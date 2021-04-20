@@ -48,7 +48,9 @@ assert(res, 'Library rkeys not found')
 ---------------------------------------------------------------
 local res, hk = pcall(require, 'lib.imcustom.hotkey')
 assert(res, 'Library imcustom not found')
--- ---------------------------------------------------------------
+----------------------------------------------------------------
+local dlstatus = require('moonloader').download_status
+----------------------------------------------------------------
 
 local function closeDialog()
 	sampSetDialogClientside(true)
@@ -230,8 +232,8 @@ local checked_box = imgui.ImBool(false)
 local checked_box2 = imgui.ImBool(false)
 local checked_box3 = imgui.ImBool(false)
 -------------------Обновление------------------------------------------------------------
-local script_vers = 1
-local script_vers_text = "1.0"
+local script_vers = 2
+local script_vers_text = "1.1"
 local update_url = "https://raw.githubusercontent.com/KabanBunya/Tools/main/update.ini"
 local update_path = getWorkingDirectory() .."/update.ini"
 local script_url = "https://raw.githubusercontent.com/KabanBunya/Tools/main/Monopoly.lua"
@@ -693,6 +695,7 @@ function main()
 					thisScript():reload()
 		end
 	end)
+	end
 		
 		-- получаем время
 		unix_time = os.time(os.date('!*t'))
