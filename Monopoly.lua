@@ -234,7 +234,7 @@ local script_vers = 1
 local script_vers_text = "1.0"
 local update_url = "https://raw.githubusercontent.com/KabanBunya/Tools/main/update.ini"
 local update_path = getWorkingDirectory() .."/update.ini"
-local script_url = ""
+local script_url = "https://raw.githubusercontent.com/KabanBunya/Tools/main/Monopoly.lua"
 local script_path = thisScript().path
 ----------------------------------------------------------------------------------------
 
