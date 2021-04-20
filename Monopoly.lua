@@ -14,6 +14,7 @@ local close2 = false
 local close3 = false
 local close4 = false
 local close5 = false
+local update = false
 krytim = true
 
 local res = pcall(require, "lib.moonloader")
@@ -635,21 +636,11 @@ function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end
 	while not isSampAvailable() do wait(100) end
 	load_settings() -- загрузка настроек
+	update()
 	-- определяем ник и ID локального игрока 
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
-	
-	downloadUrlToFile(update_url, update_path, function(id, status)
-		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-			updateIni = inicfg.load(nil, update_path)
-			if tonumber(updateIni.info.vers) > script_vers then
-				sampAddChatMessage("[Mono Tools]{FFFFFF} Доступно новое обновление! Версия скрипта: " ..updateIni.info.vers_text, 0x046D63)
-				update_state = true
-			end
-			os.remove(update_path)
-		end
-	end)
 	
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Активация {00C2BB}/mono{FFFFFF}", 0x046D63)
 	if mass_bind ~= nil then
@@ -687,15 +678,6 @@ function main()
 	if enableskin.v then changeSkin(-1, localskin.v) end -- установка визуал скина, если включено
 	while true do
 		wait(0)
-		
-		if update_state then
-			downloadUrlToFile(update_url, update_path, function(id, status)
-				if status == dlstatus.STATUS_ENDDOWNLOADDATA then
-					sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно обновлён!", 0x046D63)
-					thisScript():reload()
-		end
-	end)
-	end
 		
 		-- получаем время
 		unix_time = os.time(os.date('!*t'))
@@ -1532,6 +1514,32 @@ function imgui.ToggleButton(str_id, bool) -- функция хомяка
 	draw_list:AddCircleFilled(imgui.ImVec2(p.x + radius + t * (width - radius * 2.0), p.y + radius), radius - 1.5, imgui.GetColorU32(bool.v and imgui.GetStyle().Colors[imgui.Col.ButtonActive] or imgui.GetStyle().Colors[imgui.Col.Button]))
  
 	return rBool
+end
+
+function update()
+	downloadUrlToFile(update_url, update_path, function(id, status)
+		if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+			updateIni = inicfg.load(nil, update_path)
+			if tonumber(updateIni.info.vers) > script_vers then
+				sampAddChatMessage("[Mono Tools]{FFFFFF} Доступно новое обновление! Версия скрипта: " ..updateIni.info.vers_text, 0x046D63)
+				update()
+				update_state = true
+			end
+			os.remove(update_path)
+		end
+	end)
+	while true do
+	wait(0)
+	if update_state then
+			downloadUrlToFile(update_url, update_path, function(id, status)
+				if status == dlstatus.STATUS_ENDDOWNLOADDATA then
+					sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно обновлён!", 0x046D63)
+					thisScript():reload()
+		end
+	end)
+	break
+end
+end
 end
 
 function imgui.OnDrawFrame()
