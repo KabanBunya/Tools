@@ -89,18 +89,18 @@ local shell32 = ffi.load 'Shell32'
 local ole32 = ffi.load 'Ole32'
 ole32.CoInitializeEx(nil, 2 + 4)
 
--- ñâàëêà ïåðåìåííûõ
+-- свалка переменных
 mlogo, errorPic, classifiedPic, pentagonPic, accessDeniedPic, gameServer, nasosal_rang = nil, nil, nil, nil, nil, nil -- 
 srv, arm = nil, nil -- 
-whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0 -- çíà÷åíèÿ ïî äåôîëòó äëÿ "èíôîðìàöèÿ"
-regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false -- bool ïåðåìåííûå äëÿ ðàáîòû ñ äèàëîãàìè
-ScriptUse = 3 -- äëÿ öèêëà
-offscript = 0 -- ïåðåìåííàÿ äëÿ ïîäñ÷åòà êîëè÷åñòâà íàæàòèé íà êíîïêó "âûêëþ÷èòü ñêðèïòà"
-pentcout, pentsrv, pentinv, pentuv = 0,0,0,0 -- äåôîëò çíà÷åíèÿ /base
+whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0
+regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false
+ScriptUse = 3 
+offscript = 0 
+pentcout, pentsrv, pentinv, pentuv = 0,0,0,0 
 regStatus = false -- 
 gmsg = false -- 
 gosButton, AccessBe = true -- 
-dostupLvl = nil -- óðîâåíü äîñòóïà
+dostupLvl = nil 
 activated = nil -- 
 isLocalPlayerSoldier = false --
 getMOLeader = "Not Registred" -- 
@@ -108,18 +108,18 @@ getSVLeader = "Not Registred" --
 getVVSLeader = "Not Registred" -- 
 getVMFLeader = "Not Registred" -- 
 pidr = false -- 
-errorSearch = nil -- åñëè íå ñìîãëè íàéòè â ïåíòàãîíå
-flymode = 0 -- êàìõàê
+errorSearch = nil 
+flymode = 0 
 isPlayerSoldier = false -- 
-speed = 0.2 -- ñêîðîñòü êàìõàêà
+speed = 0.2 
 bstatus = 0 -- 
 state = false -- 
-keystatus = false -- ïðîâåðêà íà âîñïðîèçâåäåíèå áèíäà
-mouseCoord = false -- ïðîâåðêà íà ñòàòóñ ïåðåìåùåíèÿ îêíà èíôîðìåðà
-token = 1 -- òîêåí
+keystatus = false 
+mouseCoord = false 
+token = 1 
 mouseCoord2 = false -- 
 mouseCoord3 = false -- 
-getServerColored = '' -- ïåðåìåííàÿ â êîòîðîé õðàíèì âñå íèêè ïîëüçîâàòåëåé ïî ñåðâåðó äëÿ ïîêðàñà â ÷àòå
+getServerColored = '' 
 
 blackbase = {} -- 
 names = {} -- 
@@ -127,7 +127,7 @@ SecNames = {}
 SecNames2 = {}
 
 
--- ïåðåìåííûå äëÿ øïîðû, åñëè íå îøèáàþñü, òî åñòü ëèøíèå
+-- переменные для шпоры, если не ошибаюсь, то есть лишние
 files							= {}
 window_file						= {}
 menu_spur						= imgui.ImBool(false)
@@ -141,7 +141,7 @@ edit_size_y						= imgui.ImInt(-1)
 russian_characters				= { [168] = '¨', [184] = '¸', [192] = 'À', [193] = 'Á', [194] = 'Â', [195] = 'Ã', [196] = 'Ä', [197] = 'Å', [198] = 'Æ', [199] = 'Ç', [200] = 'È', [201] = 'É', [202] = 'Ê', [203] = 'Ë', [204] = 'Ì', [205] = 'Í', [206] = 'Î', [207] = 'Ï', [208] = 'Ð', [209] = 'Ñ', [210] = 'Ò', [211] = 'Ó', [212] = 'Ô', [213] = 'Õ', [214] = 'Ö', [215] = '×', [216] = 'Ø', [217] = 'Ù', [218] = 'Ú', [219] = 'Û', [220] = 'Ü', [221] = 'Ý', [222] = 'Þ', [223] = 'ß', [224] = 'à', [225] = 'á', [226] = 'â', [227] = 'ã', [228] = 'ä', [229] = 'å', [230] = 'æ', [231] = 'ç', [232] = 'è', [233] = 'é', [234] = 'ê', [235] = 'ë', [236] = 'ì', [237] = 'í', [238] = 'î', [239] = 'ï', [240] = 'ð', [241] = 'ñ', [242] = 'ò', [243] = 'ó', [244] = 'ô', [245] = 'õ', [246] = 'ö', [247] = '÷', [248] = 'ø', [249] = 'ù', [250] = 'ú', [251] = 'û', [252] = 'ü', [253] = 'ý', [254] = 'þ', [255] = 'ÿ' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
 	
--- íàñòðîéêè èãðîêà
+-- настройки игрока
 local SET = {
  	settings = {
 		autologin = false,
@@ -186,15 +186,14 @@ local SET = {
 }
 
 
-local SeleList = {"Äîñüå", "Ñâåäåíèÿ", "Ïåíòàãîí"} -- ñïèñîê ìåíþøåê äëÿ áëîêà "èíôîðìàöèÿ"
+local SeleList = {"Äîñüå", "Ñâåäåíèÿ", "Ïåíòàãîí"} 
 
--- ýòî äåëàëîñü åñëè íå îøèáàþñü äëÿ âûäåëåíèÿ âûáðàííîãî ïóíêòà
 local SeleListBool = {}
 for i = 1, #SeleList do
 	SeleListBool[i] = imgui.ImBool(false)
 end
 
--- ìàññèâ äëÿ îêîí
+-- массив для окон
 local win_state = {}
 win_state['main'] = imgui.ImBool(false)
 win_state['info'] = imgui.ImBool(false)
@@ -229,25 +228,25 @@ local checked_box = imgui.ImBool(false)
 local checked_box2 = imgui.ImBool(false)
 local checked_box3 = imgui.ImBool(false)
 
--- âðåìåííûå ïåðåìåííûå, êîòîðûì íå òðåáóåòñÿ ñîõðàíåíèå
-pozivnoy = imgui.ImBuffer(256) -- ïîçûâíîé â ìåíþ âçàèìîäåéñòâèÿ
-cmd_name = imgui.ImBuffer(256) -- íàçâàíèå êîìàíäû
-cmd_text = imgui.ImBuffer(65536) -- òåêñò áèíäà
-searchn = imgui.ImBuffer(256) -- ïîèñê íèêà â ïåíòàãîíå
-specOtr = imgui.ImBuffer(256) -- ñïåö.îòðÿä äëÿ íàøèâêè(âðîäå)
-weather = imgui.ImInt(-1) -- óñòàíîâêà ïîãîäû
-pay = imgui.ImInt(10000) -- ñóììà äåïîçèòà
-zadervka = imgui.ImInt(1) -- çàäåðæêà
-gametime = imgui.ImInt(-1) -- óñòàíîâêà âðåìåíè 
-binddelay = imgui.ImInt(3) -- çàäåðæêà áèíäåðà
+-- временные переменные, которым не требуется сохранение
+pozivnoy = imgui.ImBuffer(256) 
+cmd_name = imgui.ImBuffer(256)
+cmd_text = imgui.ImBuffer(65536) 
+searchn = imgui.ImBuffer(256) 
+specOtr = imgui.ImBuffer(256) 
+weather = imgui.ImInt(-1) 
+pay = imgui.ImInt(10000) 
+zadervka = imgui.ImInt(1) 
+gametime = imgui.ImInt(-1) 
+binddelay = imgui.ImInt(3) 
 local checked_radio = imgui.ImInt(1)
 
--- óäàëåíèå ôàéëà êëàâèø, äåëàþ òîëüêî òîãäà, êîãäà äîáàâëÿþ íîâûå êëàâèøè. P.S. óäàëÿåò êàê êîãäà
+-- удаление файла клавиш, делаю только тогда, когда добавляю новые клавиши. P.S. удаляет как когда
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
 end
 
--- Ñîáñòâåííî òóò åáîøèì êëàâèøè äëÿ áèíäåðà è îáû÷íûå, íè÷åãî íåîáû÷íîãî, à èñòîê âñåãî ýòîãî - PerfectBinder õîìÿêà, èáî òîëüêî òàì áûëî ïîêàçàíî, êàê áîëåå ìåíåå þçàòü imcustom/rkeys.
+-- Собственно тут ебошим клавиши для биндера и обычные.
 hk._SETTINGS.noKeysMessage = u8("Ïóñòî")
 local bfile = getWorkingDirectory() .. "\\config\\Mono\\key.bind" -- ïóòü ê ôàéëó äëÿ õðàíåíèÿ êëàâèø
 local tBindList = {}
@@ -278,16 +277,11 @@ else
 	}
 end
 
-
------------------------------------------------------------------------------------
-------------------------------- ÔÈÊÑÛ È ÏÎÄÎÁÍÀß ÕÓÉÍß ----------------------------
------------------------------------------------------------------------------------
-
--- Ôèêñ çåðêàëüíîãî áàãà alt+tab(÷åðíûé ýêðàí èëè æå êàêàÿ òî õóéíÿ â âèäå çåðêàë íà ýêðàíå ïîñëå ðàçâîðîòà â èíòå)
+-- Фикс зеркального бага alt+tab(черный экран в виде зеркал на экране после разворота в инте)
 writeMemory(0x555854, 4, -1869574000, true)
 writeMemory(0x555858, 1, 144, true)
 
--- ôóíêöèÿ áûñòðîãî ïðîãðóçà èãðû, êåï÷èê ÷òîëü àâòîð.. Íå ïîìíþ
+-- функция быстрого прогруза игры.
 function patch()
 	if memory.getuint8(0x748C2B) == 0xE8 then
 		memory.fill(0x748C2B, 0x90, 5, true)
@@ -314,7 +308,7 @@ end
 patch()
 
 -----------------------------------------------------------------------------------
--------------------------- ÔÓÍÊÖÈÈ ÑÊÐÈÏÒÀ È ÂÑÅ ×ÒÎ ÏÎ ÍÈÌ -----------------------
+-------------------------- ФУНКЦИИ СКРИПТА ----------------------------------------
 -----------------------------------------------------------------------------------
 
 
@@ -454,33 +448,33 @@ function apply_custom_style() --
 end
 apply_custom_style()
 
-function files_add() -- ôóíêöèÿ ïîäãðóçêè ìåäèà ôàéëîâ
+function files_add() -- функция подгрузки файлов
 	if not doesFileExist(getGameDirectory()..'\\moonloader\\config\\Mono\\settings.ini') then 
 		inicfg.save(SET, 'config\\Mono\\settings.ini')
 	end
 end
 
-function rkeys.onHotKey(id, keys) -- ýòó øòó÷êó ÿ íå èñïîëüçóþ, íî îíà ïîìîãëà çàïðåòèòü þçàíèå êëàâèø â îïðåäåëåííûõ ñèòàõ
+function rkeys.onHotKey(id, keys)
 	if sampIsChatInputActive() or sampIsDialogActive() or isSampfuncsConsoleActive() or win_state['base'].v or win_state['update'].v or win_state['player'].v or droneActive or keystatus then
 		return false
 	end
 end
 
-function onHotKey(id, keys) -- ôóíêöèÿ îáðàáîòêè âñåõ êëàâèø, êîòîðûå òîê ñóùåñòâóþò â ñêðèïòå áëàãîäàðÿ imcustom, rkeys è õîìÿêó
+function onHotKey(id, keys) -- функция обработки всех клавиш.
 	local sKeys = tostring(table.concat(keys, " "))
 	for k, v in pairs(tBindList) do
 		if sKeys == tostring(table.concat(v.v, " ")) then
-			if k == 7 then -- äåëàåì ðåêîííåêò
+			if k == 7 then
 				reconnect()
 				return
-			elseif k == 13 then -- îòêðûâàåì ìåíþ
+			elseif k == 13 then
 				mainmenu()
 				return
 			end
 		end
 	end
 
-	for i, p in pairs(mass_bind) do -- òóò ðåãèñòðèðóåì áèíäåð íà êëàâèøè.
+	for i, p in pairs(mass_bind) do -- тут регистрируем биндер на клавиши.
 		if sKeys == tostring(table.concat(p.v, " ")) then
 			rcmd(nil, p.text, p.delay)		
 		end
@@ -493,7 +487,7 @@ function calc(m) -- "êàëüêóëÿòîð", êîòîðûé òàê è íå íà
     return type(a) == 'number' and a or nil
 end
 
-function WorkInBackground(work) -- ðàáîòà â ñâåðíóòîì imringa'a
+function WorkInBackground(work) -- работа в свернутом imringa'a
     local memory = require 'memory'
 	if work then -- on
         memory.setuint8(7634870, 1) 
@@ -508,7 +502,7 @@ function WorkInBackground(work) -- ðàáîòà â ñâåðíóòîì imringa'a
     end 
 end
 
-function WriteLog(text, path, file) -- ôóíêöèÿ çàïèñè òåêñò â ôàéë, èñïîëüçóåòñÿ äëÿ ÷àòëîãà
+function WriteLog(text, path, file) -- функция записи текста в файл, используется для чатлога
 	if not doesDirectoryExist(getWorkingDirectory()..'\\'..path..'\\') then
 		createDirectory(getWorkingDirectory()..'\\'..path..'\\')
 	end
@@ -518,7 +512,6 @@ function WriteLog(text, path, file) -- ôóíêöèÿ çàïèñè òåêñò â
 	file:close()
 end
 
--- Øèôðîâàëêà Base64
 local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' -- You will need this for encoding/decoding
 function en(data)
     return ((data:gsub('.', function(x) 
@@ -547,7 +540,7 @@ function dc(data)
     end))
 end
 
-function tags(args) -- ôóíêöèÿ ñ òýãàìè ñêðèïòà
+function tags(args) -- функция с тэгами скрипта
 
 	args = args:gsub("{params}", tostring(cmdparams))
 	args = args:gsub("{paramNickByID}", tostring(sampGetPlayerNickname(cmdparams)))
@@ -593,7 +586,7 @@ function tags(args) -- ôóíêöèÿ ñ òýãàìè ñêðèïòà
 	return args
 end
 
-function mainmenu() -- ôóíêöèÿ îòêðûòèÿ îñíîâíîãî ìåíþ ñêðèïòà
+function mainmenu() -- функция открытия основного меню скрипта
 	if not win_state['player'].v and not win_state['update'].v and not win_state['base'].v and not win_state['regst'].v then
 		if win_state['settings'].v then
 			win_state['settings'].v = not win_state['settings'].v
@@ -622,9 +615,8 @@ end
 function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end
 	while not isSampAvailable() do wait(100) end
-	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
-	load_settings() -- çàãðóçêà íàñòðîåê
-	-- îïðåäåëÿåì íèê è ID ëîêàëüíîãî èãðîêà 
+	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ') -- обновления
+	load_settings() -- загрузка настроек
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
@@ -651,11 +643,11 @@ function main()
 	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD) -- øðèôò äëÿ chatinfo
 	lua_thread.create(showInputHelp)
 	
-	-- ðåãèñòðàöèÿ ëîêàëüíûõ êîìàíä/êîìàíäû
-	sampRegisterChatCommand("cc", ClearChat) -- î÷èñòêà ÷àòà
-	sampRegisterChatCommand("drone", drone) -- äðîíû
-	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- äðîíû
-	sampRegisterChatCommand("reload", rel) -- ïåðåçàãðóçêà ñêðèïòà
+	-- регистрация локальных команд/команды
+	sampRegisterChatCommand("cc", ClearChat) 
+	sampRegisterChatCommand("drone", drone)
+	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end)
+	sampRegisterChatCommand("reload", rel)
 	sampRegisterChatCommand("changeskin", ex_skin)
 	sampRegisterChatCommand("mono", mainmenu)
 	sampRegisterChatCommand('rul', rul)
