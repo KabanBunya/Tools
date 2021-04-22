@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1')
+script_version('1.2')
 
 local use = false
 local close = false
