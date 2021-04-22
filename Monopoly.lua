@@ -2644,24 +2644,3 @@ function imgui.GetMaxWidthByText(text)
 	end
 	return max - 15
 end
-				imgui.NewLine()
-			else imgui.Text(u8(w)) end
-		end
-	end
-
-	render_text(string)
-end
-
-function removeMagicChar(text)
-	for i = 1, #magicChar do text = text:gsub(magicChar[i], '') end
-	return text
-end
-
-function imgui.GetMaxWidthByText(text)
-	local max = imgui.GetWindowWidth()
-	for w in text:gmatch('[^\r\n]+') do
-		local size = imgui.CalcTextSize(w)
-		if size.x > max then max = size.x end
-	end
-	return max - 15
-end
