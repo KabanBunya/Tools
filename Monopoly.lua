@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1')
+script_version('1.0')
 
 local use = false
 local close = false
@@ -628,7 +628,7 @@ function main()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Активация {00C2BB}/mono{FFFFFF}", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/mono{FFFFFF}", 0x046D63)
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
 			if p.cmd ~= "-" then
@@ -1520,7 +1520,7 @@ function imgui.OnDrawFrame()
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(260, 110), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8' Mono Tools', win_state['main'], imgui.WindowFlags.NoResize)
+		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
 		-- информация по скрипту, готово
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
