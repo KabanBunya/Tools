@@ -1,4 +1,4 @@
-script_name('Mono Tools')
+script_name('Mono Tools1')
 script_properties("work-in-pause")
 script_version('1.1')
 
@@ -17,37 +17,37 @@ local close5 = false
 krytim = true
 
 local res = pcall(require, "lib.moonloader")
-assert(res, 'Library "lib.moonloader" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "lib.moonloader" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, ffi = pcall(require, 'ffi')
-assert(res, 'Library "ffi" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "ffi" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res = pcall(require, 'lib.sampfuncs')
-assert(res, 'Library "lib.sampfuncs" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "lib.sampfuncs" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, sampev = pcall(require, 'lib.samp.events')
-assert(res, 'Library "SAMP Events" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "SAMP Events" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, key = pcall(require, "vkeys")
-assert(res, 'Library "vkeys" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "vkeys" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, imgui = pcall(require, "imgui")
-assert(res, 'Library "imgui" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "imgui" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, encoding = pcall(require, "encoding")
-assert(res, 'Library "encoding" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "encoding" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, inicfg = pcall(require, "inicfg")
-assert(res, 'Library "inicfg" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "inicfg" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, memory = pcall(require, "memory")
-assert(res, 'Library "memory" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "memory" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, rkeys = pcall(require, "rkeys")
-assert(res, 'Library "rkeys" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "rkeys" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, hk = pcall(require, 'lib.imcustom.hotkey')
-assert(res, 'Library "imcustom" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "imcustom" Г­ГҐ Г­Г Г©Г¤ГҐГ­Г . Г—ГІГ®ГЎГ» Г±ГЄГ Г·Г ГІГј ГўГ±ГҐ Г­ГіГ¦Г­Г» ГґГ Г©Г«Г» ГЁ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄГЁ, ГЇГҐГ°ГҐГ©Г¤ГЁГІГҐ ГЇГ® Г±Г±Г»Г«ГЄГҐ - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 -- ---------------------------------------------------------------
 
 local function closeDialog()
@@ -89,18 +89,18 @@ local shell32 = ffi.load 'Shell32'
 local ole32 = ffi.load 'Ole32'
 ole32.CoInitializeEx(nil, 2 + 4)
 
--- свалка переменных
+-- Г±ГўГ Г«ГЄГ  ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»Гµ
 mlogo, errorPic, classifiedPic, pentagonPic, accessDeniedPic, gameServer, nasosal_rang = nil, nil, nil, nil, nil, nil -- 
 srv, arm = nil, nil -- 
-whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0 -- значения по дефолту для "информация"
-regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false -- bool переменные для работы с диалогами
-ScriptUse = 3 -- для цикла
-offscript = 0 -- переменная для подсчета количества нажатий на кнопку "выключить скрипта"
-pentcout, pentsrv, pentinv, pentuv = 0,0,0,0 -- дефолт значения /base
+whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0 -- Г§Г­Г Г·ГҐГ­ГЁГї ГЇГ® Г¤ГҐГґГ®Г«ГІГі Г¤Г«Гї "ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї"
+regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false -- bool ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± Г¤ГЁГ Г«Г®ГЈГ Г¬ГЁ
+ScriptUse = 3 -- Г¤Г«Гї Г¶ГЁГЄГ«Г 
+offscript = 0 -- ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї Г¤Г«Гї ГЇГ®Г¤Г±Г·ГҐГІГ  ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  Г­Г Г¦Г ГІГЁГ© Г­Г  ГЄГ­Г®ГЇГЄГі "ГўГ»ГЄГ«ГѕГ·ГЁГІГј Г±ГЄГ°ГЁГЇГІГ "
+pentcout, pentsrv, pentinv, pentuv = 0,0,0,0 -- Г¤ГҐГґГ®Г«ГІ Г§Г­Г Г·ГҐГ­ГЁГї /base
 regStatus = false -- 
 gmsg = false -- 
 gosButton, AccessBe = true -- 
-dostupLvl = nil -- уровень доступа
+dostupLvl = nil -- ГіГ°Г®ГўГҐГ­Гј Г¤Г®Г±ГІГіГЇГ 
 activated = nil -- 
 isLocalPlayerSoldier = false --
 getMOLeader = "Not Registred" -- 
@@ -108,18 +108,18 @@ getSVLeader = "Not Registred" --
 getVVSLeader = "Not Registred" -- 
 getVMFLeader = "Not Registred" -- 
 pidr = false -- 
-errorSearch = nil -- если не смогли найти в пентагоне
-flymode = 0 -- камхак
+errorSearch = nil -- ГҐГ±Г«ГЁ Г­ГҐ Г±Г¬Г®ГЈГ«ГЁ Г­Г Г©ГІГЁ Гў ГЇГҐГ­ГІГ ГЈГ®Г­ГҐ
+flymode = 0 -- ГЄГ Г¬ГµГ ГЄ
 isPlayerSoldier = false -- 
-speed = 0.2 -- скорость камхака
+speed = 0.2 -- Г±ГЄГ®Г°Г®Г±ГІГј ГЄГ Г¬ГµГ ГЄГ 
 bstatus = 0 -- 
 state = false -- 
-keystatus = false -- проверка на воспроизведение бинда
-mouseCoord = false -- проверка на статус перемещения окна информера
-token = 1 -- токен
+keystatus = false -- ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  ГўГ®Г±ГЇГ°Г®ГЁГ§ГўГҐГ¤ГҐГ­ГЁГҐ ГЎГЁГ­Г¤Г 
+mouseCoord = false -- ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г±ГІГ ГІГіГ± ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГї Г®ГЄГ­Г  ГЁГ­ГґГ®Г°Г¬ГҐГ°Г 
+token = 1 -- ГІГ®ГЄГҐГ­
 mouseCoord2 = false -- 
 mouseCoord3 = false -- 
-getServerColored = '' -- переменная в которой храним все ники пользователей по серверу для покраса в чате
+getServerColored = '' -- ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї Гў ГЄГ®ГІГ®Г°Г®Г© ГµГ°Г Г­ГЁГ¬ ГўГ±ГҐ Г­ГЁГЄГЁ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ© ГЇГ® Г±ГҐГ°ГўГҐГ°Гі Г¤Г«Гї ГЇГ®ГЄГ°Г Г±Г  Гў Г·Г ГІГҐ
 
 blackbase = {} -- 
 names = {} -- 
@@ -127,7 +127,7 @@ SecNames = {}
 SecNames2 = {}
 
 
--- переменные для шпоры, если не ошибаюсь, то есть лишние
+-- ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ Г¤Г«Гї ГёГЇГ®Г°Г», ГҐГ±Г«ГЁ Г­ГҐ Г®ГёГЁГЎГ ГѕГ±Гј, ГІГ® ГҐГ±ГІГј Г«ГЁГёГ­ГЁГҐ
 files							= {}
 window_file						= {}
 menu_spur						= imgui.ImBool(false)
@@ -138,10 +138,10 @@ find_text_spur					= imgui.ImBuffer(256)
 edit_text_spur					= imgui.ImBuffer(65536)
 edit_size_x						= imgui.ImInt(-1)
 edit_size_y						= imgui.ImInt(-1)
-russian_characters				= { [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я' }
+russian_characters				= { [168] = 'ВЁ', [184] = 'Вё', [192] = 'ГЂ', [193] = 'ГЃ', [194] = 'Г‚', [195] = 'Гѓ', [196] = 'Г„', [197] = 'Г…', [198] = 'Г†', [199] = 'Г‡', [200] = 'Г€', [201] = 'Г‰', [202] = 'ГЉ', [203] = 'Г‹', [204] = 'ГЊ', [205] = 'ГЌ', [206] = 'ГЋ', [207] = 'ГЏ', [208] = 'Гђ', [209] = 'Г‘', [210] = 'Г’', [211] = 'Г“', [212] = 'Г”', [213] = 'Г•', [214] = 'Г–', [215] = 'Г—', [216] = 'Г', [217] = 'Г™', [218] = 'Гљ', [219] = 'Г›', [220] = 'Гњ', [221] = 'Гќ', [222] = 'Гћ', [223] = 'Гџ', [224] = 'Г ', [225] = 'ГЎ', [226] = 'Гў', [227] = 'ГЈ', [228] = 'Г¤', [229] = 'ГҐ', [230] = 'Г¦', [231] = 'Г§', [232] = 'ГЁ', [233] = 'Г©', [234] = 'ГЄ', [235] = 'Г«', [236] = 'Г¬', [237] = 'Г­', [238] = 'Г®', [239] = 'ГЇ', [240] = 'Г°', [241] = 'Г±', [242] = 'ГІ', [243] = 'Гі', [244] = 'Гґ', [245] = 'Гµ', [246] = 'Г¶', [247] = 'Г·', [248] = 'Гё', [249] = 'Г№', [250] = 'Гє', [251] = 'Г»', [252] = 'Гј', [253] = 'ГЅ', [254] = 'Гѕ', [255] = 'Гї' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
 	
--- настройки игрока
+-- Г­Г Г±ГІГ°Г®Г©ГЄГЁ ГЁГЈГ°Г®ГЄГ 
 local SET = {
  	settings = {
 		autologin = false,
@@ -191,15 +191,15 @@ local SET = {
 }
 
 
-local SeleList = {"Досье", "Сведения", "Пентагон"} -- список менюшек для блока "информация"
+local SeleList = {"Г„Г®Г±ГјГҐ", "Г‘ГўГҐГ¤ГҐГ­ГЁГї", "ГЏГҐГ­ГІГ ГЈГ®Г­"} -- Г±ГЇГЁГ±Г®ГЄ Г¬ГҐГ­ГѕГёГҐГЄ Г¤Г«Гї ГЎГ«Г®ГЄГ  "ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї"
 
--- это делалось если не ошибаюсь для выделения выбранного пункта
+-- ГЅГІГ® Г¤ГҐГ«Г Г«Г®Г±Гј ГҐГ±Г«ГЁ Г­ГҐ Г®ГёГЁГЎГ ГѕГ±Гј Г¤Г«Гї ГўГ»Г¤ГҐГ«ГҐГ­ГЁГї ГўГ»ГЎГ°Г Г­Г­Г®ГЈГ® ГЇГіГ­ГЄГІГ 
 local SeleListBool = {}
 for i = 1, #SeleList do
 	SeleListBool[i] = imgui.ImBool(false)
 end
 
--- массив для окон
+-- Г¬Г Г±Г±ГЁГў Г¤Г«Гї Г®ГЄГ®Г­
 local win_state = {}
 win_state['main'] = imgui.ImBool(false)
 win_state['info'] = imgui.ImBool(false)
@@ -234,27 +234,27 @@ local checked_box = imgui.ImBool(false)
 local checked_box2 = imgui.ImBool(false)
 local checked_box3 = imgui.ImBool(false)
 
--- временные переменные, которым не требуется сохранение
-pozivnoy = imgui.ImBuffer(256) -- позывной в меню взаимодействия
-cmd_name = imgui.ImBuffer(256) -- название команды
-cmd_text = imgui.ImBuffer(65536) -- текст бинда
-searchn = imgui.ImBuffer(256) -- поиск ника в пентагоне
-specOtr = imgui.ImBuffer(256) -- спец.отряд для нашивки(вроде)
-weather = imgui.ImInt(-1) -- установка погоды
-pay = imgui.ImInt(10000) -- сумма депозита
-zadervka = imgui.ImInt(1) -- задержка
-gametime = imgui.ImInt(-1) -- установка времени 
-binddelay = imgui.ImInt(3) -- задержка биндера
+-- ГўГ°ГҐГ¬ГҐГ­Г­Г»ГҐ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ, ГЄГ®ГІГ®Г°Г»Г¬ Г­ГҐ ГІГ°ГҐГЎГіГҐГІГ±Гї Г±Г®ГµГ°Г Г­ГҐГ­ГЁГҐ
+pozivnoy = imgui.ImBuffer(256) -- ГЇГ®Г§Г»ГўГ­Г®Г© Гў Г¬ГҐГ­Гѕ ГўГ§Г ГЁГ¬Г®Г¤ГҐГ©Г±ГІГўГЁГї
+cmd_name = imgui.ImBuffer(256) -- Г­Г Г§ГўГ Г­ГЁГҐ ГЄГ®Г¬Г Г­Г¤Г»
+cmd_text = imgui.ImBuffer(65536) -- ГІГҐГЄГ±ГІ ГЎГЁГ­Г¤Г 
+searchn = imgui.ImBuffer(256) -- ГЇГ®ГЁГ±ГЄ Г­ГЁГЄГ  Гў ГЇГҐГ­ГІГ ГЈГ®Г­ГҐ
+specOtr = imgui.ImBuffer(256) -- Г±ГЇГҐГ¶.Г®ГІГ°ГїГ¤ Г¤Г«Гї Г­Г ГёГЁГўГЄГЁ(ГўГ°Г®Г¤ГҐ)
+weather = imgui.ImInt(-1) -- ГіГ±ГІГ Г­Г®ГўГЄГ  ГЇГ®ГЈГ®Г¤Г»
+pay = imgui.ImInt(10000) -- Г±ГіГ¬Г¬Г  Г¤ГҐГЇГ®Г§ГЁГІГ 
+zadervka = imgui.ImInt(1) -- Г§Г Г¤ГҐГ°Г¦ГЄГ 
+gametime = imgui.ImInt(-1) -- ГіГ±ГІГ Г­Г®ГўГЄГ  ГўГ°ГҐГ¬ГҐГ­ГЁ 
+binddelay = imgui.ImInt(3) -- Г§Г Г¤ГҐГ°Г¦ГЄГ  ГЎГЁГ­Г¤ГҐГ°Г 
 local checked_radio = imgui.ImInt(1)
 
--- удаление файла клавиш, делаю только тогда, когда добавляю новые клавиши. P.S. удаляет как когда
+-- ГіГ¤Г Г«ГҐГ­ГЁГҐ ГґГ Г©Г«Г  ГЄГ«Г ГўГЁГё, Г¤ГҐГ«Г Гѕ ГІГ®Г«ГјГЄГ® ГІГ®ГЈГ¤Г , ГЄГ®ГЈГ¤Г  Г¤Г®ГЎГ ГўГ«ГїГѕ Г­Г®ГўГ»ГҐ ГЄГ«Г ГўГЁГёГЁ. P.S. ГіГ¤Г Г«ГїГҐГІ ГЄГ ГЄ ГЄГ®ГЈГ¤Г 
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
 end
 
--- Собственно тут ебошим клавиши для биндера и обычные, ничего необычного, а исток всего этого - PerfectBinder хомяка, ибо только там было показано, как более менее юзать imcustom/rkeys.
-hk._SETTINGS.noKeysMessage = u8("Пусто")
-local bfile = getWorkingDirectory() .. "\\config\\Mono\\key.bind" -- путь к файлу для хранения клавиш
+-- Г‘Г®ГЎГ±ГІГўГҐГ­Г­Г® ГІГіГІ ГҐГЎГ®ГёГЁГ¬ ГЄГ«Г ГўГЁГёГЁ Г¤Г«Гї ГЎГЁГ­Г¤ГҐГ°Г  ГЁ Г®ГЎГ»Г·Г­Г»ГҐ, Г­ГЁГ·ГҐГЈГ® Г­ГҐГ®ГЎГ»Г·Г­Г®ГЈГ®, Г  ГЁГ±ГІГ®ГЄ ГўГ±ГҐГЈГ® ГЅГІГ®ГЈГ® - PerfectBinder ГµГ®Г¬ГїГЄГ , ГЁГЎГ® ГІГ®Г«ГјГЄГ® ГІГ Г¬ ГЎГ»Г«Г® ГЇГ®ГЄГ Г§Г Г­Г®, ГЄГ ГЄ ГЎГ®Г«ГҐГҐ Г¬ГҐГ­ГҐГҐ ГѕГ§Г ГІГј imcustom/rkeys.
+hk._SETTINGS.noKeysMessage = u8("ГЏГіГ±ГІГ®")
+local bfile = getWorkingDirectory() .. "\\config\\Mono\\key.bind" -- ГЇГіГІГј ГЄ ГґГ Г©Г«Гі Г¤Г«Гї ГµГ°Г Г­ГҐГ­ГЁГї ГЄГ«Г ГўГЁГё
 local tBindList = {}
 if doesFileExist(bfile) then
 	local fkey = io.open(bfile, "r")
@@ -285,14 +285,14 @@ end
 
 
 -----------------------------------------------------------------------------------
-------------------------------- ФИКСЫ----------------------------------------------
+------------------------------- Г”Г€ГЉГ‘Г›----------------------------------------------
 -----------------------------------------------------------------------------------
 
--- Фикс зеркального бага alt+tab(черный экран или же какая то хуйня в виде зеркал на экране после разворота в инте)
+-- Г”ГЁГЄГ± Г§ГҐГ°ГЄГ Г«ГјГ­Г®ГЈГ® ГЎГ ГЈГ  alt+tab(Г·ГҐГ°Г­Г»Г© ГЅГЄГ°Г Г­ ГЁГ«ГЁ Г¦ГҐ ГЄГ ГЄГ Гї ГІГ® ГµГіГ©Г­Гї Гў ГўГЁГ¤ГҐ Г§ГҐГ°ГЄГ Г« Г­Г  ГЅГЄГ°Г Г­ГҐ ГЇГ®Г±Г«ГҐ Г°Г Г§ГўГ®Г°Г®ГІГ  Гў ГЁГ­ГІГҐ)
 writeMemory(0x555854, 4, -1869574000, true)
 writeMemory(0x555858, 1, 144, true)
 
--- функция быстрого прогруза игры, кепчик чтоль автор.. Не помню
+-- ГґГіГ­ГЄГ¶ГЁГї ГЎГ»Г±ГІГ°Г®ГЈГ® ГЇГ°Г®ГЈГ°ГіГ§Г  ГЁГЈГ°Г», ГЄГҐГЇГ·ГЁГЄ Г·ГІГ®Г«Гј Г ГўГІГ®Г°.. ГЌГҐ ГЇГ®Г¬Г­Гѕ
 function patch()
 	if memory.getuint8(0x748C2B) == 0xE8 then
 		memory.fill(0x748C2B, 0x90, 5, true)
@@ -319,7 +319,7 @@ end
 patch()
 
 -----------------------------------------------------------------------------------
--------------------------- ФУНКЦИИ СКРИПТА И ВСЕ ЧТО ПО НИМ -----------------------
+-------------------------- Г”Г“ГЌГЉГ–Г€Г€ Г‘ГЉГђГ€ГЏГ’ГЂ Г€ Г‚Г‘Г… Г—Г’ГЋ ГЏГЋ ГЌГ€ГЊ -----------------------
 -----------------------------------------------------------------------------------
 
 
@@ -651,7 +651,7 @@ function apply_custom_style4()
     colors[clr.ModalWindowDarkening]  = ImVec4(0.20, 0.20, 0.20, 0.35);
 end
 
-function apply_custom_style5() -- серый стиль
+function apply_custom_style5() -- Г±ГҐГ°Г»Г© Г±ГІГЁГ«Гј
 	imgui.SwitchContext()
     local style = imgui.GetStyle()
     local colors = style.Colors
@@ -716,46 +716,46 @@ end
 
 apply_custom_style()
 
-function files_add() -- функция подгрузки медиа файлов
+function files_add() -- ГґГіГ­ГЄГ¶ГЁГї ГЇГ®Г¤ГЈГ°ГіГ§ГЄГЁ Г¬ГҐГ¤ГЁГ  ГґГ Г©Г«Г®Гў
 	if not doesFileExist(getGameDirectory()..'\\moonloader\\config\\Mono\\settings.ini') then 
 		inicfg.save(SET, 'config\\Mono\\settings.ini')
 	end
 end
 
-function rkeys.onHotKey(id, keys) -- эту штучку я не использую, но она помогла запретить юзание клавиш в определенных ситах
+function rkeys.onHotKey(id, keys) -- ГЅГІГі ГёГІГіГ·ГЄГі Гї Г­ГҐ ГЁГ±ГЇГ®Г«ГјГ§ГіГѕ, Г­Г® Г®Г­Г  ГЇГ®Г¬Г®ГЈГ«Г  Г§Г ГЇГ°ГҐГІГЁГІГј ГѕГ§Г Г­ГЁГҐ ГЄГ«Г ГўГЁГё Гў Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­Г­Г»Гµ Г±ГЁГІГ Гµ
 	if sampIsChatInputActive() or sampIsDialogActive() or isSampfuncsConsoleActive() or win_state['base'].v or win_state['update'].v or win_state['player'].v or droneActive or keystatus then
 		return false
 	end
 end
 
-function onHotKey(id, keys) -- функция обработки всех клавиш, которые ток существуют в скрипте благодаря imcustom, rkeys и хомяку
+function onHotKey(id, keys) -- ГґГіГ­ГЄГ¶ГЁГї Г®ГЎГ°Г ГЎГ®ГІГЄГЁ ГўГ±ГҐГµ ГЄГ«Г ГўГЁГё, ГЄГ®ГІГ®Г°Г»ГҐ ГІГ®ГЄ Г±ГіГ№ГҐГ±ГІГўГіГѕГІ Гў Г±ГЄГ°ГЁГЇГІГҐ ГЎГ«Г ГЈГ®Г¤Г Г°Гї imcustom, rkeys ГЁ ГµГ®Г¬ГїГЄГі
 	local sKeys = tostring(table.concat(keys, " "))
 	for k, v in pairs(tBindList) do
 		if sKeys == tostring(table.concat(v.v, " ")) then
-			if k == 7 then -- делаем реконнект
+			if k == 7 then -- Г¤ГҐГ«Г ГҐГ¬ Г°ГҐГЄГ®Г­Г­ГҐГЄГІ
 				reconnect()
 				return
-			elseif k == 13 then -- открываем меню
+			elseif k == 13 then -- Г®ГІГЄГ°Г»ГўГ ГҐГ¬ Г¬ГҐГ­Гѕ
 				mainmenu()
 				return
 			end
 		end
 	end
 
-	for i, p in pairs(mass_bind) do -- тут регистрируем биндер на клавиши.
+	for i, p in pairs(mass_bind) do -- ГІГіГІ Г°ГҐГЈГЁГ±ГІГ°ГЁГ°ГіГҐГ¬ ГЎГЁГ­Г¤ГҐГ° Г­Г  ГЄГ«Г ГўГЁГёГЁ.
 		if sKeys == tostring(table.concat(p.v, " ")) then
 			rcmd(nil, p.text, p.delay)		
 		end
 	end
 end
 
-function calc(m) -- "калькулятор", который так и не нашел применения в скрипте, но функция все же тут есть
+function calc(m) -- "ГЄГ Г«ГјГЄГіГ«ГїГІГ®Г°", ГЄГ®ГІГ®Г°Г»Г© ГІГ ГЄ ГЁ Г­ГҐ Г­Г ГёГҐГ« ГЇГ°ГЁГ¬ГҐГ­ГҐГ­ГЁГї Гў Г±ГЄГ°ГЁГЇГІГҐ, Г­Г® ГґГіГ­ГЄГ¶ГЁГї ГўГ±ГҐ Г¦ГҐ ГІГіГІ ГҐГ±ГІГј
     local func = load('return '..tostring(m))
     local a = select(2, pcall(func))
     return type(a) == 'number' and a or nil
 end
 
-function WorkInBackground(work) -- работа в свернутом imringa'a
+function WorkInBackground(work) -- Г°Г ГЎГ®ГІГ  Гў Г±ГўГҐГ°Г­ГіГІГ®Г¬ imringa'a
     local memory = require 'memory'
 	if work then -- on
         memory.setuint8(7634870, 1) 
@@ -770,7 +770,7 @@ function WorkInBackground(work) -- работа в свернутом imringa'a
     end 
 end
 
-function WriteLog(text, path, file) -- функция записи текст в файл, используется для чатлога
+function WriteLog(text, path, file) -- ГґГіГ­ГЄГ¶ГЁГї Г§Г ГЇГЁГ±ГЁ ГІГҐГЄГ±ГІ Гў ГґГ Г©Г«, ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГІГ±Гї Г¤Г«Гї Г·Г ГІГ«Г®ГЈГ 
 	if not doesDirectoryExist(getWorkingDirectory()..'\\'..path..'\\') then
 		createDirectory(getWorkingDirectory()..'\\'..path..'\\')
 	end
@@ -780,7 +780,7 @@ function WriteLog(text, path, file) -- функция записи текст в файл, используется
 	file:close()
 end
 
--- Шифровалка Base64
+-- ГГЁГґГ°Г®ГўГ Г«ГЄГ  Base64
 local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' -- You will need this for encoding/decoding
 function en(data)
     return ((data:gsub('.', function(x) 
@@ -809,7 +809,7 @@ function dc(data)
     end))
 end
 
-function tags(args) -- функция с тэгами скрипта
+function tags(args) -- ГґГіГ­ГЄГ¶ГЁГї Г± ГІГЅГЈГ Г¬ГЁ Г±ГЄГ°ГЁГЇГІГ 
 
 	args = args:gsub("{params}", tostring(cmdparams))
 	args = args:gsub("{paramNickByID}", tostring(sampGetPlayerNickname(cmdparams)))
@@ -855,7 +855,7 @@ function tags(args) -- функция с тэгами скрипта
 	return args
 end
 
-function mainmenu() -- функция открытия основного меню скрипта
+function mainmenu() -- ГґГіГ­ГЄГ¶ГЁГї Г®ГІГЄГ°Г»ГІГЁГї Г®Г±Г­Г®ГўГ­Г®ГЈГ® Г¬ГҐГ­Гѕ Г±ГЄГ°ГЁГЇГІГ 
 	if not win_state['player'].v and not win_state['update'].v and not win_state['base'].v and not win_state['regst'].v then
 		if win_state['settings'].v then
 			win_state['settings'].v = not win_state['settings'].v
@@ -885,12 +885,12 @@ function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end
 	while not isSampAvailable() do wait(100) end
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
-	load_settings() -- загрузка настроек
-	-- определяем ник и ID локального игрока 
+	load_settings() -- Г§Г ГЈГ°ГіГ§ГЄГ  Г­Г Г±ГІГ°Г®ГҐГЄ
+	-- Г®ГЇГ°ГҐГ¤ГҐГ«ГїГҐГ¬ Г­ГЁГЄ ГЁ ID Г«Г®ГЄГ Г«ГјГ­Г®ГЈГ® ГЁГЈГ°Г®ГЄГ  
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/mono{FFFFFF}", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Г‘ГЄГ°ГЁГЇГІ ГіГ±ГЇГҐГёГ­Г® Г§Г ГЇГіГ№ГҐГ­! Г‚ГҐГ°Г±ГЁГї: {00C2BB}"..thisScript().version.."{FFFFFF}. ГЂГЄГІГЁГўГ Г¶ГЁГї {00C2BB}/mono{FFFFFF}", 0x046D63)
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
 			if p.cmd ~= "-" then
@@ -910,53 +910,53 @@ function main()
 		rkeys.registerHotKey(g.v, true, onHotKey)
 	end
 
-	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD) -- шрифт для chatinfo
+	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD) -- ГёГ°ГЁГґГІ Г¤Г«Гї chatinfo
 	lua_thread.create(showInputHelp)
 	
-	-- регистрация локальных команд/команды
-	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
-	sampRegisterChatCommand("drone", drone) -- дроны
-	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- дроны
-	sampRegisterChatCommand("reload", rel) -- перезагрузка скрипта
+	-- Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГї Г«Г®ГЄГ Г«ГјГ­Г»Гµ ГЄГ®Г¬Г Г­Г¤/ГЄГ®Г¬Г Г­Г¤Г»
+	sampRegisterChatCommand("cc", ClearChat) -- Г®Г·ГЁГ±ГІГЄГ  Г·Г ГІГ 
+	sampRegisterChatCommand("drone", drone) -- Г¤Г°Г®Г­Г»
+	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- Г¤Г°Г®Г­Г»
+	sampRegisterChatCommand("reload", rel) -- ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ  Г±ГЄГ°ГЁГЇГІГ 
 	sampRegisterChatCommand("changeskin", ex_skin)
 	sampRegisterChatCommand("mono", mainmenu)
 	sampRegisterChatCommand('rul', rul)
 
 	while token == 0 do wait(0) end
-	if enableskin.v then changeSkin(-1, localskin.v) end -- установка визуал скина, если включено
+	if enableskin.v then changeSkin(-1, localskin.v) end -- ГіГ±ГІГ Г­Г®ГўГЄГ  ГўГЁГ§ГіГ Г« Г±ГЄГЁГ­Г , ГҐГ±Г«ГЁ ГўГЄГ«ГѕГ·ГҐГ­Г®
 	while true do
 		wait(0)
 		
-		-- получаем время
+		-- ГЇГ®Г«ГіГ·Г ГҐГ¬ ГўГ°ГҐГ¬Гї
 		unix_time = os.time(os.date('!*t'))
 		moscow_time = unix_time + timefix.v * 60 * 60
 
-		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
-		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
+		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- ГіГ±ГІГ Г­Г®ГўГЄГ  ГЁГЈГ°Г®ГўГ®ГЈГ® ГўГ°ГҐГ¬ГҐГ­ГЁ
+		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- ГіГ±ГІГ Г­Г®ГўГЄГ  ГЁГЈГ°Г®ГўГ®Г© ГЇГ®ГЈГ®Г¤Г»
 		
-		--addGangZone(1001, -2080.2, 2200.1, -2380.9, 2540.3, 0x11011414) менее светлый цвет
-		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
-		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
-		interior = getActiveInterior() -- получаем инту
+		--addGangZone(1001, -2080.2, 2200.1, -2380.9, 2540.3, 0x11011414) Г¬ГҐГ­ГҐГҐ Г±ГўГҐГІГ«Г»Г© Г¶ГўГҐГІ
+		armourNew = getCharArmour(PLAYER_PED) -- ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЎГ°Г®Г­Гѕ
+		healNew = getCharHealth(PLAYER_PED) -- ГЇГ®Г«ГіГ·Г ГҐГ¬ Г•ГЏ
+		interior = getActiveInterior() -- ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЁГ­ГІГі
 
-		-- получение названия района на инглише(работает только при включенном английском в настройках игры, иначе иероглифы)
+		-- ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г­Г Г§ГўГ Г­ГЁГї Г°Г Г©Г®Г­Г  Г­Г  ГЁГ­ГЈГ«ГЁГёГҐ(Г°Г ГЎГ®ГІГ ГҐГІ ГІГ®Г«ГјГЄГ® ГЇГ°ГЁ ГўГЄГ«ГѕГ·ГҐГ­Г­Г®Г¬ Г Г­ГЈГ«ГЁГ©Г±ГЄГ®Г¬ Гў Г­Г Г±ГІГ°Г®Г©ГЄГ Гµ ГЁГЈГ°Г», ГЁГ­Г Г·ГҐ ГЁГҐГ°Г®ГЈГ«ГЁГґГ»)
 		local zX, zY, zZ = getCharCoordinates(playerPed)
 		ZoneInGame = getGxtText(getNameOfZone(zX, zY, zZ))
 			
-		-- определение города
+		-- Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ ГЈГ®Г°Г®Г¤Г 
 		local citiesList = {'Los-Santos', 'San-Fierro', 'Las-Venturas'}
 		local city = getCityPlayerIsIn(PLAYER_HANDLE)
-		if city > 0 then playerCity = citiesList[city] else playerCity = "Нет сигнала" end
+		if city > 0 then playerCity = citiesList[city] else playerCity = "ГЌГҐГІ Г±ГЁГЈГ­Г Г«Г " end
 		
 
-		-- задаем названия зонам по координатам
+		-- Г§Г Г¤Г ГҐГ¬ Г­Г Г§ГўГ Г­ГЁГї Г§Г®Г­Г Г¬ ГЇГ® ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ Г¬
 		if vmfZone then ZoneText = "Navy Base"
 		elseif vvsZone then ZoneText = "Air Forces Base"
 		elseif avikZone then ZoneText = "AirCraft Carrier"
 		elseif svZone then ZoneText = "Ground Forces"
 		else ZoneText = "-" end
 
-		if zones.v and not workpause then -- показываем информер и его перемещение
+		if zones.v and not workpause then -- ГЇГ®ГЄГ Г§Г»ГўГ ГҐГ¬ ГЁГ­ГґГ®Г°Г¬ГҐГ° ГЁ ГҐГЈГ® ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГҐ
 			if not win_state['regst'].v then win_state['informer'].v = true end
 
 			if mouseCoord then
@@ -975,7 +975,7 @@ function main()
 			win_state['informer'].v = false
 		end
 
-		if assistant.v and developMode == 1 and isPlayerSoldier then -- координатор и его перемещение
+		if assistant.v and developMode == 1 and isPlayerSoldier then -- ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ®Г° ГЁ ГҐГЈГ® ГЇГҐГ°ГҐГ¬ГҐГ№ГҐГ­ГЁГҐ
 			if not win_state['regst'].v then win_state['ass'].v = true end
 
 			if mouseCoord3 then
@@ -1000,7 +1000,7 @@ function main()
 		
 		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v
 		
-		-- тут мы шаманим с блокировкой управления персонажа
+		-- ГІГіГІ Г¬Г» ГёГ Г¬Г Г­ГЁГ¬ Г± ГЎГ«Г®ГЄГЁГ°Г®ГўГЄГ®Г© ГіГЇГ°Г ГўГ«ГҐГ­ГЁГї ГЇГҐГ°Г±Г®Г­Г Г¦Г 
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
 				lockPlayerControl(false)
@@ -1016,7 +1016,7 @@ function main()
 			lockPlayerControl(false)
 		end
 
-		if wasKeyPressed(key.VK_R) and not win_state['main'].v and not win_state['update'].v and not win_state['base'].v and not win_state['regst'].v and isPlayerSoldier then -- меню взаимодействия на ПКМ + R
+		if wasKeyPressed(key.VK_R) and not win_state['main'].v and not win_state['update'].v and not win_state['base'].v and not win_state['regst'].v and isPlayerSoldier then -- Г¬ГҐГ­Гѕ ГўГ§Г ГЁГ¬Г®Г¤ГҐГ©Г±ГІГўГЁГї Г­Г  ГЏГЉГЊ + R
 			local result, ped = getCharPlayerIsTargeting(PLAYER_HANDLE)
 			if result then
 				local tdd, id = sampGetPlayerIdByCharHandle(ped)
@@ -1028,7 +1028,7 @@ function main()
 			end
 		end
 
-		if keyT.v then -- чат на русскую Т
+		if keyT.v then -- Г·Г ГІ Г­Г  Г°ГіГ±Г±ГЄГіГѕ Г’
 			if(isKeyDown(key.VK_T) and wasKeyPressed(key.VK_T))then
 				if(not sampIsChatInputActive() and not sampIsDialogActive()) then
 					sampSetChatInputEnabled(true)
@@ -1036,25 +1036,25 @@ function main()
 			end
 		end
 		
-		if launcher.v then -- эмулятор лаунчера
+		if launcher.v then -- ГЅГ¬ГіГ«ГїГІГ®Г° Г«Г ГіГ­Г·ГҐГ°Г 
 			sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
 			end
-		if styletest.v then -- стили
+		if styletest.v then -- Г±ГІГЁГ«ГЁ
 			apply_custom_style1()
 			end
-		if styletest1.v then -- стили
+		if styletest1.v then -- Г±ГІГЁГ«ГЁ
 			apply_custom_style()
 			end
-		if styletest2.v then -- стили
+		if styletest2.v then -- Г±ГІГЁГ«ГЁ
 			apply_custom_style2()
 			end
-		if styletest3.v then -- стили
+		if styletest3.v then -- Г±ГІГЁГ«ГЁ
 			new_style()
 			end
-		if styletest4.v then -- стили
+		if styletest4.v then -- Г±ГІГЁГ«ГЁ
 			apply_custom_style4()
 			end
-		if styletest5.v then -- стили
+		if styletest5.v then -- Г±ГІГЁГ«ГЁ
 			apply_custom_style5()
 			end
 			
@@ -1125,7 +1125,7 @@ function main()
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-		for i = 0, sampGetMaxPlayerId(true) do -- отключаем "вх" камхака для игроков, оставляем для разрабов.
+		for i = 0, sampGetMaxPlayerId(true) do -- Г®ГІГЄГ«ГѕГ·Г ГҐГ¬ "ГўГµ" ГЄГ Г¬ГµГ ГЄГ  Г¤Г«Гї ГЁГЈГ°Г®ГЄГ®Гў, Г®Г±ГІГ ГўГ«ГїГҐГ¬ Г¤Г«Гї Г°Г Г§Г°Г ГЎГ®Гў.
 			if sampIsPlayerConnected(i) then
 				local result, ped = sampGetCharHandleBySampPlayerId(i)
 				if result then
@@ -1141,7 +1141,7 @@ function main()
 	end
 end
 
-function EmulShowNameTag(id, value) -- эмуляция показа неймтэгов над бошкой
+function EmulShowNameTag(id, value) -- ГЅГ¬ГіГ«ГїГ¶ГЁГї ГЇГ®ГЄГ Г§Г  Г­ГҐГ©Г¬ГІГЅГЈГ®Гў Г­Г Г¤ ГЎГ®ГёГЄГ®Г©
     local bs = raknetNewBitStream()
     raknetBitStreamWriteInt16(bs, id)
     raknetBitStreamWriteBool(bs, value)
@@ -1149,7 +1149,7 @@ function EmulShowNameTag(id, value) -- эмуляция показа неймтэгов над бошкой
     raknetDeleteBitStream(bs)
 end
 
-function sampGetPlayerIdByNickname(nick) -- получаем id игрока по нику
+function sampGetPlayerIdByNickname(nick) -- ГЇГ®Г«ГіГ·Г ГҐГ¬ id ГЁГЈГ°Г®ГЄГ  ГЇГ® Г­ГЁГЄГі
     if type(nick) == "string" then
         for id = 0, 1000 do
             local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
@@ -1164,17 +1164,17 @@ function sampGetPlayerIdByNickname(nick) -- получаем id игрока по нику
 end
 
 function onQuitGame()
-	saveSettings(2) -- сохраняем игру при выходе
+	saveSettings(2) -- Г±Г®ГµГ°Г Г­ГїГҐГ¬ ГЁГЈГ°Гі ГЇГ°ГЁ ГўГ»ГµГ®Г¤ГҐ
 end
 
-function onScriptTerminate(script, quitGame) -- действия при отключении скрипта
+function onScriptTerminate(script, quitGame) -- Г¤ГҐГ©Г±ГІГўГЁГї ГЇГ°ГЁ Г®ГІГЄГ«ГѕГ·ГҐГ­ГЁГЁ Г±ГЄГ°ГЁГЇГІГ 
 	if script == thisScript() then
 		showCursor(false)
 		saveSettings(1)
 			end
 		end
 
-function saveSettings(args, key) -- функция сохранения настроек, args 1 = при отключении скрипта, 2 = при выходе из игры, 3 = сохранение клавиш + текст key, 4 = обычное сохранение.
+function saveSettings(args, key) -- ГґГіГ­ГЄГ¶ГЁГї Г±Г®ГµГ°Г Г­ГҐГ­ГЁГї Г­Г Г±ГІГ°Г®ГҐГЄ, args 1 = ГЇГ°ГЁ Г®ГІГЄГ«ГѕГ·ГҐГ­ГЁГЁ Г±ГЄГ°ГЁГЇГІГ , 2 = ГЇГ°ГЁ ГўГ»ГµГ®Г¤ГҐ ГЁГ§ ГЁГЈГ°Г», 3 = Г±Г®ГµГ°Г Г­ГҐГ­ГЁГҐ ГЄГ«Г ГўГЁГё + ГІГҐГЄГ±ГІ key, 4 = Г®ГЎГ»Г·Г­Г®ГҐ Г±Г®ГµГ°Г Г­ГҐГ­ГЁГҐ.
 
 	if doesFileExist(bindfile) then
 		os.remove(bindfile)
@@ -1233,19 +1233,19 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	end
 
 function sampev.onPlayerChatBubble(id, color, distance, dur, text)
-	if droneActive then -- тут мы меняем дальность действия текста над бошкой и для разрабов при камхаке(дроне) расширяем
+	if droneActive then -- ГІГіГІ Г¬Г» Г¬ГҐГ­ГїГҐГ¬ Г¤Г Г«ГјГ­Г®Г±ГІГј Г¤ГҐГ©Г±ГІГўГЁГї ГІГҐГЄГ±ГІГ  Г­Г Г¤ ГЎГ®ГёГЄГ®Г© ГЁ Г¤Г«Гї Г°Г Г§Г°Г ГЎГ®Гў ГЇГ°ГЁ ГЄГ Г¬ГµГ ГЄГҐ(Г¤Г°Г®Г­ГҐ) Г°Г Г±ГёГЁГ°ГїГҐГ¬
 		return {id, color, 25, dur, text}
 	end
 end
 
--- обработка диалогов
+-- Г®ГЎГ°Г ГЎГ®ГІГЄГ  Г¤ГЁГ Г«Г®ГЈГ®Гў
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 
-	if title:find("Авторизация") and text:find("Добро пожаловать") and autologin.v then -- автологин
+	if title:find("ГЂГўГІГ®Г°ГЁГ§Г Г¶ГЁГї") and text:find("Г„Г®ГЎГ°Г® ГЇГ®Г¦Г Г«Г®ГўГ ГІГј") and autologin.v then -- Г ГўГІГ®Г«Г®ГЈГЁГ­
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopass.v))
 		return false
 	end
-	if dialogId == 991 and autopin.v then -- автологин
+	if dialogId == 991 and autopin.v then -- Г ГўГІГ®Г«Г®ГЈГЁГ­
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
 		sampCloseCurrentDialogWithButton(0)
 		return false
@@ -1261,10 +1261,10 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
         checked_test3.v = false
         checked_test4.v = false
         krytim = true
-        sampAddChatMessage('{FFB140}Рулетки закончились.', 0xFFB140)
+        sampAddChatMessage('{FFB140}ГђГіГ«ГҐГІГЄГЁ Г§Г ГЄГ®Г­Г·ГЁГ«ГЁГ±Гј.', 0xFFB140)
       end
   end
-  if text:find('Поздравляем с получением') and checked_test.v then
+  if text:find('ГЏГ®Г§Г¤Г°Г ГўГ«ГїГҐГ¬ Г± ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐГ¬') and checked_test.v then
     return false
   end
 end
@@ -1280,7 +1280,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(id)
         use = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use then
+      if data.text == 'USE' or data.text == 'Г…CГЊOГ‡Г’Г€OГ‹AГЏГ’' and use then
         clickID = id + 1
         sampSendClickTextdraw(clickID)
         use = false
@@ -1305,7 +1305,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(id)
         use1 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 then
+      if data.text == 'USE' or data.text == 'Г…CГЊOГ‡Г’Г€OГ‹AГЏГ’' and use1 then
         clickID = id + 1
         sampSendClickTextdraw(clickID)
         use1 = false
@@ -1330,7 +1330,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(id)
         use2 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 then
+      if data.text == 'USE' or data.text == 'Г…CГЊOГ‡Г’Г€OГ‹AГЏГ’' and use2 then
         clickID = id + 1
         sampSendClickTextdraw(clickID)
         use2 = false
@@ -1355,7 +1355,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(id)
         use3 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use3 then 
+      if data.text == 'USE' or data.text == 'Г…CГЊOГ‡Г’Г€OГ‹AГЏГ’' and use3 then 
         clickID = id + 1
         sampSendClickTextdraw(clickID)
 		wait(1000)
@@ -1380,7 +1380,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(id)
         use4 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use4 then 
+      if data.text == 'USE' or data.text == 'Г…CГЊOГ‡Г’Г€OГ‹AГЏГ’' and use4 then 
         clickID = id + 1
         sampSendClickTextdraw(clickID)
 		wait(1000)
@@ -1407,7 +1407,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(id)
         use5 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use5 then
+      if data.text == 'USE' or data.text == 'Г…CГЊOГ‡Г’Г€OГ‹AГЏГ’' and use5 then
         clickID = id + 1
         sampSendClickTextdraw(clickID)
         use5 = false
@@ -1471,7 +1471,7 @@ function rul(respond)
 end
 
 function sendchot6()
-	lua_thread.create(function() -- начало потока
+	lua_thread.create(function() -- Г­Г Г·Г Г«Г® ГЇГ®ГІГ®ГЄГ 
 	closeDialog()
 	wait(100)
 	closeDialog()
@@ -1488,9 +1488,9 @@ function sendchot6()
 	end)
 end
 
--- подключение шрифта для работы иконок	
+-- ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГҐ ГёГ°ГЁГґГІГ  Г¤Г«Гї Г°Г ГЎГ®ГІГ» ГЁГЄГ®Г­Г®ГЄ	
 
-function imgui.ToggleButton(str_id, bool) -- функция хомяка
+function imgui.ToggleButton(str_id, bool) -- ГґГіГ­ГЄГ¶ГЁГї ГµГ®Г¬ГїГЄГ 
 
 	local rBool = false
  
@@ -1546,41 +1546,41 @@ function imgui.ToggleButton(str_id, bool) -- функция хомяка
 end
 
 function imgui.OnDrawFrame()
-	local tLastKeys = {} -- это у нас для клавиш
-	local sw, sh = getScreenResolution() -- получаем разрешение экрана
-	local btn_size = imgui.ImVec2(-0.1, 0) -- а это "шаблоны" размеров кнопок
+	local tLastKeys = {} -- ГЅГІГ® Гі Г­Г Г± Г¤Г«Гї ГЄГ«Г ГўГЁГё
+	local sw, sh = getScreenResolution() -- ГЇГ®Г«ГіГ·Г ГҐГ¬ Г°Г Г§Г°ГҐГёГҐГ­ГЁГҐ ГЅГЄГ°Г Г­Г 
+	local btn_size = imgui.ImVec2(-0.1, 0) -- Г  ГЅГІГ® "ГёГ ГЎГ«Г®Г­Г»" Г°Г Г§Г¬ГҐГ°Г®Гў ГЄГ­Г®ГЇГ®ГЄ
 	local btn_size2 = imgui.ImVec2(160, 0)
 	local btn_size3 = imgui.ImVec2(140, 0)
 
-	-- тут мы подстраиваем курсор под адекватность
+	-- ГІГіГІ Г¬Г» ГЇГ®Г¤Г±ГІГ°Г ГЁГўГ ГҐГ¬ ГЄГіГ°Г±Г®Г° ГЇГ®Г¤ Г Г¤ГҐГЄГўГ ГІГ­Г®Г±ГІГј
 	imgui.ShowCursor = not win_state['informer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v
 	
 	if not win_state['main'].v  then 
           imgui.Process = false
        end
 	
-	if win_state['main'].v then -- основное окошко
+	if win_state['main'].v then -- Г®Г±Г­Г®ГўГ­Г®ГҐ Г®ГЄГ®ГёГЄГ®
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(260, 110), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
-		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
-		-- информация по скрипту, готово
-		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
+		if imgui.Button(u8' ГЃГЁГ­Г¤ГҐГ° ГЁ ГЌГ Г±ГІГ°Г®Г©ГЄГЁ', btn_size) then win_state['settings'].v = not win_state['settings'].v end
+		-- ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГї ГЇГ® Г±ГЄГ°ГЁГЇГІГі, ГЈГ®ГІГ®ГўГ®
+		if imgui.Button(u8' ГЏГ®Г¬Г®Г№Гј', btn_size) then win_state['help'].v = not win_state['help'].v end
 		imgui.End()
 	end
 	
-	if win_state['settings'].v then -- окно с настройками
+	if win_state['settings'].v then -- Г®ГЄГ­Г® Г± Г­Г Г±ГІГ°Г®Г©ГЄГ Г¬ГЁ
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8' Биндер и Настройки', win_state['settings'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-		if imgui.BeginMenuBar() then -- меню бар, используется в виде выпадающего списка, ибо горизонтальный с ума сходит и мерцает при клике по одному из пунктов
-			if imgui.BeginMenu(u8(" Навигация по настройкам")) then
-				if imgui.MenuItem(u8(" Биндер")) then
+		imgui.Begin(u8' ГЃГЁГ­Г¤ГҐГ° ГЁ ГЌГ Г±ГІГ°Г®Г©ГЄГЁ', win_state['settings'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
+		if imgui.BeginMenuBar() then -- Г¬ГҐГ­Гѕ ГЎГ Г°, ГЁГ±ГЇГ®Г«ГјГ§ГіГҐГІГ±Гї Гў ГўГЁГ¤ГҐ ГўГ»ГЇГ Г¤Г ГѕГ№ГҐГЈГ® Г±ГЇГЁГ±ГЄГ , ГЁГЎГ® ГЈГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­Г»Г© Г± ГіГ¬Г  Г±ГµГ®Г¤ГЁГІ ГЁ Г¬ГҐГ°Г¶Г ГҐГІ ГЇГ°ГЁ ГЄГ«ГЁГЄГҐ ГЇГ® Г®Г¤Г­Г®Г¬Гі ГЁГ§ ГЇГіГ­ГЄГІГ®Гў
+			if imgui.BeginMenu(u8(" ГЌГ ГўГЁГЈГ Г¶ГЁГї ГЇГ® Г­Г Г±ГІГ°Г®Г©ГЄГ Г¬")) then
+				if imgui.MenuItem(u8(" ГЃГЁГ­Г¤ГҐГ°")) then
 					showSet = 2
-				elseif imgui.MenuItem(u8(" Настройки")) then
+				elseif imgui.MenuItem(u8(" ГЌГ Г±ГІГ°Г®Г©ГЄГЁ")) then
 					showSet = 1
-				elseif imgui.MenuItem(u8(" Стили")) then
+				elseif imgui.MenuItem(u8(" Г‘ГІГЁГ«ГЁ")) then
 					showSet = 5
 				end
 				imgui.EndMenu()
@@ -1597,58 +1597,58 @@ function imgui.OnDrawFrame()
 		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Purple")); imgui.SameLine(); imgui.ToggleButton(u8'Purple', styletest4)
 		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Gray")); imgui.SameLine(); imgui.ToggleButton(u8'Gray', styletest5)
 		end
-		if showSet == 1 then -- общие настройки
-			if imgui.CollapsingHeader(u8' Модификации') then
+		if showSet == 1 then -- Г®ГЎГ№ГЁГҐ Г­Г Г±ГІГ°Г®Г©ГЄГЁ
+			if imgui.CollapsingHeader(u8' ГЊГ®Г¤ГЁГґГЁГЄГ Г¶ГЁГЁ') then
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 100), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГќГ¬ГіГ«ГїГІГ®Г° Г«Г ГіГ­Г·ГҐГ°Г ")); imgui.SameLine(); imgui.ToggleButton(u8'ГќГ¬ГіГ«ГїГІГ®Г° Г«Г ГіГ­Г·ГҐГ°Г ', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Г…Г±Г«ГЁ ГўГЄГ«ГѕГ·ГҐГ­Г®, ГІГ® ГўГ» Г±Г¬Г®Г¦ГҐГІГҐ Г®ГІГЄГ°Г»ГўГ ГІГј Г±ГіГ­Г¤ГіГЄГЁ Г± Г°ГіГ«ГҐГІГЄГ Г¬ГЁ, ГЇГ®Г«ГіГ·Г ГІГј ГіГўГҐГ«ГЁГ·ГҐГ­Г­Г»Г© Г¤ГҐГЇГ®Г§ГЁГІ ГЁ 10.000$ Гў Г·Г Г±. ГЏГ®Г±Г«ГҐ ГўГЄГ«ГѕГ·ГҐГ­ГЁГї Г¤Г Г­Г­Г®Г© ГґГіГ­ГЄГ¶ГЁГ© Г­ГіГ¦Г­Г® ГЇГҐГ°ГҐГ§Г Г©ГІГЁ Гў ГЁГЈГ°Гі.")
 				imgui.NextColumn()
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Г—Г ГІ Г­Г  ГЄГ«Г ГўГЁГёГі Г’")); imgui.SameLine(); imgui.ToggleButton(u8'Г—Г ГІ Г­Г  ГЄГ«Г ГўГЁГёГі T', keyT)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЂГўГІГ® Г§Г ГЄГ°Г»ГІГЁГҐ Г¤ГўГҐГ°ГҐГ©(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'ГЂГўГІГ® Г§Г ГЄГ°Г»ГІГЁГҐ Г¤ГўГҐГ°ГҐГ©(/lock)', lock)
 				imgui.EndChild()
 			end
 			if userNick == 'Bunya_Monopol' then
-			if imgui.CollapsingHeader(u8' Для разработки') then
+			if imgui.CollapsingHeader(u8' Г„Г«Гї Г°Г Г§Г°Г ГЎГ®ГІГЄГЁ') then
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 80), false)
 				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ID Моделей в Textdraw")); imgui.SameLine(); imgui.ToggleButton(u8'ID Моделей в Textdraw', idmodel)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ID ГЊГ®Г¤ГҐГ«ГҐГ© Гў Textdraw")); imgui.SameLine(); imgui.ToggleButton(u8'ID ГЊГ®Г¤ГҐГ«ГҐГ© Гў Textdraw', idmodel)
 				imgui.EndChild()
 			end
 			end
-			if imgui.CollapsingHeader(u8' Информер') then
+			if imgui.CollapsingHeader(u8' Г€Г­ГґГ®Г°Г¬ГҐГ°') then
 				imgui.BeginChild('##25252', imgui.ImVec2(750, 160), false)
 				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Г‚ГЄГ«ГѕГ·ГЁГІГј ГЁГ­ГґГ®Г°Г¬ГҐГ°")); imgui.SameLine(); imgui.ToggleButton(u8'Г‚ГЄГ«ГѕГ·ГЁГІГј ГЁГ­ГґГ®Г°Г¬ГҐГ°', zones)
 				if zones.v then
 					imgui.SameLine()
-					if imgui.Button(u8'Переместить') then 
-						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63)
+					if imgui.Button(u8'ГЏГҐГ°ГҐГ¬ГҐГ±ГІГЁГІГј') then 
+						sampAddChatMessage("[Mono Tools]{FFFFFF} Г‚Г»ГЎГҐГ°ГЁГІГҐ ГЇГ®Г§ГЁГ¶ГЁГѕ ГЁ Г­Г Г¦Г¬ГЁГІГҐ {00C2BB}Enter{FFFFFF} Г·ГІГ®ГЎГ» Г±Г®ГµГ°Г Г­ГЁГІГј ГҐГҐ.", 0x046D63)
 						win_state['settings'].v = not win_state['settings'].v 
 						win_state['main'].v = not win_state['main'].v 
 						mouseCoord = true 
 					end
 				end
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение брони")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение брони', infArmour)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение здоровья")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение здоровья', infHP)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЎГ°Г®Г­ГЁ")); imgui.SameLine(); imgui.ToggleButton(u8'ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЎГ°Г®Г­ГЁ', infArmour)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Г§Г¤Г®Г°Г®ГўГјГї")); imgui.SameLine(); imgui.ToggleButton(u8'ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Г§Г¤Г®Г°Г®ГўГјГї', infHP)
 				imgui.NextColumn()
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение города")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение города', infCity)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение района")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение района', infRajon)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение квадрата")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение квадрата', infKv)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение времени")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение времени', infTime)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЈГ®Г°Г®Г¤Г ")); imgui.SameLine(); imgui.ToggleButton(u8'ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЈГ®Г°Г®Г¤Г ', infCity)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Г°Г Г©Г®Г­Г ")); imgui.SameLine(); imgui.ToggleButton(u8'ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Г°Г Г©Г®Г­Г ', infRajon)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЄГўГ Г¤Г°Г ГІГ ")); imgui.SameLine(); imgui.ToggleButton(u8'ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГЄГўГ Г¤Г°Г ГІГ ', infKv)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГўГ°ГҐГ¬ГҐГ­ГЁ")); imgui.SameLine(); imgui.ToggleButton(u8'ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ ГўГ°ГҐГ¬ГҐГ­ГЁ', infTime)
 				imgui.EndChild()
 			end
-			if imgui.CollapsingHeader(u8' Авторизация') then
+			if imgui.CollapsingHeader(u8' ГЂГўГІГ®Г°ГЁГ§Г Г¶ГЁГї') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(750, 60), false)
 				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автологин")); imgui.SameLine(); imgui.ToggleButton(u8("Автологин"), autologin)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЂГўГІГ®Г«Г®ГЈГЁГ­")); imgui.SameLine(); imgui.ToggleButton(u8("ГЂГўГІГ®Г«Г®ГЈГЁГ­"), autologin)
 				if autologin.v then
-					imgui.InputText(u8'Пароль', autopass)
+					imgui.InputText(u8'ГЏГ Г°Г®Г«Гј', autopass)
 				end
 				imgui.NextColumn()
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автопин")); imgui.SameLine(); imgui.ToggleButton(u8("Автопин"), autopin)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЂГўГІГ®ГЇГЁГ­")); imgui.SameLine(); imgui.ToggleButton(u8("ГЂГўГІГ®ГЇГЁГ­"), autopin)
 				if autopin.v then
-					imgui.InputText(u8'Pin-код', autopasspin)
+					imgui.InputText(u8'Pin-ГЄГ®Г¤', autopasspin)
 				end
 				imgui.EndChild()
 			end
@@ -1656,16 +1656,16 @@ function imgui.OnDrawFrame()
 			if imgui.CollapsingHeader(u8' Roulette Tools') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 200), false)
 				imgui.Columns(2, _, false)
-				imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
-				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
-				imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
-				imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГІГј ГЎГ°Г®Г­Г§Г®ГўГ»ГҐ Г°ГіГ«ГҐГІГЄГЁ', checked_test)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГІГј Г±ГҐГ°ГҐГЎГ°ГїГ­Г»ГҐ  Г°ГіГ«ГҐГІГЄГЁ', checked_test2)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГІГј Г§Г®Г«Г®ГІГ»ГҐ Г°ГіГ«ГҐГІГЄГЁ', checked_test3)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГІГј ГЇГ«Г ГІГЁГ­Г®ГўГ»ГҐ Г°ГіГ«ГҐГІГЄГЁ', checked_test4)
 				imgui.NextColumn()
-				imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
-				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
-				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
-				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-				imgui.SliderInt(u8'Задержка',zadervka,1, 30)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГўГ ГІГј Г®ГЎГ»Г·Г­Г»Г© Г±ГіГ­Г¤ГіГЄ', checked_test5)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГўГ ГІГј Г¤Г®Г­Г ГІГ­Г»Г© Г±ГіГ­Г¤ГіГЄ', checked_test6)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГўГ ГІГј ГЇГ«Г ГІГЁГ­Г®ГўГ»Г© Г±ГіГ­Г¤ГіГЄ', checked_test7)
+				imgui.Checkbox(u8'ГЋГІГЄГ°Г»ГўГ ГІГј Г±ГіГ­Г¤ГіГЄ "Г€Г«Г®Г­Г  ГЊГ Г±ГЄГ "', checked_test10)
+				imgui.SliderInt(u8'Г‡Г Г¤ГҐГ°Г¦ГЄГ ',zadervka,1, 30)
 				imgui.EndChild()
 			end
 			if checked_test.v then
@@ -1695,27 +1695,27 @@ function imgui.OnDrawFrame()
 			if imgui.CollapsingHeader(u8' Bank Menu') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 60), false)
 				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ГЏГ®ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г¤ГҐГЇГ®Г§ГЁГІГ  ГЄГ Г¦Г¤Г»Г© PD")); imgui.SameLine(); imgui.ToggleButton(u8("ГЏГ®ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г¤ГҐГЇГ®Г§ГЁГІГ  ГЄГ Г¦Г¤Г»Г© PD"), autopay)
 				if autopay.v then
-				imgui.SliderInt(u8"Сумма пополнения", pay, 10000, 5000000)
+				imgui.SliderInt(u8"Г‘ГіГ¬Г¬Г  ГЇГ®ГЇГ®Г«Г­ГҐГ­ГЁГї", pay, 10000, 5000000)
 			end
 			imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Toch Menu') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 100), false)
 				imgui.Columns(2, _, false)
-				imgui.Checkbox(u8'Камни', checked_box2)
+				imgui.Checkbox(u8'ГЉГ Г¬Г­ГЁ', checked_box2)
 				imgui.SameLine()
-				imgui.TextQuestion(u8"Авто-заточка аксессуара камнями(ложить камни на вторую страницу инвентаря)")
+				imgui.TextQuestion(u8"ГЂГўГІГ®-Г§Г ГІГ®Г·ГЄГ  Г ГЄГ±ГҐГ±Г±ГіГ Г°Г  ГЄГ Г¬Г­ГїГ¬ГЁ(Г«Г®Г¦ГЁГІГј ГЄГ Г¬Г­ГЁ Г­Г  ГўГІГ®Г°ГіГѕ Г±ГІГ°Г Г­ГЁГ¶Гі ГЁГ­ГўГҐГ­ГІГ Г°Гї)")
 				imgui.SameLine()
-				imgui.Checkbox(u8'Амулеты', checked_box)
+				imgui.Checkbox(u8'ГЂГ¬ГіГ«ГҐГІГ»', checked_box)
 				imgui.SameLine()
-				imgui.TextQuestion(u8"Авто-заточка аксессуара амулетами(ложить амулеты на вторую страницу инвентаря)")
+				imgui.TextQuestion(u8"ГЂГўГІГ®-Г§Г ГІГ®Г·ГЄГ  Г ГЄГ±ГҐГ±Г±ГіГ Г°Г  Г Г¬ГіГ«ГҐГІГ Г¬ГЁ(Г«Г®Г¦ГЁГІГј Г Г¬ГіГ«ГҐГІГ» Г­Г  ГўГІГ®Г°ГіГѕ Г±ГІГ°Г Г­ГЁГ¶Гі ГЁГ­ГўГҐГ­ГІГ Г°Гї)")
 				imgui.SameLine()
-				imgui.Checkbox(u8'Камни и Амулеты', checked_box3)
+				imgui.Checkbox(u8'ГЉГ Г¬Г­ГЁ ГЁ ГЂГ¬ГіГ«ГҐГІГ»', checked_box3)
 				imgui.SameLine()
-				imgui.TextQuestion(u8"Авто-заточка аксессуара камнями и амулетами(работает 50/50 и не у всех, тестируйте)")
-				imgui.Text(u8'Выберите на сколько будет точиться акс:')
+				imgui.TextQuestion(u8"ГЂГўГІГ®-Г§Г ГІГ®Г·ГЄГ  Г ГЄГ±ГҐГ±Г±ГіГ Г°Г  ГЄГ Г¬Г­ГїГ¬ГЁ ГЁ Г Г¬ГіГ«ГҐГІГ Г¬ГЁ(Г°Г ГЎГ®ГІГ ГҐГІ 50/50 ГЁ Г­ГҐ Гі ГўГ±ГҐГµ, ГІГҐГ±ГІГЁГ°ГіГ©ГІГҐ)")
+				imgui.Text(u8'Г‚Г»ГЎГҐГ°ГЁГІГҐ Г­Г  Г±ГЄГ®Г«ГјГЄГ® ГЎГіГ¤ГҐГІ ГІГ®Г·ГЁГІГјГ±Гї Г ГЄГ±:')
 				imgui.Separator()
 				imgui.RadioButton('+1', checked_radio, 1)
 				imgui.SameLine()
@@ -1743,27 +1743,27 @@ function imgui.OnDrawFrame()
 				imgui.Separator()
 				imgui.EndChild()
 			end
-			if imgui.CollapsingHeader(u8' Таймцикл') then
+			if imgui.CollapsingHeader(u8' Г’Г Г©Г¬Г¶ГЁГЄГ«') then
 				if weather.v == -1 then weather.v = readMemory(0xC81320, 1, true) end
 				if gametime.v == -1 then gametime.v = readMemory(0xB70153, 1, true) end
-				imgui.SliderInt(u8"ID погоды", weather, 0, 50)
-				imgui.SliderInt(u8"Игровой час", gametime, 0, 23)
+				imgui.SliderInt(u8"ID ГЇГ®ГЈГ®Г¤Г»", weather, 0, 50)
+				imgui.SliderInt(u8"Г€ГЈГ°Г®ГўГ®Г© Г·Г Г±", gametime, 0, 23)
 			end
-			if imgui.CollapsingHeader(u8' Прочие настройки') then
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Визуальный скин")); imgui.SameLine(); imgui.ToggleButton(u8("Визуальный скин"), enableskin)
+			if imgui.CollapsingHeader(u8' ГЏГ°Г®Г·ГЁГҐ Г­Г Г±ГІГ°Г®Г©ГЄГЁ') then
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Г‚ГЁГ§ГіГ Г«ГјГ­Г»Г© Г±ГЄГЁГ­")); imgui.SameLine(); imgui.ToggleButton(u8("Г‚ГЁГ§ГіГ Г«ГјГ­Г»Г© Г±ГЄГЁГ­"), enableskin)
 				if enableskin.v then
 					imgui.InputInt("##229", localskin, 0, 0)
 					imgui.SameLine()
-					if imgui.Button(u8("Применить")) then
+					if imgui.Button(u8("ГЏГ°ГЁГ¬ГҐГ­ГЁГІГј")) then
 						if localskin.v <= 0 or localskin.v == 74 or localskin.v == 53 then
 							localskin.v = 1
 						end
 						changeSkin(-1, localskin.v)
 					end
 				end
-				imgui.SliderInt(u8" Коррекция времени", timefix, 0, 5)
+				imgui.SliderInt(u8" ГЉГ®Г°Г°ГҐГЄГ¶ГЁГї ГўГ°ГҐГ¬ГҐГ­ГЁ", timefix, 0, 5)
 			end
-		elseif showSet == 3 then -- настройки клавиш
+		elseif showSet == 3 then -- Г­Г Г±ГІГ°Г®Г©ГЄГЁ ГЄГ«Г ГўГЁГё
 			imgui.Columns(2, _, false)
 			for k, v in ipairs(tBindList) do
 					if k ~= 2 and k ~= 8 and k ~= 9 and k ~= 10 then
@@ -1782,33 +1782,33 @@ function imgui.OnDrawFrame()
 				--end
 				if k >= 6 and imgui.GetColumnIndex() ~= 1 then imgui.NextColumn() end
 			end
-		elseif showSet == 2 then -- меню биндера
+		elseif showSet == 2 then -- Г¬ГҐГ­Гѕ ГЎГЁГ­Г¤ГҐГ°Г 
 			imgui.Columns(4, _, false)
 			imgui.NextColumn()
 			imgui.NextColumn()
 			imgui.NextColumn()
-			for k, v in ipairs(mass_bind) do -- выводим все бинды
+			for k, v in ipairs(mass_bind) do -- ГўГ»ГўГ®Г¤ГЁГ¬ ГўГ±ГҐ ГЎГЁГ­Г¤Г»
 				imgui.NextColumn()
-				if hk.HotKey("##ID" .. k, v, tLastKeys, 100) then -- выводим окошко, куда будем тыкать, чтобы назначить клавишу
+				if hk.HotKey("##ID" .. k, v, tLastKeys, 100) then -- ГўГ»ГўГ®Г¤ГЁГ¬ Г®ГЄГ®ГёГЄГ®, ГЄГіГ¤Г  ГЎГіГ¤ГҐГ¬ ГІГ»ГЄГ ГІГј, Г·ГІГ®ГЎГ» Г­Г Г§Г­Г Г·ГЁГІГј ГЄГ«Г ГўГЁГёГі
 					if not rkeys.isHotKeyDefined(v.v) then
 						if rkeys.isHotKeyDefined(tLastKeys.v) then
 							rkeys.unRegisterHotKey(tLastKeys.v)
 						end
 					end
 					rkeys.registerHotKey(v.v, true, onHotKey)
-					saveSettings(3, "KEY") -- сохраняем настройки
+					saveSettings(3, "KEY") -- Г±Г®ГµГ°Г Г­ГїГҐГ¬ Г­Г Г±ГІГ°Г®Г©ГЄГЁ
 				end
 				imgui.NextColumn()
-				if v.cmd ~= "-" then -- условие вывода текста
-					imgui.Text(u8("Команда: /"..v.cmd))
+				if v.cmd ~= "-" then -- ГіГ±Г«Г®ГўГЁГҐ ГўГ»ГўГ®Г¤Г  ГІГҐГЄГ±ГІГ 
+					imgui.Text(u8("ГЉГ®Г¬Г Г­Г¤Г : /"..v.cmd))
 				else
-					imgui.Text(u8("Команда не назначена"))
+					imgui.Text(u8("ГЉГ®Г¬Г Г­Г¤Г  Г­ГҐ Г­Г Г§Г­Г Г·ГҐГ­Г "))
 				end
 				imgui.NextColumn()
-				if imgui.Button(u8(" Редактировать бинд ##"..k)) then imgui.OpenPopup(u8"Установка клавиши ##modal"..k) end
+				if imgui.Button(u8(" ГђГҐГ¤Г ГЄГІГЁГ°Г®ГўГ ГІГј ГЎГЁГ­Г¤ ##"..k)) then imgui.OpenPopup(u8"Г“Г±ГІГ Г­Г®ГўГЄГ  ГЄГ«Г ГўГЁГёГЁ ##modal"..k) end
 				if k ~= 0 then
 					imgui.NextColumn()
-					if imgui.Button(u8(" Удалить бинд ##"..k)) then
+					if imgui.Button(u8(" Г“Г¤Г Г«ГЁГІГј ГЎГЁГ­Г¤ ##"..k)) then
 						if v.cmd ~= "-" then sampUnregisterChatCommand(v.cmd) end
 						if rkeys.isHotKeyDefined(tLastKeys.v) then rkeys.unRegisterHotKey(tLastKeys.v) end
 						table.remove(mass_bind, k)
@@ -1816,22 +1816,22 @@ function imgui.OnDrawFrame()
 					end
 				end
 				
-				if imgui.BeginPopupModal(u8"Установка клавиши ##modal"..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove) then
-					if imgui.Button(u8(' Сменить/Назначить команду'), imgui.ImVec2(200, 0)) then
-						imgui.OpenPopup(u8"Команда - /"..v.cmd)
+				if imgui.BeginPopupModal(u8"Г“Г±ГІГ Г­Г®ГўГЄГ  ГЄГ«Г ГўГЁГёГЁ ##modal"..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove) then
+					if imgui.Button(u8(' Г‘Г¬ГҐГ­ГЁГІГј/ГЌГ Г§Г­Г Г·ГЁГІГј ГЄГ®Г¬Г Г­Г¤Гі'), imgui.ImVec2(200, 0)) then
+						imgui.OpenPopup(u8"ГЉГ®Г¬Г Г­Г¤Г  - /"..v.cmd)
 					end
-					if imgui.Button(u8(' Редактировать содержимое'), imgui.ImVec2(200, 0)) then
+					if imgui.Button(u8(' ГђГҐГ¤Г ГЄГІГЁГ°Г®ГўГ ГІГј Г±Г®Г¤ГҐГ°Г¦ГЁГ¬Г®ГҐ'), imgui.ImVec2(200, 0)) then
 						cmd_text.v = u8(v.text):gsub("~", "\n")
 						binddelay.v = v.delay
-						imgui.OpenPopup(u8'Редактор текста ##second'..k)
+						imgui.OpenPopup(u8'ГђГҐГ¤Г ГЄГІГ®Г° ГІГҐГЄГ±ГІГ  ##second'..k)
 					end
 
-					if imgui.BeginPopupModal(u8"Команда - /"..v.cmd, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.AlwaysAutoResize) then
-						imgui.Text(u8"Введите название команды, которую хотите применить к бинду, указывайте без '/':")						
-						imgui.Text(u8"Чтобы удалить комманду, введите прочерк и сохраните.")						
+					if imgui.BeginPopupModal(u8"ГЉГ®Г¬Г Г­Г¤Г  - /"..v.cmd, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.AlwaysAutoResize) then
+						imgui.Text(u8"Г‚ГўГҐГ¤ГЁГІГҐ Г­Г Г§ГўГ Г­ГЁГҐ ГЄГ®Г¬Г Г­Г¤Г», ГЄГ®ГІГ®Г°ГіГѕ ГµГ®ГІГЁГІГҐ ГЇГ°ГЁГ¬ГҐГ­ГЁГІГј ГЄ ГЎГЁГ­Г¤Гі, ГіГЄГ Г§Г»ГўГ Г©ГІГҐ ГЎГҐГ§ '/':")						
+						imgui.Text(u8"Г—ГІГ®ГЎГ» ГіГ¤Г Г«ГЁГІГј ГЄГ®Г¬Г¬Г Г­Г¤Гі, ГўГўГҐГ¤ГЁГІГҐ ГЇГ°Г®Г·ГҐГ°ГЄ ГЁ Г±Г®ГµГ°Г Г­ГЁГІГҐ.")						
 						imgui.InputText("##FUCKITTIKCUF_1", cmd_name)
 
-						if imgui.Button(u8" Сохранить", imgui.ImVec2(100, 0)) then
+						if imgui.Button(u8" Г‘Г®ГµГ°Г Г­ГЁГІГј", imgui.ImVec2(100, 0)) then
 							v.cmd = u8:decode(cmd_name.v)
 
 							if u8:decode(cmd_name.v) ~= "-" then
@@ -1842,50 +1842,50 @@ function imgui.OnDrawFrame()
 							imgui.CloseCurrentPopup()
 						end
 						imgui.SameLine()
-						if imgui.Button(u8" Закрыть") then
+						if imgui.Button(u8" Г‡Г ГЄГ°Г»ГІГј") then
 							cmd_name.v = ""
 							imgui.CloseCurrentPopup()
 						end
 						imgui.EndPopup()
 					end
 
-					if imgui.BeginPopupModal(u8'Редактор текста ##second'..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.AlwaysAutoResize) then
+					if imgui.BeginPopupModal(u8'ГђГҐГ¤Г ГЄГІГ®Г° ГІГҐГЄГ±ГІГ  ##second'..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.AlwaysAutoResize) then
 						imgui.BeginChild('##sdaadasdd', imgui.ImVec2(1100, 600), true)
 						imgui.Columns(2, _, false)
-						imgui.TextWrapped(u8("Параметр {bwait:time} обязателен после каждой строки. Задержка автоматически не выставляется."))
-						imgui.TextWrapped(u8"Редактор текста биндера:")
+						imgui.TextWrapped(u8("ГЏГ Г°Г Г¬ГҐГІГ° {bwait:time} Г®ГЎГїГ§Г ГІГҐГ«ГҐГ­ ГЇГ®Г±Г«ГҐ ГЄГ Г¦Г¤Г®Г© Г±ГІГ°Г®ГЄГЁ. Г‡Г Г¤ГҐГ°Г¦ГЄГ  Г ГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГЁ Г­ГҐ ГўГ»Г±ГІГ ГўГ«ГїГҐГІГ±Гї."))
+						imgui.TextWrapped(u8"ГђГҐГ¤Г ГЄГІГ®Г° ГІГҐГЄГ±ГІГ  ГЎГЁГ­Г¤ГҐГ°Г :")
 						imgui.InputTextMultiline('##FUCKITTIKCUF_2', cmd_text, imgui.ImVec2(550, 300))
 						
-						imgui.Text(u8("Результат:"))
+						imgui.Text(u8("ГђГҐГ§ГіГ«ГјГІГ ГІ:"))
 						local example = tags(u8:decode(cmd_text.v))
 						imgui.Text(u8(example))
 						imgui.NextColumn()
 						imgui.BeginChild('##sdaadddasdd', imgui.ImVec2(525, 480), true)
-						imgui.TextColoredRGB('• {bwait:1500} {21BDBF}- задержка между строк - {fff555}ОБЯЗАТЕЛЬНЫЙ ПАРАМЕТР')
+						imgui.TextColoredRGB('В• {bwait:1500} {21BDBF}- Г§Г Г¤ГҐГ°Г¦ГЄГ  Г¬ГҐГ¦Г¤Гі Г±ГІГ°Г®ГЄ - {fff555}ГЋГЃГџГ‡ГЂГ’Г…Г‹ГњГЌГ›Г‰ ГЏГЂГђГЂГЊГ…Г’Гђ')
 						imgui.Separator()
 						
-						imgui.TextColoredRGB('• {params} {21BDBF}- параметр команды - {fff555}/'..v.cmd..' [параметр]')
-						imgui.TextColoredRGB('• {paramNickByID} {21BDBF}- цифровой параметр, получаем ник по ID.')
-						imgui.TextColoredRGB('• {paramFullNameByID} {21BDBF}- цифровой параметр, получаем РП ник по ID.')
-						imgui.TextColoredRGB('• {paramNameByID} {21BDBF}- цифровой параметр, получаем имя по ID.')
-						imgui.TextColoredRGB('• {paramSurnameByID} {21BDBF}- цифровой параметр, получаем фамилию по ID.')
+						imgui.TextColoredRGB('В• {params} {21BDBF}- ГЇГ Г°Г Г¬ГҐГІГ° ГЄГ®Г¬Г Г­Г¤Г» - {fff555}/'..v.cmd..' [ГЇГ Г°Г Г¬ГҐГІГ°]')
+						imgui.TextColoredRGB('В• {paramNickByID} {21BDBF}- Г¶ГЁГґГ°Г®ГўГ®Г© ГЇГ Г°Г Г¬ГҐГІГ°, ГЇГ®Г«ГіГ·Г ГҐГ¬ Г­ГЁГЄ ГЇГ® ID.')
+						imgui.TextColoredRGB('В• {paramFullNameByID} {21BDBF}- Г¶ГЁГґГ°Г®ГўГ®Г© ГЇГ Г°Г Г¬ГҐГІГ°, ГЇГ®Г«ГіГ·Г ГҐГ¬ ГђГЏ Г­ГЁГЄ ГЇГ® ID.')
+						imgui.TextColoredRGB('В• {paramNameByID} {21BDBF}- Г¶ГЁГґГ°Г®ГўГ®Г© ГЇГ Г°Г Г¬ГҐГІГ°, ГЇГ®Г«ГіГ·Г ГҐГ¬ ГЁГ¬Гї ГЇГ® ID.')
+						imgui.TextColoredRGB('В• {paramSurnameByID} {21BDBF}- Г¶ГЁГґГ°Г®ГўГ®Г© ГЇГ Г°Г Г¬ГҐГІГ°, ГЇГ®Г«ГіГ·Г ГҐГ¬ ГґГ Г¬ГЁГ«ГЁГѕ ГЇГ® ID.')
 
 						imgui.Separator()
-						imgui.TextColoredRGB('• {mynick} {21BDBF}- ваш полный ник - {fff555}'..tostring(userNick))
-						imgui.TextColoredRGB('• {myfname} {21BDBF}- ваш РП ник - {fff555}'..tostring(nickName))
-						imgui.TextColoredRGB('• {myname} {21BDBF}- ваше имя - {fff555}'..tostring(userNick:gsub("_.*", "")))
-						imgui.TextColoredRGB('• {mysurname} {21BDBF}- ваша фамилия - {fff555}'..tostring(userNick:gsub(".*_", "")))
-						imgui.TextColoredRGB('• {myid} {21BDBF}- ваш ID - {fff555}'..tostring(myID))
-						imgui.TextColoredRGB('• {myhp} {21BDBF}- ваш уровень HP - {fff555}'..tostring(healNew))
-						imgui.TextColoredRGB('• {myarm} {21BDBF}- ваш уровень брони - {fff555}'..tostring(armourNew))
+						imgui.TextColoredRGB('В• {mynick} {21BDBF}- ГўГ Гё ГЇГ®Г«Г­Г»Г© Г­ГЁГЄ - {fff555}'..tostring(userNick))
+						imgui.TextColoredRGB('В• {myfname} {21BDBF}- ГўГ Гё ГђГЏ Г­ГЁГЄ - {fff555}'..tostring(nickName))
+						imgui.TextColoredRGB('В• {myname} {21BDBF}- ГўГ ГёГҐ ГЁГ¬Гї - {fff555}'..tostring(userNick:gsub("_.*", "")))
+						imgui.TextColoredRGB('В• {mysurname} {21BDBF}- ГўГ ГёГ  ГґГ Г¬ГЁГ«ГЁГї - {fff555}'..tostring(userNick:gsub(".*_", "")))
+						imgui.TextColoredRGB('В• {myid} {21BDBF}- ГўГ Гё ID - {fff555}'..tostring(myID))
+						imgui.TextColoredRGB('В• {myhp} {21BDBF}- ГўГ Гё ГіГ°Г®ГўГҐГ­Гј HP - {fff555}'..tostring(healNew))
+						imgui.TextColoredRGB('В• {myarm} {21BDBF}- ГўГ Гё ГіГ°Г®ГўГҐГ­Гј ГЎГ°Г®Г­ГЁ - {fff555}'..tostring(armourNew))
 						imgui.Separator()
-						imgui.TextColoredRGB('• {city} {21BDBF}- город, в котором находитесь - {fff555}'..tostring(playerCity))
-						imgui.TextColoredRGB('• {kvadrat} {21BDBF}- определение квадрата - {fff555}'..tostring(locationPos()))
-						imgui.TextColoredRGB('• {zone} {21BDBF}- определение района - {fff555}'..tostring(ZoneInGame))
-						imgui.TextColoredRGB('• {time} {21BDBF}- МСК время - {fff555}'..string.format(os.date('%H:%M:%S', moscow_time)))		
+						imgui.TextColoredRGB('В• {city} {21BDBF}- ГЈГ®Г°Г®Г¤, Гў ГЄГ®ГІГ®Г°Г®Г¬ Г­Г ГµГ®Г¤ГЁГІГҐГ±Гј - {fff555}'..tostring(playerCity))
+						imgui.TextColoredRGB('В• {kvadrat} {21BDBF}- Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ ГЄГўГ Г¤Г°Г ГІГ  - {fff555}'..tostring(locationPos()))
+						imgui.TextColoredRGB('В• {zone} {21BDBF}- Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ Г°Г Г©Г®Г­Г  - {fff555}'..tostring(ZoneInGame))
+						imgui.TextColoredRGB('В• {time} {21BDBF}- ГЊГ‘ГЉ ГўГ°ГҐГ¬Гї - {fff555}'..string.format(os.date('%H:%M:%S', moscow_time)))		
 						imgui.EndChild()
 						imgui.NewLine()
-						if imgui.Button(u8" Сохранить", btn_size) then
+						if imgui.Button(u8" Г‘Г®ГµГ°Г Г­ГЁГІГј", btn_size) then
 
 							v.text = u8:decode(cmd_text.v):gsub("\n", '~')
 							v.delay = binddelay.v
@@ -1898,14 +1898,14 @@ function imgui.OnDrawFrame()
 							imgui.CloseCurrentPopup()
 						end
 
-						if imgui.Button(u8" Закрыть не сохраняя", btn_size) then
+						if imgui.Button(u8" Г‡Г ГЄГ°Г»ГІГј Г­ГҐ Г±Г®ГµГ°Г Г­ГїГї", btn_size) then
 							imgui.CloseCurrentPopup()
 						end
 						imgui.EndChild()
 						imgui.EndPopup()
 					end
 
-					if imgui.Button(u8" Закрыть", imgui.ImVec2(200, 0)) then
+					if imgui.Button(u8" Г‡Г ГЄГ°Г»ГІГј", imgui.ImVec2(200, 0)) then
 						imgui.CloseCurrentPopup()
 					end
 					imgui.EndPopup()
@@ -1914,22 +1914,22 @@ function imgui.OnDrawFrame()
 			
 			imgui.NextColumn()
 			imgui.NewLine()
-			if imgui.Button(u8(" Добавить бинд")) then mass_bind[#mass_bind + 1] = {delay = "3", v = {}, text = "n/a", cmd = "-"} end	
+			if imgui.Button(u8(" Г„Г®ГЎГ ГўГЁГІГј ГЎГЁГ­Г¤")) then mass_bind[#mass_bind + 1] = {delay = "3", v = {}, text = "n/a", cmd = "-"} end	
 		end
 
 		imgui.End()
 	end
 
-	if win_state['help'].v then -- окно "помощь"
+	if win_state['help'].v then -- Г®ГЄГ­Г® "ГЇГ®Г¬Г®Г№Гј"
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(970, 400), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8('Помощь'), win_state['help'], imgui.WindowFlags.NoResize)
+		imgui.Begin(u8('ГЏГ®Г¬Г®Г№Гј'), win_state['help'], imgui.WindowFlags.NoResize)
 		imgui.BeginGroup()
 		imgui.BeginChild('left pane', imgui.ImVec2(180, 350), true)
 		
-		if imgui.Selectable(u8"Команды скрипта") then selected2 = 1 end
+		if imgui.Selectable(u8"ГЉГ®Г¬Г Г­Г¤Г» Г±ГЄГ°ГЁГЇГІГ ") then selected2 = 1 end
 		imgui.Separator()
-		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 2 end		
+		if imgui.Selectable(u8"ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГї Г±ГЄГ°ГЁГЇГІГ ") then selected2 = 2 end		
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
@@ -1937,7 +1937,7 @@ function imgui.OnDrawFrame()
 		if selected2 == 0 then
 			selected2 = 1
 		elseif selected2 == 2 then
-		imgui.Text(u8"Обновления")
+		imgui.Text(u8"ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГї")
 		imgui.Columns(2, _,false)
 		imgui.SetColumnWidth(-1, 800)
 		imgui.Separator()
@@ -1945,34 +1945,34 @@ function imgui.OnDrawFrame()
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
-				imgui.Text(u8"1. Добавлено автообноление.")
-				imgui.Text(u8"2. В случае, если у вас не хватает библиотек - скрипт напишет в moonloader.log каких библиотек не хватает")
-				imgui.Text(u8"и укажет ссылку, где можно их скачать.")
-				imgui.Text(u8"3. Убрана авто-оплата налогов т.к с новым семейным улучшением она не нужна.")
-				imgui.Text(u8"4. Теперь можно изменить цвет меню.")
-				imgui.Text(u8"5. Когда вы нажимаете на 'Биндер и настройки' сразу открывается меню с настройками.")
+				imgui.Text(u8"1. Г„Г®ГЎГ ГўГ«ГҐГ­Г® Г ГўГІГ®Г®ГЎГ­Г®Г«ГҐГ­ГЁГҐ.")
+				imgui.Text(u8"2. Г‚ Г±Г«ГіГ·Г ГҐ, ГҐГ±Г«ГЁ Гі ГўГ Г± Г­ГҐ ГµГўГ ГІГ ГҐГІ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄ - Г±ГЄГ°ГЁГЇГІ Г­Г ГЇГЁГёГҐГІ Гў moonloader.log ГЄГ ГЄГЁГµ ГЎГЁГЎГ«ГЁГ®ГІГҐГЄ Г­ГҐ ГµГўГ ГІГ ГҐГІ")
+				imgui.Text(u8"ГЁ ГіГЄГ Г¦ГҐГІ Г±Г±Г»Г«ГЄГі, ГЈГ¤ГҐ Г¬Г®Г¦Г­Г® ГЁГµ Г±ГЄГ Г·Г ГІГј.")
+				imgui.Text(u8"3. Г“ГЎГ°Г Г­Г  Г ГўГІГ®-Г®ГЇГ«Г ГІГ  Г­Г Г«Г®ГЈГ®Гў ГІ.ГЄ Г± Г­Г®ГўГ»Г¬ Г±ГҐГ¬ГҐГ©Г­Г»Г¬ ГіГ«ГіГ·ГёГҐГ­ГЁГҐГ¬ Г®Г­Г  Г­ГҐ Г­ГіГ¦Г­Г .")
+				imgui.Text(u8"4. Г’ГҐГЇГҐГ°Гј Г¬Г®Г¦Г­Г® ГЁГ§Г¬ГҐГ­ГЁГІГј Г¶ГўГҐГІ Г¬ГҐГ­Гѕ.")
+				imgui.Text(u8"5. ГЉГ®ГЈГ¤Г  ГўГ» Г­Г Г¦ГЁГ¬Г ГҐГІГҐ Г­Г  'ГЃГЁГ­Г¤ГҐГ° ГЁ Г­Г Г±ГІГ°Г®Г©ГЄГЁ' Г±Г°Г Г§Гі Г®ГІГЄГ°Г»ГўГ ГҐГІГ±Гї Г¬ГҐГ­Гѕ Г± Г­Г Г±ГІГ°Г®Г©ГЄГ Г¬ГЁ.")
 		imgui.EndChild()
 		end
 		elseif selected2 == 1 then
-			imgui.Text(u8"Команды скрипта")
+			imgui.Text(u8"ГЉГ®Г¬Г Г­Г¤Г» Г±ГЄГ°ГЁГЇГІГ ")
 			imgui.Separator()
 			imgui.Columns(2, _,false)
 			imgui.SetColumnWidth(-1, 800)
-				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/reload - Перезагрузка скрипта.")
-				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/сс - Очистка чата.")
-				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/drone - Получить картинку с дрона на территории.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/reload - ГЏГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ  Г±ГЄГ°ГЁГЇГІГ .")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/Г±Г± - ГЋГ·ГЁГ±ГІГЄГ  Г·Г ГІГ .")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/drone - ГЏГ®Г«ГіГ·ГЁГІГј ГЄГ Г°ГІГЁГ­ГЄГі Г± Г¤Г°Г®Г­Г  Г­Г  ГІГҐГ°Г°ГЁГІГ®Г°ГЁГЁ.")
 				imgui.Separator()
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Важно! Для того, чтобы все функции скрипта работали стабильно, нужно чтобы инвентарь был на английском языке!")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Настройть язык инвентаря вы можете в /settings. Убедительная просьба не выключать автообновления в коде.")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе вы в будущем не получите улучшения или исправление ошибок. Также, если вы хотите предложить свои идеи")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"по улучшению скрипта, нашли баги или скрипт у вас не работает как должен, то отпишите https://vk.com/alex_bynes.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Г‚Г Г¦Г­Г®! Г„Г«Гї ГІГ®ГЈГ®, Г·ГІГ®ГЎГ» ГўГ±ГҐ ГґГіГ­ГЄГ¶ГЁГЁ Г±ГЄГ°ГЁГЇГІГ  Г°Г ГЎГ®ГІГ Г«ГЁ Г±ГІГ ГЎГЁГ«ГјГ­Г®, Г­ГіГ¦Г­Г® Г·ГІГ®ГЎГ» ГЁГ­ГўГҐГ­ГІГ Г°Гј ГЎГ»Г« Г­Г  Г Г­ГЈГ«ГЁГ©Г±ГЄГ®Г¬ ГїГ§Г»ГЄГҐ!")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"ГЌГ Г±ГІГ°Г®Г©ГІГј ГїГ§Г»ГЄ ГЁГ­ГўГҐГ­ГІГ Г°Гї ГўГ» Г¬Г®Г¦ГҐГІГҐ Гў /settings. Г“ГЎГҐГ¤ГЁГІГҐГ«ГјГ­Г Гї ГЇГ°Г®Г±ГјГЎГ  Г­ГҐ ГўГ»ГЄГ«ГѕГ·Г ГІГј Г ГўГІГ®Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї Гў ГЄГ®Г¤ГҐ.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Г€Г­Г Г·ГҐ ГўГ» Гў ГЎГіГ¤ГіГ№ГҐГ¬ Г­ГҐ ГЇГ®Г«ГіГ·ГЁГІГҐ ГіГ«ГіГ·ГёГҐГ­ГЁГї ГЁГ«ГЁ ГЁГ±ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ Г®ГёГЁГЎГ®ГЄ. Г’Г ГЄГ¦ГҐ, ГҐГ±Г«ГЁ ГўГ» ГµГ®ГІГЁГІГҐ ГЇГ°ГҐГ¤Г«Г®Г¦ГЁГІГј Г±ГўГ®ГЁ ГЁГ¤ГҐГЁ")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"ГЇГ® ГіГ«ГіГ·ГёГҐГ­ГЁГѕ Г±ГЄГ°ГЁГЇГІГ , Г­Г ГёГ«ГЁ ГЎГ ГЈГЁ ГЁГ«ГЁ Г±ГЄГ°ГЁГЇГІ Гі ГўГ Г± Г­ГҐ Г°Г ГЎГ®ГІГ ГҐГІ ГЄГ ГЄ Г¤Г®Г«Г¦ГҐГ­, ГІГ® Г®ГІГЇГЁГёГЁГІГҐ https://vk.com/alex_bynes.")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
         imgui.End()
 	end
 	
-	if win_state['informer'].v then -- окно информера
+	if win_state['informer'].v then -- Г®ГЄГ­Г® ГЁГ­ГґГ®Г°Г¬ГҐГ°Г 
 
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX, infoY), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
@@ -1981,14 +1981,14 @@ function imgui.OnDrawFrame()
 		if imgui.Begin("Mono Service", win_state['informer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			imgui.Text("Mono Tools Services")
 			imgui.Separator()
-			if infZone.v then imgui.Text(u8("• Зона: "..ZoneText)) end
-			if infArmour.v then imgui.Text(u8("• Броня: "..armourNew)) end
-			if infHP.v then imgui.Text(u8("• Здоровье: "..healNew)) end
-			if infCity.v then imgui.Text(u8("• Город: "..playerCity)) end
-			if infRajon.v then imgui.Text(u8("• Район: "..ZoneInGame)) end
+			if infZone.v then imgui.Text(u8("В• Г‡Г®Г­Г : "..ZoneText)) end
+			if infArmour.v then imgui.Text(u8("В• ГЃГ°Г®Г­Гї: "..armourNew)) end
+			if infHP.v then imgui.Text(u8("В• Г‡Г¤Г®Г°Г®ГўГјГҐ: "..healNew)) end
+			if infCity.v then imgui.Text(u8("В• ГѓГ®Г°Г®Г¤: "..playerCity)) end
+			if infRajon.v then imgui.Text(u8("В• ГђГ Г©Г®Г­: "..ZoneInGame)) end
 			
-			if infKv.v then imgui.Text(u8("• Квадрат: "..tostring(locationPos()))) end
-			if infTime.v then imgui.Text(u8("• Время: "..os.date("%H:%M:%S"))) end
+			if infKv.v then imgui.Text(u8("В• ГЉГўГ Г¤Г°Г ГІ: "..tostring(locationPos()))) end
+			if infTime.v then imgui.Text(u8("В• Г‚Г°ГҐГ¬Гї: "..os.date("%H:%M:%S"))) end
 			imgui.End()
 		end
 		imgui.PopStyleColor()
@@ -2026,35 +2026,35 @@ function imgui.TextQuestion(text)
 	end
 end
 
-function rcmd(cmd, text, delay) -- функция для биндера, без которой не будет ни команд, ни клавиш.
-	if cmd ~= nil then -- обрабатываем биндер, который работает по команде
-		if cmd ~= '-' then sampUnregisterChatCommand(cmd) end -- делаем это для перерегистрации команд
-		sampRegisterChatCommand(cmd, function(params) -- регистрируем команду + задаем функцию
-			globalcmd = lua_thread.create(function() -- поток гасим в переменную, чтобы потом я мог стопить бинды, но что-то пошло не так и они обратно не запускались ;D
-				if not keystatus then -- проверяем, не активен ли сейчас иной бинд
-					cmdparams = params -- задаем параметры тэгам
-					if text:find("{param") and cmdparams == '' then -- если в тексте бинда есть намек на тэг параметра и параметр пуст, говорим заполнить его
-						local partype = '' -- объявим локальную переменную
-						if text:find("ByID}") then partype = "ID" else partype = "Параметр" end -- зададим ей значение из условия
-						sampAddChatMessage("[Mono Tools]{FFFFFF} Используйте: /"..cmd.." ["..partype.."].", 0x046D63)
+function rcmd(cmd, text, delay) -- ГґГіГ­ГЄГ¶ГЁГї Г¤Г«Гї ГЎГЁГ­Г¤ГҐГ°Г , ГЎГҐГ§ ГЄГ®ГІГ®Г°Г®Г© Г­ГҐ ГЎГіГ¤ГҐГІ Г­ГЁ ГЄГ®Г¬Г Г­Г¤, Г­ГЁ ГЄГ«Г ГўГЁГё.
+	if cmd ~= nil then -- Г®ГЎГ°Г ГЎГ ГІГ»ГўГ ГҐГ¬ ГЎГЁГ­Г¤ГҐГ°, ГЄГ®ГІГ®Г°Г»Г© Г°Г ГЎГ®ГІГ ГҐГІ ГЇГ® ГЄГ®Г¬Г Г­Г¤ГҐ
+		if cmd ~= '-' then sampUnregisterChatCommand(cmd) end -- Г¤ГҐГ«Г ГҐГ¬ ГЅГІГ® Г¤Г«Гї ГЇГҐГ°ГҐГ°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ ГЄГ®Г¬Г Г­Г¤
+		sampRegisterChatCommand(cmd, function(params) -- Г°ГҐГЈГЁГ±ГІГ°ГЁГ°ГіГҐГ¬ ГЄГ®Г¬Г Г­Г¤Гі + Г§Г Г¤Г ГҐГ¬ ГґГіГ­ГЄГ¶ГЁГѕ
+			globalcmd = lua_thread.create(function() -- ГЇГ®ГІГ®ГЄ ГЈГ Г±ГЁГ¬ Гў ГЇГҐГ°ГҐГ¬ГҐГ­Г­ГіГѕ, Г·ГІГ®ГЎГ» ГЇГ®ГІГ®Г¬ Гї Г¬Г®ГЈ Г±ГІГ®ГЇГЁГІГј ГЎГЁГ­Г¤Г», Г­Г® Г·ГІГ®-ГІГ® ГЇГ®ГёГ«Г® Г­ГҐ ГІГ ГЄ ГЁ Г®Г­ГЁ Г®ГЎГ°Г ГІГ­Г® Г­ГҐ Г§Г ГЇГіГ±ГЄГ Г«ГЁГ±Гј ;D
+				if not keystatus then -- ГЇГ°Г®ГўГҐГ°ГїГҐГ¬, Г­ГҐ Г ГЄГІГЁГўГҐГ­ Г«ГЁ Г±ГҐГ©Г·Г Г± ГЁГ­Г®Г© ГЎГЁГ­Г¤
+					cmdparams = params -- Г§Г Г¤Г ГҐГ¬ ГЇГ Г°Г Г¬ГҐГІГ°Г» ГІГЅГЈГ Г¬
+					if text:find("{param") and cmdparams == '' then -- ГҐГ±Г«ГЁ Гў ГІГҐГЄГ±ГІГҐ ГЎГЁГ­Г¤Г  ГҐГ±ГІГј Г­Г Г¬ГҐГЄ Г­Г  ГІГЅГЈ ГЇГ Г°Г Г¬ГҐГІГ°Г  ГЁ ГЇГ Г°Г Г¬ГҐГІГ° ГЇГіГ±ГІ, ГЈГ®ГўГ®Г°ГЁГ¬ Г§Г ГЇГ®Г«Г­ГЁГІГј ГҐГЈГ®
+						local partype = '' -- Г®ГЎГєГїГўГЁГ¬ Г«Г®ГЄГ Г«ГјГ­ГіГѕ ГЇГҐГ°ГҐГ¬ГҐГ­Г­ГіГѕ
+						if text:find("ByID}") then partype = "ID" else partype = "ГЏГ Г°Г Г¬ГҐГІГ°" end -- Г§Г Г¤Г Г¤ГЁГ¬ ГҐГ© Г§Г­Г Г·ГҐГ­ГЁГҐ ГЁГ§ ГіГ±Г«Г®ГўГЁГї
+						sampAddChatMessage("[Mono Tools]{FFFFFF} Г€Г±ГЇГ®Г«ГјГ§ГіГ©ГІГҐ: /"..cmd.." ["..partype.."].", 0x046D63)
 					else
 						keystatus = true
-						local strings = split(text, '~', false) -- обрабатываем текст бинда
-						for i, g in ipairs(strings) do -- начинаем непосредественный вывод текста по строкам
+						local strings = split(text, '~', false) -- Г®ГЎГ°Г ГЎГ ГІГ»ГўГ ГҐГ¬ ГІГҐГЄГ±ГІ ГЎГЁГ­Г¤Г 
+						for i, g in ipairs(strings) do -- Г­Г Г·ГЁГ­Г ГҐГ¬ Г­ГҐГЇГ®Г±Г°ГҐГ¤ГҐГ±ГІГўГҐГ­Г­Г»Г© ГўГ»ГўГ®Г¤ ГІГҐГЄГ±ГІГ  ГЇГ® Г±ГІГ°Г®ГЄГ Г¬
 							if not g:find("{bwait:") then sampSendChat(tags(tostring(g))) end
 							wait(g:match("%{bwait:(%d+)%}"))
 						end
 						keystatus = false
-						cmdparams = nil -- обнуляем параметры после использования
+						cmdparams = nil -- Г®ГЎГ­ГіГ«ГїГҐГ¬ ГЇГ Г°Г Г¬ГҐГІГ°Г» ГЇГ®Г±Г«ГҐ ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГї
 					end
 				end
 			end)
 		end)
 	else
-		-- тут все аналогично, как и с командами, только чуток проще.
+		-- ГІГіГІ ГўГ±ГҐ Г Г­Г Г«Г®ГЈГЁГ·Г­Г®, ГЄГ ГЄ ГЁ Г± ГЄГ®Г¬Г Г­Г¤Г Г¬ГЁ, ГІГ®Г«ГјГЄГ® Г·ГіГІГ®ГЄ ГЇГ°Г®Г№ГҐ.
 		globalkey = lua_thread.create(function()
 			if text:find("{params}") then
-				sampAddChatMessage("[Mono Tools]{FFFFFF} В данном бинде установлен параметр, использование клавишами невозможно.", 0x046D63)
+				sampAddChatMessage("[Mono Tools]{FFFFFF} Г‚ Г¤Г Г­Г­Г®Г¬ ГЎГЁГ­Г¤ГҐ ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­ ГЇГ Г°Г Г¬ГҐГІГ°, ГЁГ±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ ГЄГ«Г ГўГЁГёГ Г¬ГЁ Г­ГҐГўГ®Г§Г¬Г®Г¦Г­Г®.", 0x046D63)
 			else
 
 				local strings = split(text, '~', false)
@@ -2069,7 +2069,7 @@ function rcmd(cmd, text, delay) -- функция для биндера, без которой не будет ни 
 	end
 end
 
-function split(str, delim, plain) -- функция фипа, которая сделала биндер рабочим
+function split(str, delim, plain) -- ГґГіГ­ГЄГ¶ГЁГї ГґГЁГЇГ , ГЄГ®ГІГ®Г°Г Гї Г±Г¤ГҐГ«Г Г«Г  ГЎГЁГ­Г¤ГҐГ° Г°Г ГЎГ®Г·ГЁГ¬
     local tokens, pos, plain = {}, 1, not (plain == false) 
     repeat
         local npos, epos = string.find(str, delim, pos, plain)
@@ -2079,7 +2079,7 @@ function split(str, delim, plain) -- функция фипа, которая сделала биндер рабочи
     return tokens
 end
 
-function showHelp(param) -- "вопросик" для скрипта
+function showHelp(param) -- "ГўГ®ГЇГ°Г®Г±ГЁГЄ" Г¤Г«Гї Г±ГЄГ°ГЁГЇГІГ 
     imgui.TextDisabled('(?)')
     if imgui.IsItemHovered() then
         imgui.BeginTooltip()
@@ -2090,44 +2090,44 @@ function showHelp(param) -- "вопросик" для скрипта
     end
 end
 
-function all_trim(s) -- удаление пробелов из строки ес не ошибаюсь
+function all_trim(s) -- ГіГ¤Г Г«ГҐГ­ГЁГҐ ГЇГ°Г®ГЎГҐГ«Г®Гў ГЁГ§ Г±ГІГ°Г®ГЄГЁ ГҐГ± Г­ГҐ Г®ГёГЁГЎГ ГѕГ±Гј
    return s:match( "^%s*(.-)%s*$" )
 end
 
-function ClearChat() -- очистка чата
+function ClearChat() -- Г®Г·ГЁГ±ГІГЄГ  Г·Г ГІГ 
     memory.fill(sampGetChatInfoPtr() + 306, 0x0, 25200)
     memory.write(sampGetChatInfoPtr() + 306, 25562, 4, 0x0)
     memory.write(sampGetChatInfoPtr() + 0x63DA, 1, 1)
 end
 
-function locationPos() -- получение квадрата игрока
+function locationPos() -- ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ ГЄГўГ Г¤Г°Г ГІГ  ГЁГЈГ°Г®ГЄГ 
 	if not workpause then
 		if interior == 0 then
 			local KV = {
-				[1] = "А",
-				[2] = "Б",
-				[3] = "В",
-				[4] = "Г",
-				[5] = "Д",
-				[6] = "Ж",
-				[7] = "З",
-				[8] = "И",
-				[9] = "К",
-				[10] = "Л",
-				[11] = "М",
-				[12] = "Н",
-				[13] = "О",
-				[14] = "П",
-				[15] = "Р",
-				[16] = "С",
-				[17] = "Т",
-				[18] = "У",
-				[19] = "Ф",
-				[20] = "Х",
-				[21] = "Ц",
-				[22] = "Ч",
-				[23] = "Ш",
-				[24] = "Я",
+				[1] = "ГЂ",
+				[2] = "ГЃ",
+				[3] = "Г‚",
+				[4] = "Гѓ",
+				[5] = "Г„",
+				[6] = "Г†",
+				[7] = "Г‡",
+				[8] = "Г€",
+				[9] = "ГЉ",
+				[10] = "Г‹",
+				[11] = "ГЊ",
+				[12] = "ГЌ",
+				[13] = "ГЋ",
+				[14] = "ГЏ",
+				[15] = "Гђ",
+				[16] = "Г‘",
+				[17] = "Г’",
+				[18] = "Г“",
+				[19] = "Г”",
+				[20] = "Г•",
+				[21] = "Г–",
+				[22] = "Г—",
+				[23] = "Г",
+				[24] = "Гџ",
 			}
 			local X, Y, Z = getCharCoordinates(PLAYER_PED)
 			X = math.ceil((X + 3000) / 250)
@@ -2150,28 +2150,28 @@ function locationPos() -- получение квадрата игрока
 	end
 end
 
-function ARGBtoRGB(color) return bit32 or require'bit'.band(color, 0xFFFFFF) end -- конверт цветов
+function ARGBtoRGB(color) return bit32 or require'bit'.band(color, 0xFFFFFF) end -- ГЄГ®Г­ГўГҐГ°ГІ Г¶ГўГҐГІГ®Гў
 
-function rel() -- перезагрузка скрипта
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт перезагружается.", 0x046D63)
+function rel() -- ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ  Г±ГЄГ°ГЁГЇГІГ 
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Г‘ГЄГ°ГЁГЇГІ ГЇГҐГ°ГҐГ§Г ГЈГ°ГіГ¦Г ГҐГІГ±Гї.", 0x046D63)
 	reloadScript = true
 	thisScript():reload()
 end
 
-function clearSeleListBool(var) -- не ебу что-это ахахах ;D
+function clearSeleListBool(var) -- Г­ГҐ ГҐГЎГі Г·ГІГ®-ГЅГІГ® Г ГµГ ГµГ Гµ ;D
 	for i = 1, #SeleList do
 		SeleListBool[i].v = false
 	end
 	SeleListBool[var].v = true
 end
 
-function cmd_color() -- функция получения цвета строки, хз зачем она мне, но когда то юзал
+function cmd_color() -- ГґГіГ­ГЄГ¶ГЁГї ГЇГ®Г«ГіГ·ГҐГ­ГЁГї Г¶ГўГҐГІГ  Г±ГІГ°Г®ГЄГЁ, ГµГ§ Г§Г Г·ГҐГ¬ Г®Г­Г  Г¬Г­ГҐ, Г­Г® ГЄГ®ГЈГ¤Г  ГІГ® ГѕГ§Г Г«
 	local text, prefix, color, pcolor = sampGetChatString(99)
-	sampAddChatMessage(string.format("Цвет последней строки чата - {934054}[%d] (скопирован в буфер обмена)",color),-1)
+	sampAddChatMessage(string.format("Г–ГўГҐГІ ГЇГ®Г±Г«ГҐГ¤Г­ГҐГ© Г±ГІГ°Г®ГЄГЁ Г·Г ГІГ  - {934054}[%d] (Г±ГЄГ®ГЇГЁГ°Г®ГўГ Г­ Гў ГЎГіГґГҐГ° Г®ГЎГ¬ГҐГ­Г )",color),-1)
 	setClipboardText(color)
 end
 
-function changeSkin(id, skinId) -- визуальная смена скина(imring вроде бы скидывал ее)
+function changeSkin(id, skinId) -- ГўГЁГ§ГіГ Г«ГјГ­Г Гї Г±Г¬ГҐГ­Г  Г±ГЄГЁГ­Г (imring ГўГ°Г®Г¤ГҐ ГЎГ» Г±ГЄГЁГ¤Г»ГўГ Г« ГҐГҐ)
     bs = raknetNewBitStream()
     if id == -1 then _, id = sampGetPlayerIdByCharHandle(PLAYER_PED) end
     raknetBitStreamWriteInt32(bs, id)
@@ -2181,54 +2181,54 @@ function changeSkin(id, skinId) -- визуальная смена скина(imring вроде бы скидыв
 end
 
 function sampev.onSendPlayerSync(data)
-	if workpause then -- костыль для работы скрипта при свернутой игре
+	if workpause then -- ГЄГ®Г±ГІГ»Г«Гј Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г±ГЄГ°ГЁГЇГІГ  ГЇГ°ГЁ Г±ГўГҐГ°Г­ГіГІГ®Г© ГЁГЈГ°ГҐ
 		return false
 	end
 end
 
 function sampev.onServerMessage(color, text)
 
-	if color == 1721355519 and text:match("%[F%] .*") then -- получение ранга и ID игрока, который последним написал в /f чат, для тэгов биндера
+	if color == 1721355519 and text:match("%[F%] .*") then -- ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г°Г Г­ГЈГ  ГЁ ID ГЁГЈГ°Г®ГЄГ , ГЄГ®ГІГ®Г°Г»Г© ГЇГ®Г±Г«ГҐГ¤Г­ГЁГ¬ Г­Г ГЇГЁГ±Г Г« Гў /f Г·Г ГІ, Г¤Г«Гї ГІГЅГЈГ®Гў ГЎГЁГ­Г¤ГҐГ°Г 
 		lastfradiozv, lastfradioID = text:match('%[F%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
-	elseif color == 869033727 and text:match("%[R%] .*") then -- получение ранга и ID игрока, который последним написал в /r чат, для тэгов биндера
+	elseif color == 869033727 and text:match("%[R%] .*") then -- ГЇГ®Г«ГіГ·ГҐГ­ГЁГҐ Г°Г Г­ГЈГ  ГЁ ID ГЁГЈГ°Г®ГЄГ , ГЄГ®ГІГ®Г°Г»Г© ГЇГ®Г±Г«ГҐГ¤Г­ГЁГ¬ Г­Г ГЇГЁГ±Г Г« Гў /r Г·Г ГІ, Г¤Г«Гї ГІГЅГЈГ®Гў ГЎГЁГ­Г¤ГҐГ°Г 
 		lastrradiozv, lastrradioID = text:match('%[R%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
-	elseif text:match("Банковский чек") and autopay.v then
+	elseif text:match("ГЃГ Г­ГЄГ®ГўГ±ГЄГЁГ© Г·ГҐГЄ") and autopay.v then
 		sendchot6()
-	elseif text:match("Этот транспорт зарегистрирован") and lock.v then
+	elseif text:match("ГќГІГ®ГІ ГІГ°Г Г­Г±ГЇГ®Г°ГІ Г§Г Г°ГҐГЈГЁГ±ГІГ°ГЁГ°Г®ГўГ Г­") and lock.v then
 		sampSendChat('/lock')
-	elseif text:find("Вам был добавлен предмет") then
+	elseif text:find("Г‚Г Г¬ ГЎГ»Г« Г¤Г®ГЎГ ГўГ«ГҐГ­ ГЇГ°ГҐГ¤Г¬ГҐГІ") then
 		krytim = true
-	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') then
+	elseif text:find('%[ГЏГ®Г¤Г±ГЄГ Г§ГЄГ %] %{FFFFFF%}Г‚Г» ГЇГ®Г«ГіГ·ГЁГ«ГЁ +(.+)%$!') then
 		krytim = true
 	end
-	if text:find('Увы, вам не удалось улучшить предмет') and checked_box.v then
+	if text:find('Г“ГўГ», ГўГ Г¬ Г­ГҐ ГіГ¤Г Г«Г®Г±Гј ГіГ«ГіГ·ГёГЁГІГј ГЇГ°ГҐГ¤Г¬ГҐГІ') and checked_box.v then
 		checktochilki = true
 		sampSendClickTextdraw(2093)
 	end
-	if text:find('Успех! Вам удалось улучшить предмет') and checked_box.v then
-		number = string.match(text, 'на ++(%d+)')+0
+	if text:find('Г“Г±ГЇГҐГµ! Г‚Г Г¬ ГіГ¤Г Г«Г®Г±Гј ГіГ«ГіГ·ГёГЁГІГј ГЇГ°ГҐГ¤Г¬ГҐГІ') and checked_box.v then
+		number = string.match(text, 'Г­Г  ++(%d+)')+0
 		if number < checked_radio.v and checked_box.v then
 			checktochilki = true
 			sampSendClickTextdraw(2093)
 	end
 end
-	if text:find('Увы, вам не удалось улучшить предмет') and checked_box2.v then
+	if text:find('Г“ГўГ», ГўГ Г¬ Г­ГҐ ГіГ¤Г Г«Г®Г±Гј ГіГ«ГіГ·ГёГЁГІГј ГЇГ°ГҐГ¤Г¬ГҐГІ') and checked_box2.v then
 		checktochilki1 = true
 		sampSendClickTextdraw(2093)
 	end
-	if text:find('Успех! Вам удалось улучшить предмет') and checked_box2.v then
-		number = string.match(text, 'на ++(%d+)')+0
+	if text:find('Г“Г±ГЇГҐГµ! Г‚Г Г¬ ГіГ¤Г Г«Г®Г±Гј ГіГ«ГіГ·ГёГЁГІГј ГЇГ°ГҐГ¤Г¬ГҐГІ') and checked_box2.v then
+		number = string.match(text, 'Г­Г  ++(%d+)')+0
 		if number < checked_radio.v and checked_box2.v then
 			checktochilki1 = true
 			sampSendClickTextdraw(2093)
 	end
 end
-	if text:find('Увы, вам не удалось улучшить предмет') and checked_box3.v then
+	if text:find('Г“ГўГ», ГўГ Г¬ Г­ГҐ ГіГ¤Г Г«Г®Г±Гј ГіГ«ГіГ·ГёГЁГІГј ГЇГ°ГҐГ¤Г¬ГҐГІ') and checked_box3.v then
 		checktochilki2 = true
 		sampSendClickTextdraw(2093)
 	end
-	if text:find('Успех! Вам удалось улучшить предмет') and checked_box3.v then
-		number = string.match(text, 'на ++(%d+)')+0
+	if text:find('Г“Г±ГЇГҐГµ! Г‚Г Г¬ ГіГ¤Г Г«Г®Г±Гј ГіГ«ГіГ·ГёГЁГІГј ГЇГ°ГҐГ¤Г¬ГҐГІ') and checked_box3.v then
+		number = string.match(text, 'Г­Г  ++(%d+)')+0
 		if number < checked_radio.v and checked_box3.v then
 			checktochilki2 = true
 			sampSendClickTextdraw(2093)
@@ -2255,19 +2255,19 @@ function autoupdate(json_url, prefix, url)
               lua_thread.create(function(prefix)
                 local dlstatus = require('moonloader').download_status
                 local color = -1
-                sampAddChatMessage(('[Mono Tools]{FFFFFF} Доступно новое обновление! Пытаюсь обновиться c '..thisScript().version..' на '..updateversion), 0x046D63)
+                sampAddChatMessage(('[Mono Tools]{FFFFFF} Г„Г®Г±ГІГіГЇГ­Г® Г­Г®ГўГ®ГҐ Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ! ГЏГ»ГІГ ГѕГ±Гј Г®ГЎГ­Г®ГўГЁГІГјГ±Гї c '..thisScript().version..' Г­Г  '..updateversion), 0x046D63)
                 wait(250)
                 downloadUrlToFile(updatelink, thisScript().path,
                   function(id3, status1, p13, p23)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
-                      sampAddChatMessage(('[Mono Tools]{FFFFFF} Скрипт успешно обновлён.'), 0x046D63)
+                      sampAddChatMessage(('[Mono Tools]{FFFFFF} Г‘ГЄГ°ГЁГЇГІ ГіГ±ГЇГҐГёГ­Г® Г®ГЎГ­Г®ГўГ«ВёГ­.'), 0x046D63)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
                     if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                       if goupdatestatus == nil then
-                        sampAddChatMessage(('[Mono Tools]{FFFFFF} Не удалось обновить скрипт! Подробнее узнавайте у Буни. Его вк - https://vk.com/alex_bynes'), 0x046D63)
+                        sampAddChatMessage(('[Mono Tools]{FFFFFF} ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г®ГЎГ­Г®ГўГЁГІГј Г±ГЄГ°ГЁГЇГІ! ГЏГ®Г¤Г°Г®ГЎГ­ГҐГҐ ГіГ§Г­Г ГўГ Г©ГІГҐ Гі ГЃГіГ­ГЁ. Г…ГЈГ® ГўГЄ - https://vk.com/alex_bynes'), 0x046D63)
                         update = false
                       end
                     end
@@ -2288,7 +2288,7 @@ function autoupdate(json_url, prefix, url)
   while update ~= false do wait(100) end
 end
 
-function load_settings() -- загрузка настроек
+function load_settings() -- Г§Г ГЈГ°ГіГ§ГЄГ  Г­Г Г±ГІГ°Г®ГҐГЄ
 	-- CONFIG CREATE/LOAD
 	ini = inicfg.load(SET, getGameDirectory()..'\\moonloader\\config\\Mono\\settings.ini')
 	
@@ -2347,7 +2347,7 @@ function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, u
 	return {Ver, mod, nick, response, authKey, clientver, unk}
 end
 
-function showInputHelp() -- chatinfo(для меня) и showinputhelp от хомяка ес не ошибаюсь
+function showInputHelp() -- chatinfo(Г¤Г«Гї Г¬ГҐГ­Гї) ГЁ showinputhelp Г®ГІ ГµГ®Г¬ГїГЄГ  ГҐГ± Г­ГҐ Г®ГёГЁГЎГ ГѕГ±Гј
 	while true do
 		local chat = sampIsChatInputActive()
 		if chat == true then
@@ -2365,7 +2365,7 @@ function showInputHelp() -- chatinfo(для меня) и showinputhelp от хомяка ес не о
 			local errorCode = ffi.C.GetLocaleInfoA(tonumber(ffi.string(KeyboardLayoutName), 16), 0x00000002, LocalInfo, BuffSize)
 			local localName = ffi.string(LocalInfo)
 			local text = string.format(
-				"%s :: {%0.6x}%s[%d] {ffffff}:: Капс: %s {FFFFFF}:: Язык: {ffeeaa}%s{ffffff}",
+				"%s :: {%0.6x}%s[%d] {ffffff}:: ГЉГ ГЇГ±: %s {FFFFFF}:: ГџГ§Г»ГЄ: {ffeeaa}%s{ffffff}",
 				os.date("%H:%M:%S"), bit.band(color,0xffffff), nname, mmyID, getStrByState(capsState), string.match(localName, "([^%(]*)")
 			)
 			
@@ -2375,14 +2375,14 @@ function showInputHelp() -- chatinfo(для меня) и showinputhelp от хомяка ес не о
 	end
 end
 
-function getStrByState(keyState) -- состояние клавиш для chatinfo
+function getStrByState(keyState) -- Г±Г®Г±ГІГ®ГїГ­ГЁГҐ ГЄГ«Г ГўГЁГё Г¤Г«Гї chatinfo
 	if keyState == 0 then
-		return "{ffeeaa}Выкл{ffffff}"
+		return "{ffeeaa}Г‚Г»ГЄГ«{ffffff}"
 	end
-	return "{9EC73D}Вкл{ffffff}"
+	return "{9EC73D}Г‚ГЄГ«{ffffff}"
 end
 
-function reconnect() -- реконнект игрока
+function reconnect() -- Г°ГҐГЄГ®Г­Г­ГҐГЄГІ ГЁГЈГ°Г®ГЄГ 
 	lua_thread.create(function()
 		sampSetGamestate(5)
 		sampDisconnectWithReason()
@@ -2391,16 +2391,16 @@ function reconnect() -- реконнект игрока
 	end)
 end
 
-function drone() -- дрон/камхак, дополнение камхака санька
+function drone() -- Г¤Г°Г®Г­/ГЄГ Г¬ГµГ ГЄ, Г¤Г®ГЇГ®Г«Г­ГҐГ­ГЁГҐ ГЄГ Г¬ГµГ ГЄГ  Г±Г Г­ГјГЄГ 
 	lua_thread.create(function()
 		if droneActive then
-			sampAddChatMessage("[Mono Tools]{FFFFFF} На данный момент вы уже управляете дроном.", 0x046D63)
+			sampAddChatMessage("[Mono Tools]{FFFFFF} ГЌГ  Г¤Г Г­Г­Г»Г© Г¬Г®Г¬ГҐГ­ГІ ГўГ» ГіГ¦ГҐ ГіГЇГ°Г ГўГ«ГїГҐГІГҐ Г¤Г°Г®Г­Г®Г¬.", 0x046D63)
 			return
 		end
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Управление дроном клавишами: {00C2BB}W, A, S, D, Space, Shift{FFFFFF}.", 0x046D63)
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Режимы дрона: {00C2BB}Numpad1, Numpad2, Numpad3{FFFFFF}.", 0x046D63)
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Скорость полета дрона: {00C2BB}+(быстрей), -(медленней){FFFFFF}.", 0x046D63)
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Заверешить пилотирование дроном можно клавишей {00C2BB}Enter{FFFFFF}.", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Г“ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ Г¤Г°Г®Г­Г®Г¬ ГЄГ«Г ГўГЁГёГ Г¬ГЁ: {00C2BB}W, A, S, D, Space, Shift{FFFFFF}.", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} ГђГҐГ¦ГЁГ¬Г» Г¤Г°Г®Г­Г : {00C2BB}Numpad1, Numpad2, Numpad3{FFFFFF}.", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Г‘ГЄГ®Г°Г®Г±ГІГј ГЇГ®Г«ГҐГІГ  Г¤Г°Г®Г­Г : {00C2BB}+(ГЎГ»Г±ГІГ°ГҐГ©), -(Г¬ГҐГ¤Г«ГҐГ­Г­ГҐГ©){FFFFFF}.", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Г‡Г ГўГҐГ°ГҐГёГЁГІГј ГЇГЁГ«Г®ГІГЁГ°Г®ГўГ Г­ГЁГҐ Г¤Г°Г®Г­Г®Г¬ Г¬Г®Г¦Г­Г® ГЄГ«Г ГўГЁГёГҐГ© {00C2BB}Enter{FFFFFF}.", 0x046D63)
 		while true do
 			wait(0)
 			if flymode == 0 then
@@ -2607,7 +2607,7 @@ function drone() -- дрон/камхак, дополнение камхака санька
 	end)
 end
 
--- ФУНКЦИИ ИЗ ШПОРЫ
+-- Г”Г“ГЌГЉГ–Г€Г€ Г€Г‡ ГГЏГЋГђГ›
 function string.rlower(s)
 	s = s:lower()
 	local strlen = s:len()
