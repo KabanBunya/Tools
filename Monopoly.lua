@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.0')
+script_version('1.1')
 
 local use = false
 local close = false
@@ -17,37 +17,37 @@ local close5 = false
 krytim = true
 
 local res = pcall(require, "lib.moonloader")
-assert(res, 'Library lib.moonloader not found')
+assert(res, 'Library "lib.moonloader" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, ffi = pcall(require, 'ffi')
-assert(res, 'Library ffi not found')
+assert(res, 'Library "ffi" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res = pcall(require, 'lib.sampfuncs')
-assert(res, 'Library lib.sampfuncs not found')
+assert(res, 'Library "lib.sampfuncs" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, sampev = pcall(require, 'lib.samp.events')
-assert(res, 'Library SAMP Events not found')
+assert(res, 'Library "SAMP Events" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, key = pcall(require, "vkeys")
-assert(res, 'Library vkeys not found')
+assert(res, 'Library "vkeys" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, imgui = pcall(require, "imgui")
-assert(res, 'Library imgui not found')
+assert(res, 'Library "imgui" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, encoding = pcall(require, "encoding")
-assert(res, 'Library encoding not found')
+assert(res, 'Library "encoding" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, inicfg = pcall(require, "inicfg")
-assert(res, 'Library inicfg not found')
+assert(res, 'Library "inicfg" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, memory = pcall(require, "memory")
-assert(res, 'Library memory not found')
+assert(res, 'Library "memory" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, rkeys = pcall(require, "rkeys")
-assert(res, 'Library rkeys not found')
+assert(res, 'Library "rkeys" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ---------------------------------------------------------------
 local res, hk = pcall(require, 'lib.imcustom.hotkey')
-assert(res, 'Library imcustom not found')
+assert(res, 'Library "imcustom" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 -- ---------------------------------------------------------------
 
 local function closeDialog()
@@ -146,7 +146,6 @@ local SET = {
  	settings = {
 		autologin = false,
 		autopin = false,
-		autoopl = false,
 		autopay = false,
 		lock = false,
 		autopass = '',
@@ -160,6 +159,12 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		styletest = false,
+		styletest1 = false,
+		styletest2 = false,
+		styletest3 = false,
+		styletest4 = false,
+		styletest5 = false,
 		infoX = 0,
 		infoY = 0,
 		infoX2 = 0,
@@ -280,7 +285,7 @@ end
 
 
 -----------------------------------------------------------------------------------
-------------------------------- ФИКСЫ И ПОДОБНАЯ ХУЙНЯ ----------------------------
+------------------------------- ФИКСЫ----------------------------------------------
 -----------------------------------------------------------------------------------
 
 -- Фикс зеркального бага alt+tab(черный экран или же какая то хуйня в виде зеркал на экране после разворота в инте)
@@ -452,6 +457,263 @@ function apply_custom_style() --
 	colors[clr.ModalWindowDarkening] = ImVec4(0.00, 0.00, 0.00, 0.80)
 
 end
+
+function apply_custom_style1()
+    imgui.SwitchContext()
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    local clr = imgui.Col
+    local ImVec4 = imgui.ImVec4
+	local ImVec2 = imgui.ImVec2
+
+	style.WindowPadding = ImVec2(15, 15)
+    style.WindowRounding = 5.0
+	style.FramePadding = ImVec2(5, 5)
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ChildWindowRounding = 2.0
+    style.FrameRounding = 2.0
+    style.ItemSpacing = imgui.ImVec2(12.0, 8.0)
+	style.IndentSpacing = 25.0
+    style.ScrollbarSize = 15.0
+    style.ScrollbarRounding = 9.0
+    style.GrabMinSize = 5.0
+    style.GrabRounding = 3.0
+
+    colors[clr.FrameBg]                = ImVec4(0.48, 0.16, 0.16, 0.54)
+    colors[clr.FrameBgHovered]         = ImVec4(0.98, 0.26, 0.26, 0.40)
+    colors[clr.FrameBgActive]          = ImVec4(0.98, 0.26, 0.26, 0.67)
+    colors[clr.TitleBg]                = ImVec4(0.04, 0.04, 0.04, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.48, 0.16, 0.16, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.00, 0.00, 0.00, 0.51)
+    colors[clr.CheckMark]              = ImVec4(0.98, 0.26, 0.26, 1.00)
+    colors[clr.SliderGrab]             = ImVec4(0.88, 0.26, 0.24, 1.00)
+    colors[clr.SliderGrabActive]       = ImVec4(0.98, 0.26, 0.26, 1.00)
+    colors[clr.Button]                 = ImVec4(0.98, 0.26, 0.26, 0.40)
+    colors[clr.ButtonHovered]          = ImVec4(0.98, 0.26, 0.26, 1.00)
+    colors[clr.ButtonActive]           = ImVec4(0.98, 0.06, 0.06, 1.00)
+    colors[clr.Header]                 = ImVec4(0.98, 0.26, 0.26, 0.31)
+    colors[clr.HeaderHovered]          = ImVec4(0.98, 0.26, 0.26, 0.80)
+    colors[clr.HeaderActive]           = ImVec4(0.98, 0.26, 0.26, 1.00)
+    colors[clr.Separator]              = colors[clr.Border]
+    colors[clr.SeparatorHovered]       = ImVec4(0.75, 0.10, 0.10, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.75, 0.10, 0.10, 1.00)
+    colors[clr.ResizeGrip]             = ImVec4(0.98, 0.26, 0.26, 0.25)
+    colors[clr.ResizeGripHovered]      = ImVec4(0.98, 0.26, 0.26, 0.67)
+    colors[clr.ResizeGripActive]       = ImVec4(0.98, 0.26, 0.26, 0.95)
+    colors[clr.TextSelectedBg]         = ImVec4(0.98, 0.26, 0.26, 0.35)
+    colors[clr.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.50, 0.50, 0.50, 1.00)
+    colors[clr.WindowBg]               = ImVec4(0.06, 0.06, 0.06, 0.94)
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.00)
+    colors[clr.PopupBg]                = ImVec4(0.08, 0.08, 0.08, 0.94)
+    colors[clr.ComboBg]                = colors[clr.PopupBg]
+    colors[clr.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
+    colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
+    colors[clr.MenuBarBg]              = ImVec4(0.14, 0.14, 0.14, 1.00)
+    colors[clr.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
+    colors[clr.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
+    colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
+    colors[clr.ScrollbarGrabActive]    = ImVec4(0.51, 0.51, 0.51, 1.00)
+    colors[clr.CloseButton]            = ImVec4(0.41, 0.41, 0.41, 0.50)
+    colors[clr.CloseButtonHovered]     = ImVec4(0.98, 0.39, 0.36, 1.00)
+    colors[clr.CloseButtonActive]      = ImVec4(0.98, 0.39, 0.36, 1.00)
+    colors[clr.PlotLines]              = ImVec4(0.61, 0.61, 0.61, 1.00)
+    colors[clr.PlotLinesHovered]       = ImVec4(1.00, 0.43, 0.35, 1.00)
+    colors[clr.PlotHistogram]          = ImVec4(0.90, 0.70, 0.00, 1.00)
+    colors[clr.PlotHistogramHovered]   = ImVec4(1.00, 0.60, 0.00, 1.00)
+    colors[clr.ModalWindowDarkening]   = ImVec4(0.80, 0.80, 0.80, 0.35)
+end
+
+function apply_custom_style2()
+    imgui.SwitchContext()
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    local clr = imgui.Col
+    local ImVec4 = imgui.ImVec4
+	local ImVec2 = imgui.ImVec2
+
+	style.WindowPadding = ImVec2(15, 15)
+    style.WindowRounding = 5.0
+	style.FramePadding = ImVec2(5, 5)
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ChildWindowRounding = 2.0
+    style.FrameRounding = 2.0
+    style.ItemSpacing = imgui.ImVec2(12.0, 8.0)
+	style.IndentSpacing = 25.0
+    style.ScrollbarSize = 15.0
+    style.ScrollbarRounding = 9.0
+    style.GrabMinSize = 5.0
+    style.GrabRounding = 3.0
+
+    colors[clr.FrameBg]                = ImVec4(0.16, 0.29, 0.48, 0.54)
+    colors[clr.FrameBgHovered]         = ImVec4(0.26, 0.59, 0.98, 0.40)
+    colors[clr.FrameBgActive]          = ImVec4(0.26, 0.59, 0.98, 0.67)
+    colors[clr.TitleBg]                = ImVec4(0.04, 0.04, 0.04, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.16, 0.29, 0.48, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.00, 0.00, 0.00, 0.51)
+    colors[clr.CheckMark]              = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.SliderGrab]             = ImVec4(0.24, 0.52, 0.88, 1.00)
+    colors[clr.SliderGrabActive]       = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.Button]                 = ImVec4(0.26, 0.59, 0.98, 0.40)
+    colors[clr.ButtonHovered]          = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.ButtonActive]           = ImVec4(0.06, 0.53, 0.98, 1.00)
+    colors[clr.Header]                 = ImVec4(0.26, 0.59, 0.98, 0.31)
+    colors[clr.HeaderHovered]          = ImVec4(0.26, 0.59, 0.98, 0.80)
+    colors[clr.HeaderActive]           = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.Separator]              = colors[clr.Border]
+    colors[clr.SeparatorHovered]       = ImVec4(0.26, 0.59, 0.98, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.ResizeGrip]             = ImVec4(0.26, 0.59, 0.98, 0.25)
+    colors[clr.ResizeGripHovered]      = ImVec4(0.26, 0.59, 0.98, 0.67)
+    colors[clr.ResizeGripActive]       = ImVec4(0.26, 0.59, 0.98, 0.95)
+    colors[clr.TextSelectedBg]         = ImVec4(0.26, 0.59, 0.98, 0.35)
+    colors[clr.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.50, 0.50, 0.50, 1.00)
+    colors[clr.WindowBg]               = ImVec4(0.06, 0.06, 0.06, 0.94)
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.00)
+    colors[clr.PopupBg]                = ImVec4(0.08, 0.08, 0.08, 0.94)
+    colors[clr.ComboBg]                = colors[clr.PopupBg]
+    colors[clr.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
+    colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
+    colors[clr.MenuBarBg]              = ImVec4(0.14, 0.14, 0.14, 1.00)
+    colors[clr.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
+    colors[clr.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
+    colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
+    colors[clr.ScrollbarGrabActive]    = ImVec4(0.51, 0.51, 0.51, 1.00)
+    colors[clr.CloseButton]            = ImVec4(0.41, 0.41, 0.41, 0.50)
+    colors[clr.CloseButtonHovered]     = ImVec4(0.98, 0.39, 0.36, 1.00)
+    colors[clr.CloseButtonActive]      = ImVec4(0.98, 0.39, 0.36, 1.00)
+    colors[clr.PlotLines]              = ImVec4(0.61, 0.61, 0.61, 1.00)
+    colors[clr.PlotLinesHovered]       = ImVec4(1.00, 0.43, 0.35, 1.00)
+    colors[clr.PlotHistogram]          = ImVec4(0.90, 0.70, 0.00, 1.00)
+    colors[clr.PlotHistogramHovered]   = ImVec4(1.00, 0.60, 0.00, 1.00)
+    colors[clr.ModalWindowDarkening]   = ImVec4(0.80, 0.80, 0.80, 0.35)
+end
+
+function apply_custom_style4()
+    imgui.SwitchContext()
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    local clr = imgui.Col
+    local ImVec4 = imgui.ImVec4
+	local ImVec2 = imgui.ImVec2
+
+	style.WindowPadding = ImVec2(15, 15)
+    style.WindowRounding = 5.0
+	style.FramePadding = ImVec2(5, 5)
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ChildWindowRounding = 2.0
+    style.FrameRounding = 2.0
+    style.ItemSpacing = imgui.ImVec2(12.0, 8.0)
+	style.IndentSpacing = 25.0
+    style.ScrollbarSize = 15.0
+    style.ScrollbarRounding = 9.0
+    style.GrabMinSize = 5.0
+    style.GrabRounding = 3.0
+	
+    colors[clr.WindowBg]              = ImVec4(0.14, 0.12, 0.16, 1.00);
+    colors[clr.ChildWindowBg]         = ImVec4(0.30, 0.20, 0.39, 0.00);
+    colors[clr.PopupBg]               = ImVec4(0.05, 0.05, 0.10, 0.90);
+    colors[clr.Border]                = ImVec4(0.89, 0.85, 0.92, 0.30);
+    colors[clr.BorderShadow]          = ImVec4(0.00, 0.00, 0.00, 0.00);
+    colors[clr.FrameBg]               = ImVec4(0.30, 0.20, 0.39, 1.00);
+    colors[clr.FrameBgHovered]        = ImVec4(0.41, 0.19, 0.63, 0.68);
+    colors[clr.FrameBgActive]         = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.TitleBg]               = ImVec4(0.41, 0.19, 0.63, 0.45);
+    colors[clr.TitleBgCollapsed]      = ImVec4(0.41, 0.19, 0.63, 0.35);
+    colors[clr.TitleBgActive]         = ImVec4(0.41, 0.19, 0.63, 0.78);
+    colors[clr.MenuBarBg]             = ImVec4(0.30, 0.20, 0.39, 0.57);
+    colors[clr.ScrollbarBg]           = ImVec4(0.30, 0.20, 0.39, 1.00);
+    colors[clr.ScrollbarGrab]         = ImVec4(0.41, 0.19, 0.63, 0.31);
+    colors[clr.ScrollbarGrabHovered]  = ImVec4(0.41, 0.19, 0.63, 0.78);
+    colors[clr.ScrollbarGrabActive]   = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.ComboBg]               = ImVec4(0.30, 0.20, 0.39, 1.00);
+    colors[clr.CheckMark]             = ImVec4(0.56, 0.61, 1.00, 1.00);
+    colors[clr.SliderGrab]            = ImVec4(0.41, 0.19, 0.63, 0.24);
+    colors[clr.SliderGrabActive]      = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.Button]                = ImVec4(0.41, 0.19, 0.63, 0.44);
+    colors[clr.ButtonHovered]         = ImVec4(0.41, 0.19, 0.63, 0.86);
+    colors[clr.ButtonActive]          = ImVec4(0.64, 0.33, 0.94, 1.00);
+    colors[clr.Header]                = ImVec4(0.41, 0.19, 0.63, 0.76);
+    colors[clr.HeaderHovered]         = ImVec4(0.41, 0.19, 0.63, 0.86);
+    colors[clr.HeaderActive]          = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.ResizeGrip]            = ImVec4(0.41, 0.19, 0.63, 0.20);
+    colors[clr.ResizeGripHovered]     = ImVec4(0.41, 0.19, 0.63, 0.78);
+    colors[clr.ResizeGripActive]      = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.CloseButton]           = ImVec4(1.00, 1.00, 1.00, 0.75);
+    colors[clr.CloseButtonHovered]    = ImVec4(0.88, 0.74, 1.00, 0.59);
+    colors[clr.CloseButtonActive]     = ImVec4(0.88, 0.85, 0.92, 1.00);
+    colors[clr.PlotLines]             = ImVec4(0.89, 0.85, 0.92, 0.63);
+    colors[clr.PlotLinesHovered]      = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.PlotHistogram]         = ImVec4(0.89, 0.85, 0.92, 0.63);
+    colors[clr.PlotHistogramHovered]  = ImVec4(0.41, 0.19, 0.63, 1.00);
+    colors[clr.TextSelectedBg]        = ImVec4(0.41, 0.19, 0.63, 0.43);
+    colors[clr.ModalWindowDarkening]  = ImVec4(0.20, 0.20, 0.20, 0.35);
+end
+
+function apply_custom_style5() -- серый стиль
+	imgui.SwitchContext()
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    local clr = imgui.Col
+    local ImVec4 = imgui.ImVec4
+	local ImVec2 = imgui.ImVec2
+
+	style.WindowPadding = ImVec2(15, 15)
+    style.WindowRounding = 5.0
+	style.FramePadding = ImVec2(5, 5)
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ChildWindowRounding = 2.0
+    style.FrameRounding = 2.0
+    style.ItemSpacing = imgui.ImVec2(12.0, 8.0)
+	style.IndentSpacing = 25.0
+    style.ScrollbarSize = 15.0
+    style.ScrollbarRounding = 9.0
+    style.GrabMinSize = 5.0
+    style.GrabRounding = 3.0
+  
+    colors[clr.Text] = ImVec4(0.95, 0.96, 0.98, 1.00)
+    colors[clr.TextDisabled] = ImVec4(0.36, 0.42, 0.47, 1.00)
+    colors[clr.WindowBg] = ImVec4(0.11, 0.15, 0.17, 1.00)
+    colors[clr.ChildWindowBg] = ImVec4(0.15, 0.18, 0.22, 1.00)
+    colors[clr.PopupBg] = ImVec4(0.08, 0.08, 0.08, 0.94)
+    colors[clr.Border] = ImVec4(0.43, 0.43, 0.50, 0.50)
+    colors[clr.BorderShadow] = ImVec4(0.00, 0.00, 0.00, 0.00)
+    colors[clr.FrameBg] = ImVec4(0.20, 0.25, 0.29, 1.00)
+    colors[clr.FrameBgHovered] = ImVec4(0.12, 0.20, 0.28, 1.00)
+    colors[clr.FrameBgActive] = ImVec4(0.09, 0.12, 0.14, 1.00)
+    colors[clr.TitleBg] = ImVec4(0.09, 0.12, 0.14, 0.65)
+    colors[clr.TitleBgCollapsed] = ImVec4(0.00, 0.00, 0.00, 0.51)
+    colors[clr.TitleBgActive] = ImVec4(0.08, 0.10, 0.12, 1.00)
+    colors[clr.MenuBarBg] = ImVec4(0.15, 0.18, 0.22, 1.00)
+    colors[clr.ScrollbarBg] = ImVec4(0.02, 0.02, 0.02, 0.39)
+    colors[clr.ScrollbarGrab] = ImVec4(0.20, 0.25, 0.29, 1.00)
+    colors[clr.ScrollbarGrabHovered] = ImVec4(0.18, 0.22, 0.25, 1.00)
+    colors[clr.ScrollbarGrabActive] = ImVec4(0.09, 0.21, 0.31, 1.00)
+    colors[clr.ComboBg] = ImVec4(0.20, 0.25, 0.29, 1.00)
+    colors[clr.CheckMark] = ImVec4(0.28, 0.56, 1.00, 1.00)
+    colors[clr.SliderGrab] = ImVec4(0.28, 0.56, 1.00, 1.00)
+    colors[clr.SliderGrabActive] = ImVec4(0.37, 0.61, 1.00, 1.00)
+    colors[clr.Button] = ImVec4(0.20, 0.25, 0.29, 1.00)
+    colors[clr.ButtonHovered] = ImVec4(0.28, 0.56, 1.00, 1.00)
+    colors[clr.ButtonActive] = ImVec4(0.06, 0.53, 0.98, 1.00)
+    colors[clr.Header] = ImVec4(0.20, 0.25, 0.29, 0.55)
+    colors[clr.HeaderHovered] = ImVec4(0.26, 0.59, 0.98, 0.80)
+    colors[clr.HeaderActive] = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.ResizeGrip] = ImVec4(0.26, 0.59, 0.98, 0.25)
+    colors[clr.ResizeGripHovered] = ImVec4(0.26, 0.59, 0.98, 0.67)
+    colors[clr.ResizeGripActive] = ImVec4(0.06, 0.05, 0.07, 1.00)
+    colors[clr.CloseButton] = ImVec4(0.40, 0.39, 0.38, 0.16)
+    colors[clr.CloseButtonHovered] = ImVec4(0.40, 0.39, 0.38, 0.39)
+    colors[clr.CloseButtonActive] = ImVec4(0.40, 0.39, 0.38, 1.00)
+    colors[clr.PlotLines] = ImVec4(0.61, 0.61, 0.61, 1.00)
+    colors[clr.PlotLinesHovered] = ImVec4(1.00, 0.43, 0.35, 1.00)
+    colors[clr.PlotHistogram] = ImVec4(0.90, 0.70, 0.00, 1.00)
+    colors[clr.PlotHistogramHovered] = ImVec4(1.00, 0.60, 0.00, 1.00)
+    colors[clr.TextSelectedBg] = ImVec4(0.25, 1.00, 0.00, 0.43)
+    colors[clr.ModalWindowDarkening] = ImVec4(1.00, 0.98, 0.95, 0.73)
+end
+
 apply_custom_style()
 
 function files_add() -- функция подгрузки медиа файлов
@@ -777,6 +1039,24 @@ function main()
 		if launcher.v then -- эмулятор лаунчера
 			sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
 			end
+		if styletest.v then -- стили
+			apply_custom_style1()
+			end
+		if styletest1.v then -- стили
+			apply_custom_style()
+			end
+		if styletest2.v then -- стили
+			apply_custom_style2()
+			end
+		if styletest3.v then -- стили
+			new_style()
+			end
+		if styletest4.v then -- стили
+			apply_custom_style4()
+			end
+		if styletest5.v then -- стили
+			apply_custom_style5()
+			end
 			
 	if checked_test.v and krytim then
       rul()
@@ -915,6 +1195,12 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.styletest = styletest.v
+	ini.settings.styletest1 = styletest1.v
+	ini.settings.styletest2 = styletest2.v
+	ini.settings.styletest3 = styletest3.v
+	ini.settings.styletest4 = styletest4.v
+	ini.settings.styletest5 = styletest5.v
 	ini.settings.timefix = timefix.v
 	ini.settings.enableskin = enableskin.v
 	ini.settings.idmodel = idmodel.v
@@ -935,7 +1221,6 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.autopasspin = u8:decode(autopasspin.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.autopin = autopin.v
-	ini.settings.autoopl = autoopl.v
 	ini.settings.autopay = autopay.v
 	ini.settings.lock = lock.v
 
@@ -964,9 +1249,6 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
 		sampCloseCurrentDialogWithButton(0)
 		return false
-	end
-	if dialogId == 119 and autoopl.v then
-	sendchot5()
 	end
     if dialogId == 722 and nodial then
     nodial = false
@@ -1206,245 +1488,6 @@ function sendchot6()
 	end)
 end
 
-function sendchot5()
-	lua_thread.create(function() -- начало потока
-	closeDialog()
-	sampSendDialogResponse(9762, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(784, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 15, -1)
-	wait(200)
-	sampSendDialogResponse(9762, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(784, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 15, -1)
-	wait(200)
-	sampSendDialogResponse(9762, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(784, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 15, -1)
-	wait(200)
-	sampSendDialogResponse(9762, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(784, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 15, -1)
-	wait(200)
-	sampSendDialogResponse(9762, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(784, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 15, -1)
-	wait(200)
-	sampSendDialogResponse(9762, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(784, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 14, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 14, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 14, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 2, -1)
-	wait(200)
-	sampSendDialogResponse(783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 14, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 3, -1)
-	wait(200)
-	sampSendDialogResponse(783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 14, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 4, -1)
-	wait(200)
-	sampSendDialogResponse(783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 14, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 5, -1)
-	wait(200)
-	sampSendDialogResponse(783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 13, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(1783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 13, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(1783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 13, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 2, -1)
-	wait(200)
-	sampSendDialogResponse(1783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 13, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 3, -1)
-	wait(200)
-	sampSendDialogResponse(1783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 13, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 4, -1)
-	wait(200)
-	sampSendDialogResponse(1783, 1 , 0, -1)
-	wait(200)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 13, -1)
-	wait(200)
-	sampSendDialogResponse(7238, 1 , 5, -1)
-	wait(200)
-	sampSendDialogResponse(1783, 1 , 0, -1)
-	wait(100)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 4, -1)
-	wait(200)
-	sampSendDialogResponse(881, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(882, 1 , 0, -1)
-	wait(100)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
-	wait(200)
-	sampSendDialogResponse(33, 1 , 4, -1)
-	wait(200)
-	sampSendDialogResponse(881, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(882, 1 , 0, -1)
-	wait(100)
-	closeDialog()
-	thisScript():reload()
-end)
-end
 -- подключение шрифта для работы иконок	
 
 function imgui.ToggleButton(str_id, bool) -- функция хомяка
@@ -1536,13 +1579,25 @@ function imgui.OnDrawFrame()
 				if imgui.MenuItem(u8(" Биндер")) then
 					showSet = 2
 				elseif imgui.MenuItem(u8(" Настройки")) then
+					showSet = 1
+				elseif imgui.MenuItem(u8(" Стили")) then
 					showSet = 5
 				end
 				imgui.EndMenu()
 			end
 			imgui.EndMenuBar()
 		end
-		if showSet == 5 then -- общие настройки
+		if showSet == 5 then
+		imgui.Columns(2, _, false)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Red")); imgui.SameLine(); imgui.ToggleButton(u8'Red', styletest)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Green")); imgui.SameLine(); imgui.ToggleButton(u8'Green', styletest1)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Blue")); imgui.SameLine(); imgui.ToggleButton(u8'Blue', styletest2)
+		imgui.NextColumn()
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Black")); imgui.SameLine(); imgui.ToggleButton(u8'Black', styletest3)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Purple")); imgui.SameLine(); imgui.ToggleButton(u8'Purple', styletest4)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Gray")); imgui.SameLine(); imgui.ToggleButton(u8'Gray', styletest5)
+		end
+		if showSet == 1 then -- общие настройки
 			if imgui.CollapsingHeader(u8' Модификации') then
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 100), false)
 				imgui.Columns(2, _, false)
@@ -1553,7 +1608,7 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.EndChild()
 			end
-			if userNick == 'Bunya_Monopoly' then
+			if userNick == 'Bunya_Monopol' then
 			if imgui.CollapsingHeader(u8' Для разработки') then
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 80), false)
 				imgui.Columns(2, _, false)
@@ -1640,8 +1695,6 @@ function imgui.OnDrawFrame()
 			if imgui.CollapsingHeader(u8' Bank Menu') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 60), false)
 				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.TextQuestion(u8"Оплата пока работает только в Банке. Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'."); imgui.SameLine(); imgui.Text(u8("Авто-оплата налогов(если есть авто, дом и бизнес)")); imgui.SameLine(); imgui.ToggleButton(u8("Авто-оплата налогов)"), autoopl)
-				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay)
 				if autopay.v then
 				imgui.SliderInt(u8"Сумма пополнения", pay, 10000, 5000000)
@@ -1875,24 +1928,44 @@ function imgui.OnDrawFrame()
 		imgui.BeginChild('left pane', imgui.ImVec2(180, 350), true)
 		
 		if imgui.Selectable(u8"Команды скрипта") then selected2 = 1 end
-		imgui.Separator()		
+		imgui.Separator()
+		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 2 end		
+		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
 		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 350), true)
 		if selected2 == 0 then
 			selected2 = 1
+		elseif selected2 == 2 then
+		imgui.Text(u8"Обновления")
+		imgui.Columns(2, _,false)
+		imgui.SetColumnWidth(-1, 800)
+		imgui.Separator()
+		if imgui.CollapsingHeader(u8' 23.04.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлено автообноление.")
+				imgui.Text(u8"2. В случае, если у вас не хватает библиотек - скрипт напишет в moonloader.log каких библиотек не хватает")
+				imgui.Text(u8"и укажет ссылку, где можно их скачать.")
+				imgui.Text(u8"3. Убрана авто-оплата налогов т.к с новым семейным улучшением она не нужна.")
+				imgui.Text(u8"4. Теперь можно изменить цвет меню.")
+				imgui.Text(u8"5. Когда вы нажимаете на 'Биндер и настройки' сразу открывается меню с настройками.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
 			imgui.Columns(2, _,false)
-			imgui.SetColumnWidth(-1, 300)
-				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/reload")
-				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/сс")
-				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/drone")
-			imgui.NextColumn()
-				imgui.Text(u8"Перезагрузка скрипта.")
-				imgui.Text(u8"Очистка чата.")
-				imgui.Text(u8"Получить картинку с дрона на территории.")
+			imgui.SetColumnWidth(-1, 800)
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/reload - Перезагрузка скрипта.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/сс - Очистка чата.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/drone - Получить картинку с дрона на территории.")
+				imgui.Separator()
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Важно! Для того, чтобы все функции скрипта работали стабильно, нужно чтобы инвентарь был на английском языке!")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Настройть язык инвентаря вы можете в /settings. Убедительная просьба не выключать автообновления в коде.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе вы в будущем не получите улучшения или исправление ошибок. Также, если вы хотите предложить свои идеи")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"по улучшению скрипта, нашли баги или скрипт у вас не работает как должен, то отпишите https://vk.com/alex_bynes.")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -2227,7 +2300,6 @@ function load_settings() -- загрузка настроек
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
 	autopin = imgui.ImBool(ini.settings.autopin)
-	autoopl = imgui.ImBool(ini.settings.autoopl)
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
@@ -2248,6 +2320,12 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	styletest = imgui.ImBool(ini.settings.styletest)
+	styletest1 = imgui.ImBool(ini.settings.styletest1)
+	styletest2 = imgui.ImBool(ini.settings.styletest2)
+	styletest3 = imgui.ImBool(ini.settings.styletest3)
+	styletest4 = imgui.ImBool(ini.settings.styletest4)
+	styletest5 = imgui.ImBool(ini.settings.styletest5)
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
 	timecout = imgui.ImBool(ini.settings.timecout)
 	rtag = imgui.ImBuffer(u8(ini.settings.tag), 256)
@@ -2262,7 +2340,6 @@ function load_settings() -- загрузка настроек
 	findY = ini.settings.findY
 	asX = ini.assistant.asX
 	asY = ini.assistant.asY
-	-- END CONFIG WORKING
 end
 
 function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
