@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1')
+script_version('1.2')
 
 local use = false
 local close = false
@@ -15,6 +15,13 @@ local close3 = false
 local close4 = false
 local close5 = false
 krytim = true
+
+local restore_text = false
+local dialogs_data = {}
+local dialogIncoming = 0
+
+bike = {[481] = true, [509] = true, [510] = true}
+moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true}
 
 local res = pcall(require, "lib.moonloader")
 assert(res, 'Library "lib.moonloader" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
@@ -159,6 +166,9 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		ndr = false,
+		toch = false,
+		autobike = false,
 		styletest = false,
 		styletest1 = false,
 		styletest2 = false,
@@ -173,6 +183,7 @@ local SET = {
 		timefix = 3,
 		enableskin = false,
 		idmodel = false,
+		idtextdraw = false,
 		skin = 1,
 	},
 	assistant = {
@@ -207,6 +218,7 @@ win_state['settings'] = imgui.ImBool(false)
 win_state['hotkeys'] = imgui.ImBool(false)
 win_state['leaders'] = imgui.ImBool(false)
 win_state['help'] = imgui.ImBool(false)
+win_state['calc'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
@@ -233,6 +245,8 @@ local checktochilki2 = false
 local checked_box = imgui.ImBool(false)
 local checked_box2 = imgui.ImBool(false)
 local checked_box3 = imgui.ImBool(false)
+local result = '';
+local inputBufferText = imgui.ImBuffer(256)
 
 -- временные переменные, которым не требуется сохранение
 pozivnoy = imgui.ImBuffer(256) -- позывной в меню взаимодействия
@@ -865,6 +879,8 @@ function mainmenu() -- функция открытия основного меню скрипта
 			win_state['about'].v = not win_state['about'].v
 		elseif win_state['help'].v then
 			win_state['help'].v = not win_state['help'].v
+		elseif win_state['calc'].v then
+			win_state['calc'].v = not win_state['calc'].v
 		elseif win_state['info'].v then
 			win_state['info'].v = not win_state['info'].v
 		elseif menu_spur.v then
@@ -884,7 +900,6 @@ end
 function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end
 	while not isSampAvailable() do wait(100) end
-	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	load_settings() -- загрузка настроек
 	-- определяем ник и ID локального игрока 
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
@@ -909,6 +924,12 @@ function main()
 	for i, g in pairs(mass_bind) do
 		rkeys.registerHotKey(g.v, true, onHotKey)
 	end
+	
+	local font = renderCreateFont("Arial", 8, 5) --creating font
+    sampRegisterChatCommand("td_get", function(i)
+        print(sampTextdrawGetString(i))
+        sampAddChatMessage(sampTextdrawGetString(i), -1)
+    end)
 
 	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD) -- шрифт для chatinfo
 	lua_thread.create(showInputHelp)
@@ -916,12 +937,12 @@ function main()
 	-- регистрация локальных команд/команды
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
 	sampRegisterChatCommand("drone", drone) -- дроны
-	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- дроны
+	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- не вводить команду, она нужна не для этого.
 	sampRegisterChatCommand("reload", rel) -- перезагрузка скрипта
-	sampRegisterChatCommand("changeskin", ex_skin)
-	sampRegisterChatCommand("mono", mainmenu)
-	sampRegisterChatCommand('rul', rul)
-
+	sampRegisterChatCommand("changeskin", ex_skin) -- не вводить команду, она нужна не для этого.
+	sampRegisterChatCommand("mono", mainmenu) -- меню скрипта
+	sampRegisterChatCommand('rul', rul) -- не вводить команду, она нужна не для этого.
+	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	while token == 0 do wait(0) end
 	if enableskin.v then changeSkin(-1, localskin.v) end -- установка визуал скина, если включено
 	while true do
@@ -1036,6 +1057,39 @@ function main()
 			end
 		end
 		
+		if isCharOnAnyBike(playerPed) and isKeyDown(0xA0) and autobike.v then
+			if bike[getCarModel(storeCarCharIsInNoSave(playerPed))] then
+				setGameKeyState(16, 255)
+				wait(10)
+				setGameKeyState(16, 0)
+			elseif moto[getCarModel(storeCarCharIsInNoSave(playerPed))] and autobike.v then
+				setGameKeyState(1, -128)
+				wait(10)
+				setGameKeyState(1, 0)
+			end
+		end
+		
+		if dialogIncoming ~= 0 and dialogs_data[dialogIncoming] and ndr.v then
+		local data = dialogs_data[dialogIncoming]
+		if data[1] and not restore_text then
+			sampSetCurrentDialogListItem(data[1])
+		end
+		if data[2] then
+			sampSetCurrentDialogEditboxText(data[2])
+		end
+		dialogIncoming = 0
+		end
+		
+		if toggle and idtextdraw.v then --params that not declared has a nil value that same as false
+            for a = 0, 2304    do --cycle trough all textdeaw id
+                if sampTextdrawIsExists(a) then --if textdeaw exists then
+                    x, y = sampTextdrawGetPos(a) --we get it's position. value returns in game coords
+                    x1, y1 = convertGameScreenCoordsToWindowScreenCoords(x, y) --so we convert it to screen cuz render needs screen coords
+                    renderFontDrawText(font, a, x1, y1, 0xFFBEBEBE) --and then we draw it's id on textdeaw position
+			end
+		end
+	end
+		
 		if launcher.v then -- эмулятор лаунчера
 			sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
 			end
@@ -1125,7 +1179,7 @@ function main()
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-		for i = 0, sampGetMaxPlayerId(true) do -- отключаем "вх" камхака для игроков, оставляем для разрабов.
+		for i = 0, sampGetMaxPlayerId(true) do 
 			if sampIsPlayerConnected(i) then
 				local result, ped = sampGetCharHandleBySampPlayerId(i)
 				if result then
@@ -1195,6 +1249,9 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.ndr = ndr.v
+	ini.settings.toch = toch.v
+	ini.settings.autobike = autobike.v
 	ini.settings.styletest = styletest.v
 	ini.settings.styletest1 = styletest1.v
 	ini.settings.styletest2 = styletest2.v
@@ -1204,6 +1261,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.timefix = timefix.v
 	ini.settings.enableskin = enableskin.v
 	ini.settings.idmodel = idmodel.v
+	ini.settings.idtextdraw = idtextdraw.v
 	ini.settings.skin = localskin.v
 	ini.settings.timecout = timecout.v
 	ini.settings.gangzones = gangzones.v
@@ -1238,9 +1296,37 @@ function sampev.onPlayerChatBubble(id, color, distance, dur, text)
 	end
 end
 
+function comma_value(n)
+	local left,num,right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+	return left..(num:reverse():gsub('(%d%d%d)','%1.'):reverse())..right
+end
+
+function separator(text)
+	if text:find("$") then
+	    for S in string.gmatch(text, "%$%d+") do
+	    	local replace = comma_value(S)
+	    	text = string.gsub(text, S, replace)
+	    end
+	    for S in string.gmatch(text, "%d+%$") do
+	    	S = string.sub(S, 0, #S-1)
+	    	local replace = comma_value(S)
+	    	text = string.gsub(text, S, replace)
+	    end
+	end
+	return text
+end
+
+function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
+	if ndr.v then
+	dialogs_data[dialogId] = {listboxId, input}
+	end
+end
+
 -- обработка диалогов
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
-
+	if ndr.v then
+		dialogIncoming = dialogId
+	end
 	if title:find("Авторизация") and text:find("Добро пожаловать") and autologin.v then -- автологин
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopass.v))
 		return false
@@ -1267,6 +1353,11 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
   if text:find('Поздравляем с получением') and checked_test.v then
     return false
   end
+	if toch.v then
+  		text = separator(text)
+		title = separator(title)
+		return {dialogId, style, title, button1, button2, text}
+	end
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
@@ -1562,11 +1653,12 @@ function imgui.OnDrawFrame()
 	if win_state['main'].v then -- основное окошко
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(260, 110), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(260, 140), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
 		-- информация по скрипту, готово
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
+		if imgui.Button(u8' Калькулятор', btn_size) then win_state['calc'].v = not win_state['calc'].v end
 		imgui.End()
 	end
 	
@@ -1599,13 +1691,16 @@ function imgui.OnDrawFrame()
 		end
 		if showSet == 1 then -- общие настройки
 			if imgui.CollapsingHeader(u8' Модификации') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 100), false)
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 125), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.EndChild()
 			end
 			if userNick == 'Bunya_Monopol' then
@@ -1613,11 +1708,15 @@ function imgui.OnDrawFrame()
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 80), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ID Моделей в Textdraw")); imgui.SameLine(); imgui.ToggleButton(u8'ID Моделей в Textdraw', idmodel)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ID Textdraw")); imgui.SameLine(); imgui.ToggleButton(u8'ID Textdraw', idtextdraw)
+				if idtextdraw.v then
+					toggle = not toggle
+				end
 				imgui.EndChild()
 			end
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
-				imgui.BeginChild('##25252', imgui.ImVec2(750, 160), false)
+				imgui.BeginChild('##25252', imgui.ImVec2(750, 130), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones)
 				if zones.v then
@@ -1654,7 +1753,7 @@ function imgui.OnDrawFrame()
 			end
 	   
 			if imgui.CollapsingHeader(u8' Roulette Tools') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 200), false)
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 160), false)
 				imgui.Columns(2, _, false)
 				imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
 				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
@@ -1919,7 +2018,147 @@ function imgui.OnDrawFrame()
 
 		imgui.End()
 	end
-
+	
+	if win_state['calc'].v then -- окно "калькулятор"
+        imgui.SetNextWindowSize(imgui.ImVec2(340, 340), imgui.Cond.FirstUseEver);
+        if not window_pos then
+            ScreenX, ScreenY = getScreenResolution()
+            imgui.SetNextWindowPos(imgui.ImVec2(ScreenX / 2 , ScreenY / 2), imgui.Cond.FirsUseEver, imgui.ImVec2(0.5, 0.5))
+            window_pos = true
+        end
+		imgui.Begin(u8'Калькулятор', win_state['calc'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar);
+		imgui.BeginChild('', imgui.ImVec2(300, 280), true);
+        imgui.Text(result);
+        imgui.Text("       ")
+        imgui.SameLine()
+        imgui.InputText(u8'', inputBufferText);
+		if imgui.Button('7', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s7', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('8', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s8', inputBufferText.v);
+        end
+		 imgui.SameLine();
+        if imgui.Button('9', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s9', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('/', imgui.ImVec2(40, 40)) then
+			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
+			if tonumber(bufferFirstNum) then
+				local numResult = tonumber(bufferFirstNum) / tonumber(inputBufferText.v);
+				result = string.format('%s/', tostring(numResult));
+				inputBufferText.v = '';
+			else
+				result = string.format('%s/', inputBufferText.v);
+				inputBufferText.v = '';
+			end
+		end
+		imgui.SameLine();
+		if imgui.Button('CLR', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = '';
+			result = '';
+        end
+		
+		 if imgui.Button('4', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s4', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('5', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s5', inputBufferText.v);
+        end
+		imgui.SameLine();
+        if imgui.Button('6', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s6', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('*', imgui.ImVec2(40, 40)) then
+			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
+			if tonumber(bufferFirstNum) then
+				local numResult = tonumber(bufferFirstNum) * tonumber(inputBufferText.v);
+				result = string.format('%s*', tostring(numResult));
+				inputBufferText.v = '';
+			else
+				result = string.format('%s*', inputBufferText.v);
+				inputBufferText.v = '';
+			end
+        end
+		imgui.SameLine();
+		if imgui.Button('SQRT', imgui.ImVec2(40, 40)) then
+			if tonumber(inputBufferText.v) then
+				local bufferResult = math.sqrt(tonumber(inputBufferText.v));
+				result = tostring(bufferResult);
+			end
+		end
+		if imgui.Button('1', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s1', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('2', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s2', inputBufferText.v);
+        end
+		imgui.SameLine();
+        if imgui.Button('3', imgui.ImVec2(40, 40)) then
+            inputBufferText.v = string.format('%s3', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('-', imgui.ImVec2(40, 40)) then
+            local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
+			if tonumber(bufferFirstNum) then
+				local numResult = tonumber(bufferFirstNum) - tonumber(inputBufferText.v);
+				result = string.format('%s-', tostring(numResult));
+				inputBufferText.v = '';
+			else
+				result = string.format('%s-', inputBufferText.v);
+				inputBufferText.v = '';
+			end
+        end
+		imgui.SameLine();
+		if imgui.Button('^', imgui.ImVec2(40, 40)) then
+			result = string.format('%s^', inputBufferText.v);
+			inputBufferText.v = '';
+		end
+		if imgui.Button('0', imgui.ImVec2(92, 40)) then
+            inputBufferText.v = string.format('%s0', inputBufferText.v);
+        end
+		imgui.SameLine();
+		if imgui.Button('+', imgui.ImVec2(40, 40)) then
+			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
+			if tonumber(bufferFirstNum) then
+				local numResult = tonumber(bufferFirstNum) + tonumber(inputBufferText.v);
+				result = string.format('%s+', tostring(numResult));
+				inputBufferText.v = '';
+			else
+				result = string.format('%s+', inputBufferText.v);
+				inputBufferText.v = '';
+			end
+        end
+		imgui.SameLine();
+		if imgui.Button('=', imgui.ImVec2(92, 40)) then
+			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
+			if bufferAct == '+' then
+				local numResult = tonumber(bufferFirstNum) + tonumber(inputBufferText.v);
+				result = tostring(numResult);
+			elseif bufferAct == '-' then
+				local numResult = tonumber(bufferFirstNum) - tonumber(inputBufferText.v);
+				result = tostring(numResult);
+			elseif bufferAct == '/' then
+				local numResult = tonumber(bufferFirstNum) / tonumber(inputBufferText.v);
+				result = tostring(numResult);
+			elseif bufferAct == '*' then
+				local numResult = tonumber(bufferFirstNum) * tonumber(inputBufferText.v);
+				result = tostring(numResult);
+			elseif bufferAct == '^' then
+				local numResult = tonumber(bufferFirstNum) ^ tonumber(inputBufferText.v);
+				result = tostring(numResult);
+			end
+			inputBufferText.v = '';
+        end
+		imgui.EndChild();
+        imgui.End();
+    end
+	
 	if win_state['help'].v then -- окно "помощь"
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(970, 400), imgui.Cond.FirstUseEver)
@@ -1951,6 +2190,18 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"3. Убрана авто-оплата налогов т.к с новым семейным улучшением она не нужна.")
 				imgui.Text(u8"4. Теперь можно изменить цвет меню.")
 				imgui.Text(u8"5. Когда вы нажимаете на 'Биндер и настройки' сразу открывается меню с настройками.")
+		imgui.EndChild()
+		end
+		if imgui.CollapsingHeader(u8' 24.04.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлен автобайк и автомото. Если на вашем сервере он запрещен, то используйте на свой страх и риск.")
+				imgui.Text(u8"2. Добавлены точки в числах.")
+				imgui.Text(u8"3. Добавлено запоминание диалогов(полезно тем, кто играет со сборки).")
+				imgui.Text(u8"4. Вроде бы сделал фикс, что скрипт запускался не с первого раза.")
+				imgui.Text(u8"Но если эта проблема осталась или нашли другую, то пишите - https://vk.com/alex_bynes")
+				imgui.Text(u8"5. Добавлен калькулятор. /mono - калькулятор.")
 		imgui.EndChild()
 		end
 		elseif selected2 == 1 then
@@ -2187,7 +2438,6 @@ function sampev.onSendPlayerSync(data)
 end
 
 function sampev.onServerMessage(color, text)
-
 	if color == 1721355519 and text:match("%[F%] .*") then -- получение ранга и ID игрока, который последним написал в /f чат, для тэгов биндера
 		lastfradiozv, lastfradioID = text:match('%[F%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
 	elseif color == 869033727 and text:match("%[R%] .*") then -- получение ранга и ID игрока, который последним написал в /r чат, для тэгов биндера
@@ -2233,6 +2483,24 @@ end
 			checktochilki2 = true
 			sampSendClickTextdraw(2093)
 		end
+	end
+	if toch.v then
+		text = separator(text)
+		return {color, text}
+	end
+end
+
+function sampev.onCreate3DText(id, color, position, distance, testLOS, attachedPlayerId, attachedVehicleId, text)
+	if toch.v then
+		text = separator(text)
+		return {id, color, position, distance, testLOS, attachedPlayerId, attachedVehicleId, text}
+	end
+end
+
+function sampev.onTextDrawSetString(id, text)
+	if toch.v then
+		text = separator(text)
+		return {id, text}
 	end
 end
 
@@ -2309,6 +2577,7 @@ function load_settings() -- загрузка настроек
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
 	idmodel = imgui.ImBool(ini.settings.idmodel)
+	idtextdraw = imgui.ImBool(ini.settings.idtextdraw)
 
 	infZone = imgui.ImBool(ini.informer.zone)
 	infHP = imgui.ImBool(ini.informer.hp)
@@ -2320,6 +2589,9 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	ndr = imgui.ImBool(ini.settings.ndr)
+	toch = imgui.ImBool(ini.settings.toch)
+	autobike = imgui.ImBool(ini.settings.autobike)
 	styletest = imgui.ImBool(ini.settings.styletest)
 	styletest1 = imgui.ImBool(ini.settings.styletest1)
 	styletest2 = imgui.ImBool(ini.settings.styletest2)
