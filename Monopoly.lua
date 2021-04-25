@@ -2682,7 +2682,6 @@ function autoupdate(json_url, prefix, url)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                       sampAddChatMessage(('[Mono Tools]{FFFFFF} Скрипт успешно обновлён.'), 0x046D63)
-					  wait(5000)
 					  sampAddChatMessage(('[Mono Tools]{FFFFFF} Ознакомиться со всеми обновлениями вы сможете в /mono - помощь - обновления.'), 0x046D63)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
