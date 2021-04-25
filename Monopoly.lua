@@ -157,7 +157,6 @@ local SET = {
 		lock = false,
 		autopass = '',
 		autopasspin = '',
-		zadervkayashika = '',
 		timecout = false,
 		gangzones = false,
 		zones = false,
@@ -1190,22 +1189,22 @@ function main()
 	if yashik.v then
       active = true
       sampSendChat("/invent")
-      wait(zadervkayashika.v*60000)
+      wait(120000)
     end
 	if yashik1.v then
       active1 = true
       sampSendChat("/invent")
-      wait(zadervkayashika.v*60000)
+      wait(120000)
     end
 	if yashik2.v then
       active2 = true
       sampSendChat("/invent")
-      wait(zadervkayashika.v*60000)
+      wait(120000)
     end
 	if yashik3.v then
       active5 = true
       sampSendChat("/invent")
-      wait(zadervkayashika.v*60000)
+      wait(120000)
     end
 		for i = 0, sampGetMaxPlayerId(true) do 
 			if sampIsPlayerConnected(i) then
@@ -1310,7 +1309,6 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autopasspin = u8:decode(autopasspin.v)
-	ini.settings.zadervkayashika = u8:decode(zadervkayashika.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autopay = autopay.v
@@ -2128,7 +2126,6 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
-				imgui.InputText(u8'Задержка в минутах', zadervkayashika)
 				imgui.EndChild()
 			end
 			if checked_test.v then
@@ -2725,7 +2722,6 @@ function load_settings() -- загрузка настроек
 	lock = imgui.ImBool(ini.settings.lock)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autopasspin = imgui.ImBuffer(u8(ini.settings.autopasspin), 256)
-	zadervkayashika = imgui.ImBuffer(u8(ini.settings.zadervkayashika), 256)
 	
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
