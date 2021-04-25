@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.2')
+script_version('1.3')
 
 local use = false
 local close = false
@@ -157,6 +157,7 @@ local SET = {
 		lock = false,
 		autopass = '',
 		autopasspin = '',
+		zadervkayashika = '',
 		timecout = false,
 		gangzones = false,
 		zones = false,
@@ -166,6 +167,10 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		yashik = false,
+		yashik1 = false,
+		yashik2 = false,
+		yashik3 = false,
 		ndr = false,
 		toch = false,
 		autobike = false,
@@ -191,13 +196,13 @@ local SET = {
 		asY = 1
 	},
 	informer = {
-		zone = true,
 		hp = true,
 		armour = true,
 		city = true,
 		kv = true,
 		time = true,
-		rajon = true
+		rajon = true,
+		fps = true
 	}
 }
 
@@ -219,6 +224,7 @@ win_state['hotkeys'] = imgui.ImBool(false)
 win_state['leaders'] = imgui.ImBool(false)
 win_state['help'] = imgui.ImBool(false)
 win_state['calc'] = imgui.ImBool(false)
+win_state['yashiki'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
@@ -881,6 +887,8 @@ function mainmenu() -- функция открытия основного меню скрипта
 			win_state['help'].v = not win_state['help'].v
 		elseif win_state['calc'].v then
 			win_state['calc'].v = not win_state['calc'].v
+		elseif win_state['yashiki'].v then
+			win_state['yashiki'].v = not win_state['yashiki'].v
 		elseif win_state['info'].v then
 			win_state['info'].v = not win_state['info'].v
 		elseif menu_spur.v then
@@ -963,12 +971,12 @@ function main()
 		-- получение названия района на инглише(работает только при включенном английском в настройках игры, иначе иероглифы)
 		local zX, zY, zZ = getCharCoordinates(playerPed)
 		ZoneInGame = getGxtText(getNameOfZone(zX, zY, zZ))
+		
 			
 		-- определение города
 		local citiesList = {'Los-Santos', 'San-Fierro', 'Las-Venturas'}
 		local city = getCityPlayerIsIn(PLAYER_HANDLE)
 		if city > 0 then playerCity = citiesList[city] else playerCity = "Нет сигнала" end
-		
 
 		-- задаем названия зонам по координатам
 		if vmfZone then ZoneText = "Navy Base"
@@ -1111,7 +1119,7 @@ function main()
 		if styletest5.v then -- стили
 			apply_custom_style5()
 			end
-			
+ 
 	if checked_test.v and krytim then
       rul()
       wait(222)
@@ -1179,6 +1187,26 @@ function main()
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
+	if yashik.v then
+      active = true
+      sampSendChat("/invent")
+      wait(zadervkayashika.v*60000)
+    end
+	if yashik1.v then
+      active1 = true
+      sampSendChat("/invent")
+      wait(zadervkayashika.v*60000)
+    end
+	if yashik2.v then
+      active2 = true
+      sampSendChat("/invent")
+      wait(zadervkayashika.v*60000)
+    end
+	if yashik3.v then
+      active5 = true
+      sampSendChat("/invent")
+      wait(zadervkayashika.v*60000)
+    end
 		for i = 0, sampGetMaxPlayerId(true) do 
 			if sampIsPlayerConnected(i) then
 				local result, ped = sampGetCharHandleBySampPlayerId(i)
@@ -1246,9 +1274,14 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.informer.kv = infKv.v
 	ini.informer.time = infTime.v
 	ini.informer.rajon = infRajon.v
+	ini.informer.fps = inffps.v
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.yashik = yashik.v
+	ini.settings.yashik1 = yashik1.v
+	ini.settings.yashik2 = yashik2.v
+	ini.settings.yashik3 = yashik3.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
 	ini.settings.autobike = autobike.v
@@ -1277,6 +1310,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autopasspin = u8:decode(autopasspin.v)
+	ini.settings.zadervkayashika = u8:decode(zadervkayashika.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autopay = autopay.v
@@ -1516,6 +1550,107 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
+  
+	if yashik.v and active then
+    lua_thread.create(function()
+      if data.modelId == 19918 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use then
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+        use = false
+        close = true
+      end
+      if close then
+        wait(111)
+        sampSendClickTextdraw(2112)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close = false
+        active = false
+      end
+    end)
+  end
+  if yashik1.v and active1 then
+    lua_thread.create(function()
+      if data.modelId == 19613 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use1 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 then
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+        use1 = false
+        close1 = true
+      end
+      if close1 then
+        wait(111)
+        sampSendClickTextdraw(2112)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close1 = false
+        active1 = false
+      end
+    end)
+  end
+  if yashik2.v and active2 then
+    lua_thread.create(function()
+      if data.modelId == 1353 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use2 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 then
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+        use2 = false
+        close2 = true
+      end
+      if close2 then
+        wait(111)
+        sampSendClickTextdraw(2112)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close2 = false
+        active2 = false
+      end
+    end)
+  end
+	if yashik3.v and active5 then
+    lua_thread.create(function()
+      if data.modelId == 1733 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use5 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use5 then
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+        use5 = false
+        close5 = true
+      end
+      if close5 then
+        wait(111)
+        sampSendClickTextdraw(2112)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close5 = false
+        active5 = false
+      end
+    end)
+  end
 	if data.modelId == 1615 and checktochilki then
 		if id ~= 2108 and checktochilki then
 			sampSendClickTextdraw(id)
@@ -1653,9 +1788,10 @@ function imgui.OnDrawFrame()
 	if win_state['main'].v then -- основное окошко
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(260, 140), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(260, 174), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
+		if imgui.Button(u8' Roulette Tools', btn_size) then win_state['yashiki'].v = not win_state['yashiki'].v end
 		-- информация по скрипту, готово
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
 		if imgui.Button(u8' Калькулятор', btn_size) then win_state['calc'].v = not win_state['calc'].v end
@@ -1728,11 +1864,12 @@ function imgui.OnDrawFrame()
 						mouseCoord = true 
 					end
 				end
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение брони")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение брони', infArmour)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение здоровья")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение здоровья', infHP)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение брони")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение брони', infArmour)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение города")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение города', infCity)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение района")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение района', infRajon)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение ФПС")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение ФПС', inffps)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение квадрата")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение квадрата', infKv)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение времени")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение времени', infTime)
 				imgui.EndChild()
@@ -1750,55 +1887,6 @@ function imgui.OnDrawFrame()
 					imgui.InputText(u8'Pin-код', autopasspin)
 				end
 				imgui.EndChild()
-			end
-	   
-			if imgui.CollapsingHeader(u8' Roulette Tools') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 160), false)
-				imgui.Columns(2, _, false)
-				imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
-				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
-				imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
-				imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
-				imgui.NextColumn()
-				imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
-				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
-				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
-				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-				imgui.SliderInt(u8'Задержка',zadervka,1, 30)
-				imgui.EndChild()
-			end
-			if checked_test.v then
-			checked_test.v = true
-			checked_test2.v = false
-			checked_test3.v = false
-			checked_test4.v = false
-			end
-			if checked_test2.v then
-			checked_test2.v = true
-			checked_test.v = false
-			checked_test3.v = false
-			checked_test4.v = false
-			end
-			if checked_test3.v then
-			checked_test4.v = false
-			checked_test3.v = true
-			checked_test2.v = false
-			checked_test.v = false
-			end
-			if checked_test4.v then
-			checked_test3.v = false
-			checked_test2.v = false
-			checked_test.v = false
-			checked_test4.v = true
-			end
-			if imgui.CollapsingHeader(u8' Bank Menu') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 60), false)
-				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay)
-				if autopay.v then
-				imgui.SliderInt(u8"Сумма пополнения", pay, 10000, 5000000)
-			end
-			imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Toch Menu') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 100), false)
@@ -2019,6 +2107,57 @@ function imgui.OnDrawFrame()
 		imgui.End()
 	end
 	
+	if win_state['yashiki'].v then -- окно с настройками
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
+		if imgui.Begin(u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 330), false)
+				imgui.Columns(2, _, false)
+				imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
+				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
+				imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
+				imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
+				imgui.NextColumn()
+				imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
+				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
+				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
+				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
+				imgui.SliderInt(u8'Задержка',zadervka,1, 30)
+				imgui.NextColumn()
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
+				imgui.InputText(u8'Задержка в минутах', zadervkayashika)
+				imgui.EndChild()
+			end
+			if checked_test.v then
+			checked_test.v = true
+			checked_test2.v = false
+			checked_test3.v = false
+			checked_test4.v = false
+			end
+			if checked_test2.v then
+			checked_test2.v = true
+			checked_test.v = false
+			checked_test3.v = false
+			checked_test4.v = false
+			end
+			if checked_test3.v then
+			checked_test4.v = false
+			checked_test3.v = true
+			checked_test2.v = false
+			checked_test.v = false
+			end
+			if checked_test4.v then
+			checked_test3.v = false
+			checked_test2.v = false
+			checked_test.v = false
+			checked_test4.v = true
+			end
+		imgui.End()
+	end
+	
 	if win_state['calc'].v then -- окно "калькулятор"
         imgui.SetNextWindowSize(imgui.ImVec2(340, 340), imgui.Cond.FirstUseEver);
         if not window_pos then
@@ -2204,6 +2343,21 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"5. Добавлен калькулятор. /mono - калькулятор.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 25.04.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. После обновления скрипт будет писать, что ознакомиться с обновлением вы сможете")
+				imgui.Text(u8"в /mono - помощь - обновления. ")
+				imgui.Text(u8"2. Добавлено закрытие меню скрипта на ESC.")
+				imgui.Text(u8"3. Исправлен баг когда при использовании точек в числах не работали текстдравы.")
+				imgui.Text(u8"4. Добавлена возможность включить открывание ящиков навсегда.")
+				imgui.Text(u8"5. Также меню с рулетками и ящиками перенесено на главное меню в /mono.")
+				imgui.Text(u8"6. В информер добавлен счетчик FPS, но он требует доработки.")
+				imgui.Text(u8"7. Также обнаружен баг, когда окно информера пропадает при использований функции")
+				imgui.Text(u8"открытия ящиков. Будет исправлено позже.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -2229,15 +2383,13 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
 
 		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.0, 0.0, 0.0, 0.3))
-		if imgui.Begin("Mono Service", win_state['informer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
-			imgui.Text("Mono Tools Services")
-			imgui.Separator()
-			if infZone.v then imgui.Text(u8("• Зона: "..ZoneText)) end
-			if infArmour.v then imgui.Text(u8("• Броня: "..armourNew)) end
+		if imgui.Begin("Mono Tools", win_state['informer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			if infHP.v then imgui.Text(u8("• Здоровье: "..healNew)) end
+			if infArmour.v then imgui.Text(u8("• Броня: "..armourNew)) end
 			if infCity.v then imgui.Text(u8("• Город: "..playerCity)) end
 			if infRajon.v then imgui.Text(u8("• Район: "..ZoneInGame)) end
-			
+			local FPS = memory.getfloat(0xB7CB50, true) -- получение фпс
+			if inffps.v then imgui.Text(u8("• ФПС: "..tostring(math.ceil(FPS)))) end
 			if infKv.v then imgui.Text(u8("• Квадрат: "..tostring(locationPos()))) end
 			if infTime.v then imgui.Text(u8("• Время: "..os.date("%H:%M:%S"))) end
 			imgui.End()
@@ -2338,6 +2490,13 @@ function showHelp(param) -- "вопросик" для скрипта
         imgui.TextUnformatted(param)
         imgui.PopTextWrapPos()
         imgui.EndTooltip()
+    end
+end
+
+function onWindowMessage(m, p)
+    if p == 0x1B and win_state['main'].v then
+        consumeWindowMessage()
+        win_state['main'].v = false
     end
 end
 
@@ -2497,13 +2656,6 @@ function sampev.onCreate3DText(id, color, position, distance, testLOS, attachedP
 	end
 end
 
-function sampev.onTextDrawSetString(id, text)
-	if toch.v then
-		text = separator(text)
-		return {id, text}
-	end
-end
-
 function autoupdate(json_url, prefix, url)
   local dlstatus = require('moonloader').download_status
   local json = getWorkingDirectory() .. '\\'..thisScript().name..'-version.json'
@@ -2530,6 +2682,8 @@ function autoupdate(json_url, prefix, url)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                       sampAddChatMessage(('[Mono Tools]{FFFFFF} Скрипт успешно обновлён.'), 0x046D63)
+					  wait(5000)
+					  sampAddChatMessage(('[Mono Tools]{FFFFFF} Ознакомиться со всеми обновлениями вы сможете в /mono - помощь - обновления.'), 0x046D63)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
@@ -2572,6 +2726,7 @@ function load_settings() -- загрузка настроек
 	lock = imgui.ImBool(ini.settings.lock)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autopasspin = imgui.ImBuffer(u8(ini.settings.autopasspin), 256)
+	zadervkayashika = imgui.ImBuffer(u8(ini.settings.zadervkayashika), 256)
 	
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
@@ -2586,9 +2741,14 @@ function load_settings() -- загрузка настроек
 	infKv = imgui.ImBool(ini.informer.kv)
 	infTime = imgui.ImBool(ini.informer.time)
 	infRajon = imgui.ImBool(ini.informer.rajon)
+	inffps = imgui.ImBool(ini.informer.fps)
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	yashik = imgui.ImBool(ini.settings.yashik)
+	yashik1 = imgui.ImBool(ini.settings.yashik1)
+	yashik2 = imgui.ImBool(ini.settings.yashik2)
+	yashik3 = imgui.ImBool(ini.settings.yashik3)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
 	autobike = imgui.ImBool(ini.settings.autobike)
