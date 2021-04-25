@@ -1266,7 +1266,6 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 		f2:close()
 	end
 
-	ini.informer.zone = infZone.v
 	ini.informer.hp = infHP.v
 	ini.informer.armour = infArmour.v
 	ini.informer.city = infCity.v
@@ -2729,7 +2728,6 @@ function load_settings() -- загрузка настроек
 	idmodel = imgui.ImBool(ini.settings.idmodel)
 	idtextdraw = imgui.ImBool(ini.settings.idtextdraw)
 
-	infZone = imgui.ImBool(ini.informer.zone)
 	infHP = imgui.ImBool(ini.informer.hp)
 	infArmour = imgui.ImBool(ini.informer.armour)
 	infCity = imgui.ImBool(ini.informer.city)
