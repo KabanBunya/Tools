@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.3')
+script_version('1.4')
 
 local use = false
 local close = false
@@ -262,6 +262,7 @@ specOtr = imgui.ImBuffer(256) -- спец.отряд для нашивки(вроде)
 weather = imgui.ImInt(-1) -- установка погоды
 pay = imgui.ImInt(10000) -- сумма депозита
 zadervka = imgui.ImInt(1) -- задержка
+zadervkav2 = imgui.ImInt(3) -- задержка
 gametime = imgui.ImInt(-1) -- установка времени 
 binddelay = imgui.ImInt(3) -- задержка биндера
 local checked_radio = imgui.ImInt(1)
@@ -940,6 +941,7 @@ function main()
 
 	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD) -- шрифт для chatinfo
 	lua_thread.create(showInputHelp)
+	lua_thread.create(informerperem)
 	
 	-- регистрация локальных команд/команды
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
@@ -983,42 +985,6 @@ function main()
 		elseif avikZone then ZoneText = "AirCraft Carrier"
 		elseif svZone then ZoneText = "Ground Forces"
 		else ZoneText = "-" end
-
-		if zones.v and not workpause then -- показываем информер и его перемещение
-			if not win_state['regst'].v then win_state['informer'].v = true end
-
-			if mouseCoord then
-				showCursor(true, true)
-				infoX, infoY = getCursorPos()
-				if isKeyDown(VK_RETURN) then
-					infoX = math.floor(infoX)
-					infoY = math.floor(infoY)
-					mouseCoord = false
-					showCursor(false, false)
-					win_state['main'].v = not win_state['main'].v
-					win_state['settings'].v = not win_state['settings'].v
-				end
-			end
-		else
-			win_state['informer'].v = false
-		end
-
-		if assistant.v and developMode == 1 and isPlayerSoldier then -- координатор и его перемещение
-			if not win_state['regst'].v then win_state['ass'].v = true end
-
-			if mouseCoord3 then
-				showCursor(true, true)
-				asX, asY = getCursorPos()
-				if isKeyDown(VK_RETURN) then
-					asX = math.floor(asX)
-					asY = math.floor(asY)
-					mouseCoord3 = false
-					showCursor(false, false)
-				end
-			end
-		else
-			win_state['ass'].v = false
-		end
 		
 		if files[1] then
 			for i, k in pairs(files) do
@@ -1189,22 +1155,22 @@ function main()
 	if yashik.v then
       active = true
       sampSendChat("/invent")
-      wait(120000)
+      wait(zadervkav2.v*60000)
     end
 	if yashik1.v then
       active1 = true
       sampSendChat("/invent")
-      wait(120000)
+      wait(zadervkav2.v*60000)
     end
 	if yashik2.v then
       active2 = true
       sampSendChat("/invent")
-      wait(120000)
+      wait(zadervkav2.v*60000)
     end
 	if yashik3.v then
       active5 = true
       sampSendChat("/invent")
-      wait(120000)
+      wait(zadervkav2.v*60000)
     end
 		for i = 0, sampGetMaxPlayerId(true) do 
 			if sampIsPlayerConnected(i) then
@@ -1228,6 +1194,16 @@ function EmulShowNameTag(id, value) -- эмуляция показа неймтэгов над бошкой
     raknetBitStreamWriteBool(bs, value)
     raknetEmulRpcReceiveBitStream(80, bs)
     raknetDeleteBitStream(bs)
+end
+
+function sampev.onSendSpawn()
+	lua_thread.create(function()
+	showCursor(false)
+	if yashik.v or yashik1.v or yashik2.v or yashik3.v then
+		wait(10000)
+		sampSendChat("/invent")
+	end
+end)
 end
 
 function sampGetPlayerIdByNickname(nick) -- получаем id игрока по нику
@@ -1781,6 +1757,10 @@ function imgui.OnDrawFrame()
 	if not win_state['main'].v  then 
           imgui.Process = false
        end
+	  
+	if not win_state['main'].v and win_state['informer'].v then 
+          imgui.Process = true
+       end
 	
 	if win_state['main'].v then -- основное окошко
 		
@@ -1821,6 +1801,24 @@ function imgui.OnDrawFrame()
 		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Black")); imgui.SameLine(); imgui.ToggleButton(u8'Black', styletest3)
 		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Purple")); imgui.SameLine(); imgui.ToggleButton(u8'Purple', styletest4)
 		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Gray")); imgui.SameLine(); imgui.ToggleButton(u8'Gray', styletest5)
+		if styletest.v then -- стили
+			apply_custom_style1()
+			end
+		if styletest1.v then -- стили
+			apply_custom_style()
+			end
+		if styletest2.v then -- стили
+			apply_custom_style2()
+			end
+		if styletest3.v then -- стили
+			new_style()
+			end
+		if styletest4.v then -- стили
+			apply_custom_style4()
+			end
+		if styletest5.v then -- стили
+			apply_custom_style5()
+			end
 		end
 		if showSet == 1 then -- общие настройки
 			if imgui.CollapsingHeader(u8' Модификации') then
@@ -1863,11 +1861,13 @@ function imgui.OnDrawFrame()
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение здоровья")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение здоровья', infHP)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение брони")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение брони', infArmour)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение квадрата")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение квадрата', infKv)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение города")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение города', infCity)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение района")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение района', infRajon)
+				imgui.SameLine()
+				imgui.TextQuestion(u8"Если отображаются иероглифы - сделайте игру на английский язык в настройках.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение ФПС")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение ФПС', inffps)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение квадрата")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение квадрата', infKv)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение времени")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение времени', infTime)
 				imgui.EndChild()
 			end
@@ -2125,6 +2125,15 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
+				imgui.SliderInt(u8'Задержка',zadervkav2,3, 30)
+				imgui.NextColumn()
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе работать не будет! Если включить 'всегда открывать' -")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"то скрипт будет открывать выбранные сундуки даже после")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезахода. Если включить 'открыть сундук' - то скрипт будет")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"открывать выбранные сундуки до перезахода. Также если")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перестали открываться сундуки, то зайдите в /settings")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"и включите инвентарь на русский и снова на английский.")
 				imgui.EndChild()
 			end
 			if checked_test.v then
@@ -2354,6 +2363,21 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"открытия ящиков. Будет исправлено позже.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 26.04.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. В новую функцию открытия сундуков добавлен ползунок с задержкой")
+				imgui.Text(u8"(по умолчанию 3 минуты)")
+				imgui.Text(u8"2. В Roolette Tools добавлена инструкция по использованию.")
+				imgui.Text(u8"3. Исправлена невозможность сменить стиль если открываются сундуки.")
+				imgui.Text(u8"4. Фикс закрытия меню на esc(не закрывалось, если открыт информер).")
+				imgui.Text(u8"5. Исправлены баги связанные с информером.")
+				imgui.Text(u8"6. После спавна на экране появлялась мышка - исправлено. ")
+				imgui.Text(u8"7. После спавна, если выбран пункт 'всегда открывать сундуки',")
+				imgui.Text(u8"через 10 секунд открывается инвентарь, чтобы открытие сундуков сработало.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -2372,7 +2396,6 @@ function imgui.OnDrawFrame()
         imgui.EndGroup()
         imgui.End()
 	end
-	
 	if win_state['informer'].v then -- окно информера
 
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX, infoY), imgui.ImVec2(0.5, 0.5))
@@ -2493,6 +2516,10 @@ function onWindowMessage(m, p)
     if p == 0x1B and win_state['main'].v then
         consumeWindowMessage()
         win_state['main'].v = false
+		win_state['settings'].v = false
+		win_state['calc'].v = false
+		win_state['yashiki'].v = false
+		win_state['help'].v = false
     end
 end
 
@@ -2799,6 +2826,47 @@ function showInputHelp() -- chatinfo(для меня) и showinputhelp от хомяка ес не о
 		wait(0)
 	end
 end
+
+function informerperem()
+while true do
+if zones.v and not workpause then -- показываем информер и его перемещение
+			if not win_state['regst'].v then win_state['informer'].v = true end
+
+			if mouseCoord then
+				showCursor(true, true)
+				infoX, infoY = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					infoX = math.floor(infoX)
+					infoY = math.floor(infoY)
+					mouseCoord = false
+					showCursor(false, false)
+					win_state['main'].v = not win_state['main'].v
+					win_state['settings'].v = not win_state['settings'].v
+				end
+			end
+		else
+			win_state['informer'].v = false
+		end
+
+		if assistant.v and developMode == 1 and isPlayerSoldier then -- координатор и его перемещение
+			if not win_state['regst'].v then win_state['ass'].v = true end
+
+			if mouseCoord3 then
+				showCursor(true, true)
+				asX, asY = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					asX = math.floor(asX)
+					asY = math.floor(asY)
+					mouseCoord3 = false
+					showCursor(false, false)
+				end
+			end
+		else
+			win_state['ass'].v = false
+		end
+		wait(0)
+		end
+	end
 
 function getStrByState(keyState) -- состояние клавиш для chatinfo
 	if keyState == 0 then
