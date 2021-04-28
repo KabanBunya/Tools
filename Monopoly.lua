@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.4')
+script_version('1.5')
 
 local use = false
 local close = false
@@ -166,6 +166,7 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		mvdhelp = false,
 		yashik = false,
 		yashik1 = false,
 		yashik2 = false,
@@ -201,7 +202,8 @@ local SET = {
 		kv = true,
 		time = true,
 		rajon = true,
-		fps = true
+		fps = true,
+		hpcar = true
 	}
 }
 
@@ -968,7 +970,7 @@ function main()
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
 		interior = getActiveInterior() -- получаем инту
-
+		
 		-- получение названия района на инглише(работает только при включенном английском в настройках игры, иначе иероглифы)
 		local zX, zY, zZ = getCharCoordinates(playerPed)
 		ZoneInGame = getGxtText(getNameOfZone(zX, zY, zZ))
@@ -1197,13 +1199,7 @@ function EmulShowNameTag(id, value) -- эмуляция показа неймтэгов над бошкой
 end
 
 function sampev.onSendSpawn()
-	lua_thread.create(function()
 	showCursor(false)
-	if yashik.v or yashik1.v or yashik2.v or yashik3.v then
-		wait(10000)
-		sampSendChat("/invent")
-	end
-end)
 end
 
 function sampGetPlayerIdByNickname(nick) -- получаем id игрока по нику
@@ -1249,9 +1245,11 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.informer.time = infTime.v
 	ini.informer.rajon = infRajon.v
 	ini.informer.fps = inffps.v
+	ini.informer.hpcar = infhpcar.v
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.mvdhelp = mvdhelp.v
 	ini.settings.yashik = yashik.v
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
@@ -1281,7 +1279,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.findX = findX
 	ini.settings.findY = findY
 	ini.settings.tag = u8:decode(rtag.v)
-
+	
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autopasspin = u8:decode(autopasspin.v)
 	ini.settings.autologin = autologin.v
@@ -1687,8 +1685,6 @@ function sendchot6()
 	end)
 end
 
--- подключение шрифта для работы иконок	
-
 function imgui.ToggleButton(str_id, bool) -- функция хомяка
 
 	local rBool = false
@@ -1832,6 +1828,7 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
 				imgui.EndChild()
 			end
 			if userNick == 'Bunya_Monopol' then
@@ -1847,7 +1844,7 @@ function imgui.OnDrawFrame()
 			end
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
-				imgui.BeginChild('##25252', imgui.ImVec2(750, 130), false)
+				imgui.BeginChild('##25252', imgui.ImVec2(750, 155), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones)
 				if zones.v then
@@ -1867,6 +1864,7 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение района")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение района', infRajon)
 				imgui.SameLine()
 				imgui.TextQuestion(u8"Если отображаются иероглифы - сделайте игру на английский язык в настройках.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение ХП т/с")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение ХП т/с', infhpcar)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение ФПС")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение ФПС', inffps)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение времени")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение времени', infTime)
 				imgui.EndChild()
@@ -1884,6 +1882,15 @@ function imgui.OnDrawFrame()
 					imgui.InputText(u8'Pin-код', autopasspin)
 				end
 				imgui.EndChild()
+			end
+			if imgui.CollapsingHeader(u8' Bank Menu') then
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 60), false)
+				imgui.Columns(2, _, false)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay)
+				if autopay.v then
+				imgui.SliderInt(u8"Сумма пополнения", pay, 10000, 5000000)
+			end
+			imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Toch Menu') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 100), false)
@@ -2378,6 +2385,15 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"через 10 секунд открывается инвентарь, чтобы открытие сундуков сработало.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 28.04.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлен в модификации Фикс для тех, кто использует МВД Хелпер(МВД блочит инвентарь при спавне).")
+				imgui.Text(u8"2. В информер добавлено ХП транспорта.")
+				imgui.Text(u8"3. После смерти, если включено 'всегда открывать сундуки' у вас не открывается инвентарь.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -2409,13 +2425,17 @@ function imgui.OnDrawFrame()
 			if infRajon.v then imgui.Text(u8("• Район: "..ZoneInGame)) end
 			local FPS = memory.getfloat(0xB7CB50, true) -- получение фпс
 			if inffps.v then imgui.Text(u8("• ФПС: "..tostring(math.ceil(FPS)))) end
+			if isCharInAnyCar(PLAYER_PED) and infhpcar.v then 
+				car = storeCarCharIsInNoSave(playerPed)
+				carhp = getCarHealth(car)
+			imgui.Text(u8("• ХП т/с: " ..carhp)) end
 			if infKv.v then imgui.Text(u8("• Квадрат: "..tostring(locationPos()))) end
 			if infTime.v then imgui.Text(u8("• Время: "..os.date("%H:%M:%S"))) end
 			imgui.End()
-		end
+			end
 		imgui.PopStyleColor()
+		end
 	end
-end
 
 function imgui.Link(link,name,myfunc)
   myfunc = type(name) == 'boolean' and name or myfunc or false
@@ -2619,6 +2639,24 @@ function sampev.onSendPlayerSync(data)
 	end
 end
 
+function fixprice()
+	lua_thread.create(function()
+		wait(15000)
+		thisScript():reload()
+		end)
+	end
+	
+function fixpricecopia()
+	lua_thread.create(function()
+		wait(10000)
+		sampSendChat("/mm")
+		wait(500)
+		setVirtualKeyDown(VK_ESCAPE, true)
+		wait(40)
+		setVirtualKeyDown(VK_ESCAPE, false)
+		end)
+	end
+
 function sampev.onServerMessage(color, text)
 	if color == 1721355519 and text:match("%[F%] .*") then -- получение ранга и ID игрока, который последним написал в /f чат, для тэгов биндера
 		lastfradiozv, lastfradioID = text:match('%[F%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
@@ -2632,6 +2670,21 @@ function sampev.onServerMessage(color, text)
 		krytim = true
 	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') then
 		krytim = true
+	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and yashik.v then
+		fixprice()
+	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and yashik1.v then
+		fixprice()
+	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and yashik2.v then
+		fixprice()
+	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and yashik3.v then
+		fixprice()
+	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and mvdhelp.v then
+		fixpricecopia()
 	end
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box.v then
 		checktochilki = true
@@ -2748,7 +2801,6 @@ function load_settings() -- загрузка настроек
 	lock = imgui.ImBool(ini.settings.lock)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autopasspin = imgui.ImBuffer(u8(ini.settings.autopasspin), 256)
-	
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
@@ -2762,9 +2814,11 @@ function load_settings() -- загрузка настроек
 	infTime = imgui.ImBool(ini.informer.time)
 	infRajon = imgui.ImBool(ini.informer.rajon)
 	inffps = imgui.ImBool(ini.informer.fps)
+	infhpcar = imgui.ImBool(ini.informer.hpcar)
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
 	yashik = imgui.ImBool(ini.settings.yashik)
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
