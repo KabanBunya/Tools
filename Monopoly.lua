@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.5')
+script_version('1.6')
 
 local use = false
 local close = false
@@ -154,9 +154,25 @@ local SET = {
 		autologin = false,
 		autopin = false,
 		autopay = false,
+		autoopl = false,
+		autoopl1 = false,
+		autoopl2 = false,
+		autoopl3 = false,
+		autoopl4 = false,
+		autoopl5 = false,
+		autoopl6 = false,
 		lock = false,
 		autopass = '',
 		autopasspin = '',
+		autoklava = '114',
+		autopassopl = '6',
+		autopassopl1 = '15',
+		autopassopl2 = '16',
+		autopassopl3 = '17',
+		zadervka = '3',
+		zadervkav2 = '3',
+		autopasspay = '5000000',
+		autopasspaypin = '8',
 		timecout = false,
 		gangzones = false,
 		zones = false,
@@ -166,6 +182,7 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		eat = false,
 		mvdhelp = false,
 		yashik = false,
 		yashik1 = false,
@@ -173,6 +190,7 @@ local SET = {
 		yashik3 = false,
 		ndr = false,
 		toch = false,
+		klava = false,
 		autobike = false,
 		styletest = false,
 		styletest1 = false,
@@ -226,6 +244,7 @@ win_state['leaders'] = imgui.ImBool(false)
 win_state['help'] = imgui.ImBool(false)
 win_state['calc'] = imgui.ImBool(false)
 win_state['yashiki'] = imgui.ImBool(false)
+win_state['bank'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
@@ -262,9 +281,6 @@ cmd_text = imgui.ImBuffer(65536) -- текст бинда
 searchn = imgui.ImBuffer(256) -- поиск ника в пентагоне
 specOtr = imgui.ImBuffer(256) -- спец.отряд для нашивки(вроде)
 weather = imgui.ImInt(-1) -- установка погоды
-pay = imgui.ImInt(10000) -- сумма депозита
-zadervka = imgui.ImInt(1) -- задержка
-zadervkav2 = imgui.ImInt(3) -- задержка
 gametime = imgui.ImInt(-1) -- установка времени 
 binddelay = imgui.ImInt(3) -- задержка биндера
 local checked_radio = imgui.ImInt(1)
@@ -891,6 +907,8 @@ function mainmenu() -- функция открытия основного меню скрипта
 			win_state['calc'].v = not win_state['calc'].v
 		elseif win_state['yashiki'].v then
 			win_state['yashiki'].v = not win_state['yashiki'].v
+		elseif win_state['bank'].v then
+			win_state['bank'].v = not win_state['bank'].v
 		elseif win_state['info'].v then
 			win_state['info'].v = not win_state['info'].v
 		elseif menu_spur.v then
@@ -901,7 +919,8 @@ function mainmenu() -- функция открытия основного меню скрипта
 
 		offscript = 0
 		selected = 1
-		selected2 = 1
+		selected2 = 2
+		selected3 = 3
 		showSet = 1
 		leadSet = 1
 	end
@@ -965,6 +984,8 @@ function main()
 
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
+		
+		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
 		
 		--addGangZone(1001, -2080.2, 2200.1, -2380.9, 2540.3, 0x11011414) менее светлый цвет
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
@@ -1086,6 +1107,18 @@ function main()
 		if styletest5.v then -- стили
 			apply_custom_style5()
 			end
+		if eat.v then -- эмулятор лаунчера
+			sampSendChat("/house")
+			wait(100)
+			sampSendDialogResponse(174, 1 , 1, -1)
+			wait(100)
+			sampSendDialogResponse(2431, 1 , 2, -1)
+			wait(100)
+			sampSendDialogResponse(185, 1 , 6, -1)
+			wait(100)
+			closeDialog()
+			wait(10800000)
+			end
  
 	if checked_test.v and krytim then
       rul()
@@ -1202,20 +1235,6 @@ function sampev.onSendSpawn()
 	showCursor(false)
 end
 
-function sampGetPlayerIdByNickname(nick) -- получаем id игрока по нику
-    if type(nick) == "string" then
-        for id = 0, 1000 do
-            local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
-            if sampIsPlayerConnected(id) or id == myid then
-                local name = sampGetPlayerNickname(id)
-                if nick == name then
-                    return id
-                end
-            end
-        end
-    end
-end
-
 function onQuitGame()
 	saveSettings(2) -- сохраняем игру при выходе
 end
@@ -1249,6 +1268,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.eat = eat.v
 	ini.settings.mvdhelp = mvdhelp.v
 	ini.settings.yashik = yashik.v
 	ini.settings.yashik1 = yashik1.v
@@ -1256,6 +1276,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.yashik3 = yashik3.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
+	ini.settings.klava = klava.v
 	ini.settings.autobike = autobike.v
 	ini.settings.styletest = styletest.v
 	ini.settings.styletest1 = styletest1.v
@@ -1281,9 +1302,25 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.tag = u8:decode(rtag.v)
 	
 	ini.settings.autopass = u8:decode(autopass.v)
+	ini.settings.autopasspay = u8:decode(autopasspay.v)
+	ini.settings.autopasspaypin = u8:decode(autopasspaypin.v)
 	ini.settings.autopasspin = u8:decode(autopasspin.v)
+	ini.settings.zadervka = u8:decode(zadervka.v)
+	ini.settings.zadervkav2 = u8:decode(zadervkav2.v)
+	ini.settings.autopassopl = u8:decode(autopassopl.v)
+	ini.settings.autopassopl1 = u8:decode(autopassopl1.v)
+	ini.settings.autopassopl2 = u8:decode(autopassopl2.v)
+	ini.settings.autopassopl3 = u8:decode(autopassopl3.v)
+	ini.settings.autoklava = u8:decode(autoklava.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.autopin = autopin.v
+	ini.settings.autoopl = autoopl.v
+	ini.settings.autoopl1 = autoopl1.v
+	ini.settings.autoopl2 = autoopl2.v
+	ini.settings.autoopl3 = autoopl3.v
+	ini.settings.autoopl4 = autoopl4.v
+	ini.settings.autoopl5 = autoopl5.v
+	ini.settings.autoopl6 = autoopl6.v
 	ini.settings.autopay = autopay.v
 	ini.settings.lock = lock.v
 
@@ -1341,6 +1378,27 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 		sampCloseCurrentDialogWithButton(0)
 		return false
 	end
+	if dialogId == 119 and autoopl.v then
+	sendchot5()
+	end
+	if dialogId == 119 and autoopl1.v then
+	sendchot8()
+	end
+	if dialogId == 119 and autoopl2.v then
+	sendchot9()
+	end
+	if dialogId == 119 and autoopl3.v then
+	sendchot10()
+	end
+	if dialogId == 119 and autoopl4.v then
+	sendchot11()
+	end
+	if dialogId == 119 and autoopl5.v then
+	sendchot12()
+	end
+	if dialogId == 119 and autoopl6.v then
+	sendchot13()
+	end
     if dialogId == 722 and nodial then
     nodial = false
     return false
@@ -1384,7 +1442,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1409,7 +1467,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close1 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1434,7 +1492,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close2 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1486,7 +1544,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	  end
 	  if close4 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1511,7 +1569,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close5 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1537,7 +1595,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1562,7 +1620,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close1 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1587,7 +1645,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close2 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1612,7 +1670,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close5 then
         wait(111)
-        sampSendClickTextdraw(2112)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -1677,12 +1735,868 @@ function sendchot6()
     wait(200)
     setVirtualKeyDown(key.VK_N, false)
 	wait(200)
-	sampSendDialogResponse(33, 1 , 6, -1)
+	sampSendDialogResponse(33, 1 , u8:decode(autopasspaypin.v), -1)
 	wait(200)
-	sampSendDialogResponse(4498, 1, 0, u8:decode(pay.v))
+	sampSendDialogResponse(4498, 1, 0, u8:decode(autopasspay.v))
+	wait(100)
+	closeDialog()
 	wait(100)
 	closeDialog()
 	end)
+end
+
+function sendchot9()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
+end
+	
+function sendchot5()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
+end
+
+function sendchot13()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
+end
+
+function sendchot12()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
+end
+
+function sendchot10()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl3.v), -1)
+	wait(200)
+	sampSendDialogResponse(9762, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(784, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
+end
+
+function sendchot11()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
+end
+
+function sendchot8()
+	lua_thread.create(function() -- начало потока
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
+	wait(200)
+	sampSendDialogResponse(881, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(882, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl1.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(1783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_N, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_N, false)
+	wait(200)
+	sampSendDialogResponse(33, 1 , u8:decode(autopassopl2.v), -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(783, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	thisScript():reload()
+end)
 end
 
 function imgui.ToggleButton(str_id, bool) -- функция хомяка
@@ -1761,10 +2675,11 @@ function imgui.OnDrawFrame()
 	if win_state['main'].v then -- основное окошко
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(260, 174), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(260, 205), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
 		if imgui.Button(u8' Roulette Tools', btn_size) then win_state['yashiki'].v = not win_state['yashiki'].v end
+		if imgui.Button(u8' Bank Menu', btn_size) then win_state['bank'].v = not win_state['bank'].v end
 		-- информация по скрипту, готово
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
 		if imgui.Button(u8' Калькулятор', btn_size) then win_state['calc'].v = not win_state['calc'].v end
@@ -1818,17 +2733,23 @@ function imgui.OnDrawFrame()
 		end
 		if showSet == 1 then -- общие настройки
 			if imgui.CollapsingHeader(u8' Модификации') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 125), false)
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 186), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката.")
+				
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Открытие скрипта на клавишу")); imgui.SameLine(); imgui.ToggleButton(u8'Открытие скрипта на клавишу', klava)
+				if klava.v then
+					imgui.InputText(u8'    ', autoklava); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в /mono - помощь - коды клавиш.") 
+				end
 				imgui.EndChild()
 			end
 			if userNick == 'Bunya_Monopol' then
@@ -1882,15 +2803,6 @@ function imgui.OnDrawFrame()
 					imgui.InputText(u8'Pin-код', autopasspin)
 				end
 				imgui.EndChild()
-			end
-			if imgui.CollapsingHeader(u8' Bank Menu') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 60), false)
-				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay)
-				if autopay.v then
-				imgui.SliderInt(u8"Сумма пополнения", pay, 10000, 5000000)
-			end
-			imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Toch Menu') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 100), false)
@@ -2126,13 +3038,13 @@ function imgui.OnDrawFrame()
 				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
 				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
 				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-				imgui.SliderInt(u8'Задержка',zadervka,1, 30)
+				imgui.InputText(u8'Задержка', zadervka)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
-				imgui.SliderInt(u8'Задержка',zadervkav2,3, 30)
+				imgui.InputText(u8'Задержка ',zadervkav2)
 				imgui.NextColumn()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе работать не будет! Если включить 'всегда открывать' -")
@@ -2166,6 +3078,69 @@ function imgui.OnDrawFrame()
 			checked_test2.v = false
 			checked_test.v = false
 			checked_test4.v = true
+			end
+		imgui.End()
+	end
+	
+	if win_state['bank'].v then -- окно с настройками
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
+		if imgui.Begin(u8' Bank Menu ', win_state['bank'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 330), false)
+				imgui.Columns(2, _, false)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку, дом и бизнес"), autoopl); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+				end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за коммуналку, дом и бизнес"), autoopl2); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl2.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+				end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку и дом")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку и дом"), autoopl1); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl1.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+				end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за коммуналку и дом")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за коммуналку и дом"), autoopl5); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl5.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+				end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто и бизнес"), autoopl3); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl3.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+				end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за бизнес"), autoopl6); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl6.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+				end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто"), autoopl4); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
+				if autoopl4.v then
+					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
+					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+				end
+				imgui.NextColumn()
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay); imgui.SameLine(); imgui.TextQuestion(u8"Пополняет депозит на указанную сумму когда скрипт видит в чате 'Банковский чек'. Также вы должны в этот момент стоять у кассы в Банке, иначе депозит не пополнится.");
+				if autopay.v then
+					imgui.InputText(u8'Номер строки', autopasspaypin); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Пополнения Депозита' и вписываете получившиеся номер строки. По умолчанию стоит 8 строка.")
+					imgui.InputText(u8'Сумма', autopasspay); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать сумму пополнения. По умолчанию стоит 5.000.000$")
+			end
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Оплату налогов включать только один из нужных вам")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"пунктов! Также внимательно читайте как и что нужно настроить.")
+				imgui.EndChild()
 			end
 		imgui.End()
 	end
@@ -2316,16 +3291,31 @@ function imgui.OnDrawFrame()
 		imgui.Begin(u8('Помощь'), win_state['help'], imgui.WindowFlags.NoResize)
 		imgui.BeginGroup()
 		imgui.BeginChild('left pane', imgui.ImVec2(180, 350), true)
-		
 		if imgui.Selectable(u8"Команды скрипта") then selected2 = 1 end
 		imgui.Separator()
-		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 2 end		
+		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 2 end
+		imgui.Separator()
+		if imgui.Selectable(u8"Коды клавиш") then selected2 = 3 end			
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
 		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 350), true)
 		if selected2 == 0 then
 			selected2 = 1
+		elseif selected2 == 3 then
+		imgui.Text(u8"Коды клавиш")
+		imgui.Columns(2, _,false)
+		imgui.SetColumnWidth(-1, 800)
+		imgui.Separator()
+		imgui.Text(u8"Tab - 9"); imgui.SameLine(); imgui.Text(u8"Enter - 13"); imgui.SameLine(); imgui.Text(u8"Shift - 16"); imgui.SameLine(); imgui.Text(u8"Ctrl - 17"); imgui.SameLine(); imgui.Text(u8"Alt - 18"); imgui.SameLine(); imgui.Text(u8"Pause - 19"); imgui.SameLine(); imgui.Text(u8"CapsLock - 20"); imgui.SameLine(); imgui.Text(u8"Esc - 27"); imgui.SameLine(); imgui.Text(u8"Пробел - 32"); imgui.SameLine(); imgui.Text(u8"PageUp - 33")
+		imgui.Text(u8"PageDown - 34"); imgui.SameLine(); imgui.Text(u8"End - 35"); imgui.SameLine(); imgui.Text(u8"Home - 36"); imgui.SameLine(); imgui.Text(u8"Стрелка влево - 37"); imgui.SameLine(); imgui.Text(u8"Стрелка вверх - 38"); imgui.SameLine(); imgui.Text(u8"Стрелка вправо - 39"); imgui.SameLine(); imgui.Text(u8"Стрелка вниз - 40")
+		imgui.Text(u8"Insert - 45"); imgui.SameLine(); imgui.Text(u8"Delete - 46"); imgui.SameLine(); imgui.Text(u8"0 - 48"); imgui.SameLine(); imgui.Text(u8"1 - 49"); imgui.SameLine(); imgui.Text(u8"2 - 50"); imgui.SameLine(); imgui.Text(u8"3 - 51"); imgui.SameLine(); imgui.Text(u8"4 - 52"); imgui.SameLine(); imgui.Text(u8"5 - 53"); imgui.SameLine(); imgui.Text(u8"6 - 54"); imgui.SameLine(); imgui.Text(u8"7 - 55"); imgui.SameLine(); imgui.Text(u8"8 - 56"); imgui.SameLine(); imgui.Text(u8"9 - 57"); imgui.SameLine(); imgui.Text (u8"A - 65"); imgui.SameLine(); imgui.Text (u8"B - 66")	
+		imgui.Text (u8"C - 67"); imgui.SameLine(); imgui.Text (u8"D - 68"); imgui.SameLine();	imgui.Text (u8"E - 69"); imgui.SameLine();	imgui.Text (u8"F - 70"); imgui.SameLine();	imgui.Text (u8"G - 71"); imgui.SameLine();	imgui.Text (u8"H - 72"); imgui.SameLine();	imgui.Text (u8"I - 73"); imgui.SameLine();	imgui.Text (u8"J - 74"); imgui.SameLine();	imgui.Text (u8"K - 75"); imgui.SameLine();	imgui.Text (u8"L - 76"); imgui.SameLine();	imgui.Text (u8"M - 77"); imgui.SameLine();	imgui.Text (u8"N - 78"); imgui.SameLine();	imgui.Text (u8"O - 79"); imgui.SameLine();	imgui.Text (u8"P - 80"); imgui.SameLine();	imgui.Text (u8"Q - 81")	
+		imgui.Text (u8"R - 82"); imgui.SameLine();	imgui.Text (u8"S - 83"); imgui.SameLine();	imgui.Text (u8"T - 84"); imgui.SameLine();	imgui.Text (u8"U - 85"); imgui.SameLine();	imgui.Text (u8"V - 86"); imgui.SameLine();	imgui.Text (u8"W - 87"); imgui.SameLine();	imgui.Text (u8"X - 88"); imgui.SameLine();	imgui.Text (u8"Y - 89"); imgui.SameLine();	imgui.Text (u8"Z - 90"); imgui.SameLine();	imgui.Text (u8"левая клавиша Windows - 91")
+		imgui.Text (u8"правая клавиша Windows - 92"); imgui.SameLine(); imgui.Text (u8"NumPad 0 - 96"); imgui.SameLine(); imgui.Text (u8"NumPad 1 - 97"); imgui.SameLine(); imgui.Text (u8"NumPad 2 - 98"); imgui.SameLine(); imgui.Text (u8"NumPad 3 - 99"); imgui.SameLine(); imgui.Text (u8"NumPad 4 - 100")
+		imgui.Text (u8"NumPad 5 - 101"); imgui.SameLine(); imgui.Text (u8"NumPad 6 - 102"); imgui.SameLine(); imgui.Text (u8"NumPad 7 - 103"); imgui.SameLine(); imgui.Text (u8"NumPad 8 - 104"); imgui.SameLine(); imgui.Text (u8"NumPad 9 - 105"); imgui.SameLine(); imgui.Text (u8"NumPad * - 106"); imgui.SameLine(); imgui.Text (u8"NumPad + - 107")
+		imgui.Text (u8"NumPad - - 109"); imgui.SameLine(); imgui.Text (u8"NumPad . - 119"); imgui.SameLine(); imgui.Text (u8"NumPad / - 111"); imgui.SameLine(); imgui.Text (u8"F3 - 114"); imgui.SameLine(); imgui.Text (u8"F4 - 115"); imgui.SameLine(); imgui.Text (u8"F5 - 116"); imgui.SameLine(); imgui.Text (u8"F6 - 117"); imgui.SameLine(); imgui.Text (u8"F7 - 118"); imgui.SameLine(); imgui.Text (u8"F8 - 119"); imgui.SameLine(); imgui.Text (u8"F9 - 120")
+		imgui.Text (u8"F10 - 121"); imgui.SameLine(); imgui.Text (u8"F11 - 122"); imgui.SameLine(); imgui.Text (u8"F12 - 123")
 		elseif selected2 == 2 then
 		imgui.Text(u8"Обновления")
 		imgui.Columns(2, _,false)
@@ -2392,6 +3382,19 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"1. Добавлен в модификации Фикс для тех, кто использует МВД Хелпер(МВД блочит инвентарь при спавне).")
 				imgui.Text(u8"2. В информер добавлено ХП транспорта.")
 				imgui.Text(u8"3. После смерти, если включено 'всегда открывать сундуки' у вас не открывается инвентарь.")
+		imgui.EndChild()
+		end
+		if imgui.CollapsingHeader(u8' 03.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлено сохранение задержки для сундуков.")
+				imgui.Text(u8"2. Добавлена автоеда дома с кд в 3 часа на всякий случай.")
+				imgui.Text(u8"3. 'Bank Menu' перенесен в главное меню.")
+				imgui.Text(u8"4. Полностью переписана система пополнения депозита.")
+				imgui.Text(u8"5. Вернул улучшенную версию авто оплаты налогов.(находится в 'Bank Menu')")
+				imgui.Text(u8"6. Теперь в 'Модификации' можно настроить кнопку на открытие/закрытие скрипта.")
+				imgui.Text(u8"7. В помощь добавлен пункт 'Коды клавиш'.")
 		imgui.EndChild()
 		end
 		elseif selected2 == 1 then
@@ -2539,6 +3542,7 @@ function onWindowMessage(m, p)
 		win_state['settings'].v = false
 		win_state['calc'].v = false
 		win_state['yashiki'].v = false
+		win_state['bank'].v = false
 		win_state['help'].v = false
     end
 end
@@ -2732,6 +3736,17 @@ function sampev.onCreate3DText(id, color, position, distance, testLOS, attachedP
 	end
 end
 
+function sampGetPlayerIdByNickname(nick)
+  nick = tostring(nick)
+  local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
+  if nick == sampGetPlayerNickname(myid) then return myid end
+  for i = 0, 1003 do
+    if sampIsPlayerConnected(i) and sampGetPlayerNickname(i) == nick then
+      return i
+    end
+  end
+end
+
 function autoupdate(json_url, prefix, url)
   local dlstatus = require('moonloader').download_status
   local json = getWorkingDirectory() .. '\\'..thisScript().name..'-version.json'
@@ -2797,10 +3812,26 @@ function load_settings() -- загрузка настроек
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
 	autopin = imgui.ImBool(ini.settings.autopin)
+	autoopl = imgui.ImBool(ini.settings.autoopl)
+	autoopl1 = imgui.ImBool(ini.settings.autoopl1)
+	autoopl2 = imgui.ImBool(ini.settings.autoopl2)
+	autoopl3 = imgui.ImBool(ini.settings.autoopl3)
+	autoopl4 = imgui.ImBool(ini.settings.autoopl4)
+	autoopl5 = imgui.ImBool(ini.settings.autoopl5)
+	autoopl6 = imgui.ImBool(ini.settings.autoopl6)
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
+	autopasspay = imgui.ImBuffer(u8(ini.settings.autopasspay), 256)
+	autopasspaypin = imgui.ImBuffer(u8(ini.settings.autopasspaypin), 256)
 	autopasspin = imgui.ImBuffer(u8(ini.settings.autopasspin), 256)
+	zadervka = imgui.ImBuffer(u8(ini.settings.zadervka), 256)
+	zadervkav2 = imgui.ImBuffer(u8(ini.settings.zadervkav2), 256)
+	autopassopl = imgui.ImBuffer(u8(ini.settings.autopassopl), 256)
+	autopassopl1 = imgui.ImBuffer(u8(ini.settings.autopassopl1), 256)
+	autopassopl2 = imgui.ImBuffer(u8(ini.settings.autopassopl2), 256)
+	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
+	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
@@ -2818,6 +3849,7 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	eat = imgui.ImBool(ini.settings.eat)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
 	yashik = imgui.ImBool(ini.settings.yashik)
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
@@ -2825,6 +3857,7 @@ function load_settings() -- загрузка настроек
 	yashik3 = imgui.ImBool(ini.settings.yashik3)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
+	klava = imgui.ImBool(ini.settings.klava)
 	autobike = imgui.ImBool(ini.settings.autobike)
 	styletest = imgui.ImBool(ini.settings.styletest)
 	styletest1 = imgui.ImBool(ini.settings.styletest1)
