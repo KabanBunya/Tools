@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.6')
+script_version('1.7')
 
 local use = false
 local close = false
@@ -14,6 +14,7 @@ local close2 = false
 local close3 = false
 local close4 = false
 local close5 = false
+local fontsize = nil
 krytim = true
 
 local restore_text = false
@@ -188,6 +189,7 @@ local SET = {
 		yashik1 = false,
 		yashik2 = false,
 		yashik3 = false,
+		yashik4 = false,
 		ndr = false,
 		toch = false,
 		klava = false,
@@ -205,8 +207,6 @@ local SET = {
 		spOtr = '',
 		timefix = 3,
 		enableskin = false,
-		idmodel = false,
-		idtextdraw = false,
 		skin = 1,
 	},
 	assistant = {
@@ -245,6 +245,7 @@ win_state['help'] = imgui.ImBool(false)
 win_state['calc'] = imgui.ImBool(false)
 win_state['yashiki'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
+win_state['shema'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
@@ -265,6 +266,43 @@ local checked_test7 = imgui.ImBool(false)
 local checked_test8 = imgui.ImBool(false)
 local checked_test9 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
+local checked_test11 = imgui.ImBool(false)
+local video = imgui.ImBool(false)
+local video1 = imgui.ImBool(false)
+local video2 = imgui.ImBool(false)
+local video3 = imgui.ImBool(false)
+local video4 = imgui.ImBool(false)
+local video5 = imgui.ImBool(false)
+local video6 = imgui.ImBool(false)
+local video7 = imgui.ImBool(false)
+local video8 = imgui.ImBool(false)
+local video9 = imgui.ImBool(false)
+local video10 = imgui.ImBool(false)
+local video11 = imgui.ImBool(false)
+local video12 = imgui.ImBool(false)
+local video13 = imgui.ImBool(false)
+local video14 = imgui.ImBool(false)
+local video15 = imgui.ImBool(false)
+local video16 = imgui.ImBool(false)
+local video17 = imgui.ImBool(false)
+local video18 = imgui.ImBool(false)
+local video19 = imgui.ImBool(false)
+local video20 = imgui.ImBool(false)
+local video21 = imgui.ImBool(false)
+local video22 = imgui.ImBool(false)
+local video23 = imgui.ImBool(false)
+local video24 = imgui.ImBool(false)
+local video25 = imgui.ImBool(false)
+local video26 = imgui.ImBool(false)
+local video27 = imgui.ImBool(false)
+local video28 = imgui.ImBool(false)
+local video29 = imgui.ImBool(false)
+local video30 = imgui.ImBool(false)
+local video31 = imgui.ImBool(false)
+local video32 = imgui.ImBool(false)
+local video33 = imgui.ImBool(false)
+local video34 = imgui.ImBool(false)
+local video35 = imgui.ImBool(false)
 local checktochilki = false
 local checktochilki1 = false
 local checktochilki2 = false
@@ -284,6 +322,7 @@ weather = imgui.ImInt(-1) -- установка погоды
 gametime = imgui.ImInt(-1) -- установка времени 
 binddelay = imgui.ImInt(3) -- задержка биндера
 local checked_radio = imgui.ImInt(1)
+local hlam = imgui.ImInt(1)
 
 -- удаление файла клавиш, делаю только тогда, когда добавляю новые клавиши. P.S. удаляет как когда
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
@@ -909,6 +948,8 @@ function mainmenu() -- функция открытия основного меню скрипта
 			win_state['yashiki'].v = not win_state['yashiki'].v
 		elseif win_state['bank'].v then
 			win_state['bank'].v = not win_state['bank'].v
+		elseif win_state['shema'].v then
+			win_state['shema'].v = not win_state['shema'].v
 		elseif win_state['info'].v then
 			win_state['info'].v = not win_state['info'].v
 		elseif menu_spur.v then
@@ -1076,16 +1117,6 @@ function main()
 		dialogIncoming = 0
 		end
 		
-		if toggle and idtextdraw.v then --params that not declared has a nil value that same as false
-            for a = 0, 2304    do --cycle trough all textdeaw id
-                if sampTextdrawIsExists(a) then --if textdeaw exists then
-                    x, y = sampTextdrawGetPos(a) --we get it's position. value returns in game coords
-                    x1, y1 = convertGameScreenCoordsToWindowScreenCoords(x, y) --so we convert it to screen cuz render needs screen coords
-                    renderFontDrawText(font, a, x1, y1, 0xFFBEBEBE) --and then we draw it's id on textdeaw position
-			end
-		end
-	end
-		
 		if launcher.v then -- эмулятор лаунчера
 			sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
 			end
@@ -1187,6 +1218,11 @@ function main()
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
+	if checked_test11.v then
+      active50 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
 	if yashik.v then
       active = true
       sampSendChat("/invent")
@@ -1207,6 +1243,336 @@ function main()
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
+	if yashik4.v then
+      active51 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if video.v then
+      active6 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2139)
+      wait(15000)
+	end
+	if video1.v then
+      active7 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2141)
+      wait(15000)
+	end
+	
+	if video2.v then
+      active8 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2143)
+      wait(15000)
+	end
+	if video3.v then
+      active9 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2145)
+      wait(15000)
+	end
+	if video4.v then
+      active10 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2147)
+      wait(15000)
+	end
+	if video5.v then
+      active11 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2149)
+      wait(15000)
+	end
+	if video6.v then
+      active12 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2151)
+      wait(15000)
+	end
+	if video7.v then
+      active13 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2153)
+      wait(15000)
+	end
+	if video8.v then
+      active14 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2155)
+      wait(15000)
+	end
+	if video9.v then
+      active15 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2157)
+      wait(15000)
+	end
+	if video10.v then
+      active16 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2159)
+      wait(15000)
+	end
+	if video11.v then
+      active17 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2161)
+      wait(15000)
+	end
+	if video12.v then
+      active18 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2163)
+      wait(15000)
+	end
+	if video13.v then
+      active19 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2165)
+      wait(15000)
+	end
+	if video14.v then
+      active20 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+      wait(15000)
+	end
+	if video15.v then
+      active21 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2169)
+      wait(15000)
+	end
+	if video16.v then
+      active22 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2171)
+      wait(15000)
+	end
+	if video17.v then
+      active23 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2173)
+      wait(15000)
+	end
+	if video18.v then
+      active24 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2175)
+      wait(15000)
+	end
+	if video19.v then
+      active25 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2177)
+      wait(15000)
+	end
+	if video20.v then
+      active26 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2179)
+      wait(15000)
+	end
+	if video21.v then
+      active27 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2181)
+      wait(15000)
+	end
+	if video22.v then
+      active28 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2183)
+      wait(15000)
+	end
+	if video23.v then
+      active29 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2185)
+      wait(15000)
+	end
+	if video24.v then
+      active30 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2187)
+      wait(15000)
+	end
+	if video25.v then
+      active31 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2189)
+      wait(15000)
+	end
+	if video26.v then
+      active32 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2191)
+      wait(15000)
+	end
+	if video27.v then
+      active33 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2193)
+      wait(15000)
+	end
+	if video28.v then
+      active34 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2195)
+      wait(15000)
+	end
+	if video29.v then
+      active35 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2197)
+      wait(15000)
+	end
+	if video30.v then
+      active36 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2199)
+      wait(15000)
+	end
+	if video31.v then
+      active37 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2201)
+      wait(15000)
+	end
+	if video32.v then
+      active38 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2203)
+      wait(15000)
+	end
+	if video33.v then
+      active39 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2205)
+      wait(15000)
+	end
+	if video34.v then
+      active40 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2207)
+      wait(15000)
+	end
+	if video35.v then
+      active41 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2209)
+      wait(15000)
+	end
 		for i = 0, sampGetMaxPlayerId(true) do 
 			if sampIsPlayerConnected(i) then
 				local result, ped = sampGetCharHandleBySampPlayerId(i)
@@ -1274,6 +1640,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
 	ini.settings.yashik3 = yashik3.v
+	ini.settings.yashik4 = yashik4.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
 	ini.settings.klava = klava.v
@@ -1286,8 +1653,6 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.styletest5 = styletest5.v
 	ini.settings.timefix = timefix.v
 	ini.settings.enableskin = enableskin.v
-	ini.settings.idmodel = idmodel.v
-	ini.settings.idtextdraw = idtextdraw.v
 	ini.settings.skin = localskin.v
 	ini.settings.timecout = timecout.v
 	ini.settings.gangzones = gangzones.v
@@ -1424,9 +1789,6 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
-  if idmodel.v then 
-	sampfuncsLog(('Textdraw create | id: %d model: %d text: %s x: %.2f y: %.2f'):format(id, data.modelId, data.text, data.position.x, data.position.y))
-  end
   if checked_test5.v and active then
     lua_thread.create(function()
       if data.modelId == 19918 then
@@ -1579,7 +1941,41 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-  
+	if checked_test11.v and active50 then
+    lua_thread.create(function()
+      if data.modelId == 19344 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use50 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use50 then
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+        use50 = false
+        grad50 = true
+      end
+	  if grad50 then
+		wait(111)
+		sampSendClickTextdraw(2093)
+		wait(111)
+		sampSendClickTextdraw(2096)
+		wait(111)
+		sampSendClickTextdraw(2099)
+        grad50 = false
+		close50 = true
+	  end
+      if close50 then
+        wait(111)
+        sampSendClickTextdraw(2067)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close50 = false
+        active50 = false
+      end
+    end)
+  end
 	if yashik.v and active then
     lua_thread.create(function()
       if data.modelId == 19918 then
@@ -1677,6 +2073,869 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampSendClickTextdraw(2135)
         close5 = false
         active5 = false
+      end
+    end)
+  end
+	if yashik4.v and active51 then
+    lua_thread.create(function()
+      if data.modelId == 19344 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use51 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use51 then
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+        use51 = false
+        grad51 = true
+      end
+	  if grad51 then
+		wait(111)
+		sampSendClickTextdraw(2093)
+		wait(111)
+		sampSendClickTextdraw(2096)
+		wait(111)
+		sampSendClickTextdraw(2099)
+        grad51 = false
+		close51 = true
+	  end
+      if close51 then
+        wait(111)
+        sampSendClickTextdraw(2067)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close51 = false
+        active51 = false
+      end
+    end)
+  end
+	if video.v and active6 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use6 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use6 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use6 = false
+        close6 = true
+		end
+		if close6 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close6 = false
+        active6 = false
+      end
+    end)
+  end
+	if video1.v and active7 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use7 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use7 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use7 = false
+        close7 = true
+		end
+		if close7 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close7 = false
+        active7 = false
+      end
+    end)
+  end
+  if video2.v and active8 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use8 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use8 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use8 = false
+        close8 = true
+		end
+		if close8 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close8 = false
+        active8 = false
+      end
+    end)
+  end
+  if video3.v and active9 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use9 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use9 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use9 = false
+        close9 = true
+		end
+		if close9 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close9 = false
+        active9 = false
+      end
+    end)
+  end
+  if video4.v and active10 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use10 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use10 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use10 = false
+        close10 = true
+		end
+		if close10 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close10 = false
+        active10 = false
+      end
+    end)
+  end
+  if video5.v and active11 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use11 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use11 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use11 = false
+        close11 = true
+		end
+		if close11 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close11 = false
+        active11 = false
+      end
+    end)
+  end
+  if video6.v and active12 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use12 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use12 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use12 = false
+        close12 = true
+		end
+		if close12 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close12 = false
+        active12 = false
+      end
+    end)
+  end
+  if video7.v and active13 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use13 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use13 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use13 = false
+        close13 = true
+		end
+		if close13 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close13 = false
+        active13 = false
+      end
+    end)
+  end
+  if video8.v and active14 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use14 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use14 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use14 = false
+        close14 = true
+		end
+		if close14 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close14 = false
+        active14 = false
+      end
+    end)
+  end
+  if video9.v and active15 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use15 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use15 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use15 = false
+        close15 = true
+		end
+		if close15 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close15 = false
+        active15 = false
+      end
+    end)
+  end
+  if video10.v and active16 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use16 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use16 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use16 = false
+        close16 = true
+		end
+		if close16 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close16 = false
+        active16 = false
+      end
+    end)
+  end
+  if video11.v and active17 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use17 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use17 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use17 = false
+        close17 = true
+		end
+		if close17 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close17 = false
+        active17 = false
+      end
+    end)
+  end
+  if video12.v and active18 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use18 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use18 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use18 = false
+        close18 = true
+		end
+		if close18 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close18 = false
+        active18 = false
+      end
+    end)
+  end
+  if video13.v and active19 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use19 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use19 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use19 = false
+        close19 = true
+		end
+		if close19 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close19 = false
+        active19 = false
+      end
+    end)
+  end
+  if video14.v and active20 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use20 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use20 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use20 = false
+        close20 = true
+		end
+		if close20 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close20 = false
+        active20 = false
+      end
+    end)
+  end
+  if video15.v and active21 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use21 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use21 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use21 = false
+        close21 = true
+		end
+		if close21 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close21 = false
+        active21 = false
+      end
+    end)
+  end
+  if video16.v and active22 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use22 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use22 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use22 = false
+        close22 = true
+		end
+		if close22 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close22 = false
+        active22 = false
+      end
+    end)
+  end
+  if video17.v and active23 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use23 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use23 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use23 = false
+        close23 = true
+		end
+		if close23 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close23 = false
+        active23 = false
+      end
+    end)
+  end
+  if video18.v and active24 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use24 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use24 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use24 = false
+        close24 = true
+		end
+		if close24 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close24 = false
+        active24 = false
+      end
+    end)
+  end
+  if video19.v and active25 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use25 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use25 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use25 = false
+        close25 = true
+		end
+		if close25 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close25 = false
+        active25 = false
+      end
+    end)
+  end
+  if video20.v and active26 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use26 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use26 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use26 = false
+        close26 = true
+		end
+		if close26 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close26 = false
+        active26 = false
+      end
+    end)
+  end
+  if video21.v and active27 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use27 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use27 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use27 = false
+        close27 = true
+		end
+		if close27 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close27 = false
+        active27 = false
+      end
+    end)
+  end
+  if video22.v and active28 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use28 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use28 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use28 = false
+        close28 = true
+		end
+		if close28 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close28 = false
+        active28 = false
+      end
+    end)
+  end
+  if video23.v and active29 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use29 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use29 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use29 = false
+        close29 = true
+		end
+		if close29 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close29 = false
+        active29 = false
+      end
+    end)
+  end
+  if video24.v and active30 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use30 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use30 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use30 = false
+        close30 = true
+		end
+		if close30 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close30 = false
+        active30 = false
+      end
+    end)
+  end
+  if video25.v and active31 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use31 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use31 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use31 = false
+        close31 = true
+		end
+		if close31 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close31 = false
+        active31 = false
+      end
+    end)
+  end
+  if video26.v and active32 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use32 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use32 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use32 = false
+        close32 = true
+		end
+		if close32 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close32 = false
+        active32 = false
+      end
+    end)
+  end
+  if video27.v and active33 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use33 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use33 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use33 = false
+        close33 = true
+		end
+		if close33 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close33 = false
+        active33 = false
+      end
+    end)
+  end
+  if video28.v and active34 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use34 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use34 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use34 = false
+        close34 = true
+		end
+		if close34 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close34 = false
+        active34 = false
+      end
+    end)
+  end
+  if video29.v and active35 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use35 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use35 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use35 = false
+        close35 = true
+		end
+		if close35 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close35 = false
+        active35 = false
+      end
+    end)
+  end
+  if video30.v and active36 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use36 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use36 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use36 = false
+        close36 = true
+		end
+		if close36 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close36 = false
+        active36 = false
+      end
+    end)
+  end
+  if video31.v and active37 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use37 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use37 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use37 = false
+        close37 = true
+		end
+		if close37 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close37 = false
+        active37 = false
+      end
+    end)
+  end
+  if video32.v and active38 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use38 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use38 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use38 = false
+        close38 = true
+		end
+		if close38 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close38 = false
+        active38 = false
+      end
+    end)
+  end
+  if video33.v and active39 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use39 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use39 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use39 = false
+        close39 = true
+		end
+		if close39 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close39 = false
+        active39 = false
+      end
+    end)
+  end
+  if video34.v and active40 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use40 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use40 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use40 = false
+        close40 = true
+		end
+		if close40 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close40 = false
+        active40 = false
+      end
+    end)
+  end
+  if video35.v and active41 then
+		lua_thread.create(function()
+		if data.modelId == 962 then
+		 use41 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use41 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use41 = false
+        close41 = true
+		end
+		if close41 then
+        wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close41 = false
+        active41 = false
       end
     end)
   end
@@ -2654,12 +3913,19 @@ function imgui.ToggleButton(str_id, bool) -- функция хомяка
 	return rBool
 end
 
+function imgui.BeforeDrawFrame()
+    if fontsize == nil then
+        fontsize = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 25.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
+    end
+end
+
 function imgui.OnDrawFrame()
 	local tLastKeys = {} -- это у нас для клавиш
 	local sw, sh = getScreenResolution() -- получаем разрешение экрана
 	local btn_size = imgui.ImVec2(-0.1, 0) -- а это "шаблоны" размеров кнопок
 	local btn_size2 = imgui.ImVec2(160, 0)
 	local btn_size3 = imgui.ImVec2(140, 0)
+	local btn_size5 = imgui.ImVec2(70, 50)
 
 	-- тут мы подстраиваем курсор под адекватность
 	imgui.ShowCursor = not win_state['informer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v
@@ -2688,7 +3954,7 @@ function imgui.OnDrawFrame()
 	
 	if win_state['settings'].v then -- окно с настройками
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(850, 460), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Биндер и Настройки', win_state['settings'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
 		if imgui.BeginMenuBar() then -- меню бар, используется в виде выпадающего списка, ибо горизонтальный с ума сходит и мерцает при клике по одному из пунктов
 			if imgui.BeginMenu(u8(" Навигация по настройкам")) then
@@ -2732,6 +3998,23 @@ function imgui.OnDrawFrame()
 			end
 		end
 		if showSet == 1 then -- общие настройки
+			if imgui.CollapsingHeader(u8' Майнинг') then
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 358), false)
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Видеокарты должны быть на второй странице инвентаря и идти по порядку! Т.е в слот №1 ложите видеокарту, следующую ложите в")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"          слот №2 и так далее. Чтобы узнать номер слота - смотрите схему. Чтобы быстро прервать процесс - напишите /reload.")
+				imgui.NextColumn()
+				if imgui.Button(u8' Схема', btn_size) then win_state['shema'].v = not win_state['shema'].v end
+				imgui.Checkbox(u8'Улучшать видеокарту №1  ', video); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №4', video3)
+				imgui.Checkbox(u8'Улучшать видеокарту №5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №6  ', video5); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №8', video7)
+				imgui.Checkbox(u8'Улучшать видеокарту №9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №10', video9); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №11', video10); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №12', video11)
+				imgui.Checkbox(u8'Улучшать видеокарту №13', video12); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №14', video13); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №15', video14); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №16', video15)
+				imgui.Checkbox(u8'Улучшать видеокарту №17', video16); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №18', video17); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №19', video18); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №20', video19)
+				imgui.Checkbox(u8'Улучшать видеокарту №21', video20); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №22', video21); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №23', video22); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №24', video23)
+				imgui.Checkbox(u8'Улучшать видеокарту №25', video24); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №26', video25); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №27', video26); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №28', video27)
+				imgui.Checkbox(u8'Улучшать видеокарту №29', video28); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №30', video29); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №31', video30); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №32', video31)
+				imgui.Checkbox(u8'Улучшать видеокарту №33', video32); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №34', video33); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №35', video34); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №36', video35)
+				imgui.EndChild()
+			end
 			if imgui.CollapsingHeader(u8' Модификации') then
 				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 186), false)
 				imgui.Columns(2, _, false)
@@ -2740,7 +4023,6 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката.")
-				
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
@@ -2751,18 +4033,6 @@ function imgui.OnDrawFrame()
 					imgui.InputText(u8'    ', autoklava); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в /mono - помощь - коды клавиш.") 
 				end
 				imgui.EndChild()
-			end
-			if userNick == 'Bunya_Monopol' then
-			if imgui.CollapsingHeader(u8' Для разработки') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 80), false)
-				imgui.Columns(2, _, false)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ID Моделей в Textdraw")); imgui.SameLine(); imgui.ToggleButton(u8'ID Моделей в Textdraw', idmodel)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ID Textdraw")); imgui.SameLine(); imgui.ToggleButton(u8'ID Textdraw', idtextdraw)
-				if idtextdraw.v then
-					toggle = not toggle
-				end
-				imgui.EndChild()
-			end
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
 				imgui.BeginChild('##25252', imgui.ImVec2(750, 155), false)
@@ -3022,12 +4292,11 @@ function imgui.OnDrawFrame()
 
 		imgui.End()
 	end
-	
 	if win_state['yashiki'].v then -- окно с настройками
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(850, 465), imgui.Cond.FirstUseEver)
 		if imgui.Begin(u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 330), false)
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 380), false)
 				imgui.Columns(2, _, false)
 				imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
 				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
@@ -3038,12 +4307,14 @@ function imgui.OnDrawFrame()
 				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
 				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
 				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
+				imgui.Checkbox(u8'Открывать золотое яйцо', checked_test11); imgui.SameLine(); imgui.TextQuestion(u8"Яйцо как и сундуки должны быть на первой странице инвентаря. Также у вас должны быть куплены все 3 курицы, а иначе может не сработать.") 
 				imgui.InputText(u8'Задержка', zadervka)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать золотое яйцо")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать золотое яйцо', yashik4)
 				imgui.InputText(u8'Задержка ',zadervkav2)
 				imgui.NextColumn()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
@@ -3078,6 +4349,26 @@ function imgui.OnDrawFrame()
 			checked_test2.v = false
 			checked_test.v = false
 			checked_test4.v = true
+			end
+		imgui.End()
+	end
+	
+	if win_state['shema'].v then -- окно с настройками
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(510, 470), imgui.Cond.FirstUseEver)
+		if imgui.Begin(u8' Схема', win_state['shema'], imgui.WindowFlags.NoResize) then
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 430), false)
+				imgui.PushFont(fontsize)
+				imgui.Text('   INVENTORY'); imgui.SameLine(); imgui.Text('                       S'); imgui.SameLine(); imgui.Text('     C'); imgui.SameLine(); imgui.Text('    P'); imgui.SameLine(); imgui.Text('     S');
+				imgui.PopFont()
+				imgui.Button(u8' №1', btn_size5); imgui.SameLine(); imgui.Button(u8' №2', btn_size5); imgui.SameLine(); imgui.Button(u8' №3', btn_size5); imgui.SameLine(); imgui.Button(u8' №4', btn_size5); imgui.SameLine(); imgui.Button(u8' №5', btn_size5); imgui.SameLine(); imgui.Button(u8' №6', btn_size5)
+				imgui.Button(u8' №7', btn_size5); imgui.SameLine(); imgui.Button(u8' №8', btn_size5); imgui.SameLine(); imgui.Button(u8' №9', btn_size5); imgui.SameLine(); imgui.Button(u8' №10', btn_size5); imgui.SameLine(); imgui.Button(u8' №11', btn_size5); imgui.SameLine(); imgui.Button(u8' №12', btn_size5)
+				imgui.Button(u8' №13', btn_size5); imgui.SameLine(); imgui.Button(u8' №14', btn_size5); imgui.SameLine(); imgui.Button(u8' №15', btn_size5); imgui.SameLine(); imgui.Button(u8' №16', btn_size5); imgui.SameLine(); imgui.Button(u8' №17', btn_size5); imgui.SameLine(); imgui.Button(u8' №18', btn_size5)
+				imgui.Button(u8' №19', btn_size5); imgui.SameLine(); imgui.Button(u8' №20', btn_size5); imgui.SameLine(); imgui.Button(u8' №21', btn_size5); imgui.SameLine(); imgui.Button(u8' №22', btn_size5); imgui.SameLine(); imgui.Button(u8' №23', btn_size5); imgui.SameLine(); imgui.Button(u8' №24', btn_size5)
+				imgui.Button(u8' №25', btn_size5); imgui.SameLine(); imgui.Button(u8' №26', btn_size5); imgui.SameLine(); imgui.Button(u8' №27', btn_size5); imgui.SameLine(); imgui.Button(u8' №28', btn_size5); imgui.SameLine(); imgui.Button(u8' №29', btn_size5); imgui.SameLine(); imgui.Button(u8' №30', btn_size5)
+				imgui.Button(u8' №31', btn_size5); imgui.SameLine(); imgui.Button(u8' №32', btn_size5); imgui.SameLine(); imgui.Button(u8' №33', btn_size5); imgui.SameLine(); imgui.Button(u8' №34', btn_size5); imgui.SameLine(); imgui.Button(u8' №35', btn_size5); imgui.SameLine(); imgui.Button(u8' №36', btn_size5)
+				imgui.Text(u8'                                                 '); imgui.SameLine(); imgui.RadioButton('', hlam, 2); imgui.SameLine(); imgui.RadioButton('', hlam, 1); imgui.SameLine(); imgui.RadioButton('', hlam, 3)
+				imgui.EndChild()
 			end
 		imgui.End()
 	end
@@ -3397,6 +4688,14 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"7. В помощь добавлен пункт 'Коды клавиш'.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 07.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлен в 'Биндер и Настройки' пункт 'Майнинг'. Там вы сможете улучшать свои видеокарты.")
+				imgui.Text(u8"2. В 'Roulette Tools' добавлено золотое яйцо.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -3687,6 +4986,9 @@ function sampev.onServerMessage(color, text)
 	if text:match("Добро пожаловать на Arizona Role Play!") and yashik3.v then
 		fixprice()
 	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and yashik4.v then
+		fixprice()
+	end
 	if text:match("Добро пожаловать на Arizona Role Play!") and mvdhelp.v then
 		fixpricecopia()
 	end
@@ -3835,8 +5137,6 @@ function load_settings() -- загрузка настроек
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
-	idmodel = imgui.ImBool(ini.settings.idmodel)
-	idtextdraw = imgui.ImBool(ini.settings.idtextdraw)
 
 	infHP = imgui.ImBool(ini.informer.hp)
 	infArmour = imgui.ImBool(ini.informer.armour)
@@ -3855,6 +5155,7 @@ function load_settings() -- загрузка настроек
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
 	yashik3 = imgui.ImBool(ini.settings.yashik3)
+	yashik4 = imgui.ImBool(ini.settings.yashik4)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
 	klava = imgui.ImBool(ini.settings.klava)
