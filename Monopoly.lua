@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.7')
+script_version('1.8')
 
 local use = false
 local close = false
@@ -183,6 +183,8 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		yuma = false,
+		prescott = false,
 		eat = false,
 		mvdhelp = false,
 		yashik = false,
@@ -1248,7 +1250,332 @@ function main()
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
-	if video.v then
+	if video.v and yuma.v then
+      active6 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2138)
+      wait(15000)
+	end
+	if video1.v and yuma.v then
+      active7 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2140)
+      wait(15000)
+	end
+	
+	if video2.v and yuma.v then
+      active8 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2142)
+      wait(15000)
+	end
+	if video3.v and yuma.v then
+      active9 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2144)
+      wait(15000)
+	end
+	if video4.v and yuma.v then
+      active10 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2146)
+      wait(15000)
+	end
+	if video5.v and yuma.v then
+      active11 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2148)
+      wait(15000)
+	end
+	if video6.v and yuma.v then
+      active12 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2150)
+      wait(15000)
+	end
+	if video7.v and yuma.v then
+      active13 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2152)
+      wait(15000)
+	end
+	if video8.v and yuma.v then
+      active14 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2154)
+      wait(15000)
+	end
+	if video9.v and yuma.v then
+      active15 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2156)
+      wait(15000)
+	end
+	if video10.v and yuma.v then
+      active16 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2158)
+      wait(15000)
+	end
+	if video11.v and yuma.v then
+      active17 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2160)
+      wait(15000)
+	end
+	if video12.v and yuma.v then
+      active18 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2162)
+      wait(15000)
+	end
+	if video13.v and yuma.v then
+      active19 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2164)
+      wait(15000)
+	end
+	if video14.v and yuma.v then
+      active20 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2166)
+      wait(15000)
+	end
+	if video15.v and yuma.v then
+      active21 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2168)
+      wait(15000)
+	end
+	if video16.v and yuma.v then
+      active22 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2170)
+      wait(15000)
+	end
+	if video17.v and yuma.v then
+      active23 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2172)
+      wait(15000)
+	end
+	if video18.v and yuma.v then
+      active24 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2174)
+      wait(15000)
+	end
+	if video19.v and yuma.v then
+      active25 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2176)
+      wait(15000)
+	end
+	if video20.v and yuma.v then
+      active26 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2178)
+      wait(15000)
+	end
+	if video21.v and yuma.v then
+      active27 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2180)
+      wait(15000)
+	end
+	if video22.v and yuma.v then
+      active28 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2182)
+      wait(15000)
+	end
+	if video23.v and yuma.v then
+      active29 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2184)
+      wait(15000)
+	end
+	if video24.v and yuma.v then
+      active30 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2186)
+      wait(15000)
+	end
+	if video25.v and yuma.v then
+      active31 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2188)
+      wait(15000)
+	end
+	if video26.v and yuma.v then
+      active32 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2190)
+      wait(15000)
+	end
+	if video27.v and yuma.v then
+      active33 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2192)
+      wait(15000)
+	end
+	if video28.v and yuma.v then
+      active34 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2194)
+      wait(15000)
+	end
+	if video29.v and yuma.v then
+      active35 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2196)
+      wait(15000)
+	end
+	if video30.v and yuma.v then
+      active36 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2198)
+      wait(15000)
+	end
+	if video31.v and yuma.v then
+      active37 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2200)
+      wait(15000)
+	end
+	if video32.v and yuma.v then
+      active38 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2202)
+      wait(15000)
+	end
+	if video33.v and yuma.v then
+      active39 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2204)
+      wait(15000)
+	end
+	if video34.v and yuma.v then
+      active40 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2206)
+      wait(15000)
+	end
+	if video35.v and yuma.v then
+      active41 = true
+      sampSendChat("/invent")
+	  wait(200)
+	  sampSendClickTextdraw(2108)
+	  wait(200)
+	  sampSendClickTextdraw(2208)
+      wait(15000)
+	end
+	if video.v and prescott.v then
       active6 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1257,7 +1584,7 @@ function main()
 	  sampSendClickTextdraw(2139)
       wait(15000)
 	end
-	if video1.v then
+	if video1.v and prescott.v then
       active7 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1266,8 +1593,7 @@ function main()
 	  sampSendClickTextdraw(2141)
       wait(15000)
 	end
-	
-	if video2.v then
+	if video2.v and prescott.v then
       active8 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1276,7 +1602,7 @@ function main()
 	  sampSendClickTextdraw(2143)
       wait(15000)
 	end
-	if video3.v then
+	if video3.v and prescott.v then
       active9 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1285,7 +1611,7 @@ function main()
 	  sampSendClickTextdraw(2145)
       wait(15000)
 	end
-	if video4.v then
+	if video4.v and prescott.v then
       active10 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1294,7 +1620,7 @@ function main()
 	  sampSendClickTextdraw(2147)
       wait(15000)
 	end
-	if video5.v then
+	if video5.v and prescott.v then
       active11 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1303,7 +1629,7 @@ function main()
 	  sampSendClickTextdraw(2149)
       wait(15000)
 	end
-	if video6.v then
+	if video6.v and prescott.v then
       active12 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1312,7 +1638,7 @@ function main()
 	  sampSendClickTextdraw(2151)
       wait(15000)
 	end
-	if video7.v then
+	if video7.v and prescott.v then
       active13 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1321,7 +1647,7 @@ function main()
 	  sampSendClickTextdraw(2153)
       wait(15000)
 	end
-	if video8.v then
+	if video8.v and prescott.v then
       active14 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1330,7 +1656,7 @@ function main()
 	  sampSendClickTextdraw(2155)
       wait(15000)
 	end
-	if video9.v then
+	if video9.v and prescott.v then
       active15 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1339,7 +1665,7 @@ function main()
 	  sampSendClickTextdraw(2157)
       wait(15000)
 	end
-	if video10.v then
+	if video10.v and yuma.v then
       active16 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1348,7 +1674,7 @@ function main()
 	  sampSendClickTextdraw(2159)
       wait(15000)
 	end
-	if video11.v then
+	if video11.v and prescott.v then
       active17 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1357,7 +1683,7 @@ function main()
 	  sampSendClickTextdraw(2161)
       wait(15000)
 	end
-	if video12.v then
+	if video12.v and prescott.v then
       active18 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1366,7 +1692,7 @@ function main()
 	  sampSendClickTextdraw(2163)
       wait(15000)
 	end
-	if video13.v then
+	if video13.v and prescott.v then
       active19 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1375,7 +1701,7 @@ function main()
 	  sampSendClickTextdraw(2165)
       wait(15000)
 	end
-	if video14.v then
+	if video14.v and prescott.v then
       active20 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1384,7 +1710,7 @@ function main()
 	  sampSendClickTextdraw(2167)
       wait(15000)
 	end
-	if video15.v then
+	if video15.v and prescott.v then
       active21 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1393,7 +1719,7 @@ function main()
 	  sampSendClickTextdraw(2169)
       wait(15000)
 	end
-	if video16.v then
+	if video16.v and prescott.v then
       active22 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1402,7 +1728,7 @@ function main()
 	  sampSendClickTextdraw(2171)
       wait(15000)
 	end
-	if video17.v then
+	if video17.v and prescott.v then
       active23 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1411,7 +1737,7 @@ function main()
 	  sampSendClickTextdraw(2173)
       wait(15000)
 	end
-	if video18.v then
+	if video18.v and prescott.v then
       active24 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1420,7 +1746,7 @@ function main()
 	  sampSendClickTextdraw(2175)
       wait(15000)
 	end
-	if video19.v then
+	if video19.v and prescott.v then
       active25 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1429,7 +1755,7 @@ function main()
 	  sampSendClickTextdraw(2177)
       wait(15000)
 	end
-	if video20.v then
+	if video20.v and prescott.v then
       active26 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1438,7 +1764,7 @@ function main()
 	  sampSendClickTextdraw(2179)
       wait(15000)
 	end
-	if video21.v then
+	if video21.v and prescott.v then
       active27 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1447,7 +1773,7 @@ function main()
 	  sampSendClickTextdraw(2181)
       wait(15000)
 	end
-	if video22.v then
+	if video22.v and prescott.v then
       active28 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1456,7 +1782,7 @@ function main()
 	  sampSendClickTextdraw(2183)
       wait(15000)
 	end
-	if video23.v then
+	if video23.v and prescott.v then
       active29 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1465,7 +1791,7 @@ function main()
 	  sampSendClickTextdraw(2185)
       wait(15000)
 	end
-	if video24.v then
+	if video24.v and prescott.v then
       active30 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1474,7 +1800,7 @@ function main()
 	  sampSendClickTextdraw(2187)
       wait(15000)
 	end
-	if video25.v then
+	if video25.v and prescott.v then
       active31 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1483,7 +1809,7 @@ function main()
 	  sampSendClickTextdraw(2189)
       wait(15000)
 	end
-	if video26.v then
+	if video26.v and prescott.v then
       active32 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1492,7 +1818,7 @@ function main()
 	  sampSendClickTextdraw(2191)
       wait(15000)
 	end
-	if video27.v then
+	if video27.v and prescott.v then
       active33 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1501,7 +1827,7 @@ function main()
 	  sampSendClickTextdraw(2193)
       wait(15000)
 	end
-	if video28.v then
+	if video28.v and prescott.v then
       active34 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1510,7 +1836,7 @@ function main()
 	  sampSendClickTextdraw(2195)
       wait(15000)
 	end
-	if video29.v then
+	if video29.v and prescott.v then
       active35 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1519,7 +1845,7 @@ function main()
 	  sampSendClickTextdraw(2197)
       wait(15000)
 	end
-	if video30.v then
+	if video30.v and prescott.v then
       active36 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1528,7 +1854,7 @@ function main()
 	  sampSendClickTextdraw(2199)
       wait(15000)
 	end
-	if video31.v then
+	if video31.v and prescott.v then
       active37 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1537,7 +1863,7 @@ function main()
 	  sampSendClickTextdraw(2201)
       wait(15000)
 	end
-	if video32.v then
+	if video32.v and prescott.v then
       active38 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1546,7 +1872,7 @@ function main()
 	  sampSendClickTextdraw(2203)
       wait(15000)
 	end
-	if video33.v then
+	if video33.v and prescott.v then
       active39 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1555,7 +1881,7 @@ function main()
 	  sampSendClickTextdraw(2205)
       wait(15000)
 	end
-	if video34.v then
+	if video34.v and prescott.v then
       active40 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1564,7 +1890,7 @@ function main()
 	  sampSendClickTextdraw(2207)
       wait(15000)
 	end
-	if video35.v then
+	if video35.v and prescott.v then
       active41 = true
       sampSendChat("/invent")
 	  wait(200)
@@ -1634,6 +1960,8 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.yuma = yuma.v
+	ini.settings.prescott = prescott.v
 	ini.settings.eat = eat.v
 	ini.settings.mvdhelp = mvdhelp.v
 	ini.settings.yashik = yashik.v
@@ -3954,7 +4282,7 @@ function imgui.OnDrawFrame()
 	
 	if win_state['settings'].v then -- окно с настройками
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(850, 460), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(850, 530), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Биндер и Настройки', win_state['settings'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
 		if imgui.BeginMenuBar() then -- меню бар, используется в виде выпадающего списка, ибо горизонтальный с ума сходит и мерцает при клике по одному из пунктов
 			if imgui.BeginMenu(u8(" Навигация по настройкам")) then
@@ -3999,11 +4327,16 @@ function imgui.OnDrawFrame()
 		end
 		if showSet == 1 then -- общие настройки
 			if imgui.CollapsingHeader(u8' Майнинг') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 358), false)
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 440), false)
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Видеокарты должны быть на второй странице инвентаря и идти по порядку! Т.е в слот №1 ложите видеокарту, следующую ложите в")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"          слот №2 и так далее. Чтобы узнать номер слота - смотрите схему. Чтобы быстро прервать процесс - напишите /reload.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"слот №2 и так далее. Чтобы узнать номер слота - смотрите схему. Также выберите сервер, на котором играете. На каждом сервере")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"разные текстдравы инвентаря. Если скрипт не работает, то возможно из-за телефона у вас изменились текстдравы (нужно просто")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезайти). Чтобы прервать процесс улучшения - выключите ползунок с названием сервера или /reload.")
 				imgui.NextColumn()
 				if imgui.Button(u8' Схема', btn_size) then win_state['shema'].v = not win_state['shema'].v end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Yuma")); imgui.SameLine(); imgui.ToggleButton(u8'Yuma', yuma)
+				imgui.SameLine()
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Prescott")); imgui.SameLine(); imgui.ToggleButton(u8'Prescott', prescott)
 				imgui.Checkbox(u8'Улучшать видеокарту №1  ', video); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №4', video3)
 				imgui.Checkbox(u8'Улучшать видеокарту №5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №6  ', video5); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №8', video7)
 				imgui.Checkbox(u8'Улучшать видеокарту №9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №10', video9); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №11', video10); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №12', video11)
@@ -4307,7 +4640,7 @@ function imgui.OnDrawFrame()
 				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
 				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
 				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-				imgui.Checkbox(u8'Открывать золотое яйцо', checked_test11); imgui.SameLine(); imgui.TextQuestion(u8"Яйцо как и сундуки должны быть на первой странице инвентаря. Также у вас должны быть куплены все 3 курицы, а иначе может не сработать.") 
+				imgui.Checkbox(u8'Открывать золотое яйцо', checked_test11); imgui.SameLine(); imgui.TextQuestion(u8"Яйцо как и сундуки должны быть на первой странице инвентаря. Также у вас должны быть куплены все 3 курицы, а иначе может не сработать.")
 				imgui.InputText(u8'Задержка', zadervka)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
@@ -4696,6 +5029,14 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"2. В 'Roulette Tools' добавлено золотое яйцо.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 08.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Фикс улучшения видеокарт. Также скрипт работает только на Юме и Прескотте. Если нужно добавить другие")
+				imgui.Text(u8"сервера или обнаружили баги - пишите https://vk.com/alex_bynes")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -4715,12 +5056,18 @@ function imgui.OnDrawFrame()
         imgui.End()
 	end
 	if win_state['informer'].v then -- окно информера
-
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX, infoY), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
-
 		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.0, 0.0, 0.0, 0.3))
 		if imgui.Begin("Mono Tools", win_state['informer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
+			infobar()
+			imgui.End()
+			end
+		imgui.PopStyleColor()
+		end
+	end
+	
+function infobar()
 			if infHP.v then imgui.Text(u8("• Здоровье: "..healNew)) end
 			if infArmour.v then imgui.Text(u8("• Броня: "..armourNew)) end
 			if infCity.v then imgui.Text(u8("• Город: "..playerCity)) end
@@ -4733,11 +5080,7 @@ function imgui.OnDrawFrame()
 			imgui.Text(u8("• ХП т/с: " ..carhp)) end
 			if infKv.v then imgui.Text(u8("• Квадрат: "..tostring(locationPos()))) end
 			if infTime.v then imgui.Text(u8("• Время: "..os.date("%H:%M:%S"))) end
-			imgui.End()
-			end
-		imgui.PopStyleColor()
 		end
-	end
 
 function imgui.Link(link,name,myfunc)
   myfunc = type(name) == 'boolean' and name or myfunc or false
@@ -5149,6 +5492,8 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	yuma = imgui.ImBool(ini.settings.yuma)
+	prescott = imgui.ImBool(ini.settings.prescott)
 	eat = imgui.ImBool(ini.settings.eat)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
 	yashik = imgui.ImBool(ini.settings.yashik)
