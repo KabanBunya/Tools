@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.8')
+script_version('1.9')
 
 local use = false
 local close = false
@@ -166,6 +166,8 @@ local SET = {
 		autopass = '',
 		autopasspin = '',
 		autoklava = '114',
+		autoklavareload = '115',
+		activator = 'mono',
 		autopassopl = '6',
 		autopassopl1 = '15',
 		autopassopl2 = '16',
@@ -183,6 +185,8 @@ local SET = {
 		chatInfo = false,
 		keyT = false,
 		launcher = false,
+		launcherpc = false,
+		launcherm = false,
 		yuma = false,
 		prescott = false,
 		eat = false,
@@ -367,7 +371,7 @@ end
 ------------------------------- ФИКСЫ----------------------------------------------
 -----------------------------------------------------------------------------------
 
--- Фикс зеркального бага alt+tab(черный экран или же какая то хуйня в виде зеркал на экране после разворота в инте)
+-- Фикс зеркального бага alt+tab(черный экран или же в виде зеркал на экране после разворота в инте)
 writeMemory(0x555854, 4, -1869574000, true)
 writeMemory(0x555858, 1, 144, true)
 
@@ -977,7 +981,7 @@ function main()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/mono{FFFFFF}", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/"..activator.v.."{FFFFFF}", 0x046D63)
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
 			if p.cmd ~= "-" then
@@ -1013,21 +1017,20 @@ function main()
 	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- не вводить команду, она нужна не для этого.
 	sampRegisterChatCommand("reload", rel) -- перезагрузка скрипта
 	sampRegisterChatCommand("changeskin", ex_skin) -- не вводить команду, она нужна не для этого.
-	sampRegisterChatCommand("mono", mainmenu) -- меню скрипта
+	sampRegisterChatCommand(activator.v, mainmenu) -- меню скрипта
 	sampRegisterChatCommand('rul', rul) -- не вводить команду, она нужна не для этого.
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	while token == 0 do wait(0) end
 	if enableskin.v then changeSkin(-1, localskin.v) end -- установка визуал скина, если включено
 	while true do
 		wait(0)
-		
 		-- получаем время
 		unix_time = os.time(os.date('!*t'))
 		moscow_time = unix_time + timefix.v * 60 * 60
 
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
-		
+		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
 		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
 		
 		--addGangZone(1001, -2080.2, 2200.1, -2380.9, 2540.3, 0x11011414) менее светлый цвет
@@ -1118,10 +1121,6 @@ function main()
 		end
 		dialogIncoming = 0
 		end
-		
-		if launcher.v then -- эмулятор лаунчера
-			sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
-			end
 		if styletest.v then -- стили
 			apply_custom_style1()
 			end
@@ -1960,6 +1959,8 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.launcherpc = launcherpc.v
+	ini.settings.launcherm = launcherm.v
 	ini.settings.yuma = yuma.v
 	ini.settings.prescott = prescott.v
 	ini.settings.eat = eat.v
@@ -2005,6 +2006,8 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.autopassopl2 = u8:decode(autopassopl2.v)
 	ini.settings.autopassopl3 = u8:decode(autopassopl3.v)
 	ini.settings.autoklava = u8:decode(autoklava.v)
+	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
+	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autoopl = autoopl.v
@@ -4186,6 +4189,12 @@ function sendchot8()
 end)
 end
 
+function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
+	if launcherpc.v then clientver = 'Arizona PC' end
+	if launcherm.v then clientver = 'arizona-mobile' end
+	return {Ver, mod, nick, response, authKey, clientver, unk}
+end
+
 function imgui.ToggleButton(str_id, bool) -- функция хомяка
 
 	local rBool = false
@@ -4349,22 +4358,30 @@ function imgui.OnDrawFrame()
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Модификации') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 186), false)
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 285), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру. PC - не отображает luxe машины. Mobile - отображает luxe машины.")
+				if launcher.v then
+				if launcherpc.v then launcherm.v = false end
+				if launcherm.v then launcherpc.v = false end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" PC")); imgui.SameLine(); imgui.ToggleButton(u8'PC', launcherpc); imgui.SameLine(); 
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Mobile")); imgui.SameLine(); imgui.ToggleButton(u8'Mobile', launcherm)
+				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката.") 
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Открытие скрипта на клавишу")); imgui.SameLine(); imgui.ToggleButton(u8'Открытие скрипта на клавишу', klava)
-				if klava.v then
-					imgui.InputText(u8'    ', autoklava); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в /mono - помощь - коды клавиш.") 
-				end
+				imgui.Text(u8(" Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
+					imgui.InputText(u8'          ', autoklava)
+					imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
+					imgui.InputText(u8'               ', autoklavareload)
+					imgui.Text(u8(" Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
+					imgui.InputText(u8'                 ', activator)
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
@@ -4966,7 +4983,7 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"3. Добавлено запоминание диалогов(полезно тем, кто играет со сборки).")
 				imgui.Text(u8"4. Вроде бы сделал фикс, что скрипт запускался не с первого раза.")
 				imgui.Text(u8"Но если эта проблема осталась или нашли другую, то пишите - https://vk.com/alex_bynes")
-				imgui.Text(u8"5. Добавлен калькулятор. /mono - калькулятор.")
+				imgui.Text(u8"5. Добавлен калькулятор. Меню скрипта - калькулятор.")
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 25.04.2021') then
@@ -4974,11 +4991,11 @@ function imgui.OnDrawFrame()
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. После обновления скрипт будет писать, что ознакомиться с обновлением вы сможете")
-				imgui.Text(u8"в /mono - помощь - обновления. ")
+				imgui.Text(u8"в Меню скрипта - помощь - обновления. ")
 				imgui.Text(u8"2. Добавлено закрытие меню скрипта на ESC.")
 				imgui.Text(u8"3. Исправлен баг когда при использовании точек в числах не работали текстдравы.")
 				imgui.Text(u8"4. Добавлена возможность включить открывание ящиков навсегда.")
-				imgui.Text(u8"5. Также меню с рулетками и ящиками перенесено на главное меню в /mono.")
+				imgui.Text(u8"5. Также меню с рулетками и ящиками перенесено на главное меню в /"..activator.v..".")
 				imgui.Text(u8"6. В информер добавлен счетчик FPS, но он требует доработки.")
 				imgui.Text(u8"7. Также обнаружен баг, когда окно информера пропадает при использований функции")
 				imgui.Text(u8"открытия ящиков. Будет исправлено позже.")
@@ -5035,6 +5052,17 @@ function imgui.OnDrawFrame()
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Фикс улучшения видеокарт. Также скрипт работает только на Юме и Прескотте. Если нужно добавить другие")
 				imgui.Text(u8"сервера или обнаружили баги - пишите https://vk.com/alex_bynes")
+		imgui.EndChild()
+		end
+		if imgui.CollapsingHeader(u8' 22.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлена возможность перезагрузки скрипта на кнопку.")
+				imgui.Text(u8"2. Фикс когда меню не открывалось при открытий сундуков.")
+				imgui.Text(u8"3. Переписан эмулятор лаунчера. Теперь можно активировать ПК версию или мобаил версию.")
+				imgui.Text(u8"Преимущества мобаил - виден luxe транспорт.")
+				imgui.Text(u8"4. Добавлена возможность изменить команду открытия скрипта.")
 		imgui.EndChild()
 		end
 		elseif selected2 == 1 then
@@ -5187,6 +5215,10 @@ function onWindowMessage(m, p)
 		win_state['bank'].v = false
 		win_state['help'].v = false
     end
+	if checked_test5.v or checked_test6.v or checked_test7.v or checked_test10.v or checked_test11.v then
+	if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
+	if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
+end
 end
 
 function all_trim(s) -- удаление пробелов из строки ес не ошибаюсь
@@ -5418,7 +5450,7 @@ function autoupdate(json_url, prefix, url)
                     if status1 == dlstatus.STATUS_DOWNLOADINGDATA then
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                       sampAddChatMessage(('[Mono Tools]{FFFFFF} Скрипт успешно обновлён.'), 0x046D63)
-					  sampAddChatMessage(('[Mono Tools]{FFFFFF} Ознакомиться со всеми обновлениями вы сможете в /mono - помощь - обновления.'), 0x046D63)
+					  sampAddChatMessage(('[Mono Tools]{FFFFFF} Ознакомиться со всеми обновлениями вы сможете в Меню скрипта - помощь - обновления.'), 0x046D63)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
@@ -5477,6 +5509,8 @@ function load_settings() -- загрузка настроек
 	autopassopl2 = imgui.ImBuffer(u8(ini.settings.autopassopl2), 256)
 	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
+	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
+	activator = imgui.ImBuffer(u8(ini.settings.activator), 256)
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
@@ -5492,6 +5526,8 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	launcherpc = imgui.ImBool(ini.settings.launcherpc)
+	launcherm = imgui.ImBool(ini.settings.launcherm)
 	yuma = imgui.ImBool(ini.settings.yuma)
 	prescott = imgui.ImBool(ini.settings.prescott)
 	eat = imgui.ImBool(ini.settings.eat)
@@ -5525,11 +5561,6 @@ function load_settings() -- загрузка настроек
 	findY = ini.settings.findY
 	asX = ini.assistant.asX
 	asY = ini.assistant.asY
-end
-
-function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
-	clientver = 'Arizona PC'
-	return {Ver, mod, nick, response, authKey, clientver, unk}
 end
 
 function showInputHelp() -- chatinfo(для меня) и showinputhelp от хомяка ес не ошибаюсь
