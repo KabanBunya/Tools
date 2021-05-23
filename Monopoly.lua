@@ -58,7 +58,7 @@ local res, hk = pcall(require, 'lib.imcustom.hotkey')
 assert(res, 'Library "imcustom" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ------------------------------------------------------------------
 local res, notf = pcall(import, "imgui_notf.lua")
-assert(res, 'Library "imgui_notf.lua" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader.')
 ------------------------------------------------------------------
 
 local function closeDialog()
