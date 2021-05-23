@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.9')
+script_version('2.0')
 
 local use = false
 local close = false
@@ -56,7 +56,10 @@ assert(res, 'Library "rkeys" не найдена. Чтобы скачать все нужны файлы и библиот
 ---------------------------------------------------------------
 local res, hk = pcall(require, 'lib.imcustom.hotkey')
 assert(res, 'Library "imcustom" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
--- ---------------------------------------------------------------
+------------------------------------------------------------------
+local res, notf = pcall(import, "imgui_notf.lua")
+assert(res, 'Library "imgui_notf.lua" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+------------------------------------------------------------------
 
 local function closeDialog()
 	sampSetDialogClientside(true)
@@ -97,45 +100,42 @@ local shell32 = ffi.load 'Shell32'
 local ole32 = ffi.load 'Ole32'
 ole32.CoInitializeEx(nil, 2 + 4)
 
--- свалка переменных
 mlogo, errorPic, classifiedPic, pentagonPic, accessDeniedPic, gameServer, nasosal_rang = nil, nil, nil, nil, nil, nil -- 
 srv, arm = nil, nil -- 
-whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0 -- значения по дефолту для "информация"
-regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false -- bool переменные для работы с диалогами
-ScriptUse = 3 -- для цикла
-offscript = 0 -- переменная для подсчета количества нажатий на кнопку "выключить скрипта"
-pentcout, pentsrv, pentinv, pentuv = 0,0,0,0 -- дефолт значения /base
+whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0
+regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false
+ScriptUse = 3 
+offscript = 0 
+pentcout, pentsrv, pentinv, pentuv = 0,0,0,0
 regStatus = false -- 
 gmsg = false -- 
-gosButton, AccessBe = true -- 
-dostupLvl = nil -- уровень доступа
-activated = nil -- 
-isLocalPlayerSoldier = false --
-getMOLeader = "Not Registred" -- 
-getSVLeader = "Not Registred" -- 
-getVVSLeader = "Not Registred" -- 
-getVMFLeader = "Not Registred" -- 
+gosButton, AccessBe = true 
+dostupLvl = nil 
+activated = nil 
+isLocalPlayerSoldier = false 
+getMOLeader = "Not Registred" 
+getSVLeader = "Not Registred" 
+getVVSLeader = "Not Registred"  
+getVMFLeader = "Not Registred" 
 pidr = false -- 
-errorSearch = nil -- если не смогли найти в пентагоне
-flymode = 0 -- камхак
+errorSearch = nil 
+flymode = 0 
 isPlayerSoldier = false -- 
-speed = 0.2 -- скорость камхака
-bstatus = 0 -- 
-state = false -- 
-keystatus = false -- проверка на воспроизведение бинда
-mouseCoord = false -- проверка на статус перемещения окна информера
-token = 1 -- токен
-mouseCoord2 = false -- 
-mouseCoord3 = false -- 
-getServerColored = '' -- переменная в которой храним все ники пользователей по серверу для покраса в чате
+speed = 0.2 
+bstatus = 0 
+state = false 
+keystatus = false 
+mouseCoord = false 
+token = 1 
+mouseCoord2 = false 
+mouseCoord3 = false 
+getServerColored = '' 
 
 blackbase = {} -- 
 names = {} -- 
 SecNames = {}
 SecNames2 = {}
 
-
--- переменные для шпоры, если не ошибаюсь, то есть лишние
 files							= {}
 window_file						= {}
 menu_spur						= imgui.ImBool(false)
@@ -149,7 +149,6 @@ edit_size_y						= imgui.ImInt(-1)
 russian_characters				= { [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
 	
--- настройки игрока
 local SET = {
  	settings = {
 		autologin = false,
@@ -176,6 +175,24 @@ local SET = {
 		zadervkav2 = '3',
 		autopasspay = '5000000',
 		autopasspaypin = '8',
+		deagleone = '/do "Desert Eagle" в кобуре.',
+		deagletwo = '/me достал "Desert Eagle" из кобуры и снял с предохранителя',
+		m4one = '/do Винтовка "M4" висит на плече.',
+		m4two = '/me снял винтовку с плеча и снял с предохранителя',
+		awpone = '/do Снайперская винтовка висит на плече.',
+		awptwo = '/me снял cнайперскую винтовку с плеча',
+		uzione = '/do Микро Узи висят на спине.',
+		uzitwo = '/me достал Микро Узи из-за спины и снял с предохранителя',
+		ak47one = '/do Автомат "АК-47" висит на плече.',
+		ak47two = '/me снял автомат с плеча и снял с предохранителя',
+		mp5one = '/do Полуавтомат "MP5" висит на плече.',
+		mp5two = '/me снял с плеча полуавтомат MP5 и снял с предохранителя',
+		shotgunone = '/do Дробовик "Shotgun" находится за спиной.',
+		shotguntwo = '/me достал дробовик "Shotgun" из-за спины и снял с предохранителя',
+		rifleone = '/do Охотничье ружье висит на плече.',
+		rifletwo = '/me снял охотничье ружье с плеча и снял с предохранителя',
+		knifeone = '/do Нож находится в ножне.',
+		knifetwo = '/me правой рукой достай нож из ножны',
 		timecout = false,
 		gangzones = false,
 		zones = false,
@@ -187,6 +204,15 @@ local SET = {
 		launcher = false,
 		launcherpc = false,
 		launcherm = false,
+		deagle = false,
+		awp = false,
+		m4 = false,
+		uzi = false,
+		ak47 = false,
+		mp5 = false,
+		shotgun = false,
+		rifle = false,
+		knife = false,
 		yuma = false,
 		prescott = false,
 		eat = false,
@@ -195,7 +221,6 @@ local SET = {
 		yashik1 = false,
 		yashik2 = false,
 		yashik3 = false,
-		yashik4 = false,
 		ndr = false,
 		toch = false,
 		klava = false,
@@ -232,15 +257,13 @@ local SET = {
 }
 
 
-local SeleList = {"Досье", "Сведения", "Пентагон"} -- список менюшек для блока "информация"
+local SeleList = {"Досье", "Сведения", "Пентагон"} 
 
--- это делалось если не ошибаюсь для выделения выбранного пункта
 local SeleListBool = {}
 for i = 1, #SeleList do
 	SeleListBool[i] = imgui.ImBool(false)
 end
 
--- массив для окон
 local win_state = {}
 win_state['main'] = imgui.ImBool(false)
 win_state['info'] = imgui.ImBool(false)
@@ -272,7 +295,6 @@ local checked_test7 = imgui.ImBool(false)
 local checked_test8 = imgui.ImBool(false)
 local checked_test9 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
-local checked_test11 = imgui.ImBool(false)
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
 local video2 = imgui.ImBool(false)
@@ -318,26 +340,23 @@ local checked_box3 = imgui.ImBool(false)
 local result = '';
 local inputBufferText = imgui.ImBuffer(256)
 
--- временные переменные, которым не требуется сохранение
-pozivnoy = imgui.ImBuffer(256) -- позывной в меню взаимодействия
-cmd_name = imgui.ImBuffer(256) -- название команды
-cmd_text = imgui.ImBuffer(65536) -- текст бинда
-searchn = imgui.ImBuffer(256) -- поиск ника в пентагоне
-specOtr = imgui.ImBuffer(256) -- спец.отряд для нашивки(вроде)
-weather = imgui.ImInt(-1) -- установка погоды
-gametime = imgui.ImInt(-1) -- установка времени 
-binddelay = imgui.ImInt(3) -- задержка биндера
+pozivnoy = imgui.ImBuffer(256) 
+cmd_name = imgui.ImBuffer(256) 
+cmd_text = imgui.ImBuffer(65536) 
+searchn = imgui.ImBuffer(256) 
+specOtr = imgui.ImBuffer(256) 
+weather = imgui.ImInt(-1) 
+gametime = imgui.ImInt(-1) 
+binddelay = imgui.ImInt(3) 
 local checked_radio = imgui.ImInt(1)
 local hlam = imgui.ImInt(1)
 
--- удаление файла клавиш, делаю только тогда, когда добавляю новые клавиши. P.S. удаляет как когда
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
 end
 
--- Собственно тут ебошим клавиши для биндера и обычные, ничего необычного, а исток всего этого - PerfectBinder хомяка, ибо только там было показано, как более менее юзать imcustom/rkeys.
 hk._SETTINGS.noKeysMessage = u8("Пусто")
-local bfile = getWorkingDirectory() .. "\\config\\Mono\\key.bind" -- путь к файлу для хранения клавиш
+local bfile = getWorkingDirectory() .. "\\config\\Mono\\key.bind" 
 local tBindList = {}
 if doesFileExist(bfile) then
 	local fkey = io.open(bfile, "r")
@@ -366,16 +385,9 @@ else
 	}
 end
 
-
------------------------------------------------------------------------------------
-------------------------------- ФИКСЫ----------------------------------------------
------------------------------------------------------------------------------------
-
--- Фикс зеркального бага alt+tab(черный экран или же в виде зеркал на экране после разворота в инте)
 writeMemory(0x555854, 4, -1869574000, true)
 writeMemory(0x555858, 1, 144, true)
 
--- функция быстрого прогруза игры, кепчик чтоль автор.. Не помню
 function patch()
 	if memory.getuint8(0x748C2B) == 0xE8 then
 		memory.fill(0x748C2B, 0x90, 5, true)
@@ -400,11 +412,6 @@ function patch()
 	end
 end
 patch()
-
------------------------------------------------------------------------------------
--------------------------- ФУНКЦИИ СКРИПТА И ВСЕ ЧТО ПО НИМ -----------------------
------------------------------------------------------------------------------------
-
 
 function new_style() -- 
 
@@ -734,7 +741,7 @@ function apply_custom_style4()
     colors[clr.ModalWindowDarkening]  = ImVec4(0.20, 0.20, 0.20, 0.35);
 end
 
-function apply_custom_style5() -- серый стиль
+function apply_custom_style5() 
 	imgui.SwitchContext()
     local style = imgui.GetStyle()
     local colors = style.Colors
@@ -799,46 +806,46 @@ end
 
 apply_custom_style()
 
-function files_add() -- функция подгрузки медиа файлов
+function files_add()
 	if not doesFileExist(getGameDirectory()..'\\moonloader\\config\\Mono\\settings.ini') then 
 		inicfg.save(SET, 'config\\Mono\\settings.ini')
 	end
 end
 
-function rkeys.onHotKey(id, keys) -- эту штучку я не использую, но она помогла запретить юзание клавиш в определенных ситах
+function rkeys.onHotKey(id, keys) 
 	if sampIsChatInputActive() or sampIsDialogActive() or isSampfuncsConsoleActive() or win_state['base'].v or win_state['update'].v or win_state['player'].v or droneActive or keystatus then
 		return false
 	end
 end
 
-function onHotKey(id, keys) -- функция обработки всех клавиш, которые ток существуют в скрипте благодаря imcustom, rkeys и хомяку
+function onHotKey(id, keys)
 	local sKeys = tostring(table.concat(keys, " "))
 	for k, v in pairs(tBindList) do
 		if sKeys == tostring(table.concat(v.v, " ")) then
-			if k == 7 then -- делаем реконнект
+			if k == 7 then 
 				reconnect()
 				return
-			elseif k == 13 then -- открываем меню
+			elseif k == 13 then 
 				mainmenu()
 				return
 			end
 		end
 	end
 
-	for i, p in pairs(mass_bind) do -- тут регистрируем биндер на клавиши.
+	for i, p in pairs(mass_bind) do 
 		if sKeys == tostring(table.concat(p.v, " ")) then
 			rcmd(nil, p.text, p.delay)		
 		end
 	end
 end
 
-function calc(m) -- "калькулятор", который так и не нашел применения в скрипте, но функция все же тут есть
+function calc(m) 
     local func = load('return '..tostring(m))
     local a = select(2, pcall(func))
     return type(a) == 'number' and a or nil
 end
 
-function WorkInBackground(work) -- работа в свернутом imringa'a
+function WorkInBackground(work)
     local memory = require 'memory'
 	if work then -- on
         memory.setuint8(7634870, 1) 
@@ -853,7 +860,7 @@ function WorkInBackground(work) -- работа в свернутом imringa'a
     end 
 end
 
-function WriteLog(text, path, file) -- функция записи текст в файл, используется для чатлога
+function WriteLog(text, path, file) 
 	if not doesDirectoryExist(getWorkingDirectory()..'\\'..path..'\\') then
 		createDirectory(getWorkingDirectory()..'\\'..path..'\\')
 	end
@@ -863,8 +870,7 @@ function WriteLog(text, path, file) -- функция записи текст в файл, используется
 	file:close()
 end
 
--- Шифровалка Base64
-local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' -- You will need this for encoding/decoding
+local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/' 
 function en(data)
     return ((data:gsub('.', function(x) 
         local r,b='',x:byte()
@@ -892,7 +898,7 @@ function dc(data)
     end))
 end
 
-function tags(args) -- функция с тэгами скрипта
+function tags(args)
 
 	args = args:gsub("{params}", tostring(cmdparams))
 	args = args:gsub("{paramNickByID}", tostring(sampGetPlayerNickname(cmdparams)))
@@ -938,7 +944,7 @@ function tags(args) -- функция с тэгами скрипта
 	return args
 end
 
-function mainmenu() -- функция открытия основного меню скрипта
+function mainmenu()
 	if not win_state['player'].v and not win_state['update'].v and not win_state['base'].v and not win_state['regst'].v then
 		if win_state['settings'].v then
 			win_state['settings'].v = not win_state['settings'].v
@@ -976,8 +982,7 @@ end
 function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end
 	while not isSampAvailable() do wait(100) end
-	load_settings() -- загрузка настроек
-	-- определяем ник и ID локального игрока 
+	load_settings()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
@@ -1001,17 +1006,16 @@ function main()
 		rkeys.registerHotKey(g.v, true, onHotKey)
 	end
 	
-	local font = renderCreateFont("Arial", 8, 5) --creating font
+	local font = renderCreateFont("Arial", 8, 5)
     sampRegisterChatCommand("td_get", function(i)
         print(sampTextdrawGetString(i))
         sampAddChatMessage(sampTextdrawGetString(i), -1)
     end)
 
-	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD) -- шрифт для chatinfo
+	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD)
 	lua_thread.create(showInputHelp)
 	lua_thread.create(informerperem)
 	
-	-- регистрация локальных команд/команды
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
 	sampRegisterChatCommand("drone", drone) -- дроны
 	sampRegisterChatCommand("leave", function() if not win_state['player'].v and not win_state['update'].v and not win_state['main'].v then win_state['leave'].v = not win_state['leave'].v end end) -- не вводить команду, она нужна не для этого.
@@ -1019,12 +1023,13 @@ function main()
 	sampRegisterChatCommand("changeskin", ex_skin) -- не вводить команду, она нужна не для этого.
 	sampRegisterChatCommand(activator.v, mainmenu) -- меню скрипта
 	sampRegisterChatCommand('rul', rul) -- не вводить команду, она нужна не для этого.
+	sampRegisterChatCommand('afind', afind) -- регистрируем команду
+	sampRegisterChatCommand('sfind', sfind) -- регистрируем команду
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	while token == 0 do wait(0) end
-	if enableskin.v then changeSkin(-1, localskin.v) end -- установка визуал скина, если включено
+	if enableskin.v then changeSkin(-1, localskin.v) end
 	while true do
 		wait(0)
-		-- получаем время
 		unix_time = os.time(os.date('!*t'))
 		moscow_time = unix_time + timefix.v * 60 * 60
 
@@ -1033,7 +1038,6 @@ function main()
 		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
 		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
 		
-		--addGangZone(1001, -2080.2, 2200.1, -2380.9, 2540.3, 0x11011414) менее светлый цвет
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
 		interior = getActiveInterior() -- получаем инту
@@ -1042,6 +1046,10 @@ function main()
 		local zX, zY, zZ = getCharCoordinates(playerPed)
 		ZoneInGame = getGxtText(getNameOfZone(zX, zY, zZ))
 		
+		if afind == 1 then -- проверяем активирован ли скрипт
+			sampSendChat('/find '..id_find) -- сообщение в чат
+			wait(2000) -- задержка между /find
+		end
 			
 		-- определение города
 		local citiesList = {'Los-Santos', 'San-Fierro', 'Las-Venturas'}
@@ -1055,6 +1063,50 @@ function main()
 		elseif svZone then ZoneText = "Ground Forces"
 		else ZoneText = "-" end
 		
+		if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
+            local gun = getCurrentCharWeapon(PLAYER_PED)
+            if gun == 24 and deagle.v then
+                sampSendChat(u8:decode (deagleone.v))
+				wait(1500)
+				sampSendChat(u8:decode (deagletwo.v))
+            elseif gun == 31 and m4.v then
+                sampSendChat(u8:decode (m4one.v))
+				wait(1500)
+				sampSendChat(u8:decode (m4two.v))
+			elseif gun == 34 and awp.v then
+                sampSendChat(u8:decode (awpone.v))
+				wait(1500)
+				sampSendChat(u8:decode (awptwo.v))
+			elseif gun == 28 and uzi.v then
+                sampSendChat(u8:decode (uzione.v))
+				wait(1500)
+				sampSendChat(u8:decode (uzitwo.v))
+			elseif gun == 30 and ak47.v then
+                sampSendChat(u8:decode (ak47one.v))
+				wait(1500)
+				sampSendChat(u8:decode (ak47two.v))
+			elseif gun == 29 and mp5.v then
+                sampSendChat(u8:decode (mp5one.v))
+				wait(1500)
+				sampSendChat(u8:decode (mp5two.v))
+			elseif gun == 25 and shotgun.v then
+                sampSendChat(u8:decode (shotgunone.v))
+				wait(1500)
+				sampSendChat(u8:decode (shotguntwo.v))
+			elseif gun == 33 and rifle.v then
+                sampSendChat(u8:decode (rifleone.v))
+				wait(1500)
+				sampSendChat(u8:decode (rifletwo.v))
+			elseif gun == 4 and knife.v then
+                sampSendChat(u8:decode (knife.v))
+				wait(1500)
+				sampSendChat(u8:decode (knifetwo.v))
+			elseif gun == 0 then
+                sampSendChat("/me убрал оружие")
+            end
+            lastgun = gun
+        end
+		
 		if files[1] then
 			for i, k in pairs(files) do
 				if k and not imgui.Process then imgui.Process = menu_spur.v or window_file[i].v end
@@ -1063,7 +1115,6 @@ function main()
 		
 		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v
 		
-		-- тут мы шаманим с блокировкой управления персонажа
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
 				lockPlayerControl(false)
@@ -1077,18 +1128,6 @@ function main()
 			lockPlayerControl(true)
 		else
 			lockPlayerControl(false)
-		end
-
-		if wasKeyPressed(key.VK_R) and not win_state['main'].v and not win_state['update'].v and not win_state['base'].v and not win_state['regst'].v and isPlayerSoldier then -- меню взаимодействия на ПКМ + R
-			local result, ped = getCharPlayerIsTargeting(PLAYER_HANDLE)
-			if result then
-				local tdd, id = sampGetPlayerIdByCharHandle(ped)
-				if tdd then
-					MenuName = sampGetPlayerNickname(id)
-					MenuID = id
-					win_state['player'].v = not win_state['player'].v
-				end
-			end
 		end
 
 		if keyT.v then -- чат на русскую Т
@@ -1139,7 +1178,7 @@ function main()
 		if styletest5.v then -- стили
 			apply_custom_style5()
 			end
-		if eat.v then -- эмулятор лаунчера
+		if eat.v then 
 			sampSendChat("/house")
 			wait(100)
 			sampSendDialogResponse(174, 1 , 1, -1)
@@ -1151,7 +1190,6 @@ function main()
 			closeDialog()
 			wait(10800000)
 			end
- 
 	if checked_test.v and krytim then
       rul()
       wait(222)
@@ -1219,11 +1257,6 @@ function main()
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if checked_test11.v then
-      active50 = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
 	if yashik.v then
       active = true
       sampSendChat("/invent")
@@ -1241,11 +1274,6 @@ function main()
     end
 	if yashik3.v then
       active5 = true
-      sampSendChat("/invent")
-      wait(zadervkav2.v*60000)
-    end
-	if yashik4.v then
-      active51 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
@@ -1914,7 +1942,7 @@ function main()
 	end
 end
 
-function EmulShowNameTag(id, value) -- эмуляция показа неймтэгов над бошкой
+function EmulShowNameTag(id, value)
     local bs = raknetNewBitStream()
     raknetBitStreamWriteInt16(bs, id)
     raknetBitStreamWriteBool(bs, value)
@@ -1927,17 +1955,17 @@ function sampev.onSendSpawn()
 end
 
 function onQuitGame()
-	saveSettings(2) -- сохраняем игру при выходе
+	saveSettings(2)
 end
 
-function onScriptTerminate(script, quitGame) -- действия при отключении скрипта
+function onScriptTerminate(script, quitGame)
 	if script == thisScript() then
 		showCursor(false)
 		saveSettings(1)
 			end
 		end
 
-function saveSettings(args, key) -- функция сохранения настроек, args 1 = при отключении скрипта, 2 = при выходе из игры, 3 = сохранение клавиш + текст key, 4 = обычное сохранение.
+function saveSettings(args, key)
 
 	if doesFileExist(bindfile) then
 		os.remove(bindfile)
@@ -1959,6 +1987,15 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.deagle = deagle.v
+	ini.settings.awp = awp.v
+	ini.settings.m4 = m4.v
+	ini.settings.uzi = uzi.v
+	ini.settings.ak47 = ak47.v
+	ini.settings.mp5 = mp5.v
+	ini.settings.shotgun = shotgun.v
+	ini.settings.rifle = rifle.v
+	ini.settings.knife = knife.v
 	ini.settings.launcherpc = launcherpc.v
 	ini.settings.launcherm = launcherm.v
 	ini.settings.yuma = yuma.v
@@ -1969,7 +2006,6 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
 	ini.settings.yashik3 = yashik3.v
-	ini.settings.yashik4 = yashik4.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
 	ini.settings.klava = klava.v
@@ -2006,6 +2042,24 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	ini.settings.autopassopl2 = u8:decode(autopassopl2.v)
 	ini.settings.autopassopl3 = u8:decode(autopassopl3.v)
 	ini.settings.autoklava = u8:decode(autoklava.v)
+	ini.settings.deagleone = u8:decode(deagleone.v)
+	ini.settings.deagletwo = u8:decode(deagletwo.v)
+	ini.settings.awpone = u8:decode(awpone.v)
+	ini.settings.awptwo = u8:decode(awptwo.v)
+	ini.settings.m4one = u8:decode(m4one.v)
+	ini.settings.m4two = u8:decode(m4two.v)
+	ini.settings.uzione = u8:decode(uzione.v)
+	ini.settings.uzitwo = u8:decode(uzitwo.v)
+	ini.settings.ak47one = u8:decode(ak47one.v)
+	ini.settings.ak47two = u8:decode(ak47two.v)
+	ini.settings.mp5one = u8:decode(mp5one.v)
+	ini.settings.mp5two = u8:decode(mp5two.v)
+	ini.settings.shotgunone = u8:decode(shotgunone.v)
+	ini.settings.shotguntwo = u8:decode(shotguntwo.v)
+	ini.settings.rifleone = u8:decode(rifleone.v)
+	ini.settings.rifletwo = u8:decode(rifletwo.v)
+	ini.settings.knifeone = u8:decode(knifeone.v)
+	ini.settings.knifetwo = u8:decode(knifetwo.v)
 	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
@@ -2029,7 +2083,7 @@ function saveSettings(args, key) -- функция сохранения настроек, args 1 = при от
 	end
 
 function sampev.onPlayerChatBubble(id, color, distance, dur, text)
-	if droneActive then -- тут мы меняем дальность действия текста над бошкой и для разрабов при камхаке(дроне) расширяем
+	if droneActive then -- тут мы меняем дальность действия текста над головой
 		return {id, color, 25, dur, text}
 	end
 end
@@ -2060,7 +2114,6 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 end
 
--- обработка диалогов
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	if ndr.v then
 		dialogIncoming = dialogId
@@ -2069,7 +2122,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopass.v))
 		return false
 	end
-	if dialogId == 991 and autopin.v then -- автологин
+	if dialogId == 991 and autopin.v then 
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
 		sampCloseCurrentDialogWithButton(0)
 		return false
@@ -2272,41 +2325,6 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-	if checked_test11.v and active50 then
-    lua_thread.create(function()
-      if data.modelId == 19344 then
-        wait(111)
-        sampSendClickTextdraw(id)
-        use50 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use50 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use50 = false
-        grad50 = true
-      end
-	  if grad50 then
-		wait(111)
-		sampSendClickTextdraw(2093)
-		wait(111)
-		sampSendClickTextdraw(2096)
-		wait(111)
-		sampSendClickTextdraw(2099)
-        grad50 = false
-		close50 = true
-	  end
-      if close50 then
-        wait(111)
-        sampSendClickTextdraw(2067)
-		wait(111)
-		sampCloseCurrentDialogWithButton(1)
-		wait(111)
-		sampSendClickTextdraw(2135)
-        close50 = false
-        active50 = false
-      end
-    end)
-  end
 	if yashik.v and active then
     lua_thread.create(function()
       if data.modelId == 19918 then
@@ -2404,41 +2422,6 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampSendClickTextdraw(2135)
         close5 = false
         active5 = false
-      end
-    end)
-  end
-	if yashik4.v and active51 then
-    lua_thread.create(function()
-      if data.modelId == 19344 then
-        wait(111)
-        sampSendClickTextdraw(id)
-        use51 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use51 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use51 = false
-        grad51 = true
-      end
-	  if grad51 then
-		wait(111)
-		sampSendClickTextdraw(2093)
-		wait(111)
-		sampSendClickTextdraw(2096)
-		wait(111)
-		sampSendClickTextdraw(2099)
-        grad51 = false
-		close51 = true
-	  end
-      if close51 then
-        wait(111)
-        sampSendClickTextdraw(2067)
-		wait(111)
-		sampCloseCurrentDialogWithButton(1)
-		wait(111)
-		sampSendClickTextdraw(2135)
-        close51 = false
-        active51 = false
       end
     end)
   end
@@ -4189,13 +4172,33 @@ function sendchot8()
 end)
 end
 
+function afind(arg)
+	if arg == '' then
+		notf.addNotification("[Mono Tools]: введите ID", 3, 3) -- когда не введено ID
+	else
+		if tonumber(arg) and sampIsPlayerConnected(arg) then
+			id_find = arg
+			afind = 1
+			notf.addNotification("[Mono Tools]: Автопоиск включен для ID: [" ..id_find.. "]", 3, 2) -- при активации скрипта уведомление
+		else
+			notf.addNotification("[Mono Tools]: Указан неверный ID", 3, 3) -- при введении неверного ID уведомление
+		end
+	end
+end
+
+function sfind()
+	id_find = 5000
+	afind = 0
+	notf.addNotification("[Mono Tools]: Автопоиск отключён.", 3, 3) -- при остановке скрипта уведомление
+end
+
 function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
 	if launcherpc.v then clientver = 'Arizona PC' end
 	if launcherm.v then clientver = 'arizona-mobile' end
 	return {Ver, mod, nick, response, authKey, clientver, unk}
 end
 
-function imgui.ToggleButton(str_id, bool) -- функция хомяка
+function imgui.ToggleButton(str_id, bool)
 
 	local rBool = false
  
@@ -4283,7 +4286,6 @@ function imgui.OnDrawFrame()
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
 		if imgui.Button(u8' Roulette Tools', btn_size) then win_state['yashiki'].v = not win_state['yashiki'].v end
 		if imgui.Button(u8' Bank Menu', btn_size) then win_state['bank'].v = not win_state['bank'].v end
-		-- информация по скрипту, готово
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
 		if imgui.Button(u8' Калькулятор', btn_size) then win_state['calc'].v = not win_state['calc'].v end
 		imgui.End()
@@ -4293,7 +4295,7 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(850, 530), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Биндер и Настройки', win_state['settings'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-		if imgui.BeginMenuBar() then -- меню бар, используется в виде выпадающего списка, ибо горизонтальный с ума сходит и мерцает при клике по одному из пунктов
+		if imgui.BeginMenuBar() then
 			if imgui.BeginMenu(u8(" Навигация по настройкам")) then
 				if imgui.MenuItem(u8(" Биндер")) then
 					showSet = 2
@@ -4334,7 +4336,7 @@ function imgui.OnDrawFrame()
 			apply_custom_style5()
 			end
 		end
-		if showSet == 1 then -- общие настройки
+		if showSet == 1 then
 			if imgui.CollapsingHeader(u8' Майнинг') then
 				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 440), false)
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Видеокарты должны быть на второй странице инвентаря и идти по порядку! Т.е в слот №1 ложите видеокарту, следующую ложите в")
@@ -4383,6 +4385,9 @@ function imgui.OnDrawFrame()
 					imgui.Text(u8(" Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
 					imgui.InputText(u8'                 ', activator)
 				imgui.EndChild()
+			end
+			if imgui.CollapsingHeader(u8' RP Guns') then
+				rpguns()
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
 				imgui.BeginChild('##25252', imgui.ImVec2(750, 155), false)
@@ -4538,7 +4543,6 @@ function imgui.OnDrawFrame()
 						saveSettings(3, "DROP BIND")
 					end
 				end
-				
 				if imgui.BeginPopupModal(u8"Установка клавиши ##modal"..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove) then
 					if imgui.Button(u8(' Сменить/Назначить команду'), imgui.ImVec2(200, 0)) then
 						imgui.OpenPopup(u8"Команда - /"..v.cmd)
@@ -4571,7 +4575,6 @@ function imgui.OnDrawFrame()
 						end
 						imgui.EndPopup()
 					end
-
 					if imgui.BeginPopupModal(u8'Редактор текста ##second'..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.AlwaysAutoResize) then
 						imgui.BeginChild('##sdaadasdd', imgui.ImVec2(1100, 600), true)
 						imgui.Columns(2, _, false)
@@ -4634,7 +4637,6 @@ function imgui.OnDrawFrame()
 					imgui.EndPopup()
 				end
 			end
-			
 			imgui.NextColumn()
 			imgui.NewLine()
 			if imgui.Button(u8(" Добавить бинд")) then mass_bind[#mass_bind + 1] = {delay = "3", v = {}, text = "n/a", cmd = "-"} end	
@@ -4657,14 +4659,12 @@ function imgui.OnDrawFrame()
 				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
 				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
 				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-				imgui.Checkbox(u8'Открывать золотое яйцо', checked_test11); imgui.SameLine(); imgui.TextQuestion(u8"Яйцо как и сундуки должны быть на первой странице инвентаря. Также у вас должны быть куплены все 3 курицы, а иначе может не сработать.")
 				imgui.InputText(u8'Задержка', zadervka)
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать золотое яйцо")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать золотое яйцо', yashik4)
 				imgui.InputText(u8'Задержка ',zadervkav2)
 				imgui.NextColumn()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
@@ -4702,8 +4702,7 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
-	
-	if win_state['shema'].v then -- окно с настройками
+	if win_state['shema'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(510, 470), imgui.Cond.FirstUseEver)
 		if imgui.Begin(u8' Схема', win_state['shema'], imgui.WindowFlags.NoResize) then
@@ -4722,8 +4721,7 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
-	
-	if win_state['bank'].v then -- окно с настройками
+	if win_state['bank'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
 		if imgui.Begin(u8' Bank Menu ', win_state['bank'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
@@ -4785,7 +4783,6 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
-	
 	if win_state['calc'].v then -- окно "калькулятор"
         imgui.SetNextWindowSize(imgui.ImVec2(340, 340), imgui.Cond.FirstUseEver);
         if not window_pos then
@@ -4925,7 +4922,6 @@ function imgui.OnDrawFrame()
 		imgui.EndChild();
         imgui.End();
     end
-	
 	if win_state['help'].v then -- окно "помощь"
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(970, 400), imgui.Cond.FirstUseEver)
@@ -5065,6 +5061,15 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"4. Добавлена возможность изменить команду открытия скрипта.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 23.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлен autofind. /afind - начать поиск игрока. /sfind - закончить поиск. ")
+				imgui.Text(u8"2. Убрано золотое яйцо т.к уже неактуально")
+				imgui.Text(u8"3. Добавлена авто-отыгровка некоторого оружия.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -5073,6 +5078,8 @@ function imgui.OnDrawFrame()
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/reload - Перезагрузка скрипта.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/сс - Очистка чата.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/drone - Получить картинку с дрона на территории.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/afind - Автопоиск игрока через /find.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/sfind - Отключение автопоиска.")
 				imgui.Separator()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Важно! Для того, чтобы все функции скрипта работали стабильно, нужно чтобы инвентарь был на английском языке!")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Настройть язык инвентаря вы можете в /settings. Убедительная просьба не выключать автообновления в коде.")
@@ -5166,7 +5173,6 @@ function rcmd(cmd, text, delay) -- функция для биндера, без которой не будет ни 
 			end)
 		end)
 	else
-		-- тут все аналогично, как и с командами, только чуток проще.
 		globalkey = lua_thread.create(function()
 			if text:find("{params}") then
 				sampAddChatMessage("[Mono Tools]{FFFFFF} В данном бинде установлен параметр, использование клавишами невозможно.", 0x046D63)
@@ -5184,7 +5190,7 @@ function rcmd(cmd, text, delay) -- функция для биндера, без которой не будет ни 
 	end
 end
 
-function split(str, delim, plain) -- функция фипа, которая сделала биндер рабочим
+function split(str, delim, plain)
     local tokens, pos, plain = {}, 1, not (plain == false) 
     repeat
         local npos, epos = string.find(str, delim, pos, plain)
@@ -5215,13 +5221,13 @@ function onWindowMessage(m, p)
 		win_state['bank'].v = false
 		win_state['help'].v = false
     end
-	if checked_test5.v or checked_test6.v or checked_test7.v or checked_test10.v or checked_test11.v then
+	if checked_test5.v or checked_test6.v or checked_test7.v or checked_test10.v then
 	if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
 	if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
-end
+	end
 end
 
-function all_trim(s) -- удаление пробелов из строки ес не ошибаюсь
+function all_trim(s)
    return s:match( "^%s*(.-)%s*$" )
 end
 
@@ -5289,20 +5295,20 @@ function rel() -- перезагрузка скрипта
 	thisScript():reload()
 end
 
-function clearSeleListBool(var) -- не ебу что-это ахахах ;D
+function clearSeleListBool(var)
 	for i = 1, #SeleList do
 		SeleListBool[i].v = false
 	end
 	SeleListBool[var].v = true
 end
 
-function cmd_color() -- функция получения цвета строки, хз зачем она мне, но когда то юзал
+function cmd_color()
 	local text, prefix, color, pcolor = sampGetChatString(99)
 	sampAddChatMessage(string.format("Цвет последней строки чата - {934054}[%d] (скопирован в буфер обмена)",color),-1)
 	setClipboardText(color)
 end
 
-function changeSkin(id, skinId) -- визуальная смена скина(imring вроде бы скидывал ее)
+function changeSkin(id, skinId)
     bs = raknetNewBitStream()
     if id == -1 then _, id = sampGetPlayerIdByCharHandle(PLAYER_PED) end
     raknetBitStreamWriteInt32(bs, id)
@@ -5361,9 +5367,6 @@ function sampev.onServerMessage(color, text)
 	if text:match("Добро пожаловать на Arizona Role Play!") and yashik3.v then
 		fixprice()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and yashik4.v then
-		fixprice()
-	end
 	if text:match("Добро пожаловать на Arizona Role Play!") and mvdhelp.v then
 		fixpricecopia()
 	end
@@ -5396,10 +5399,18 @@ end
 	if text:find('Успех! Вам удалось улучшить предмет') and checked_box3.v then
 		number = string.match(text, 'на ++(%d+)')+0
 		if number < checked_radio.v and checked_box3.v then
-			checktochilki2 = true
-			sampSendClickTextdraw(2093)
+		checktochilki2 = true
+		sampSendClickTextdraw(2093)
 		end
 	end
+	if text:find("Игрок находится") then
+			notf.addNotification("Цель укрывается в здании.", 3, 3)
+			return false
+	end
+	if text:find("отмечено на карте красным маркером!") then
+			notf.addNotification("Цель обнаружена! Она отмечена на карте красным маркером.", 3, 2)
+			return false
+	end	
 	if toch.v then
 		text = separator(text)
 		return {color, text}
@@ -5478,10 +5489,7 @@ function autoupdate(json_url, prefix, url)
 end
 
 function load_settings() -- загрузка настроек
-	-- CONFIG CREATE/LOAD
 	ini = inicfg.load(SET, getGameDirectory()..'\\moonloader\\config\\Mono\\settings.ini')
-	
-	-- LOAD CONFIG INFO
 	
 	gangzones = imgui.ImBool(ini.settings.gangzones)
 	zones = imgui.ImBool(ini.settings.zones)
@@ -5511,6 +5519,24 @@ function load_settings() -- загрузка настроек
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
 	activator = imgui.ImBuffer(u8(ini.settings.activator), 256)
+	deagleone = imgui.ImBuffer(u8(ini.settings.deagleone), 256)
+	deagletwo = imgui.ImBuffer(u8(ini.settings.deagletwo), 256)
+	awpone = imgui.ImBuffer(u8(ini.settings.awpone), 256)
+	awptwo = imgui.ImBuffer(u8(ini.settings.awptwo), 256)
+	m4one = imgui.ImBuffer(u8(ini.settings.m4one), 256)
+	m4two = imgui.ImBuffer(u8(ini.settings.m4two), 256)
+	uzione = imgui.ImBuffer(u8(ini.settings.uzione), 256)
+	uzitwo = imgui.ImBuffer(u8(ini.settings.uzitwo), 256)
+	ak47one = imgui.ImBuffer(u8(ini.settings.ak47one), 256)
+	ak47two = imgui.ImBuffer(u8(ini.settings.ak47two), 256)
+	mp5one = imgui.ImBuffer(u8(ini.settings.mp5one), 256)
+	mp5two = imgui.ImBuffer(u8(ini.settings.mp5two), 256)
+	shotgunone = imgui.ImBuffer(u8(ini.settings.shotgunone), 256)
+	shotguntwo = imgui.ImBuffer(u8(ini.settings.shotguntwo), 256)
+	rifleone = imgui.ImBuffer(u8(ini.settings.rifleone), 256)
+	rifletwo = imgui.ImBuffer(u8(ini.settings.rifletwo), 256)
+	knifeone = imgui.ImBuffer(u8(ini.settings.knifeone), 256)
+	knifetwo = imgui.ImBuffer(u8(ini.settings.knifetwo), 256)
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
@@ -5526,6 +5552,15 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	deagle = imgui.ImBool(ini.settings.deagle)
+	awp = imgui.ImBool(ini.settings.awp)
+	m4 = imgui.ImBool(ini.settings.m4)
+	uzi = imgui.ImBool(ini.settings.uzi)
+	ak47 = imgui.ImBool(ini.settings.ak47)
+	mp5 = imgui.ImBool(ini.settings.mp5)
+	shotgun = imgui.ImBool(ini.settings.shotgun)
+	rifle = imgui.ImBool(ini.settings.rifle)
+	knife = imgui.ImBool(ini.settings.knife)
 	launcherpc = imgui.ImBool(ini.settings.launcherpc)
 	launcherm = imgui.ImBool(ini.settings.launcherm)
 	yuma = imgui.ImBool(ini.settings.yuma)
@@ -5536,7 +5571,6 @@ function load_settings() -- загрузка настроек
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
 	yashik3 = imgui.ImBool(ini.settings.yashik3)
-	yashik4 = imgui.ImBool(ini.settings.yashik4)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
 	klava = imgui.ImBool(ini.settings.klava)
@@ -5563,7 +5597,7 @@ function load_settings() -- загрузка настроек
 	asY = ini.assistant.asY
 end
 
-function showInputHelp() -- chatinfo(для меня) и showinputhelp от хомяка ес не ошибаюсь
+function showInputHelp()
 	while true do
 		local chat = sampIsChatInputActive()
 		if chat == true then
@@ -5639,16 +5673,7 @@ function getStrByState(keyState) -- состояние клавиш для chatinfo
 	return "{9EC73D}Вкл{ffffff}"
 end
 
-function reconnect() -- реконнект игрока
-	lua_thread.create(function()
-		sampSetGamestate(5)
-		sampDisconnectWithReason()
-		wait(18000) 
-		sampSetGamestate(1)
-	end)
-end
-
-function drone() -- дрон/камхак, дополнение камхака санька
+function drone()
 	lua_thread.create(function()
 		if droneActive then
 			sampAddChatMessage("[Mono Tools]{FFFFFF} На данный момент вы уже управляете дроном.", 0x046D63)
@@ -5864,7 +5889,6 @@ function drone() -- дрон/камхак, дополнение камхака санька
 	end)
 end
 
--- ФУНКЦИИ ИЗ ШПОРЫ
 function string.rlower(s)
 	s = s:lower()
 	local strlen = s:len()
@@ -5974,3 +5998,54 @@ function imgui.GetMaxWidthByText(text)
 	end
 	return max - 15
 end
+
+function rpguns()
+	imgui.BeginChild('##as2dasasdf', imgui.ImVec2(810, 285), false)
+		imgui.Columns(2, _, false)
+		imgui.Checkbox(u8'Desert Eagle', deagle)
+		if deagle.v then
+		imgui.InputText(u8'Desert Eagle /do', deagleone)
+		imgui.InputText(u8'Desert Eagle /me', deagletwo)
+		end
+		imgui.Checkbox(u8'Винтовка M4', m4)
+		if m4.v then
+		imgui.InputText(u8'Винтовка M4 /do', m4one)
+		imgui.InputText(u8'Винтовка M4 /me', m4two)
+		end
+		imgui.Checkbox(u8'Снайперская винтовка', awp)
+		if awp.v then
+		imgui.InputText(u8'Sniper /do', awpone)
+		imgui.InputText(u8'Sniper /me', awptwo)
+		end
+		imgui.Checkbox(u8'Узи', uzi)
+		if uzi.v then
+		imgui.InputText(u8'Узи /do', uzione)
+		imgui.InputText(u8'Узи /me', uzitwo)
+		end
+		imgui.Checkbox(u8'Автомат АК-47', ak47)
+		if ak47.v then
+		imgui.InputText(u8'Автомат АК-47 /do', ak47one)
+		imgui.InputText(u8'Автомат АК-47 /me', ak47two)
+		end
+		imgui.Checkbox(u8'MP5', mp5)
+		if mp5.v then
+		imgui.InputText(u8'MP5 /do', mp5one)
+		imgui.InputText(u8'MP5 /me', mp5two)
+		end
+		imgui.Checkbox(u8'ShotGun', shotgun)
+		if shotgun.v then
+		imgui.InputText(u8'ShotGun /do', shotgunone)
+		imgui.InputText(u8'ShotGun /me', shotguntwo)
+		end
+		imgui.Checkbox(u8'Rifle', rifle)
+		if rifle.v then
+		imgui.InputText(u8'Rifle /do', rifleone)
+		imgui.InputText(u8'Rifle /me', rifletwo)
+		end
+		imgui.Checkbox(u8'Нож', knife)
+		if knife.v then
+		imgui.InputText(u8'Нож /do', knifeone)
+		imgui.InputText(u8'Нож /me', knifetwo)
+		end
+		imgui.EndChild()
+	end
