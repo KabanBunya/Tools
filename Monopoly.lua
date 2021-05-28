@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.0')
+script_version('2.1')
 
 local use = false
 local close = false
@@ -58,7 +58,7 @@ local res, hk = pcall(require, 'lib.imcustom.hotkey')
 assert(res, 'Library "imcustom" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ------------------------------------------------------------------
 local res, notf = pcall(import, "imgui_notf.lua")
-assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader.')
+assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
 ------------------------------------------------------------------
 
 local function closeDialog()
@@ -98,6 +98,15 @@ local KeyboardLayoutName = ffi.new("char[?]", BuffSize)
 local LocalInfo = ffi.new("char[?]", BuffSize)
 local shell32 = ffi.load 'Shell32'
 local ole32 = ffi.load 'Ole32'
+
+chars = {
+	["й"] = "q", ["ц"] = "w", ["у"] = "e", ["к"] = "r", ["е"] = "t", ["н"] = "y", ["г"] = "u", ["ш"] = "i", ["щ"] = "o", ["з"] = "p", ["х"] = "[", ["ъ"] = "]", ["ф"] = "a",
+	["ы"] = "s", ["в"] = "d", ["а"] = "f", ["п"] = "g", ["р"] = "h", ["о"] = "j", ["л"] = "k", ["д"] = "l", ["ж"] = ";", ["э"] = "'", ["я"] = "z", ["ч"] = "x", ["с"] = "c", ["м"] = "v",
+	["и"] = "b", ["т"] = "n", ["ь"] = "m", ["б"] = ",", ["ю"] = ".", ["Й"] = "Q", ["Ц"] = "W", ["У"] = "E", ["К"] = "R", ["Е"] = "T", ["Н"] = "Y", ["Г"] = "U", ["Ш"] = "I",
+	["Щ"] = "O", ["З"] = "P", ["Х"] = "{", ["Ъ"] = "}", ["Ф"] = "A", ["Ы"] = "S", ["В"] = "D", ["А"] = "F", ["П"] = "G", ["Р"] = "H", ["О"] = "J", ["Л"] = "K", ["Д"] = "L",
+	["Ж"] = ":", ["Э"] = "\"", ["Я"] = "Z", ["Ч"] = "X", ["С"] = "C", ["М"] = "V", ["И"] = "B", ["Т"] = "N", ["Ь"] = "M", ["Б"] = "<", ["Ю"] = ">"
+}
+
 ole32.CoInitializeEx(nil, 2 + 4)
 
 mlogo, errorPic, classifiedPic, pentagonPic, accessDeniedPic, gameServer, nasosal_rang = nil, nil, nil, nil, nil, nil -- 
@@ -200,6 +209,7 @@ local SET = {
 		tag = '',
 		enable_tag = false,
 		chatInfo = false,
+		raskladka = false,
 		keyT = false,
 		launcher = false,
 		launcherpc = false,
@@ -1015,6 +1025,10 @@ function main()
 	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD)
 	lua_thread.create(showInputHelp)
 	lua_thread.create(informerperem)
+	lua_thread.create(roulette)
+	if raskladka.v then
+	lua_thread.create(inputChat)
+	end
 	
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
 	sampRegisterChatCommand("drone", drone) -- дроны
@@ -1227,56 +1241,6 @@ function main()
       sampSendClickTextdraw(2091)
       krytim = false
 	end
-	if checked_test5.v then
-      active = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-    end
-    if checked_test6.v then
-      active1 = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-    end
-    if checked_test7.v then
-      active2 = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
-	if checked_test8.v then
-      active3 = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
-	if checked_test9.v then
-      active4 = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
-	if checked_test10.v then
-      active5 = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
-	if yashik.v then
-      active = true
-      sampSendChat("/invent")
-      wait(zadervkav2.v*60000)
-    end
-	if yashik1.v then
-      active1 = true
-      sampSendChat("/invent")
-      wait(zadervkav2.v*60000)
-    end
-	if yashik2.v then
-      active2 = true
-      sampSendChat("/invent")
-      wait(zadervkav2.v*60000)
-    end
-	if yashik3.v then
-      active5 = true
-      sampSendChat("/invent")
-      wait(zadervkav2.v*60000)
-    end
 	if video.v and yuma.v then
       active6 = true
       sampSendChat("/invent")
@@ -1295,7 +1259,6 @@ function main()
 	  sampSendClickTextdraw(2140)
       wait(15000)
 	end
-	
 	if video2.v and yuma.v then
       active8 = true
       sampSendChat("/invent")
@@ -2023,6 +1986,7 @@ function saveSettings(args, key)
 	ini.settings.gangzones = gangzones.v
 	ini.settings.zones = zones.v
 	ini.settings.chatInfo = chatInfo.v
+	ini.settings.raskladka = raskladka.v
 	ini.settings.infoX = infoX
 	ini.settings.infoY = infoY
 	ini.settings.infoX2 = infoX2
@@ -4373,17 +4337,18 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката.") 
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
 				imgui.Text(u8(" Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
-					imgui.InputText(u8'          ', autoklava)
+					imgui.InputText(u8'', autoklava)
 					imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
-					imgui.InputText(u8'               ', autoklavareload)
+					imgui.InputText(u8' ', autoklavareload)
 					imgui.Text(u8(" Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
-					imgui.InputText(u8'                 ', activator)
+					imgui.InputText(u8'  ', activator)
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' RP Guns') then
@@ -4738,38 +4703,38 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за коммуналку, дом и бизнес"), autoopl2); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl2.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
-					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Коммуналка ', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом ', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Бизнес ', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку и дом")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку и дом"), autoopl1); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl1.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
-					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Авто ', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Коммуналка  ', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом  ', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за коммуналку и дом")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за коммуналку и дом"), autoopl5); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl5.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Коммуналка   ', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом   ', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто и бизнес"), autoopl3); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl3.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
-					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Авто  ', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Бизнес  ', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за бизнес"), autoopl6); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl6.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Бизнес   ', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто"), autoopl4); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl4.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Авто    ', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
 				end
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay); imgui.SameLine(); imgui.TextQuestion(u8"Пополняет депозит на указанную сумму когда скрипт видит в чате 'Банковский чек'. Также вы должны в этот момент стоять у кассы в Банке, иначе депозит не пополнится.");
@@ -4795,7 +4760,7 @@ function imgui.OnDrawFrame()
         imgui.Text(result);
         imgui.Text("       ")
         imgui.SameLine()
-        imgui.InputText(u8'', inputBufferText);
+        imgui.InputText(u8'     ', inputBufferText);
 		if imgui.Button('7', imgui.ImVec2(40, 40)) then
             inputBufferText.v = string.format('%s7', inputBufferText.v);
         end
@@ -5070,6 +5035,15 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"3. Добавлена авто-отыгровка некоторого оружия.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 28.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Фикс того, что если убирали код клавиши в активаций скрипта - было невозможно писать в других полях.")
+				imgui.Text(u8"2. Добавлен Input Chat. Теперь даже на русской раскладке можно будет писать команды на английском языке.")
+				imgui.Text(u8"3. Фикс когда открытие сундуков останавливало работу некоторых функций скрипта.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -5221,10 +5195,6 @@ function onWindowMessage(m, p)
 		win_state['bank'].v = false
 		win_state['help'].v = false
     end
-	if checked_test5.v or checked_test6.v or checked_test7.v or checked_test10.v then
-	if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
-	if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
-	end
 end
 
 function all_trim(s)
@@ -5582,6 +5552,7 @@ function load_settings() -- загрузка настроек
 	styletest4 = imgui.ImBool(ini.settings.styletest4)
 	styletest5 = imgui.ImBool(ini.settings.styletest5)
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
+	raskladka = imgui.ImBool(ini.settings.raskladka)
 	timecout = imgui.ImBool(ini.settings.timecout)
 	rtag = imgui.ImBuffer(u8(ini.settings.tag), 256)
 	enable_tag = imgui.ImBool(ini.settings.enable_tag)
@@ -5624,6 +5595,92 @@ function showInputHelp()
 		wait(0)
 	end
 end
+
+function translite(text)
+	for k, v in pairs(chars) do
+		text = string.gsub(text, k, v)
+	end
+	return text
+end
+
+function inputChat()
+	while true do
+		if(sampIsChatInputActive())then
+			local getInput = sampGetChatInputText()
+			if(oldText ~= getInput and #getInput > 0)then
+				local firstChar = string.sub(getInput, 1, 1)
+				if(firstChar == "." or firstChar == "/")then
+					local cmd, text = string.match(getInput, "^([^ ]+)(.*)")
+					local nText = "/" .. translite(string.sub(cmd, 2)) .. text
+					local chatInfoPtr = sampGetInputInfoPtr()
+					local chatBoxInfo = getStructElement(chatInfoPtr, 0x8, 4)
+					local lastPos = memory.getint8(chatBoxInfo + 0x11E)
+					sampSetChatInputText(nText)
+					memory.setint8(chatBoxInfo + 0x11E, lastPos)
+					memory.setint8(chatBoxInfo + 0x119, lastPos)
+					oldText = nText
+				end
+			end
+		end
+		wait(0)
+	end
+end
+
+function roulette()
+while true do 
+	if checked_test5.v then
+      active = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+    end
+    if checked_test6.v then
+      active1 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+    end
+    if checked_test7.v then
+      active2 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test8.v then
+      active3 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test9.v then
+      active4 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test10.v then
+      active5 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if yashik.v then
+      active = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik1.v then
+      active1 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik2.v then
+      active2 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik3.v then
+      active5 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+				end
+				wait(0)
+			end
+		end
 
 function informerperem()
 while true do
