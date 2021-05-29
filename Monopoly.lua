@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.1')
+script_version('2.2')
 
 local use = false
 local close = false
@@ -262,6 +262,8 @@ local SET = {
 		time = true,
 		rajon = true,
 		fps = true,
+		online = true,
+		ping = true,
 		hpcar = true
 	}
 }
@@ -349,6 +351,8 @@ local checked_box2 = imgui.ImBool(false)
 local checked_box3 = imgui.ImBool(false)
 local result = '';
 local inputBufferText = imgui.ImBuffer(256)
+local sessionStart = os.time()
+local sessiononline = 0
 
 pozivnoy = imgui.ImBuffer(256) 
 cmd_name = imgui.ImBuffer(256) 
@@ -993,6 +997,7 @@ function main()
 	if not isSampLoaded() or not isSampfuncsLoaded() then return end
 	while not isSampAvailable() do wait(100) end
 	load_settings()
+	getfps()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
@@ -1046,7 +1051,8 @@ function main()
 		wait(0)
 		unix_time = os.time(os.date('!*t'))
 		moscow_time = unix_time + timefix.v * 60 * 60
-
+		
+		if  sampGetGamestate() == 3 then sessiononline = os.time() - sessionStart end
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
 		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
@@ -1054,6 +1060,7 @@ function main()
 		
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
+		ping = sampGetPlayerPing(myID)
 		interior = getActiveInterior() -- получаем инту
 		
 		-- получение названия района на инглише(работает только при включенном английском в настройках игры, иначе иероглифы)
@@ -1115,7 +1122,7 @@ function main()
                 sampSendChat(u8:decode (knife.v))
 				wait(1500)
 				sampSendChat(u8:decode (knifetwo.v))
-			elseif gun == 0 then
+			elseif gun == 0 and deagle.v or m4.v or awp.v or uzi.v or ak47.v or mp5.v or shotgun.v or rifle.v or knife.v then
                 sampSendChat("/me убрал оружие")
             end
             lastgun = gun
@@ -1946,6 +1953,8 @@ function saveSettings(args, key)
 	ini.informer.time = infTime.v
 	ini.informer.rajon = infRajon.v
 	ini.informer.fps = inffps.v
+	ini.informer.online = infonline.v
+	ini.informer.ping = infping.v
 	ini.informer.hpcar = infhpcar.v
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
@@ -4355,7 +4364,7 @@ function imgui.OnDrawFrame()
 				rpguns()
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
-				imgui.BeginChild('##25252', imgui.ImVec2(750, 155), false)
+				imgui.BeginChild('##25252', imgui.ImVec2(750, 190), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones)
 				if zones.v then
@@ -4370,6 +4379,8 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение здоровья")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение здоровья', infHP)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение брони")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение брони', infArmour)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение квадрата")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение квадрата', infKv)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение пинга")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение пинга', infping)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение онлайна за сессию")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение онлайна за сессию', infonline); imgui.SameLine(); imgui.TextQuestion(u8"Сбрасывается при перезагрузке скрипта или после перезахода в игру.") 
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение города")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение города', infCity)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение района")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение района', infRajon)
@@ -5044,6 +5055,18 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"3. Фикс когда открытие сундуков останавливало работу некоторых функций скрипта.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 29.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Фикс того, что если не выбрано в RP gun оружие, то если вы убрали оружие с рук не будет рп отыгровки")
+				imgui.Text(u8"/me убрал оружие.")
+				imgui.Text(u8"2. Убран флуд в чат при заточке аксессуаров/скинов и все уведомления идут в imgui уведомления.")
+				imgui.Text(u8"3. Добавлен пинг в информер.")
+				imgui.Text(u8"4. Фикс ФПС в информере.")
+				imgui.Text(u8"5. Добавлен онлайн за сессию в информер.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 1 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -5081,14 +5104,15 @@ function infobar()
 			if infArmour.v then imgui.Text(u8("• Броня: "..armourNew)) end
 			if infCity.v then imgui.Text(u8("• Город: "..playerCity)) end
 			if infRajon.v then imgui.Text(u8("• Район: "..ZoneInGame)) end
-			local FPS = memory.getfloat(0xB7CB50, true) -- получение фпс
-			if inffps.v then imgui.Text(u8("• ФПС: "..tostring(math.ceil(FPS)))) end
+			if inffps.v then imgui.Text(u8("• ФПС: "..tostring(fraimrei))) end
+			if infping.v then imgui.Text(u8("• Пинг: "..ping)) end
 			if isCharInAnyCar(PLAYER_PED) and infhpcar.v then 
 				car = storeCarCharIsInNoSave(playerPed)
 				carhp = getCarHealth(car)
 			imgui.Text(u8("• ХП т/с: " ..carhp)) end
 			if infKv.v then imgui.Text(u8("• Квадрат: "..tostring(locationPos()))) end
 			if infTime.v then imgui.Text(u8("• Время: "..os.date("%H:%M:%S"))) end
+			if infonline.v then imgui.Text(u8("• Онлайн за сессию: "..get_timer(sessiononline))) end
 		end
 
 function imgui.Link(link,name,myfunc)
@@ -5109,6 +5133,14 @@ function imgui.Link(link,name,myfunc)
       imgui.TextColored(imgui.GetStyle().Colors[imgui.Col.Button], name)
   end
   return resultBtn
+end
+
+function getfps()
+    lua_thread.create(function()
+        wait(400)
+            fraimrei = math.floor(memory.getfloat(0xB7CB50, true))
+        return true
+    end)
 end
 
 function imgui.TextQuestion(text)
@@ -5380,7 +5412,15 @@ end
 	if text:find("отмечено на карте красным маркером!") then
 			notf.addNotification("Цель обнаружена! Она отмечена на карте красным маркером.", 3, 2)
 			return false
-	end	
+	end
+	if text:find("Увы, вам не удалось улучшить предмет") then
+			notf.addNotification("Вам не удалось улучшить скин или аксессуар, попробуйте еще раз!", 3, 3)
+			return false
+	end
+	if text:find("Успех! Вам удалось улучшить предмет") then
+			notf.addNotification("Вам удалось улучшить скин или аксессуар, поздравляем!", 3, 2)
+			return false
+	end
 	if toch.v then
 		text = separator(text)
 		return {color, text}
@@ -5518,6 +5558,8 @@ function load_settings() -- загрузка настроек
 	infTime = imgui.ImBool(ini.informer.time)
 	infRajon = imgui.ImBool(ini.informer.rajon)
 	inffps = imgui.ImBool(ini.informer.fps)
+	infonline = imgui.ImBool(ini.informer.online)
+	infping = imgui.ImBool(ini.informer.ping)
 	infhpcar = imgui.ImBool(ini.informer.hpcar)
 
 	keyT = imgui.ImBool(ini.settings.keyT)
@@ -6106,3 +6148,7 @@ function rpguns()
 		end
 		imgui.EndChild()
 	end
+
+function get_timer(time)
+return string.format("%s:%s:%s",string.format("%s%s",((tonumber(os.date("%H",time)) < tonumber(os.date("%H",0)) and (24 + tonumber(os.date("%H",time))) - tonumber(os.date("%H",0)) or tonumber(os.date("%H",time)) - (tonumber(os.date("%H",0)))) < 10 and 0 or ""),(tonumber(os.date("%H",time)) < tonumber(os.date("%H",0)) and (24 + tonumber(os.date("%H",time))) - tonumber(os.date("%H",0)) or tonumber(os.date("%H",time)) - (tonumber(os.date("%H",0))))),os.date("%M",time),os.date("%S",time))
+end
