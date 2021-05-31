@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.2')
+script_version('2.3')
 
 local use = false
 local close = false
@@ -25,40 +25,40 @@ bike = {[481] = true, [509] = true, [510] = true}
 moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true}
 
 local res = pcall(require, "lib.moonloader")
-assert(res, 'Library "lib.moonloader" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "lib.moonloader" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, ffi = pcall(require, 'ffi')
-assert(res, 'Library "ffi" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "ffi" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res = pcall(require, 'lib.sampfuncs')
-assert(res, 'Library "lib.sampfuncs" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "lib.sampfuncs" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, sampev = pcall(require, 'lib.samp.events')
-assert(res, 'Library "SAMP Events" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "SAMP Events" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, key = pcall(require, "vkeys")
-assert(res, 'Library "vkeys" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "vkeys" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, imgui = pcall(require, "imgui")
-assert(res, 'Library "imgui" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "imgui" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, encoding = pcall(require, "encoding")
-assert(res, 'Library "encoding" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "encoding" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, inicfg = pcall(require, "inicfg")
-assert(res, 'Library "inicfg" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "inicfg" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, memory = pcall(require, "memory")
-assert(res, 'Library "memory" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "memory" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, rkeys = pcall(require, "rkeys")
-assert(res, 'Library "rkeys" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "rkeys" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
 local res, hk = pcall(require, 'lib.imcustom.hotkey')
-assert(res, 'Library "imcustom" не найдена. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "imcustom" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
 local res, notf = pcall(import, "imgui_notf.lua")
-assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Чтобы скачать все нужны файлы и библиотеки, перейдите по ссылке - https://cloud.mail.ru/public/kue3/rYYaeFHoT')
+assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
 
 local function closeDialog()
@@ -202,6 +202,9 @@ local SET = {
 		rifletwo = '/me снял охотничье ружье с плеча и снял с предохранителя',
 		knifeone = '/do Нож находится в ножне.',
 		knifetwo = '/me правой рукой достай нож из ножны',
+		tazerone = '/do Тайзер в кобуре.',
+		tazertwo = '/me достал тайзер из кобуры',
+		ybralone = '/me убрал оружие',
 		timecout = false,
 		gangzones = false,
 		zones = false,
@@ -210,6 +213,8 @@ local SET = {
 		enable_tag = false,
 		chatInfo = false,
 		raskladka = false,
+		recongen = false,
+		carsis = false,
 		keyT = false,
 		launcher = false,
 		launcherpc = false,
@@ -219,6 +224,8 @@ local SET = {
 		m4 = false,
 		uzi = false,
 		ak47 = false,
+		tazer = false,
+		ybral = false,
 		mp5 = false,
 		shotgun = false,
 		rifle = false,
@@ -226,6 +233,8 @@ local SET = {
 		yuma = false,
 		prescott = false,
 		eat = false,
+		eathouse = false,
+		eatmyso = false,
 		mvdhelp = false,
 		yashik = false,
 		yashik1 = false,
@@ -253,6 +262,10 @@ local SET = {
 	assistant = {
 		asX = 1,
 		asY = 1
+	},
+	DIALOG_EDITOR = 
+		{
+
 	},
 	informer = {
 		hp = true,
@@ -287,6 +300,7 @@ win_state['calc'] = imgui.ImBool(false)
 win_state['yashiki'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
+win_state['carsas'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
@@ -353,6 +367,19 @@ local result = '';
 local inputBufferText = imgui.ImBuffer(256)
 local sessionStart = os.time()
 local sessiononline = 0
+local buf = imgui.ImBuffer(2056)
+local INFO = {
+    nil,
+    nil,
+    nil,
+    nil,
+    nil,
+    nil
+}
+
+function savedialog()
+	ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] = u8:decode(buf.v):gsub('\n', '|_TB_|')
+end
 
 pozivnoy = imgui.ImBuffer(256) 
 cmd_name = imgui.ImBuffer(256) 
@@ -976,6 +1003,8 @@ function mainmenu()
 			win_state['bank'].v = not win_state['bank'].v
 		elseif win_state['shema'].v then
 			win_state['shema'].v = not win_state['shema'].v
+		elseif win_state['carsas'].v then
+			win_state['carsas'].v = not win_state['carsas'].v
 		elseif win_state['info'].v then
 			win_state['info'].v = not win_state['info'].v
 		elseif menu_spur.v then
@@ -1031,6 +1060,7 @@ function main()
 	lua_thread.create(showInputHelp)
 	lua_thread.create(informerperem)
 	lua_thread.create(roulette)
+	lua_thread.create(eating)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1044,6 +1074,7 @@ function main()
 	sampRegisterChatCommand('rul', rul) -- не вводить команду, она нужна не для этого.
 	sampRegisterChatCommand('afind', afind) -- регистрируем команду
 	sampRegisterChatCommand('sfind', sfind) -- регистрируем команду
+	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	while token == 0 do wait(0) end
 	if enableskin.v then changeSkin(-1, localskin.v) end
@@ -1119,11 +1150,15 @@ function main()
 				wait(1500)
 				sampSendChat(u8:decode (rifletwo.v))
 			elseif gun == 4 and knife.v then
-                sampSendChat(u8:decode (knife.v))
+                sampSendChat(u8:decode (knifeone.v))
 				wait(1500)
 				sampSendChat(u8:decode (knifetwo.v))
-			elseif gun == 0 and deagle.v or m4.v or awp.v or uzi.v or ak47.v or mp5.v or shotgun.v or rifle.v or knife.v then
-                sampSendChat("/me убрал оружие")
+			elseif gun == 23 and tazer.v then
+                sampSendChat(u8:decode (tazerone.v))
+				wait(1500)
+				sampSendChat(u8:decode (tazertwo.v))
+			elseif gun == 0 and ybral.v then
+                sampSendChat(u8:decode (ybralone.v))
             end
             lastgun = gun
         end
@@ -1198,18 +1233,6 @@ function main()
 			end
 		if styletest5.v then -- стили
 			apply_custom_style5()
-			end
-		if eat.v then 
-			sampSendChat("/house")
-			wait(100)
-			sampSendDialogResponse(174, 1 , 1, -1)
-			wait(100)
-			sampSendDialogResponse(2431, 1 , 2, -1)
-			wait(100)
-			sampSendDialogResponse(185, 1 , 6, -1)
-			wait(100)
-			closeDialog()
-			wait(10800000)
 			end
 	if checked_test.v and krytim then
       rul()
@@ -1964,6 +1987,8 @@ function saveSettings(args, key)
 	ini.settings.m4 = m4.v
 	ini.settings.uzi = uzi.v
 	ini.settings.ak47 = ak47.v
+	ini.settings.tazer = tazer.v
+	ini.settings.ybral = ybral.v
 	ini.settings.mp5 = mp5.v
 	ini.settings.shotgun = shotgun.v
 	ini.settings.rifle = rifle.v
@@ -1973,6 +1998,8 @@ function saveSettings(args, key)
 	ini.settings.yuma = yuma.v
 	ini.settings.prescott = prescott.v
 	ini.settings.eat = eat.v
+	ini.settings.eathouse = eathouse.v
+	ini.settings.eatmyso = eatmyso.v
 	ini.settings.mvdhelp = mvdhelp.v
 	ini.settings.yashik = yashik.v
 	ini.settings.yashik1 = yashik1.v
@@ -1996,6 +2023,8 @@ function saveSettings(args, key)
 	ini.settings.zones = zones.v
 	ini.settings.chatInfo = chatInfo.v
 	ini.settings.raskladka = raskladka.v
+	ini.settings.recongen = recongen.v
+	ini.settings.carsis = carsis.v
 	ini.settings.infoX = infoX
 	ini.settings.infoY = infoY
 	ini.settings.infoX2 = infoX2
@@ -2025,6 +2054,9 @@ function saveSettings(args, key)
 	ini.settings.uzitwo = u8:decode(uzitwo.v)
 	ini.settings.ak47one = u8:decode(ak47one.v)
 	ini.settings.ak47two = u8:decode(ak47two.v)
+	ini.settings.tazerone = u8:decode(tazerone.v)
+	ini.settings.tazertwo = u8:decode(tazertwo.v)
+	ini.settings.ybralone = u8:decode(ybralone.v)
 	ini.settings.mp5one = u8:decode(mp5one.v)
 	ini.settings.mp5two = u8:decode(mp5two.v)
 	ini.settings.shotgunone = u8:decode(shotgunone.v)
@@ -2088,6 +2120,16 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+	if carsis.v then
+    INFO[1] = dialogId; INFO[3] = title; INFO[5] = button2;
+    INFO[2] = style; INFO[4] = button1; INFO[6] = text
+	buf.v = u8(text)
+		if ini.DIALOG_EDITOR["DIALOG_" .. dialogId] ~= nil then 
+			text = ini.DIALOG_EDITOR["DIALOG_" .. dialogId] 
+			text = text:gsub('|_TB_|', '\n')
+		return {dialogId, style, title, button1, button2, text}
+	end
+end
 	if ndr.v then
 		dialogIncoming = dialogId
 	end
@@ -3226,6 +3268,30 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
+	if eatmyso.v and active42 then 
+	 lua_thread.create(function()
+		if data.modelId == 2805 then 
+		sampSendClickTextdraw(2132)
+		use42 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use42 then 
+		clickID = id + 1
+		sampSendClickTextdraw(clickID)
+		use42 = false
+        close42 = true
+		end
+		if close42 then
+		wait(111)
+        sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        close42 = false
+        active42 = false
+		end
+	end)
+end
 	if data.modelId == 1615 and checktochilki then
 		if id ~= 2108 and checktochilki then
 			sampSendClickTextdraw(id)
@@ -4165,6 +4231,22 @@ function sfind()
 	notf.addNotification("[Mono Tools]: Автопоиск отключён.", 3, 3) -- при остановке скрипта уведомление
 end
 
+function recongenius()
+	lua_thread.create(function()
+	sampDisconnectWithReason(quit)
+	wait(30000)
+	sampSetGamestate(1)
+end)
+end
+
+function recongeniusis()
+	lua_thread.create(function()
+	sampDisconnectWithReason(quit)
+	wait(600000)
+	sampSetGamestate(1)
+end)
+end
+
 function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
 	if launcherpc.v then clientver = 'Arizona PC' end
 	if launcherm.v then clientver = 'arizona-mobile' end
@@ -4311,11 +4393,12 @@ function imgui.OnDrawFrame()
 		end
 		if showSet == 1 then
 			if imgui.CollapsingHeader(u8' Майнинг') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 440), false)
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 460), false)
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Видеокарты должны быть на второй странице инвентаря и идти по порядку! Т.е в слот №1 ложите видеокарту, следующую ложите в")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"слот №2 и так далее. Чтобы узнать номер слота - смотрите схему. Также выберите сервер, на котором играете. На каждом сервере")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"разные текстдравы инвентаря. Если скрипт не работает, то возможно из-за телефона у вас изменились текстдравы (нужно просто")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезайти). Чтобы прервать процесс улучшения - выключите ползунок с названием сервера или /reload.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезайти). Чтобы прервать процесс улучшения - выключите ползунок с названием сервера или /reload. После завершения")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" улучшения видеокарт, рекомендую перезагрузить скрипт через /reload.")
 				imgui.NextColumn()
 				if imgui.Button(u8' Схема', btn_size) then win_state['shema'].v = not win_state['shema'].v end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Yuma")); imgui.SameLine(); imgui.ToggleButton(u8'Yuma', yuma)
@@ -4333,7 +4416,7 @@ function imgui.OnDrawFrame()
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Модификации') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 285), false)
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 315), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру. PC - не отображает luxe машины. Mobile - отображает luxe машины.")
@@ -4345,8 +4428,17 @@ function imgui.OnDrawFrame()
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката.") 
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat) 
+				if eat.v then
+				if eathouse.v then eatmyso.v = false end
+				if eatmyso.v then eathouse.v = false end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Дом")); imgui.SameLine(); imgui.ToggleButton(u8'Дом', eathouse); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката."); imgui.SameLine();
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Мешок с мясом")); imgui.SameLine(); imgui.ToggleButton(u8'Мешок с мясом', eatmyso); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 30 минут есть еду из мешка с мясом.")
+				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру после рестарта через 10 минут. Также по команде /recon можно перезайти на сервер через 30 секунд.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Измененный cars")); imgui.SameLine(); imgui.ToggleButton(u8'Измененный cars', carsis); imgui.SameLine(); imgui.TextQuestion(u8"Редактирование диалога /cars. Можно использовать, например, чтобы подписать местоположение машин, изменить цвет строк в диалоге и тому подобное.");
+				if carsis.v and imgui.Button(u8' Редактировать cars', btn_size) then carsys() end
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
@@ -4697,6 +4789,9 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
+	if win_state['carsas'].v then
+		carsax()
+	end
 	if win_state['bank'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
@@ -4904,17 +4999,20 @@ function imgui.OnDrawFrame()
 		imgui.Begin(u8('Помощь'), win_state['help'], imgui.WindowFlags.NoResize)
 		imgui.BeginGroup()
 		imgui.BeginChild('left pane', imgui.ImVec2(180, 350), true)
-		if imgui.Selectable(u8"Команды скрипта") then selected2 = 1 end
+		if imgui.Selectable(u8"Команды скрипта") then selected2 = 2 end
 		imgui.Separator()
-		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 2 end
+		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 1 end
 		imgui.Separator()
 		if imgui.Selectable(u8"Коды клавиш") then selected2 = 3 end			
+		imgui.Separator()
+		if imgui.Selectable(u8"О скрипте") then selected2 = 4 end			
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
 		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 350), true)
-		if selected2 == 0 then
-			selected2 = 1
+		if selected2 == 0 then selected2 = 1
+		elseif selected2 == 4 then
+		scriptinfo()
 		elseif selected2 == 3 then
 		imgui.Text(u8"Коды клавиш")
 		imgui.Columns(2, _,false)
@@ -4929,7 +5027,7 @@ function imgui.OnDrawFrame()
 		imgui.Text (u8"NumPad 5 - 101"); imgui.SameLine(); imgui.Text (u8"NumPad 6 - 102"); imgui.SameLine(); imgui.Text (u8"NumPad 7 - 103"); imgui.SameLine(); imgui.Text (u8"NumPad 8 - 104"); imgui.SameLine(); imgui.Text (u8"NumPad 9 - 105"); imgui.SameLine(); imgui.Text (u8"NumPad * - 106"); imgui.SameLine(); imgui.Text (u8"NumPad + - 107")
 		imgui.Text (u8"NumPad - - 109"); imgui.SameLine(); imgui.Text (u8"NumPad . - 119"); imgui.SameLine(); imgui.Text (u8"NumPad / - 111"); imgui.SameLine(); imgui.Text (u8"F3 - 114"); imgui.SameLine(); imgui.Text (u8"F4 - 115"); imgui.SameLine(); imgui.Text (u8"F5 - 116"); imgui.SameLine(); imgui.Text (u8"F6 - 117"); imgui.SameLine(); imgui.Text (u8"F7 - 118"); imgui.SameLine(); imgui.Text (u8"F8 - 119"); imgui.SameLine(); imgui.Text (u8"F9 - 120")
 		imgui.Text (u8"F10 - 121"); imgui.SameLine(); imgui.Text (u8"F11 - 122"); imgui.SameLine(); imgui.Text (u8"F12 - 123")
-		elseif selected2 == 2 then
+		elseif selected2 == 1 then
 		imgui.Text(u8"Обновления")
 		imgui.Columns(2, _,false)
 		imgui.SetColumnWidth(-1, 800)
@@ -4954,7 +5052,7 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"2. Добавлены точки в числах.")
 				imgui.Text(u8"3. Добавлено запоминание диалогов(полезно тем, кто играет со сборки).")
 				imgui.Text(u8"4. Вроде бы сделал фикс, что скрипт запускался не с первого раза.")
-				imgui.Text(u8"Но если эта проблема осталась или нашли другую, то пишите - https://vk.com/alex_bynes")
+				imgui.Text(u8"Но если эта проблема осталась или нашли другую, то пишите в тему на БХ.")
 				imgui.Text(u8"5. Добавлен калькулятор. Меню скрипта - калькулятор.")
 		imgui.EndChild()
 		end
@@ -5023,7 +5121,7 @@ function imgui.OnDrawFrame()
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Фикс улучшения видеокарт. Также скрипт работает только на Юме и Прескотте. Если нужно добавить другие")
-				imgui.Text(u8"сервера или обнаружили баги - пишите https://vk.com/alex_bynes")
+				imgui.Text(u8"сервера или обнаружили баги - пишите в теме на БХ.")
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 22.05.2021') then
@@ -5067,7 +5165,23 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"5. Добавлен онлайн за сессию в информер.")
 		imgui.EndChild()
 		end
-		elseif selected2 == 1 then
+		if imgui.CollapsingHeader(u8' 31.05.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлена возможность каждые 30 минут есть из мешка с мясом в 'автоеда'.")
+				imgui.Text(u8"2. В 'RP Gun' добавлен тайзер.")
+				imgui.Text(u8"3. Добавлена возможность изменить отыгровку на '/me убрал оружие', но работает в общем случае для всего оружия.")
+				imgui.Text(u8"4. Добавлен реконнект после рестарта через 10 минут. Также по команде /recon можно перезайти на сервер")
+				imgui.Text(u8"через 30 секунд.")
+				imgui.Text(u8"5. Добавлено 'редактирование диалога /cars'. Можно использовать, например, чтобы подписать местоположение")
+				imgui.Text(u8"машин, изменить цвет строк в диалоге и тому подобное.")
+				imgui.Text(u8"6. Переходя в 'помощь', теперь вместо списка обновлений, открываются команды скрипта.")
+				imgui.Text(u8"7. В помощь добавлен пункт 'О скрипте', где перечислены автор и люди, которые помогают.")
+				imgui.Text(u8"А также кнопка, по нажатию на которую, вы перейдете в тему на БХ.")
+		imgui.EndChild()
+		end
+		elseif selected2 == 2 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
 			imgui.Columns(2, _,false)
@@ -5077,11 +5191,11 @@ function imgui.OnDrawFrame()
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/drone - Получить картинку с дрона на территории.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/afind - Автопоиск игрока через /find.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/sfind - Отключение автопоиска.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/recon - Перезайти на сервер через 30 секунд.")
 				imgui.Separator()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Важно! Для того, чтобы все функции скрипта работали стабильно, нужно чтобы инвентарь был на английском языке!")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Настройть язык инвентаря вы можете в /settings. Убедительная просьба не выключать автообновления в коде.")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе вы в будущем не получите улучшения или исправление ошибок. Также, если вы хотите предложить свои идеи")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"по улучшению скрипта, нашли баги или скрипт у вас не работает как должен, то отпишите https://vk.com/alex_bynes.")
+				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе вы в будущем не получите улучшения или исправление ошибок.")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -5421,6 +5535,9 @@ end
 			notf.addNotification("Вам удалось улучшить скин или аксессуар, поздравляем!", 3, 2)
 			return false
 	end
+	if text:find("Технический рестарт через 02 минут. Советуем завершить текущую сессию") and recongen.v then
+		recongeniusis()
+	end
 	if toch.v then
 		text = separator(text)
 		return {color, text}
@@ -5477,7 +5594,7 @@ function autoupdate(json_url, prefix, url)
                     end
                     if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                       if goupdatestatus == nil then
-                        sampAddChatMessage(('[Mono Tools]{FFFFFF} Не удалось обновить скрипт! Подробнее узнавайте у Буни. Его вк - https://vk.com/alex_bynes'), 0x046D63)
+                        sampAddChatMessage(('[Mono Tools]{FFFFFF} Не удалось обновить скрипт! Обратитесь к автору скрипта.'), 0x046D63)
                         update = false
                       end
                     end
@@ -5539,6 +5656,9 @@ function load_settings() -- загрузка настроек
 	uzitwo = imgui.ImBuffer(u8(ini.settings.uzitwo), 256)
 	ak47one = imgui.ImBuffer(u8(ini.settings.ak47one), 256)
 	ak47two = imgui.ImBuffer(u8(ini.settings.ak47two), 256)
+	tazerone = imgui.ImBuffer(u8(ini.settings.tazerone), 256)
+	tazertwo = imgui.ImBuffer(u8(ini.settings.tazertwo), 256)
+	ybralone = imgui.ImBuffer(u8(ini.settings.ybralone), 256)
 	mp5one = imgui.ImBuffer(u8(ini.settings.mp5one), 256)
 	mp5two = imgui.ImBuffer(u8(ini.settings.mp5two), 256)
 	shotgunone = imgui.ImBuffer(u8(ini.settings.shotgunone), 256)
@@ -5569,6 +5689,8 @@ function load_settings() -- загрузка настроек
 	m4 = imgui.ImBool(ini.settings.m4)
 	uzi = imgui.ImBool(ini.settings.uzi)
 	ak47 = imgui.ImBool(ini.settings.ak47)
+	tazer = imgui.ImBool(ini.settings.tazer)
+	ybral = imgui.ImBool(ini.settings.ybral)
 	mp5 = imgui.ImBool(ini.settings.mp5)
 	shotgun = imgui.ImBool(ini.settings.shotgun)
 	rifle = imgui.ImBool(ini.settings.rifle)
@@ -5578,6 +5700,8 @@ function load_settings() -- загрузка настроек
 	yuma = imgui.ImBool(ini.settings.yuma)
 	prescott = imgui.ImBool(ini.settings.prescott)
 	eat = imgui.ImBool(ini.settings.eat)
+	eathouse = imgui.ImBool(ini.settings.eathouse)
+	eatmyso = imgui.ImBool(ini.settings.eatmyso)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
 	yashik = imgui.ImBool(ini.settings.yashik)
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
@@ -5595,6 +5719,8 @@ function load_settings() -- загрузка настроек
 	styletest5 = imgui.ImBool(ini.settings.styletest5)
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
 	raskladka = imgui.ImBool(ini.settings.raskladka)
+	recongen = imgui.ImBool(ini.settings.recongen)
+	carsis = imgui.ImBool(ini.settings.carsis)
 	timecout = imgui.ImBool(ini.settings.timecout)
 	rtag = imgui.ImBuffer(u8(ini.settings.tag), 256)
 	enable_tag = imgui.ImBool(ini.settings.enable_tag)
@@ -5723,6 +5849,29 @@ while true do
 				wait(0)
 			end
 		end
+		
+function eating()
+while true do 
+	if eat.v and eatmyso.v then
+		active42 = true
+		sampSendChat("/invent")
+		wait(1800000)
+		end
+	if eat.v and eathouse.v then 
+		sampSendChat("/house")
+		wait(100)
+		sampSendDialogResponse(174, 1 , 1, -1)
+		wait(100)
+		sampSendDialogResponse(2431, 1 , 2, -1)
+		wait(100)
+		sampSendDialogResponse(185, 1 , 6, -1)
+		wait(100)
+		closeDialog()
+		wait(10800000)
+		end
+		wait(0)
+	end
+end
 
 function informerperem()
 while true do
@@ -6099,7 +6248,7 @@ function imgui.GetMaxWidthByText(text)
 end
 
 function rpguns()
-	imgui.BeginChild('##as2dasasdf', imgui.ImVec2(810, 285), false)
+	imgui.BeginChild('##as2dasasdf', imgui.ImVec2(810, 315), false)
 		imgui.Columns(2, _, false)
 		imgui.Checkbox(u8'Desert Eagle', deagle)
 		if deagle.v then
@@ -6146,9 +6295,59 @@ function rpguns()
 		imgui.InputText(u8'Нож /do', knifeone)
 		imgui.InputText(u8'Нож /me', knifetwo)
 		end
+		imgui.Checkbox(u8'Тайзер', tazer)
+		if tazer.v then
+		imgui.InputText(u8'Тайзер /do', tazerone)
+		imgui.InputText(u8'Тайзер /me', tazertwo)
+		end
+		imgui.Checkbox(u8'Убрать оружие', ybral)
+		if ybral.v then
+		imgui.InputText(u8'Убрать оружие /me', ybralone)
+		end
 		imgui.EndChild()
 	end
 
 function get_timer(time)
 return string.format("%s:%s:%s",string.format("%s%s",((tonumber(os.date("%H",time)) < tonumber(os.date("%H",0)) and (24 + tonumber(os.date("%H",time))) - tonumber(os.date("%H",0)) or tonumber(os.date("%H",time)) - (tonumber(os.date("%H",0)))) < 10 and 0 or ""),(tonumber(os.date("%H",time)) < tonumber(os.date("%H",0)) and (24 + tonumber(os.date("%H",time))) - tonumber(os.date("%H",0)) or tonumber(os.date("%H",time)) - (tonumber(os.date("%H",0))))),os.date("%M",time),os.date("%S",time))
+end
+
+function carsys(param)
+	sampSendChat('/cars')
+	win_state['carsas'].v = not win_state['carsas'].v
+	end
+
+function carsax()
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(510, 520), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' Редактировать cars', win_state['carsas'], imgui.WindowFlags.NoResize) then
+        if imgui.InputTextMultiline(u8'', buf, imgui.ImVec2(485, 420)) then 
+            sampShowDialog(INFO[1],INFO[3],u8:decode(buf.v),INFO[4],INFO[5],INFO[2])
+            sampSetDialogClientside(false)
+		end
+		if imgui.Button(u8"Сохранить", imgui.ImVec2(175, 40)) then 
+			savedialog()
+		end
+		imgui.SameLine(323)
+		if imgui.Button(u8"Удалить", imgui.ImVec2(175, 40)) then 
+			if ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] ~= nil then 
+				ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] = nil
+				sampShowDialog(INFO[1],INFO[3],INFO[6],INFO[4],INFO[5],INFO[2]) 
+				sampSetDialogClientside(false)
+			end
+		end
+        imgui.End()
+    end
+end
+
+function scriptinfo()
+	imgui.Text(u8"О скрипте")
+	imgui.Columns(2, _,false)
+	imgui.SetColumnWidth(-1, 800)
+	imgui.Separator()
+	imgui.TextColoredRGB("Автор: {FF0000}Bunya{FF0000}")
+	imgui.TextColoredRGB("Помогает в тестировании: {008000}Роман{008000}")
+	imgui.TextColoredRGB("Идеи, которые были осуществлены в скрипте, предлагали: {FFD700}Роман, Июнь, Саня, Алексей и kriper2009.{FFD700}")
+	imgui.TextColoredRGB("Актуальная версия скрипта: {00C2BB}"..thisScript().version.."{FFFFFF}")
+	if imgui.Button(u8"Тема на БХ", imgui.ImVec2(720, 25)) then os.execute("start https://www.blast.hk/threads/89343/") end
 end
