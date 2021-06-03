@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.3')
+script_version('2.4')
 
 local use = false
 local close = false
@@ -236,6 +236,7 @@ local SET = {
 		eathouse = false,
 		eatmyso = false,
 		mvdhelp = false,
+		chatcalc = false,
 		yashik = false,
 		yashik1 = false,
 		yashik2 = false,
@@ -315,6 +316,7 @@ local checked_test = imgui.ImBool(false)
 local checked_test2 = imgui.ImBool(false)
 local checked_test3 = imgui.ImBool(false)
 local checked_test4 = imgui.ImBool(false)
+local podarki = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
@@ -1061,6 +1063,7 @@ function main()
 	lua_thread.create(informerperem)
 	lua_thread.create(roulette)
 	lua_thread.create(eating)
+	lua_thread.create(calculator)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1169,7 +1172,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -2001,6 +2004,7 @@ function saveSettings(args, key)
 	ini.settings.eathouse = eathouse.v
 	ini.settings.eatmyso = eatmyso.v
 	ini.settings.mvdhelp = mvdhelp.v
+	ini.settings.chatcalc = chatcalc.v
 	ini.settings.yashik = yashik.v
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
@@ -4321,6 +4325,10 @@ function imgui.OnDrawFrame()
 	local btn_size2 = imgui.ImVec2(160, 0)
 	local btn_size3 = imgui.ImVec2(140, 0)
 	local btn_size5 = imgui.ImVec2(70, 50)
+	local input = sampGetInputInfoPtr()
+    local input = getStructElement(input, 0x8, 4)
+    local windowPosX = getStructElement(input, 0x8, 4)
+    local windowPosY = getStructElement(input, 0xC, 4)
 
 	-- тут мы подстраиваем курсор под адекватность
 	imgui.ShowCursor = not win_state['informer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v
@@ -4345,6 +4353,28 @@ function imgui.OnDrawFrame()
 		if imgui.Button(u8' Калькулятор', btn_size) then win_state['calc'].v = not win_state['calc'].v end
 		imgui.End()
 	end
+    
+    if sampIsChatInputActive() and chatcalc.v and ok then
+        imgui.SetNextWindowPos(imgui.ImVec2(windowPosX, windowPosY + 30 + 15), imgui.Cond.FirstUseEver)
+        imgui.SetNextWindowSize(imgui.ImVec2(result:len()*10, 30))
+        imgui.Begin('Solve', window, imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove)
+        imgui.CenterText(u8(number_separator(result)))
+        imgui.End()
+    end
+        if sampIsChatInputActive() and chatcalc.v and help then
+            imgui.SetNextWindowPos(imgui.ImVec2(windowPosX, windowPosY + 30 + 15), imgui.Cond.FirstUseEver)
+            imgui.SetNextWindowSize(imgui.ImVec2(800, 130))
+            imgui.Begin('Help', window2, imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove)
+            imgui.Text(u8[[23%/100 - найти число исхода из процента. 23 - это процент, 100 это сколько составлает этот процент от неизвестного числа.
+23 процента равные числу 100, в 100 процентах будет 434.
+-
+23%*100 - найти число, которое составл¤ет количество процентов. 23 - это количество процентов, 
+100 - число от которого нужно найти процент. 23 процента от числа 100 - это 23.
+-
+23/100% - найти процентное соотношение двух чисел. 23 - это число, процентное соотношение от числа 100.
+число 23 составл¤ет 23 процента от числа 100.]])
+            imgui.End()
+        end
 	
 	if win_state['settings'].v then -- окно с настройками
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
@@ -4444,6 +4474,7 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты.")
 				imgui.Text(u8(" Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 					imgui.InputText(u8'', autoklava)
 					imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
@@ -4722,6 +4753,7 @@ function imgui.OnDrawFrame()
 				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
 				imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
 				imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
+				imgui.Checkbox(u8'Открыть подарки', podarki); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся подарки.")  
 				imgui.NextColumn()
 				imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
 				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
@@ -5181,6 +5213,19 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"А также кнопка, по нажатию на которую, вы перейдете в тему на БХ.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 3.06.2021') then
+				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Добавлено автооткрытие подарков в меню 'Roulette Tools'. Теперь вам нужно всего лишь подойти к Эдварду,")
+				imgui.Text(u8"поставить галочку и вы в автоматическом режиме обменяете все свои подарки на призы. Функция выключится")
+				imgui.Text(u8"автоматический, если у вас закончатся подарки.")
+				imgui.Text(u8"2. Добавлено то, что если слот в бронзовой рулетке обновляется, то прокрутка рулетки останавливается.")
+				imgui.Text(u8"Сделано для того, чтобы после смены слота ваши рулетки не крутились впустую.")
+				imgui.Text(u8"3. Добавлен Chat Сalculator от 'Adrian G'. Если функция включена, то пишите пример в чат и получаете")
+				imgui.Text(u8"под чатом ответ.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 2 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -5486,6 +5531,12 @@ function sampev.onServerMessage(color, text)
 	if text:match("Добро пожаловать на Arizona Role Play!") and mvdhelp.v then
 		fixpricecopia()
 	end
+	if text:match("Дружище, я обменяю тебе шкатулку, только если ты принесешь 20 подарков!") and podarki.v then
+		podarki.v = false
+	end
+	if text:match("Вам был добавлен предмет 'Сертификат") or text:match("Вам был добавлен предмет 'Золото'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") or text:match("Вам был добавлен предмет 'Серебро'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") and checked_test.v then
+		checked_test.v = false
+	end
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box.v then
 		checktochilki = true
 		sampSendClickTextdraw(2093)
@@ -5703,6 +5754,7 @@ function load_settings() -- загрузка настроек
 	eathouse = imgui.ImBool(ini.settings.eathouse)
 	eatmyso = imgui.ImBool(ini.settings.eatmyso)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
+	chatcalc = imgui.ImBool(ini.settings.chatcalc)
 	yashik = imgui.ImBool(ini.settings.yashik)
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
@@ -5845,10 +5897,68 @@ while true do
       active5 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
-				end
-				wait(0)
+	end
+	if podarki.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(1449, 1 , 3, -1)
+	wait(100)
+	closeDialog()
 			end
+		wait(0)
+	end
+end
+
+function calculator()
+while true do 
+	text = sampGetChatInputText()
+        if text:find('%d+') and text:find('[-+/*^%%]') and not text:find('%a+') and text ~= nil then
+            ok, number = pcall(load('return '..text))
+            result = 'Результат: '..number
+            if not isKeyDown(0x08) then
+            setClipboardText(number)
+            end
+        end
+        if text:find('%d+%%%*%d+') then
+            number1, number2 = text:match('(%d+)%%%*(%d+)')
+            number = number1*number2/100
+            ok, number = pcall(load('return '..number))
+            result = 'Результат: '..number
+            if not isKeyDown(0x08) and ok then
+            setClipboardText(number)
+            end
+        end
+        if text:find('%d+%%%/%d+') then
+            number1, number2 = text:match('(%d+)%%%/(%d+)')
+            number = number2/number1*100
+            ok, number = pcall(load('return '..number))
+            result = 'Результат: '..number
+            if not isKeyDown(0x08) and ok then
+            setClipboardText(number)
+            end
+        end
+        if text:find('%d+/%d+%%') then
+            number1, number2 = text:match('(%d+)/(%d+)%%')
+            number = number1*100/number2
+            ok, number = pcall(load('return '..number))
+            result = 'Результат: '..number..'%'
+            if not isKeyDown(0x08) and ok then
+                setClipboardText(number..'%')
+            end
+        end
+        if text == 'calchelp' then
+            help = true
+        else
+            help = false
+        end
+        if text == '' then
+            ok = false
 		end
+		wait(0)
+	end
+end
 		
 function eating()
 while true do 
@@ -6351,3 +6461,16 @@ function scriptinfo()
 	imgui.TextColoredRGB("Актуальная версия скрипта: {00C2BB}"..thisScript().version.."{FFFFFF}")
 	if imgui.Button(u8"Тема на БХ", imgui.ImVec2(720, 25)) then os.execute("start https://www.blast.hk/threads/89343/") end
 end
+
+function imgui.CenterText(text)
+    local width = imgui.GetWindowWidth()
+    local calc = imgui.CalcTextSize(text)
+    imgui.SetCursorPosX( width / 2 - calc.x / 2 )
+    imgui.Text(text)
+end
+
+function number_separator(n) 
+	local left, num, right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
+	return left..(num:reverse():gsub('(%d%d%d)','%1 '):reverse())..right
+end
+	
