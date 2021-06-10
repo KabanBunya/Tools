@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.4')
+script_version('2.5')
 
 local use = false
 local close = false
@@ -20,6 +20,28 @@ krytim = true
 local restore_text = false
 local dialogs_data = {}
 local dialogIncoming = 0
+local game_board = {
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+}
+local game = 0 -- 0 - not started, 1 - active, 2 - over
+local score = 0
+local pong = false
+local vec = {1, 1}
+local ball = {}
+local player = {}
+local bot = {}
+local state = 0
+local player_score = 0
+local bot_score = 0
+local game_speed = 1
+local bot_brain = 1
+local dif = 1
+local dif_colors = {
+	0xFF03fcfc, 0xFF02f563, 0xFFFFFF00, 0xFFFF0000
+}
 
 bike = {[481] = true, [509] = true, [510] = true}
 moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true}
@@ -222,6 +244,7 @@ local SET = {
 		deagle = false,
 		awp = false,
 		m4 = false,
+		otgun = false,
 		uzi = false,
 		ak47 = false,
 		tazer = false,
@@ -297,8 +320,10 @@ win_state['settings'] = imgui.ImBool(false)
 win_state['hotkeys'] = imgui.ImBool(false)
 win_state['leaders'] = imgui.ImBool(false)
 win_state['help'] = imgui.ImBool(false)
-win_state['calc'] = imgui.ImBool(false)
+win_state['gamer'] = imgui.ImBool(false)
 win_state['yashiki'] = imgui.ImBool(false)
+win_state['games'] = imgui.ImBool(false)
+win_state['redak'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['carsas'] = imgui.ImBool(false)
@@ -317,6 +342,7 @@ local checked_test2 = imgui.ImBool(false)
 local checked_test3 = imgui.ImBool(false)
 local checked_test4 = imgui.ImBool(false)
 local podarki = imgui.ImBool(false)
+local platina = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
@@ -642,7 +668,7 @@ function apply_custom_style1()
     colors[clr.ComboBg]                = colors[clr.PopupBg]
     colors[clr.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
-    colors[clr.MenuBarBg]              = ImVec4(0.14, 0.14, 0.14, 1.00)
+    colors[clr.MenuBarBg]              = ImVec4(0.98, 0.26, 0.26, 0.40)
     colors[clr.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
     colors[clr.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
     colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
@@ -708,7 +734,7 @@ function apply_custom_style2()
     colors[clr.ComboBg]                = colors[clr.PopupBg]
     colors[clr.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
-    colors[clr.MenuBarBg]              = ImVec4(0.14, 0.14, 0.14, 1.00)
+    colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
     colors[clr.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
     colors[clr.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
     colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
@@ -997,10 +1023,14 @@ function mainmenu()
 			win_state['about'].v = not win_state['about'].v
 		elseif win_state['help'].v then
 			win_state['help'].v = not win_state['help'].v
-		elseif win_state['calc'].v then
-			win_state['calc'].v = not win_state['calc'].v
 		elseif win_state['yashiki'].v then
 			win_state['yashiki'].v = not win_state['yashiki'].v
+		elseif win_state['gamer'].v then
+			win_state['gamer'].v = not win_state['gamer'].v
+		elseif win_state['games'].v then
+			win_state['games'].v = not win_state['games'].v
+		elseif win_state['redak'].v then
+			win_state['redak'].v = not win_state['redak'].v
 		elseif win_state['bank'].v then
 			win_state['bank'].v = not win_state['bank'].v
 		elseif win_state['shema'].v then
@@ -1062,8 +1092,11 @@ function main()
 	lua_thread.create(showInputHelp)
 	lua_thread.create(informerperem)
 	lua_thread.create(roulette)
+	lua_thread.create(ponggame)
 	lua_thread.create(eating)
+	lua_thread.create(snakegaming)
 	lua_thread.create(calculator)
+	lua_thread.create(rpgunsin)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1118,67 +1151,25 @@ function main()
 		elseif svZone then ZoneText = "Ground Forces"
 		else ZoneText = "-" end
 		
-		if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
-            local gun = getCurrentCharWeapon(PLAYER_PED)
-            if gun == 24 and deagle.v then
-                sampSendChat(u8:decode (deagleone.v))
-				wait(1500)
-				sampSendChat(u8:decode (deagletwo.v))
-            elseif gun == 31 and m4.v then
-                sampSendChat(u8:decode (m4one.v))
-				wait(1500)
-				sampSendChat(u8:decode (m4two.v))
-			elseif gun == 34 and awp.v then
-                sampSendChat(u8:decode (awpone.v))
-				wait(1500)
-				sampSendChat(u8:decode (awptwo.v))
-			elseif gun == 28 and uzi.v then
-                sampSendChat(u8:decode (uzione.v))
-				wait(1500)
-				sampSendChat(u8:decode (uzitwo.v))
-			elseif gun == 30 and ak47.v then
-                sampSendChat(u8:decode (ak47one.v))
-				wait(1500)
-				sampSendChat(u8:decode (ak47two.v))
-			elseif gun == 29 and mp5.v then
-                sampSendChat(u8:decode (mp5one.v))
-				wait(1500)
-				sampSendChat(u8:decode (mp5two.v))
-			elseif gun == 25 and shotgun.v then
-                sampSendChat(u8:decode (shotgunone.v))
-				wait(1500)
-				sampSendChat(u8:decode (shotguntwo.v))
-			elseif gun == 33 and rifle.v then
-                sampSendChat(u8:decode (rifleone.v))
-				wait(1500)
-				sampSendChat(u8:decode (rifletwo.v))
-			elseif gun == 4 and knife.v then
-                sampSendChat(u8:decode (knifeone.v))
-				wait(1500)
-				sampSendChat(u8:decode (knifetwo.v))
-			elseif gun == 23 and tazer.v then
-                sampSendChat(u8:decode (tazerone.v))
-				wait(1500)
-				sampSendChat(u8:decode (tazertwo.v))
-			elseif gun == 0 and ybral.v then
-                sampSendChat(u8:decode (ybralone.v))
-            end
-            lastgun = gun
-        end
-		
 		if files[1] then
 			for i, k in pairs(files) do
 				if k and not imgui.Process then imgui.Process = menu_spur.v or window_file[i].v end
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
 				lockPlayerControl(false)
 			end
 		elseif droneActive then
+			lockPlayerControl(true)
+		elseif win_state['games'].v then
+			lockPlayerControl(true)
+		elseif pong then
+			lockPlayerControl(true)
+		elseif snaketaken then
 			lockPlayerControl(true)
 		elseif workpause then
 			if userNick ~= "" then
@@ -1197,12 +1188,12 @@ function main()
 			end
 		end
 		
-		if isCharOnAnyBike(playerPed) and isKeyDown(0xA0) and autobike.v then
+		if not sampIsChatInputActive() and isCharOnAnyBike(playerPed) and isKeyDown(0xA0) and autobike.v then
 			if bike[getCarModel(storeCarCharIsInNoSave(playerPed))] then
 				setGameKeyState(16, 255)
 				wait(10)
 				setGameKeyState(16, 0)
-			elseif moto[getCarModel(storeCarCharIsInNoSave(playerPed))] and autobike.v then
+			elseif not sampIsChatInputActive() and moto[getCarModel(storeCarCharIsInNoSave(playerPed))] and autobike.v then
 				setGameKeyState(1, -128)
 				wait(10)
 				setGameKeyState(1, 0)
@@ -1993,6 +1984,7 @@ function saveSettings(args, key)
 	ini.settings.tazer = tazer.v
 	ini.settings.ybral = ybral.v
 	ini.settings.mp5 = mp5.v
+	ini.settings.otgun = otgun.v
 	ini.settings.shotgun = shotgun.v
 	ini.settings.rifle = rifle.v
 	ini.settings.knife = knife.v
@@ -4235,11 +4227,20 @@ function sfind()
 	notf.addNotification("[Mono Tools]: Автопоиск отключён.", 3, 3) -- при остановке скрипта уведомление
 end
 
-function recongenius()
+function recongenius(param)
+	time = tonumber(param)
 	lua_thread.create(function()
+	if time ~= nil then
+	sampDisconnectWithReason(quit)
+	wait(time*1000)
+	sampSetGamestate(1)
+	else 
+	if time == nil then
 	sampDisconnectWithReason(quit)
 	wait(30000)
 	sampSetGamestate(1)
+end
+end
 end)
 end
 
@@ -4350,7 +4351,7 @@ function imgui.OnDrawFrame()
 		if imgui.Button(u8' Roulette Tools', btn_size) then win_state['yashiki'].v = not win_state['yashiki'].v end
 		if imgui.Button(u8' Bank Menu', btn_size) then win_state['bank'].v = not win_state['bank'].v end
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
-		if imgui.Button(u8' Калькулятор', btn_size) then win_state['calc'].v = not win_state['calc'].v end
+		if imgui.Button(u8' Мини игры', btn_size) then win_state['gamer'].v = not win_state['gamer'].v end
 		imgui.End()
 	end
     
@@ -4466,7 +4467,7 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Мешок с мясом")); imgui.SameLine(); imgui.ToggleButton(u8'Мешок с мясом', eatmyso); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 30 минут есть еду из мешка с мясом.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру после рестарта через 10 минут. Также по команде /recon можно перезайти на сервер через 30 секунд.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру после рестарта через 10 минут. Также по команде /recon [время] можно перезайти на сервер.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Измененный cars")); imgui.SameLine(); imgui.ToggleButton(u8'Измененный cars', carsis); imgui.SameLine(); imgui.TextQuestion(u8"Редактирование диалога /cars. Можно использовать, например, чтобы подписать местоположение машин, изменить цвет строк в диалоге и тому подобное.");
 				if carsis.v and imgui.Button(u8' Редактировать cars', btn_size) then carsys() end
 				imgui.NextColumn()
@@ -4515,7 +4516,7 @@ function imgui.OnDrawFrame()
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Авторизация') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(750, 60), false)
+				imgui.BeginChild('##asdasasddf764', imgui.ImVec2(750, 60), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автологин")); imgui.SameLine(); imgui.ToggleButton(u8("Автологин"), autologin)
 				if autologin.v then
@@ -4529,7 +4530,7 @@ function imgui.OnDrawFrame()
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Toch Menu') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 100), false)
+				imgui.BeginChild('##asdasasddf1245', imgui.ImVec2(800, 100), false)
 				imgui.Columns(2, _, false)
 				imgui.Checkbox(u8'Камни', checked_box2)
 				imgui.SameLine()
@@ -4753,7 +4754,8 @@ function imgui.OnDrawFrame()
 				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
 				imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
 				imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
-				imgui.Checkbox(u8'Открыть подарки', podarki); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся подарки.")  
+				imgui.Checkbox(u8'Обменять подарки', podarki); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся подарки.")  
+				imgui.Checkbox(u8'Обменять гражданские талоны на рулетки', platina); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся гражданские талоны.")  
 				imgui.NextColumn()
 				imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
 				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
@@ -4802,6 +4804,9 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
+	if win_state['redak'].v then 
+		rpredak()
+	end	
 	if win_state['shema'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(510, 470), imgui.Cond.FirstUseEver)
@@ -4886,145 +4891,22 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
-	if win_state['calc'].v then -- окно "калькулятор"
-        imgui.SetNextWindowSize(imgui.ImVec2(340, 340), imgui.Cond.FirstUseEver);
-        if not window_pos then
-            ScreenX, ScreenY = getScreenResolution()
-            imgui.SetNextWindowPos(imgui.ImVec2(ScreenX / 2 , ScreenY / 2), imgui.Cond.FirsUseEver, imgui.ImVec2(0.5, 0.5))
-            window_pos = true
-        end
-		imgui.Begin(u8'Калькулятор', win_state['calc'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoScrollbar);
-		imgui.BeginChild('', imgui.ImVec2(300, 280), true);
-        imgui.Text(result);
-        imgui.Text("       ")
-        imgui.SameLine()
-        imgui.InputText(u8'     ', inputBufferText);
-		if imgui.Button('7', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s7', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('8', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s8', inputBufferText.v);
-        end
-		 imgui.SameLine();
-        if imgui.Button('9', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s9', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('/', imgui.ImVec2(40, 40)) then
-			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
-			if tonumber(bufferFirstNum) then
-				local numResult = tonumber(bufferFirstNum) / tonumber(inputBufferText.v);
-				result = string.format('%s/', tostring(numResult));
-				inputBufferText.v = '';
-			else
-				result = string.format('%s/', inputBufferText.v);
-				inputBufferText.v = '';
-			end
-		end
-		imgui.SameLine();
-		if imgui.Button('CLR', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = '';
-			result = '';
-        end
-		
-		 if imgui.Button('4', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s4', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('5', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s5', inputBufferText.v);
-        end
-		imgui.SameLine();
-        if imgui.Button('6', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s6', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('*', imgui.ImVec2(40, 40)) then
-			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
-			if tonumber(bufferFirstNum) then
-				local numResult = tonumber(bufferFirstNum) * tonumber(inputBufferText.v);
-				result = string.format('%s*', tostring(numResult));
-				inputBufferText.v = '';
-			else
-				result = string.format('%s*', inputBufferText.v);
-				inputBufferText.v = '';
-			end
-        end
-		imgui.SameLine();
-		if imgui.Button('SQRT', imgui.ImVec2(40, 40)) then
-			if tonumber(inputBufferText.v) then
-				local bufferResult = math.sqrt(tonumber(inputBufferText.v));
-				result = tostring(bufferResult);
-			end
-		end
-		if imgui.Button('1', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s1', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('2', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s2', inputBufferText.v);
-        end
-		imgui.SameLine();
-        if imgui.Button('3', imgui.ImVec2(40, 40)) then
-            inputBufferText.v = string.format('%s3', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('-', imgui.ImVec2(40, 40)) then
-            local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
-			if tonumber(bufferFirstNum) then
-				local numResult = tonumber(bufferFirstNum) - tonumber(inputBufferText.v);
-				result = string.format('%s-', tostring(numResult));
-				inputBufferText.v = '';
-			else
-				result = string.format('%s-', inputBufferText.v);
-				inputBufferText.v = '';
-			end
-        end
-		imgui.SameLine();
-		if imgui.Button('^', imgui.ImVec2(40, 40)) then
-			result = string.format('%s^', inputBufferText.v);
-			inputBufferText.v = '';
-		end
-		if imgui.Button('0', imgui.ImVec2(92, 40)) then
-            inputBufferText.v = string.format('%s0', inputBufferText.v);
-        end
-		imgui.SameLine();
-		if imgui.Button('+', imgui.ImVec2(40, 40)) then
-			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
-			if tonumber(bufferFirstNum) then
-				local numResult = tonumber(bufferFirstNum) + tonumber(inputBufferText.v);
-				result = string.format('%s+', tostring(numResult));
-				inputBufferText.v = '';
-			else
-				result = string.format('%s+', inputBufferText.v);
-				inputBufferText.v = '';
-			end
-        end
-		imgui.SameLine();
-		if imgui.Button('=', imgui.ImVec2(92, 40)) then
-			local bufferFirstNum, bufferAct = result:match('(%d+)(.+)');
-			if bufferAct == '+' then
-				local numResult = tonumber(bufferFirstNum) + tonumber(inputBufferText.v);
-				result = tostring(numResult);
-			elseif bufferAct == '-' then
-				local numResult = tonumber(bufferFirstNum) - tonumber(inputBufferText.v);
-				result = tostring(numResult);
-			elseif bufferAct == '/' then
-				local numResult = tonumber(bufferFirstNum) / tonumber(inputBufferText.v);
-				result = tostring(numResult);
-			elseif bufferAct == '*' then
-				local numResult = tonumber(bufferFirstNum) * tonumber(inputBufferText.v);
-				result = tostring(numResult);
-			elseif bufferAct == '^' then
-				local numResult = tonumber(bufferFirstNum) ^ tonumber(inputBufferText.v);
-				result = tostring(numResult);
-			end
-			inputBufferText.v = '';
-        end
-		imgui.EndChild();
-        imgui.End();
-    end
+	if win_state['gamer'].v then -- основное окошко
+		local btn_size23 = imgui.ImVec2(-25, 0) -- а это "шаблоны" размеров кнопок
+		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(260, 145), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8' Мини игры ', win_state['gamer'], imgui.WindowFlags.NoResize)
+		if imgui.Button(u8' Играть в 2048', btn_size23) then win_state['games'].v = not win_state['games'].v end
+		imgui.SameLine(); imgui.TextQuestion(u8"Правила:\n 1) В каждом раунде появляется плитка номинала «2».\n 2) Нажатием стрелки игрок может скинуть все плитки игрового поля в одну из 4 сторон. Если при сбрасывании две плитки одного номинала «налетают» одна на другую, то они превращаются в одну, номинал которой равен сумме соединившихся плиток. После каждого хода на свободной секции поля появляется новая плитка номиналом «2». Если при нажатии кнопки местоположение плиток или их номинал не изменится, то ход не совершается.\n 3) За каждое соединение игровые очки увеличиваются на номинал получившейся плитки.\n 4) Игра заканчивается поражением, если после очередного хода невозможно совершить действие.\n\n Управление:\n ^ - стрелка вверх.\n > - стрелка вправо.\n < - стрелка влево.\n v - стрелка вниз.\n ESC - закрыть игру.")
+		if imgui.Button(u8' Играть в Pong', btn_size23) then pong = not pong end
+		imgui.SameLine(); imgui.TextQuestion(u8"Правила:\n 1) Игра не имеет ограничений по времени и счету.\n 2) Перед началом игры нужно нажать кнопку 'New Game'.\n 3) Всего в игре 4 уровня сложности и 8 скоростей.\n 4) Скорость увеличивается постепенно(зависит от счета и сложности).\n 5) Цель игры - отбивать летящий в вашу сторону мяч.\n\n Управление:\n ^ - стрелка вверх.\n v - стрелка вниз.\n 'New Game' - загружает игру или сбрасывает вашу старую игру.\n 'Start' - начать игру.\n 'Pause/Resume' - поставить игру на паузу/продолжить игру.\n 'Difficulty' - уровень сложности.\n 'Speed' - скорость игры.")
+		if imgui.Button(u8' Играть в змейку', btn_size23) then snaketaken = not snaketaken end
+		imgui.SameLine(); imgui.TextQuestion(u8"Цель игры: съесть как можно больше яблок и не врезаться в самого себя.\n\n Управление:\n ^ - стрелка вверх.\n > - стрелка вправо.\n < - стрелка влево.\n v - стрелка вниз.\n E - начать игру.\n R - закрыть игру.")
+		imgui.End()
+	end
+	if win_state['games'].v then -- окно с настройками
+		gamelist()
+	end
 	if win_state['help'].v then -- окно "помощь"
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(970, 400), imgui.Cond.FirstUseEver)
@@ -5065,7 +4947,7 @@ function imgui.OnDrawFrame()
 		imgui.SetColumnWidth(-1, 800)
 		imgui.Separator()
 		if imgui.CollapsingHeader(u8' 23.04.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf354', imgui.ImVec2(750, 135), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлено автообноление.")
@@ -5077,7 +4959,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 24.04.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf876', imgui.ImVec2(750, 140), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлен автобайк и автомото. Если на вашем сервере он запрещен, то используйте на свой страх и риск.")
@@ -5089,7 +4971,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 25.04.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf753', imgui.ImVec2(750, 190), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. После обновления скрипт будет писать, что ознакомиться с обновлением вы сможете")
@@ -5104,7 +4986,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 26.04.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf8767', imgui.ImVec2(750, 190), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. В новую функцию открытия сундуков добавлен ползунок с задержкой")
@@ -5119,7 +5001,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 28.04.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf645', imgui.ImVec2(750, 70), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлен в модификации Фикс для тех, кто использует МВД Хелпер(МВД блочит инвентарь при спавне).")
@@ -5128,7 +5010,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 03.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf213', imgui.ImVec2(750, 160), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлено сохранение задержки для сундуков.")
@@ -5141,7 +5023,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 07.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf124', imgui.ImVec2(750, 40), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлен в 'Биндер и Настройки' пункт 'Майнинг'. Там вы сможете улучшать свои видеокарты.")
@@ -5149,7 +5031,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 08.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf687', imgui.ImVec2(750, 45), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Фикс улучшения видеокарт. Также скрипт работает только на Юме и Прескотте. Если нужно добавить другие")
@@ -5157,7 +5039,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 22.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf358', imgui.ImVec2(750, 120), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлена возможность перезагрузки скрипта на кнопку.")
@@ -5168,7 +5050,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 23.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf146', imgui.ImVec2(750, 70), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлен autofind. /afind - начать поиск игрока. /sfind - закончить поиск. ")
@@ -5177,7 +5059,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 28.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf34', imgui.ImVec2(750, 70), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Фикс того, что если убирали код клавиши в активаций скрипта - было невозможно писать в других полях.")
@@ -5186,7 +5068,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 29.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf6453', imgui.ImVec2(750, 140), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Фикс того, что если не выбрано в RP gun оружие, то если вы убрали оружие с рук не будет рп отыгровки")
@@ -5198,7 +5080,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 31.05.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf546', imgui.ImVec2(750, 215), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлена возможность каждые 30 минут есть из мешка с мясом в 'автоеда'.")
@@ -5214,7 +5096,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 3.06.2021') then
-				imgui.BeginChild('##as2dasasdf', imgui.ImVec2(750, 600), false)
+				imgui.BeginChild('##as2dasasdf457', imgui.ImVec2(750, 180), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Добавлено автооткрытие подарков в меню 'Roulette Tools'. Теперь вам нужно всего лишь подойти к Эдварду,")
@@ -5224,6 +5106,21 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"Сделано для того, чтобы после смены слота ваши рулетки не крутились впустую.")
 				imgui.Text(u8"3. Добавлен Chat Сalculator от 'Adrian G'. Если функция включена, то пишите пример в чат и получаете")
 				imgui.Text(u8"под чатом ответ.")
+		imgui.EndChild()
+		end
+		if imgui.CollapsingHeader(u8' 10.06.2021') then
+				imgui.BeginChild('##as2dasasdf4576', imgui.ImVec2(750, 215), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Теперь можно перезайти в игру через нужное вам время - /recon (время в сек). Если написать просто /recon -")
+				imgui.Text(u8"то вы перезайдете на сервер через 30 секунд.")
+				imgui.Text(u8"2. Убран калькулятор на imgui т.к есть калькулятор в чат и он удобнее.")
+				imgui.Text(u8"3. Добавлены мини игры '2048' от CaJlaT, 'Пинг Понг' и 'Змейка' от arsuhinars.")
+				imgui.Text(u8"4. Переписана система RP Guns.")
+				imgui.Text(u8"5. Фиксы, которые относятся к меню скрипта.")
+				imgui.Text(u8"6. Фикс, когда закрывался скрипт, если закрыть чат на ESC.")
+				imgui.Text(u8"7. Фикс, когда автобайк срабатывал при открытом чате.")
+				imgui.Text(u8"8. В 'Roulette Tools' добавлена возможность обменять гражданские талоны на платиновые рулетки.")
 		imgui.EndChild()
 		end
 		elseif selected2 == 2 then
@@ -5237,6 +5134,7 @@ function imgui.OnDrawFrame()
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/afind - Автопоиск игрока через /find.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/sfind - Отключение автопоиска.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/recon - Перезайти на сервер через 30 секунд.")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/recon [время] - Перезайти на сервер через указанное время(в секундах).")
 				imgui.Separator()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Важно! Для того, чтобы все функции скрипта работали стабильно, нужно чтобы инвентарь был на английском языке!")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Настройть язык инвентаря вы можете в /settings. Убедительная просьба не выключать автообновления в коде.")
@@ -5377,12 +5275,16 @@ function showHelp(param) -- "вопросик" для скрипта
 end
 
 function onWindowMessage(m, p)
-    if p == 0x1B and win_state['main'].v then
+    if not sampIsChatInputActive() and p == 0x1B and win_state['main'].v then
         consumeWindowMessage()
         win_state['main'].v = false
 		win_state['settings'].v = false
-		win_state['calc'].v = false
 		win_state['yashiki'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		pong = false
+		snaketaken = false
 		win_state['bank'].v = false
 		win_state['help'].v = false
     end
@@ -5533,6 +5435,9 @@ function sampev.onServerMessage(color, text)
 	end
 	if text:match("Дружище, я обменяю тебе шкатулку, только если ты принесешь 20 подарков!") and podarki.v then
 		podarki.v = false
+	end
+	if text:match("У тебя недостаточно гражданских талонов!") and platina.v then
+		platina.v = false
 	end
 	if text:match("Вам был добавлен предмет 'Сертификат") or text:match("Вам был добавлен предмет 'Золото'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") or text:match("Вам был добавлен предмет 'Серебро'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") and checked_test.v then
 		checked_test.v = false
@@ -5721,6 +5626,7 @@ function load_settings() -- загрузка настроек
 	timefix = imgui.ImInt(ini.settings.timefix)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
+	otgun = imgui.ImBool(ini.settings.otgun)
 
 	infHP = imgui.ImBool(ini.informer.hp)
 	infArmour = imgui.ImBool(ini.informer.armour)
@@ -5846,6 +5752,226 @@ function inputChat()
 	end
 end
 
+function snakegaming()
+	while true do
+	wait(0)
+	updatesnake()
+    rendersnake()
+	end
+end
+
+function ponggame()
+	local font = renderCreateFont('Arial', 10, 5)
+	local score_font = renderCreateFont('Arial', 40, 1)
+	while true do 
+		if pong then
+			showCursor(true)
+			local mX, mY = getCursorPos()
+			local x, y = convertGameScreenCoordsToWindowScreenCoords(100, 120)
+			local X, Y = getScreenResolution()
+			ball_size = Y/90
+			player_size = {X/110, Y/15}
+			X, Y = X/1.5, Y/1.9
+			if state == 1 then
+				math.randomseed(os.time())
+				ball[1] = ball[1] + vec[1]
+				ball[2] = ball[2] + vec[2]
+				--Ауты
+				game_speed = math.floor((bot_score + player_score) / 5) > 0 and math.floor((bot_score + player_score) / 5) or 1
+				game_speed = game_speed > dif * 2 and dif * 2 or game_speed
+				vec[1] = vec[1] < 0 and -game_speed*2 or game_speed*2
+				if ball[1] >= (x+X) - player_size[1] - ball_size then
+					bot_score = bot_score + 1
+					ball = {(x*2+X)/2-ball_size, (y*2+Y+2)/2-ball_size}
+					vec[1] = math.random(-4,1) < 0 and vec[1] * -1 or vec[1]
+					vec[2] = math.random(-4,1) < 0 and vec[2] * -1 or vec[2]
+					addOneOffSound(_, _, _, 1053)
+				end
+				if ball[1] <= x + player_size[1] then
+					player_score = player_score + 1
+					ball = {(x*2+X)/2-ball_size, (y*2+Y+2)/2-ball_size}
+					vec[1] = math.random(-4,1) < 0 and vec[1] * -1 or vec[1]
+					vec[2] = math.random(-4,1) < 0 and vec[2] * -1 or vec[2]
+					addOneOffSound(_, _, _, 1052)
+				end
+				--Стены
+				if ball[2] <= y+4 then
+					vec[2] = vec[2] * -1
+					addOneOffSound(_, _, _, 1137)
+				end
+				if ball[2] >= (y+Y) -4 - ball_size then
+					vec[2] = vec[2] * -1
+					addOneOffSound(_, _, _, 1137)
+				end
+				--Ракетки
+				if ball[1] > player[1] - ball_size and ball[2] <= player[2] + player_size[2] and ball[2] >= player[2] - ball_size then
+					local delta = math.random(20, 40)
+					vec[1] = math.random(-15, 15) < 0 and vec[1] * - delta/10 or vec[1] * - 1
+					print(vec[1])
+					ball[1] = ball[1] - 10
+					addOneOffSound(_, _, _, 1137)
+				end 
+				if ball[1] < bot[1] + player_size[1] and ball[2] <= bot[2] + player_size[2] and ball[2] >= bot[2] - ball_size then
+					local delta = math.random(10, 25)
+					vec[1] = math.random(-15, 10) < 0 and vec[1] * - delta/10 or vec[1] * - 1
+					print(vec[1])
+					ball[1] = ball[1] + 10
+					addOneOffSound(_, _, _, 1137)
+				end
+				bot_brain = coerce(bot_brain + math.random(-1, 1), -10, 10)
+				local delta = ball[2] - bot[2] + bot_brain
+				if delta > 0 then delta = math.max(delta-10, 0) end
+				if delta < 0 then delta = math.min(delta+10, 0) end
+				delta = coerce(delta, -game_speed, game_speed)
+				bot[2] = coerce(bot[2] + delta, 20 + player_size[2]/2, X+x-player_size[2]/2) + player_size[2] < y+Y-4 and coerce(bot[2] + delta, 20 + player_size[2]/2, X+x-player_size[2]/2) or bot[2]
+			elseif state == 0 then
+				ball = {(x*2+X-ball_size)/2, (y*2+Y-ball_size)/2}
+				player = {X+x-player_size[1]*2, (y*2+Y-player_size[2])/2}
+				bot = {x+player_size[1], (y*2+Y-player_size[2])/2}
+			end
+			if not sampIsChatInputActive() and isKeyDown(38) and player[2] > y + 4 then -- up
+				player[2] = player[2] - 2*game_speed
+			end
+			if not sampIsChatInputActive() and isKeyDown(40) and player[2] + player_size[2] < y+Y-4 then -- down
+				player[2] = player[2] + 2*game_speed
+			end
+			renderDrawBoxWithBorder(x, y, X, Y, 0xFF323232, 4, 0xFF232323)
+			renderDrawLine((x*2+X)/2+4, y, (x*2+X)/2+4, y+Y, 5, 0xFF232323)
+			renderFontDrawText(score_font, tostring(bot_score), x+x/1.2, (y+Y)/2.8, 0xFF232323)
+			renderFontDrawText(score_font, tostring(player_score), (x+X)/1.3, (y+Y)/2.8, 0xFF232323)
+			renderDrawBox(ball[1], ball[2], ball_size, ball_size, -1)
+			renderDrawBox(player[1], player[2], player_size[1], player_size[2], 0xFF15eb83)
+			renderDrawBox(bot[1], bot[2], player_size[1], player_size[2], -1)
+			renderDrawBox(x, y-25, X, 25, 0xFF242424)
+			if renderDrawButton(font, 'Start', x, y-25, 60, 29, mX, mY, 0xFF0bb563, 0xFF0afa86, -1, -1) then state = 1 end
+			if renderDrawButton(font, (state == 2 and 'Resume' or 'Pause'), x+60, y-25, 60, 29, mX, mY, 0xFF0bb563, 0xFF0afa86, -1, -1) then state = state == 2 and 1 or 2 end
+			if renderDrawButton(font, 'Difficulty: '..dif, x+120, y-25, 90, 29, mX, mY, dif_colors[dif], dif_colors[dif], -1, -1) then 
+				dif = dif == 4 and 1 or dif + 1
+				bot_brain = dif * 5
+				state = 0
+				bot_score = 0
+				player_score = 0
+			end
+			if renderDrawButton(font, 'New Game', x+210, y-25, 100, 29, mX, mY, 0xFF0bb563, 0xFF0afa86, -1, -1) then 
+				state = 0
+				bot_score = 0
+				player_score = 0
+			end
+			renderDrawBoxWithBorder(x+310, y-25, 80, 29, 0xFF323232, 4, 0xFF242424)
+			renderFontDrawText(font, 'Speed: '..game_speed, x+310+(80-renderGetFontDrawTextLength(font, 'Speed: '..game_speed))/2, y-25+(29-renderGetFontDrawHeight(font))/2, -1)
+			if renderDrawButton(font, 'X', x+X-32, y-25, 30, 29, mX, mY, 0xFF0bb563, 0xFF0afa86, -1, -1) then 
+				pong = false 
+				showCursor(false, false) 
+			end
+			if state == 2 then
+				renderDrawBox((x*2+X-(X/3))/2, (y*2+Y-(X/3))/2, X/3, X/3, 0xFF232323)
+				renderDrawBox((x*2+X-(X/3)+(X/10))/2, (y*2+Y-(X/3)+(X/10))/2, X/6-(X/10), X/3-(X/10), -1)
+				renderDrawBox((x*2+X+(X/10))/2, (y*2+Y-(X/3)+(X/10))/2, X/6-(X/10), X/3-(X/10), -1)
+			end
+		end
+	wait(0)
+	end
+end
+
+function rpgunsin()
+while true do 
+		if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
+            local gun = getCurrentCharWeapon(PLAYER_PED)
+			if otgun.v then
+			if isKeyJustPressed(key.VK_RBUTTON) and gun == 24 and deagle.v then
+                sampSendChat(u8:decode (deagleone.v))
+				wait(1500)
+				sampSendChat(u8:decode (deagletwo.v))
+            elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 31 and m4.v then
+                sampSendChat(u8:decode (m4one.v))
+				wait(1500)
+				sampSendChat(u8:decode (m4two.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 34 and awp.v then
+                sampSendChat(u8:decode (awpone.v))
+				wait(1500)
+				sampSendChat(u8:decode (awptwo.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 28 and uzi.v then
+                sampSendChat(u8:decode (uzione.v))
+				wait(1500)
+				sampSendChat(u8:decode (uzitwo.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 30 and ak47.v then
+                sampSendChat(u8:decode (ak47one.v))
+				wait(1500)
+				sampSendChat(u8:decode (ak47two.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 29 and mp5.v then
+                sampSendChat(u8:decode (mp5one.v))
+				wait(1500)
+				sampSendChat(u8:decode (mp5two.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 25 and shotgun.v then
+                sampSendChat(u8:decode (shotgunone.v))
+				wait(1500)
+				sampSendChat(u8:decode (shotguntwo.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 33 and rifle.v then
+                sampSendChat(u8:decode (rifleone.v))
+				wait(1500)
+				sampSendChat(u8:decode (rifletwo.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 4 and knife.v then
+                sampSendChat(u8:decode (knifeone.v))
+				wait(1500)
+				sampSendChat(u8:decode (knifetwo.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 23 and tazer.v then
+                sampSendChat(u8:decode (tazerone.v))
+				wait(1500)
+				sampSendChat(u8:decode (tazertwo.v))
+			elseif isKeyJustPressed(key.VK_RBUTTON) and gun == 0 and ybral.v then
+                sampSendChat(u8:decode (ybralone.v))
+			end
+			else
+            if gun == 24 and deagle.v then
+                sampSendChat(u8:decode (deagleone.v))
+				wait(1500)
+				sampSendChat(u8:decode (deagletwo.v))
+            elseif gun == 31 and m4.v then
+                sampSendChat(u8:decode (m4one.v))
+				wait(1500)
+				sampSendChat(u8:decode (m4two.v))
+			elseif gun == 34 and awp.v then
+                sampSendChat(u8:decode (awpone.v))
+				wait(1500)
+				sampSendChat(u8:decode (awptwo.v))
+			elseif gun == 28 and uzi.v then
+                sampSendChat(u8:decode (uzione.v))
+				wait(1500)
+				sampSendChat(u8:decode (uzitwo.v))
+			elseif gun == 30 and ak47.v then
+                sampSendChat(u8:decode (ak47one.v))
+				wait(1500)
+				sampSendChat(u8:decode (ak47two.v))
+			elseif gun == 29 and mp5.v then
+                sampSendChat(u8:decode (mp5one.v))
+				wait(1500)
+				sampSendChat(u8:decode (mp5two.v))
+			elseif gun == 25 and shotgun.v then
+                sampSendChat(u8:decode (shotgunone.v))
+				wait(1500)
+				sampSendChat(u8:decode (shotguntwo.v))
+			elseif gun == 33 and rifle.v then
+                sampSendChat(u8:decode (rifleone.v))
+				wait(1500)
+				sampSendChat(u8:decode (rifletwo.v))
+			elseif gun == 4 and knife.v then
+                sampSendChat(u8:decode (knifeone.v))
+				wait(1500)
+				sampSendChat(u8:decode (knifetwo.v))
+			elseif gun == 23 and tazer.v then
+                sampSendChat(u8:decode (tazerone.v))
+				wait(1500)
+				sampSendChat(u8:decode (tazertwo.v))
+			elseif gun == 0 and ybral.v then
+                sampSendChat(u8:decode (ybralone.v))
+				end
+            lastgun = gun
+			end
+		end
+		wait(0)
+	end
+end
+
 function roulette()
 while true do 
 	if checked_test5.v then
@@ -5904,6 +6030,17 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	sampSendDialogResponse(1449, 1 , 3, -1)
+	wait(100)
+	closeDialog()
+	end
+	if platina.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(1449, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(8672, 1 , 17, -1)
 	wait(100)
 	closeDialog()
 			end
@@ -6357,63 +6494,78 @@ function imgui.GetMaxWidthByText(text)
 	return max - 15
 end
 
+function rpredak()
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(835, 445), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' Редактирование отыгровок', win_state['redak'], imgui.WindowFlags.NoResize) then
+			imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 400), false)
+			imgui.Columns(2, _, false)
+			imgui.InputText(u8'Desert Eagle /do', deagleone)
+			imgui.InputText(u8'Desert Eagle /me', deagletwo)
+			imgui.NextColumn()
+			imgui.InputText(u8'Винтовка M4 /do', m4one)
+			imgui.InputText(u8'Винтовка M4 /me', m4two)
+			imgui.Separator()
+			imgui.NextColumn()
+			imgui.InputText(u8'Sniper /do', awpone)
+			imgui.InputText(u8'Sniper /me', awptwo)
+			imgui.NextColumn()
+			imgui.InputText(u8'Узи /do', uzione)
+			imgui.InputText(u8'Узи /me', uzitwo)
+			imgui.Separator()
+			imgui.NextColumn()
+			imgui.InputText(u8'Автомат АК-47 /do', ak47one)
+			imgui.InputText(u8'Автомат АК-47 /me', ak47two)
+			imgui.NextColumn()
+			imgui.InputText(u8'MP5 /do', mp5one)
+			imgui.InputText(u8'MP5 /me', mp5two)
+			imgui.Separator()
+			imgui.NextColumn()
+			imgui.InputText(u8'ShotGun /do', shotgunone)
+			imgui.InputText(u8'ShotGun /me', shotguntwo)
+			imgui.NextColumn()
+			imgui.InputText(u8'Rifle /do', rifleone)
+			imgui.InputText(u8'Rifle /me', rifletwo)
+			imgui.Separator()
+			imgui.NextColumn()
+			imgui.InputText(u8'Нож /do', knifeone)
+			imgui.InputText(u8'Нож /me', knifetwo)
+			imgui.NextColumn()
+			imgui.InputText(u8'Тайзер /do', tazerone)
+			imgui.InputText(u8'Тайзер /me', tazertwo)
+			imgui.Separator()
+			imgui.NextColumn()
+			imgui.InputText(u8'Убрать оружие /me', ybralone)
+			imgui.EndChild()
+			imgui.End()
+		end
+	end
+
 function rpguns()
-	imgui.BeginChild('##as2dasasdf', imgui.ImVec2(810, 315), false)
+	local btn_size12 = imgui.ImVec2(810, 30)
+	imgui.BeginChild('##as2dasasdf433433', imgui.ImVec2(2000, 260), false)
 		imgui.Columns(2, _, false)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отыгровка оружия, когда оно у вас в руках")); imgui.SameLine(); imgui.ToggleButton(u8'', otgun); imgui.SameLine(); imgui.Text(u8(" Отыгровка оружия при прицеливании"))
+		if imgui.Button(u8' Редактировать отыгровки', btn_size12) then win_state['redak'].v = not win_state['redak'].v end
+		imgui.NextColumn()
+		imgui.NextColumn()
 		imgui.Checkbox(u8'Desert Eagle', deagle)
-		if deagle.v then
-		imgui.InputText(u8'Desert Eagle /do', deagleone)
-		imgui.InputText(u8'Desert Eagle /me', deagletwo)
-		end
+		imgui.SameLine(380,10)
 		imgui.Checkbox(u8'Винтовка M4', m4)
-		if m4.v then
-		imgui.InputText(u8'Винтовка M4 /do', m4one)
-		imgui.InputText(u8'Винтовка M4 /me', m4two)
-		end
 		imgui.Checkbox(u8'Снайперская винтовка', awp)
-		if awp.v then
-		imgui.InputText(u8'Sniper /do', awpone)
-		imgui.InputText(u8'Sniper /me', awptwo)
-		end
+		imgui.SameLine(380,10)
 		imgui.Checkbox(u8'Узи', uzi)
-		if uzi.v then
-		imgui.InputText(u8'Узи /do', uzione)
-		imgui.InputText(u8'Узи /me', uzitwo)
-		end
 		imgui.Checkbox(u8'Автомат АК-47', ak47)
-		if ak47.v then
-		imgui.InputText(u8'Автомат АК-47 /do', ak47one)
-		imgui.InputText(u8'Автомат АК-47 /me', ak47two)
-		end
+		imgui.SameLine(380,10)
 		imgui.Checkbox(u8'MP5', mp5)
-		if mp5.v then
-		imgui.InputText(u8'MP5 /do', mp5one)
-		imgui.InputText(u8'MP5 /me', mp5two)
-		end
 		imgui.Checkbox(u8'ShotGun', shotgun)
-		if shotgun.v then
-		imgui.InputText(u8'ShotGun /do', shotgunone)
-		imgui.InputText(u8'ShotGun /me', shotguntwo)
-		end
+		imgui.SameLine(380,10)
 		imgui.Checkbox(u8'Rifle', rifle)
-		if rifle.v then
-		imgui.InputText(u8'Rifle /do', rifleone)
-		imgui.InputText(u8'Rifle /me', rifletwo)
-		end
 		imgui.Checkbox(u8'Нож', knife)
-		if knife.v then
-		imgui.InputText(u8'Нож /do', knifeone)
-		imgui.InputText(u8'Нож /me', knifetwo)
-		end
+		imgui.SameLine(380,10)
 		imgui.Checkbox(u8'Тайзер', tazer)
-		if tazer.v then
-		imgui.InputText(u8'Тайзер /do', tazerone)
-		imgui.InputText(u8'Тайзер /me', tazertwo)
-		end
 		imgui.Checkbox(u8'Убрать оружие', ybral)
-		if ybral.v then
-		imgui.InputText(u8'Убрать оружие /me', ybralone)
-		end
 		imgui.EndChild()
 	end
 
@@ -6457,7 +6609,7 @@ function scriptinfo()
 	imgui.Separator()
 	imgui.TextColoredRGB("Автор: {FF0000}Bunya{FF0000}")
 	imgui.TextColoredRGB("Помогает в тестировании: {008000}Роман{008000}")
-	imgui.TextColoredRGB("Идеи, которые были осуществлены в скрипте, предлагали: {FFD700}Роман, Июнь, Саня, Алексей и kriper2009.{FFD700}")
+	imgui.TextColoredRGB("Идеи, которые были осуществлены в скрипте, предлагали: {FFD700}Роман, Июнь, Саня, Алексей, kriper2009 и Islamov.{FFD700}")
 	imgui.TextColoredRGB("Актуальная версия скрипта: {00C2BB}"..thisScript().version.."{FFFFFF}")
 	if imgui.Button(u8"Тема на БХ", imgui.ImVec2(720, 25)) then os.execute("start https://www.blast.hk/threads/89343/") end
 end
@@ -6473,4 +6625,564 @@ function number_separator(n)
 	local left, num, right = string.match(n,'^([^%d]*%d)(%d*)(.-)$')
 	return left..(num:reverse():gsub('(%d%d%d)','%1 '):reverse())..right
 end
+
+function imgui.CustomButton(gg, color, colorHovered, colorActive, size)
+    local clr = imgui.Col
+    imgui.PushStyleColor(clr.Button, color)
+    imgui.PushStyleColor(clr.ButtonHovered, colorHovered)
+    imgui.PushStyleColor(clr.ButtonActive, colorActive)
+    if not size then size = imgui.ImVec2(0, 0) end
+    local result = imgui.Button(gg, size)
+    imgui.PopStyleColor(3)
+    return result
+end
+
+local cfg = inicfg.load({
+    databest = {
+        best = 0
+    },
+	paramssnake = {
+       fontColor = 0xFFFFFFFF,
+       snakeColor = 0xFF1E90FF,
+       deadSnakeColor = 0xFF0000CD,
+       bgColor = 0xC8000000,
+       ceilColor = 0xFF696969,
+       appleColor = 0xFFFF0000,
+       wallColor = 0xFFC0C0C0,
+       speedsnake = 0.5,
+       fieldSize = 12,
+       hasWalls = false
+    },
+    datasnake = {
+        record = 0
+    }
+}, 'Mono\\mini-games.ini')
+
+function gamelist()
+    local X, Y = getScreenResolution()
+    imgui.SetNextWindowSize(imgui.ImVec2(415, 500), imgui.Cond.FirstUseEver)
+    imgui.SetNextWindowPos(imgui.ImVec2(X / 2, Y / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	if imgui.Begin(u8' 2048', win_state['games'], imgui.WindowFlags.NoResize) then
+    imgui.BeginChild("Score", imgui.ImVec2(105, 60))
+        imgui.SetCursorPosX((105-imgui.CalcTextSize('Score: '..score).x)/2)
+        imgui.SetCursorPosY((60-imgui.CalcTextSize('Score: '..score).y)/2)
+        imgui.Text('Score: '..score)
+	imgui.EndChild()
+    imgui.SameLine()
+    imgui.BeginChild("Best", imgui.ImVec2(105, 60))
+        imgui.SetCursorPosX((105-imgui.CalcTextSize('Record: '.. tostring(cfg.databest.best)).x)/2)
+        imgui.SetCursorPosY((60-imgui.CalcTextSize('Record: '.. tostring(cfg.databest.best)).y)/2)
+        imgui.Text('Record: '.. tostring(cfg.databest.best))
+    imgui.EndChild()
+    imgui.BeginChild("game", imgui.ImVec2(385, 375), true)
+        if game == 0 then
+            if imgui.Button('Start', imgui.ImVec2(-1,-1)) then
+                math.randomseed(os.time())  
+                game_board[math.random(1, #game_board)] = 2
+                game_board[math.random(1, #game_board)] = 2
+                score = 0
+                game = 1
+            end
+        elseif game == 1 then
+            lockPlayerControl(true)
+            for i=1,#game_board do
+                if i == 4 or i == 8 or i == 12 or i == 16 then
+                    if game_board[i] == 0 then imgui.CustomButton('', imgui.ImVec4(0.2,0.2,0.2,1), imgui.ImVec4(0.2,0.2,0.2,1), imgui.ImVec4(0.2,0.2,0.2,1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 2 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.3, 0.3, 0.2, 1), imgui.ImVec4(0.3, 0.3, 0.2, 1), imgui.ImVec4(0.3, 0.3, 0.2, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 4 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.48, 0.48, 0.25, 1), imgui.ImVec4(0.48, 0.48, 0.25, 1), imgui.ImVec4(0.48, 0.48, 0.25, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 8 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.64, 0.64, 0.2, 1), imgui.ImVec4(0.64, 0.64, 0.2, 1), imgui.ImVec4(0.64, 0.64, 0.2, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 16 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.83, 0.63, 0.13, 1), imgui.ImVec4(0.83, 0.63, 0.13, 1), imgui.ImVec4(0.83, 0.63, 0.13, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 32 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.54, 0.02, 1), imgui.ImVec4(1, 0.54, 0.02, 1), imgui.ImVec4(1, 0.54, 0.02, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 64 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.37, 0, 1), imgui.ImVec4(1, 0.37, 0, 1), imgui.ImVec4(1, 0.37, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 128 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.23, 0, 1), imgui.ImVec4(1, 0.23, 0, 1), imgui.ImVec4(1, 0.23, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 256 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.12, 0, 1), imgui.ImVec4(1, 0.12, 0, 1), imgui.ImVec4(1, 0.12, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 512 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 1024 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 2048 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 4096 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 8192 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 16384 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 32768 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                else
+                    if game_board[i] == 0 then imgui.CustomButton('', imgui.ImVec4(0.2,0.2,0.2,1), imgui.ImVec4(0.2,0.2,0.2,1), imgui.ImVec4(0.2,0.2,0.2,1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 2 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.3, 0.3, 0.2, 1), imgui.ImVec4(0.3, 0.3, 0.2, 1), imgui.ImVec4(0.3, 0.3, 0.2, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 4 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.48, 0.48, 0.25, 1), imgui.ImVec4(0.48, 0.48, 0.25, 1), imgui.ImVec4(0.48, 0.48, 0.25, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 8 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.64, 0.64, 0.2, 1), imgui.ImVec4(0.64, 0.64, 0.2, 1), imgui.ImVec4(0.64, 0.64, 0.2, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 16 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(0.83, 0.63, 0.13, 1), imgui.ImVec4(0.83, 0.63, 0.13, 1), imgui.ImVec4(0.83, 0.63, 0.13, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 32 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.54, 0.02, 1), imgui.ImVec4(1, 0.54, 0.02, 1), imgui.ImVec4(1, 0.54, 0.02, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 64 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.37, 0, 1), imgui.ImVec4(1, 0.37, 0, 1), imgui.ImVec4(1, 0.37, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 128 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.23, 0, 1), imgui.ImVec4(1, 0.23, 0, 1), imgui.ImVec4(1, 0.23, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 256 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0.12, 0, 1), imgui.ImVec4(1, 0.12, 0, 1), imgui.ImVec4(1, 0.12, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 512 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 1024 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 2048 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 4096 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 8192 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 16384 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    if game_board[i] == 32768 then imgui.CustomButton(tostring(game_board[i]), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec4(1, 0, 0, 1), imgui.ImVec2(80,80)) end
+                    imgui.SameLine()
+                end
+            end
+            if not sampIsChatInputActive() and isKeyJustPressed(38) then -- up
+                for i = 16, 5, -1 do
+                    local loop_next = i-4
+                    if game_board[i] ~= 0 then
+                        if game_board[loop_next] == game_board[i] then
+                            game_board[loop_next] = game_board[loop_next] + game_board[i]
+                            score = score + game_board[i]
+                            game_board[i] = 0
+                        end
+                        if game_board[loop_next] == 0 then
+                            game_board[loop_next] = game_board[i]
+                            game_board[i] = 0
+                        end
+                    end
+                end 
+                -- много циклов не бывает ;)
+                for i = 16, 5, -1 do
+                    local loop_next = i-4
+                    if game_board[i] ~= 0 then
+                        if game_board[loop_next] == game_board[i] then
+                            game_board[loop_next] = game_board[loop_next] + game_board[i]
+                            score = score + game_board[i]
+                            game_board[i] = 0
+                        end
+                        if game_board[loop_next] == 0 then
+                            game_board[loop_next] = game_board[i]
+                            game_board[i] = 0
+                        end
+                    end
+                end
+                local random = {}
+                for i=1,#game_board do
+                    if game_board[i] == 0 then table.insert(random, i) end
+                end
+                if #random == 0 then game = 2 
+                elseif #random >= 2 then
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                    game_board[random[math.random(1, #random)]] = 2
+                else
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                end
+            end
+            if not sampIsChatInputActive() and isKeyJustPressed(40) then -- down
+                for i=1,12 do
+                    local loop_next = i+4
+                    if loop_next > 16 then return end
+                    if game_board[loop_next] == game_board[i] then
+                        score = score + game_board[i]
+                        game_board[loop_next] = game_board[loop_next] + game_board[i]
+                        game_board[i] = 0
+                    end
+                    if game_board[loop_next] == 0 then
+                        game_board[loop_next] = game_board[i]
+                        game_board[i] = 0
+                    end
+                end
+                -- много циклов не бывает ;)
+                for i=1,12 do
+                    local loop_next = i+4
+                    if loop_next > 16 then return end
+                    if game_board[loop_next] == game_board[i] then
+                        score = score + game_board[i]
+                        game_board[loop_next] = game_board[loop_next] + game_board[i]
+                        game_board[i] = 0
+                    end
+                    if game_board[loop_next] == 0 then
+                        game_board[loop_next] = game_board[i]
+                        game_board[i] = 0
+                    end
+                end
+                local random = {}
+                for i=1,#game_board do
+                    if game_board[i] == 0 then table.insert(random, i) end
+                end
+                if #random == 0 then game = 2 
+                elseif #random >= 2 then
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                    game_board[random[math.random(1, #random)]] = 2
+                else
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                end
+            end
+            if not sampIsChatInputActive() and isKeyJustPressed(37) then -- left
+                for i=16,1, -1 do
+                    local loop_next = i-1
+                    if loop_next ~= 12 and loop_next ~= 8 and loop_next ~= 4 then
+                        if game_board[i] ~= 0 then
+                            if game_board[loop_next] == game_board[i] then
+                                game_board[loop_next] = game_board[loop_next] + game_board[i]
+                                score = score + game_board[i]
+                                game_board[i] = 0
+                            end
+                            if game_board[loop_next] == 0 then
+                                game_board[loop_next] = game_board[i]
+                                game_board[i] = 0
+                            end
+                        end
+                    end
+                end
+                -- много циклов не бывает ;)
+                for i=16,1, -1 do
+                    local loop_next = i-1
+                    if loop_next ~= 12 and loop_next ~= 8 and loop_next ~= 4 then
+                        if game_board[i] ~= 0 then
+                            if game_board[loop_next] == game_board[i] then
+                                game_board[loop_next] = game_board[loop_next] + game_board[i]
+                                score = score + game_board[i]
+                                game_board[i] = 0
+                            end
+                            if game_board[loop_next] == 0 then
+                                game_board[loop_next] = game_board[i]
+                                game_board[i] = 0
+                            end
+                        end
+                    end
+                end
+                local random = {}
+                for i=1,#game_board do
+                    if game_board[i] == 0 then table.insert(random, i) end
+                end
+                if #random == 0 then game = 2 
+                elseif #random >= 2 then
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                    game_board[random[math.random(1, #random)]] = 2
+                else
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                end
+            end
+            if not sampIsChatInputActive() and isKeyJustPressed(39) then -- right
+                for i=1,15 do
+                    local loop_next = i+1
+                    if loop_next ~= 13 and loop_next ~= 9 and loop_next ~= 5 then
+                        if game_board[i] ~= 0 then
+                            if game_board[loop_next] == game_board[i] then
+                                game_board[loop_next] = game_board[loop_next] + game_board[i]
+                                score = score + game_board[i]
+                                game_board[i] = 0
+                            end
+                            if game_board[loop_next] == 0 then
+                                game_board[loop_next] = game_board[i]
+                                game_board[i] = 0
+                            end
+                        end
+                    end
+                end
+                -- много циклов не бывает ;)
+                for i=1,15 do
+                    local loop_next = i+1
+                    if loop_next ~= 13 and loop_next ~= 9 and loop_next ~= 5 then
+                        if game_board[i] ~= 0 then
+                            if game_board[loop_next] == game_board[i] then
+                                game_board[loop_next] = game_board[loop_next] + game_board[i]
+                                score = score + game_board[i]
+                                game_board[i] = 0
+                            end
+                            if game_board[loop_next] == 0 then
+                                game_board[loop_next] = game_board[i]
+                                game_board[i] = 0
+                            end
+                        end
+                    end
+                end
+                local random = {}
+                for i=1,#game_board do
+                    if game_board[i] == 0 then table.insert(random, i) end
+                end
+                if #random == 0 then game = 2 
+                elseif #random >= 2 then
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                    game_board[random[math.random(1, #random)]] = 2
+                else
+                    math.randomseed(os.time())
+                    game_board[random[math.random(1, #random)]] = 2
+                end
+            end
+        elseif game == 2 then
+            if imgui.Button('Game Over\n\n\n   Restart',imgui.ImVec2(-1,-1)) then
+                game_board = {
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0, 0, 0,
+                }
+                math.randomseed(os.time())
+                game_board[math.random(1, #game_board)] = 2
+                game_board[math.random(1, #game_board)] = 2
+				if score > cfg.databest.best then 
+				cfg.databest.best = score
+				inicfg.save(cfg, 'Mono\\mini-games.ini')
+				end
+                score = 0
+                game = 1
+            end
+        end
+    imgui.EndChild()
+    imgui.End()
+end
+end
+
+function renderDrawButton(d3dFont, Title, posX, posY, sizeX, sizeY, targetX, targetY, boxColor, targetBoxColor, textColor, targetTextColor)
+    local bool = false
+    local currentBoxColor= boxColor
+    local currentTextColor= textColor
+
+    if targetX > posX and targetX < posX + sizeX and targetY > posY and targetY < posY + sizeY then
+        currentBoxColor = targetBoxColor
+        currentTextColor = targetTextColor
+        if isKeyJustPressed(1) then bool = true end
+    end
+    renderDrawBoxWithBorder(posX, posY, sizeX, sizeY, currentBoxColor, 4, 0xFF242424)
+    renderFontDrawText(d3dFont, Title, posX+(sizeX-renderGetFontDrawTextLength(d3dFont, Title))/2, posY+(sizeY-renderGetFontDrawHeight(d3dFont))/2, currentTextColor)
+    return bool
+	end
+
+function coerce(x, lo, hi)
+    return math.max(math.min(x, hi), lo)
+end
+
+-- Получаем разрешение экрана и находим размер и позицию окна игры
+local resX, resY = getScreenResolution()
+local winSize = resY / 2
+local winX = (resX - winSize) / 2
+local winY = (resY - winSize) / 2
+local fieldOffset = winSize * 0.15                      -- Отступ для поля
+local ceilSize = winSize * 0.7 / cfg.paramssnake.fieldSize   -- Размер одной клетки
+local ceilOffset = ceilSize * 0.1                       -- Отступ для клетки
+local realCeilSize = ceilSize * 0.8                     -- Реальный размер клетки
+local paddingsnake = resX * 0.01                             -- Отступ для текста
+
+-- Состояние игры
+local isActivated = false
+local isStarted = false
+local scoresnake = 0             -- Текущий счет
+local lastUpdate = 0.0      -- Время прошлого кадра
+local timeDelta = 0.0       -- Разница между предыдущим кадром и текущим(секунды)
+
+-- Шрифт игры
+local fontSizesnake = resY * 0.02
+local fontsnake = renderCreateFont('Arial', fontSizesnake)
+
+local snake = {}        -- Массив всех клеток змеи
+local apple = {}        -- Координата яблока
+local moveSide = 0      -- Сторона, в которую движется змейка(0 - вверх, 1 - вправо, 2 - вниз, 3 - влево)
+local nextMoveSide = 0  -- Сторона движения змейки при следующем обновлении
+local timersnake = 0.0       -- Таймер игры
+
+function updatesnake()
+    if snaketaken then
+		showCursor(true)
+		isActivated = true
+	else
+		isActivated = false
+    end
+
+    timeDelta = gameClock() - lastUpdate
+    lastUpdate = gameClock()
+
+    -- Обновляем, только если включен скрипт
+    if not isActivated then 
+        return end
+
+    -- Если игра не начата и нажата клавиша E
+    if not sampIsChatInputActive() and not isStarted and wasKeyPressed(key.VK_E) then
+        startGame()
+    end
 	
+	if not sampIsChatInputActive() and isStarted and wasKeyPressed(key.VK_R) then
+        snaketaken = false
+		showCursor(false)
+    end
+
+    -- Продолжаем только если игра запущена
+    if not isStarted then
+        return end
+
+    -- Проверяем нажатие клавиш
+    if not sampIsChatInputActive() and isKeyJustPressed(38) and moveSide ~= 2 then
+        nextMoveSide = 0
+    elseif not sampIsChatInputActive() and isKeyJustPressed(39) and moveSide ~= 3 then
+        nextMoveSide = 1
+    elseif not sampIsChatInputActive() and isKeyJustPressed(40) and moveSide ~= 0 then
+        nextMoveSide = 2
+    elseif not sampIsChatInputActive() and isKeyJustPressed(37) and moveSide ~= 1 then
+        nextMoveSide = 3
+    end
+
+    -- Продолжаем только если пришло время обновления
+    timersnake = timersnake + timeDelta
+    if timersnake < cfg.paramssnake.speedsnake then
+        return end
+    timersnake = 0
+
+    moveSide = nextMoveSide
+
+    -- Двигаем хвост к голове
+    for i = table.maxn(snake), 2, -1 do
+        snake[i].x = snake[i - 1].x
+        snake[i].y = snake[i - 1].y
+    end
+
+    -- Двигаем голову
+    headPos = {}
+    if moveSide == 0 then       -- Движемся наверх
+        headPos.x = snake[1].x
+        headPos.y = snake[1].y - 1
+    elseif moveSide == 1 then   -- Движемся вправо
+        headPos.x = snake[1].x + 1
+        headPos.y = snake[1].y
+    elseif moveSide == 2 then   -- Движемся вниз
+        headPos.x = snake[1].x
+        headPos.y = snake[1].y + 1
+    elseif moveSide == 3 then   -- Движемся влево
+        headPos.x = snake[1].x - 1
+        headPos.y = snake[1].y
+    end
+
+    -- Проверяем, скушала ли змейка яблоко
+    if snake[1].x == apple.x and snake[1].y == apple.y then
+        scoresnake = scoresnake + 1
+        spawnApple()
+        table.insert(snake, 1, headPos)
+    else
+        snake[1] = headPos
+    end
+
+    if not cfg.paramssnake.hasWalls then
+        -- Если голова ушла за границу поля по горизонтали, то возвращаяем её на другой стороне.
+        if snake[1].x < 0 then
+            snake[1].x = cfg.paramssnake.fieldSize - 1
+        elseif snake[1].x >= cfg.paramssnake.fieldSize then
+            snake[1].x = 0
+        end
+
+        -- ...по вертикали
+        if snake[1].y < 0 then
+            snake[1].y = cfg.paramssnake.fieldSize - 1
+        elseif snake[1].y >= cfg.paramssnake.fieldSize then
+            snake[1].y = 0
+        end
+    else
+        -- Проверка столкновения змейки со стеной
+        if snake[1].x == 0 or snake[1].x == cfg.paramssnake.fieldSize - 1 or snake[1].y == 0 or snake[1].y == cfg.paramssnake.fieldSize - 1 then
+            isStarted = false
+            return
+        end
+    end
+
+    -- Проверяем столкновение змейки с собой
+    for i = 2, table.maxn(snake) do
+        if snake[1].x == snake[i].x and snake[1].y == snake[i].y then
+            isStarted = false
+            return
+        end
+    end
+end
+
+-- Функция запуска игры
+function startGame()
+    isStarted = true
+
+    -- Если побили рекорд
+    if scoresnake > cfg.datasnake.record then
+        cfg.datasnake.record = scoresnake
+        inicfg.save(cfg, 'snake.ini')
+    end
+    scoresnake = 0
+
+    snake = {}
+    moveSide = 0
+    nextMoveSide = 0
+    local center = cfg.paramssnake.fieldSize / 2
+    for i = 2, 0, -1 do
+        table.insert(snake, {
+            x = center,
+            y = center - i
+        })
+    end
+    
+    spawnApple()    -- Спавним яблоко
+end
+
+-- Функция спавна яблока
+function spawnApple()
+    if not cfg.paramssnake.hasWalls then
+        apple = {
+            x = math.random(0, cfg.paramssnake.fieldSize - 1),
+            y = math.random(0, cfg.paramssnake.fieldSize - 1)
+        }
+    else
+        apple = {
+            x = math.random(1, cfg.paramssnake.fieldSize - 2),
+            y = math.random(1, cfg.paramssnake.fieldSize - 2)
+        }
+    end
+end
+
+-- Функция отрисовки игры
+function rendersnake()
+    -- Отрисовываем, только если включен скрипт
+    if not isActivated then
+        return end
+
+    -- Рисуем фон
+    renderDrawBox(winX, winY, winSize, winSize, cfg.paramssnake.bgColor)
+
+    -- Рисуем поле
+    for x = 1, cfg.paramssnake.fieldSize do
+        for y = 1, cfg.paramssnake.fieldSize do
+            if cfg.paramssnake.hasWalls and (x == 1 or y == 1 or x == cfg.paramssnake.fieldSize or y == cfg.paramssnake.fieldSize) then
+                renderCeil(x - 1, y - 1, cfg.paramssnake.wallColor)
+            else
+                renderCeil(x - 1, y - 1, cfg.paramssnake.ceilColor)
+            end
+        end
+    end
+
+    -- Рисуем яблоко
+    if apple.x ~= nil and apple.y ~= nil then
+        renderCeil(apple.x, apple.y, cfg.paramssnake.appleColor)
+    end
+
+    -- Рисуем змейку
+    for i = 1, table.maxn(snake) do
+        renderCeil(snake[i].x, snake[i].y, cfg.paramssnake.snakeColor)
+    end
+
+    if not isStarted and table.maxn(snake) > 0 then
+        renderCeil(snake[1].x, snake[1].y, cfg.paramssnake.deadSnakeColor)
+    end
+
+    -- Рисуем тексты
+    renderFontDrawText(fontsnake, 'Score: ' .. tostring(scoresnake), winX + paddingsnake, winY + paddingsnake, cfg.paramssnake.fontColor)
+
+    local text = 'Record: ' .. tostring(cfg.datasnake.record)
+    local length = renderGetFontDrawTextLength(fontsnake, text)
+    renderFontDrawText(fontsnake, text, winX + winSize - paddingsnake - length, winY + paddingsnake, cfg.paramssnake.fontColor)
+
+    if not isStarted then
+        text = 'Press E to start'
+        length = renderGetFontDrawTextLength(fontsnake, text)
+        renderFontDrawText(fontsnake, text, winX + (winSize - length) / 2, winY + winSize - fontSizesnake - paddingsnake, cfg.paramssnake.fontColor)
+    end
+	if isStarted then
+        text = 'Press R to exit'
+        length = renderGetFontDrawTextLength(fontsnake, text)
+        renderFontDrawText(fontsnake, text, winX + (winSize - length) / 2, winY + winSize - fontSizesnake - paddingsnake, cfg.paramssnake.fontColor)
+    end
+end
+
+-- Функция отрисовки клетки
+function renderCeil(x, y, color)
+    renderDrawBox(
+        winX + fieldOffset + ceilSize * x + ceilOffset,
+        winY + fieldOffset + ceilSize * y + ceilOffset,
+        realCeilSize, realCeilSize, color)
+end
