@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.5')
+script_version('2.5.1')
 
 local use = false
 local close = false
@@ -1062,7 +1062,10 @@ function main()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
+	sampAddChatMessage("{FF0000}[Test Version] Фикс открывания рулеток. Фикс точилок примерно завтра.", 0x046D63)
+	sampAddChatMessage("{FF0000}[Test Version] Если вы заметили, что проблема осталась, отпишите - https://vk.com/alex_bynes", 0x046D63)
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/"..activator.v.."{FFFFFF}", 0x046D63)
+	
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
 			if p.cmd ~= "-" then
@@ -1228,43 +1231,6 @@ function main()
 		if styletest5.v then -- стили
 			apply_custom_style5()
 			end
-	if checked_test.v and krytim then
-      rul()
-      wait(222)
-      sampSendClickTextdraw(2089)
-      sampSendClickTextdraw(2091)
-      krytim = false
-    end
-    if checked_test2.v and krytim then
-      rul()
-      wait(111)
-      sampSendClickTextdraw(2083)
-      sampSendClickTextdraw(2085)
-      wait(222)
-      sampSendClickTextdraw(2089)
-      sampSendClickTextdraw(2091)
-      krytim = false
-    end
-      if checked_test3.v and krytim then
-      rul()
-      wait(111)
-      sampSendClickTextdraw(2088)
-      sampSendClickTextdraw(2090)
-      wait(222)
-      sampSendClickTextdraw(2089)
-      sampSendClickTextdraw(2091)
-      krytim = false
-    end
-    if checked_test4.v and krytim then
-      rul()
-      wait(111)
-      sampSendClickTextdraw(2108)
-      sampSendClickTextdraw(2110)
-      wait(222)
-      sampSendClickTextdraw(2089)
-      sampSendClickTextdraw(2091)
-      krytim = false
-	end
 	if video.v and yuma.v then
       active6 = true
       sampSendChat("/invent")
@@ -5974,6 +5940,46 @@ end
 
 function roulette()
 while true do 
+	if checked_test.v and krytim then
+      rul()
+	  wait(111)
+	  closeDialog()
+      wait(222)
+      sampSendClickTextdraw(2080)
+	  wait(1000)
+      sampSendClickTextdraw(2091)
+      krytim = false
+    end
+    if checked_test2.v and krytim then
+      rul()
+	  wait(111)
+	  closeDialog()
+      wait(222)
+      sampSendClickTextdraw(2085)
+	  wait(1000)
+      sampSendClickTextdraw(2091)
+      krytim = false
+    end
+      if checked_test3.v and krytim then
+      rul()
+	  wait(111)
+	  closeDialog()
+      wait(222)
+      sampSendClickTextdraw(2090)
+	  wait(1000)
+      sampSendClickTextdraw(2091)
+      krytim = false
+    end
+    if checked_test4.v and krytim then
+      rul()
+	  wait(111)
+	  closeDialog()
+      wait(222)
+      sampSendClickTextdraw(2110)
+	  wait(1000)
+      sampSendClickTextdraw(2091)
+      krytim = false
+	end
 	if checked_test5.v then
       active = true
       sampSendChat("/invent")
