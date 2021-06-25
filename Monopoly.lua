@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.5.1')
+script_version('2.5.2')
 
 local use = false
 local close = false
@@ -1062,8 +1062,9 @@ function main()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
-	sampAddChatMessage("{FF0000}[Test Version] Фикс открывания рулеток. Фикс точилок примерно завтра.", 0x046D63)
-	sampAddChatMessage("{FF0000}[Test Version] Если вы заметили, что проблема осталась, отпишите - https://vk.com/alex_bynes", 0x046D63)
+	sampAddChatMessage("{FF0000}[Test Version] 24.06.2021 - Фикс открывания рулеток.", 0x046D63)
+	sampAddChatMessage("{FF0000}[Test Version] 25.06.2021 Фикс точилок(также теперь можно ложить камни и амулеты на любую страницу).", 0x046D63)
+	sampAddChatMessage("{FF0000}[Test Version] 25.06.2021 Фикс сундуков.", 0x046D63)
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/"..activator.v.."{FFFFFF}", 0x046D63)
 	
 	if mass_bind ~= nil then
@@ -2155,22 +2156,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 19918 then
         wait(111)
         sampSendClickTextdraw(id)
-        use = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use = false
-        close = true
-      end
-      if close then
-        wait(111)
+		wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close = false
         active = false
       end
     end)
@@ -2180,22 +2175,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 19613 then
         wait(111)
         sampSendClickTextdraw(id)
-        use1 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use1 = false
-        close1 = true
-      end
-      if close1 then
-        wait(111)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close1 = false
         active1 = false
       end
     end)
@@ -2205,22 +2194,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 1353 then
         wait(111)
         sampSendClickTextdraw(id)
-        use2 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use2 = false
-        close2 = true
-      end
-      if close2 then
-        wait(111)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close2 = false
         active2 = false
       end
     end)
@@ -2255,24 +2238,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 1240 then
         wait(111)
         sampSendClickTextdraw(id)
-        use4 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use4 then 
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-		wait(1000)
-		sampSendClickTextdraw(2048)
-		use4 = false
-		close4 = true
-	  end
-	  if close4 then
-        wait(111)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-		close4 = false
         active4 = false
 		end
 	 end)
@@ -2282,22 +2257,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 1733 then
         wait(111)
         sampSendClickTextdraw(id)
-        use5 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use5 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use5 = false
-        close5 = true
-      end
-      if close5 then
-        wait(111)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close5 = false
         active5 = false
       end
     end)
@@ -2307,22 +2276,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 19918 then
         wait(111)
         sampSendClickTextdraw(id)
-        use = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use = false
-        close = true
-      end
-      if close then
-        wait(111)
+       wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close = false
         active = false
       end
     end)
@@ -2331,23 +2294,17 @@ function sampev.onShowTextDraw(id, data, textdrawId)
     lua_thread.create(function()
       if data.modelId == 19613 then
         wait(111)
-        sampSendClickTextdraw(id)
-        use1 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use1 = false
-        close1 = true
-      end
-      if close1 then
-        wait(111)
+		sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close1 = false
         active1 = false
       end
     end)
@@ -2357,22 +2314,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 1353 then
         wait(111)
         sampSendClickTextdraw(id)
-        use2 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use2 = false
-        close2 = true
-      end
-      if close2 then
-        wait(111)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close2 = false
         active2 = false
       end
     end)
@@ -2382,22 +2333,16 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 1733 then
         wait(111)
         sampSendClickTextdraw(id)
-        use5 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use5 then
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-        use5 = false
-        close5 = true
-      end
-      if close5 then
-        wait(111)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
         sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
-        close5 = false
         active5 = false
       end
     end)
@@ -3254,43 +3199,29 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 	end)
 end
+	lua_thread.create(function()
 	if data.modelId == 1615 and checktochilki then
 		if id ~= 2108 and checktochilki then
 			sampSendClickTextdraw(id)
-			sampSendClickTextdraw(2077)
-			checktochilki = false
-	else
-			sampSendClickTextdraw(2077)
 			checktochilki = false
 		end
 	elseif data.modelId == 16112 and checktochilki1 then
 		if id ~= 2108 and checktochilki1 then
 			sampSendClickTextdraw(id)
-			sampSendClickTextdraw(2077)
-			checktochilki1 = false
-		else
-			sampSendClickTextdraw(2077)
 			checktochilki1 = false
 		end
 	elseif data.modelId == 16112 and checktochilki2 then
 		if id ~= 2108 and checktochilki2 then
 			sampSendClickTextdraw(id)
-			sampSendClickTextdraw(2077)
-			checktochilki2 = false
-		else
-			sampSendClickTextdraw(2077)
 			checktochilki2 = false
 		end
 	elseif data.modelId == 1615 and checktochilki2 then
 		if id ~= 2108 and checktochilki2 then
 			sampSendClickTextdraw(id)
-			sampSendClickTextdraw(2077)
-			checktochilki2 = false
-	else
-			sampSendClickTextdraw(2077)
 			checktochilki2 = false
 		end
 	end
+end)
 end
 
 function rul(respond)
@@ -4500,16 +4431,16 @@ function imgui.OnDrawFrame()
 				imgui.Columns(2, _, false)
 				imgui.Checkbox(u8'Камни', checked_box2)
 				imgui.SameLine()
-				imgui.TextQuestion(u8"Авто-заточка аксессуара камнями(ложить камни на вторую страницу инвентаря)")
+				imgui.TextQuestion(u8"Авто-заточка аксессуара/скина камнями.")
 				imgui.SameLine()
 				imgui.Checkbox(u8'Амулеты', checked_box)
 				imgui.SameLine()
-				imgui.TextQuestion(u8"Авто-заточка аксессуара амулетами(ложить амулеты на вторую страницу инвентаря)")
+				imgui.TextQuestion(u8"Авто-заточка аксессуара/скина амулетами.")
 				imgui.SameLine()
 				imgui.Checkbox(u8'Камни и Амулеты', checked_box3)
 				imgui.SameLine()
-				imgui.TextQuestion(u8"Авто-заточка аксессуара камнями и амулетами(работает 50/50 и не у всех, тестируйте)")
-				imgui.Text(u8'Выберите на сколько будет точиться акс:')
+				imgui.TextQuestion(u8"Авто-заточка аксессуара/скина камнями и амулетами.")
+				imgui.Text(u8'Выберите на сколько будет точиться аксессуар/скин:')
 				imgui.Separator()
 				imgui.RadioButton('+1', checked_radio, 1)
 				imgui.SameLine()
@@ -5410,35 +5341,35 @@ function sampev.onServerMessage(color, text)
 	end
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box.v then
 		checktochilki = true
-		sampSendClickTextdraw(2093)
+		inventory()
 	end
 	if text:find('Успех! Вам удалось улучшить предмет') and checked_box.v then
 		number = string.match(text, 'на ++(%d+)')+0
 		if number < checked_radio.v and checked_box.v then
 			checktochilki = true
-			sampSendClickTextdraw(2093)
+			inventory()
 	end
 end
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box2.v then
 		checktochilki1 = true
-		sampSendClickTextdraw(2093)
+		inventory()
 	end
 	if text:find('Успех! Вам удалось улучшить предмет') and checked_box2.v then
 		number = string.match(text, 'на ++(%d+)')+0
 		if number < checked_radio.v and checked_box2.v then
 			checktochilki1 = true
-			sampSendClickTextdraw(2093)
+			inventory()
 	end
 end
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box3.v then
 		checktochilki2 = true
-		sampSendClickTextdraw(2093)
+		inventory()
 	end
 	if text:find('Успех! Вам удалось улучшить предмет') and checked_box3.v then
 		number = string.match(text, 'на ++(%d+)')+0
 		if number < checked_radio.v and checked_box3.v then
 		checktochilki2 = true
-		sampSendClickTextdraw(2093)
+		inventory()
 		end
 	end
 	if text:find("Игрок находится") then
@@ -5981,51 +5912,71 @@ while true do
       krytim = false
 	end
 	if checked_test5.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
     if checked_test6.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active1 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
     if checked_test7.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active2 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test8.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active3 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test9.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active4 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test10.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active5 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if yashik.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik1.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active1 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active2 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik3.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
       active5 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
@@ -7191,4 +7142,16 @@ function renderCeil(x, y, color)
         winX + fieldOffset + ceilSize * x + ceilOffset,
         winY + fieldOffset + ceilSize * y + ceilOffset,
         realCeilSize, realCeilSize, color)
+end
+
+function inventory()
+		lua_thread.create(function()
+		sampSendClickTextdraw(2092)
+		wait(1500)
+		sampSendClickTextdraw(2093)
+		wait(1500)
+		sampSendClickTextdraw(2094)
+		wait(1000)
+		sampSendClickTextdraw(2077)
+end)
 end
