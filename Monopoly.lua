@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.6.1')
+script_version('2.6.2')
 
 local use = false
 local close = false
@@ -3599,6 +3599,7 @@ end
 function recongenmenu()
 	lua_thread.create(function()
 	sampDisconnectWithReason(quit)
+	wait(15000)
 	sampSetGamestate(1)
 end)
 end
@@ -6388,7 +6389,8 @@ function tupupdate()
 	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
 	if imgui.Begin(u8' Тестовые обновления v2.6', win_state['tup'], imgui.WindowFlags.NoResize) then
 			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Фикс 'Умного реконнекта', когда из-за данной функций вас рестартило с сервера.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"1. Фикс 'Умного реконнекта', когда из-за данной функций вас рестартило с сервера.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"2. Добавлена задержка на перезаход после кика в 15 секунд.")
 			imgui.EndChild()
 			imgui.End()
 		end
