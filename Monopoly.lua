@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.6')
+script_version('2.6.1')
 
 local use = false
 local close = false
@@ -362,6 +362,7 @@ win_state['bank'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
+win_state['tup'] = imgui.ImBool(false)
 win_state['carsas'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
@@ -1075,6 +1076,8 @@ function mainmenu()
 			win_state['shematext'].v = not win_state['shematext'].v
 		elseif win_state['shemainst'].v then
 			win_state['shemainst'].v = not win_state['shemainst'].v
+		elseif win_state['tup'].v then
+			win_state['tup'].v = not win_state['tup'].v
 		elseif win_state['carsas'].v then
 			win_state['carsas'].v = not win_state['carsas'].v
 		elseif win_state['info'].v then
@@ -1102,7 +1105,7 @@ function main()
 	_, myID = sampGetPlayerIdByCharHandle(PLAYER_PED)
 	userNick = sampGetPlayerNickname(myID)
 	nickName = userNick:gsub('_', ' ')
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация {00C2BB}/"..activator.v.."{FFFFFF}", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация: {00C2BB}/"..activator.v.."{FFFFFF}. Тестовые обновления: {00C2BB}/tu", 0x046D63)
 	
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
@@ -1153,6 +1156,7 @@ function main()
 	sampRegisterChatCommand('afind', afind) -- регистрируем команду
 	sampRegisterChatCommand('sfind', sfind) -- регистрируем команду
 	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
+	sampRegisterChatCommand('tu', testupdate) -- регистрируем команду
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	while token == 0 do wait(0) end
 	if enableskin.v then changeSkin(-1, localskin.v) end
@@ -1209,7 +1213,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shematext'].v or win_state['shemainst'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['tup'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -1560,8 +1564,10 @@ end
 	if dialogId == 119 and autoopl6.v then
 	sendchot13()
 	end
-	if dialogId == 0 and recongen.v then
-	recongenmenu()
+	for line in text:gmatch("[^\n]+") do
+	if line:find('Вы были кикнуты за подозрение в читерстве') and recongen.v then
+            recongenmenu()
+        end
 	end
     if dialogId == 722 and nodial then
     nodial = false
@@ -3541,6 +3547,10 @@ function sendchot8()
 end)
 end
 
+function testupdate()
+win_state['tup'].v = not win_state['tup'].v
+end
+
 function afind(arg)
 	if arg == '' then
 		notf.addNotification("[Mono Tools]: введите ID", 3, 3) -- когда не введено ID
@@ -4166,6 +4176,9 @@ function imgui.OnDrawFrame()
 	if win_state['shemainst'].v then
 		shemainstr()
 	end
+	if win_state['tup'].v then
+		tupupdate()
+	end
 	if win_state['carsas'].v then
 		carsax()
 	end
@@ -4637,6 +4650,7 @@ function onWindowMessage(m, p)
 		win_state['shema'].v = false
 		win_state['shematext'].v = false
 		win_state['shemainst'].v = false
+		win_state['tup'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
@@ -6362,6 +6376,19 @@ function shemainstr()
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"поэтому, если доставали телефон, то лучше перезайти в игру. Чтобы прервать процесс улучшения - уберите галочки с 'Улучшение'")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"видеокарт №*' или перезагрузите скрипт через клавишу или /reload. После завершения улучшения видеокарт, рекомендую")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезагрузить скрипт.")
+			imgui.EndChild()
+			imgui.End()
+		end
+	end
+	
+function tupupdate()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' Тестовые обновления v2.6', win_state['tup'], imgui.WindowFlags.NoResize) then
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Фикс 'Умного реконнекта', когда из-за данной функций вас рестартило с сервера.")
 			imgui.EndChild()
 			imgui.End()
 		end
