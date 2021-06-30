@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.6.2')
+script_version('2.7')
 
 local use = false
 local close = false
@@ -275,6 +275,7 @@ local SET = {
 		carsis = false,
 		keyT = false,
 		launcher = false,
+		adcounter = false,
 		launcherpc = false,
 		launcherm = false,
 		deagle = false,
@@ -300,7 +301,6 @@ local SET = {
 		yashik3 = false,
 		ndr = false,
 		toch = false,
-		klava = false,
 		autobike = false,
 		styletest = false,
 		styletest1 = false,
@@ -361,6 +361,7 @@ win_state['redak'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
+win_state['shemafunks'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
 win_state['tup'] = imgui.ImBool(false)
 win_state['carsas'] = imgui.ImBool(false)
@@ -379,6 +380,10 @@ local checked_test2 = imgui.ImBool(false)
 local checked_test3 = imgui.ImBool(false)
 local checked_test4 = imgui.ImBool(false)
 local podarki = imgui.ImBool(false)
+local water = imgui.ImBool(false)
+local btc = imgui.ImBool(false)
+local liquid = imgui.ImBool(false)
+local pusk = imgui.ImBool(false)
 local platina = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
@@ -1064,18 +1069,10 @@ function mainmenu()
 			win_state['yashiki'].v = not win_state['yashiki'].v
 		elseif win_state['gamer'].v then
 			win_state['gamer'].v = not win_state['gamer'].v
-		elseif win_state['games'].v then
-			win_state['games'].v = not win_state['games'].v
-		elseif win_state['redak'].v then
-			win_state['redak'].v = not win_state['redak'].v
 		elseif win_state['bank'].v then
 			win_state['bank'].v = not win_state['bank'].v
 		elseif win_state['shema'].v then
 			win_state['shema'].v = not win_state['shema'].v
-		elseif win_state['shematext'].v then
-			win_state['shematext'].v = not win_state['shematext'].v
-		elseif win_state['shemainst'].v then
-			win_state['shemainst'].v = not win_state['shemainst'].v
 		elseif win_state['tup'].v then
 			win_state['tup'].v = not win_state['tup'].v
 		elseif win_state['carsas'].v then
@@ -1084,6 +1081,17 @@ function mainmenu()
 			win_state['info'].v = not win_state['info'].v
 		elseif menu_spur.v then
 			menu_spur.v = not menu_spur.v
+		end
+		if win_state['shemainst'].v then
+			win_state['shemainst'].v = not win_state['shemainst'].v
+		elseif win_state['shematext'].v then
+			win_state['shematext'].v = not win_state['shematext'].v
+		elseif win_state['shemafunks'].v then
+			win_state['shemafunks'].v = not win_state['shemafunks'].v
+		elseif win_state['redak'].v then
+			win_state['redak'].v = not win_state['redak'].v
+		elseif win_state['games'].v then
+			win_state['games'].v = not win_state['games'].v
 		end
 		win_state['main'].v = not win_state['main'].v
 		imgui.Process = win_state['main'].v
@@ -1136,12 +1144,14 @@ function main()
 	lua_thread.create(showInputHelp)
 	lua_thread.create(informerperem)
 	lua_thread.create(roulette)
+	lua_thread.create(raznoe)
 	lua_thread.create(shemamain)
 	lua_thread.create(ponggame)
 	lua_thread.create(eating)
 	lua_thread.create(snakegaming)
 	lua_thread.create(calculator)
 	lua_thread.create(rpgunsin)
+	lua_thread.create(strobe)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1157,6 +1167,17 @@ function main()
 	sampRegisterChatCommand('sfind', sfind) -- регистрируем команду
 	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
 	sampRegisterChatCommand('tu', testupdate) -- регистрируем команду
+	sampRegisterChatCommand("strobes", function()
+		if isCharInAnyCar(PLAYER_PED) then
+			local car = storeCarCharIsInNoSave(PLAYER_PED)
+			local driverPed = getDriverOfCar(car)
+			
+			if PLAYER_PED == driverPed then
+				local state = not isCarSirenOn(car)
+				switchCarSiren(car, state)
+			end
+		end
+	end)
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
 	while token == 0 do wait(0) end
 	if enableskin.v then changeSkin(-1, localskin.v) end
@@ -1168,8 +1189,8 @@ function main()
 		if sampGetGamestate() == 3 then sessiononline = os.time() - sessionStart end
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
-		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
-		if not sampIsChatInputActive() and klava.v and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
+		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
+		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
 		
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
@@ -1213,7 +1234,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['tup'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shematext'].v or win_state['shemafunks'].v or win_state['shemainst'].v or win_state['tup'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -1347,6 +1368,7 @@ function saveSettings(args, key)
 	ini.settings.assistant = assistant.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.adcounter = adcounter.v
 	ini.settings.deagle = deagle.v
 	ini.settings.awp = awp.v
 	ini.settings.m4 = m4.v
@@ -1372,7 +1394,6 @@ function saveSettings(args, key)
 	ini.settings.yashik3 = yashik3.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
-	ini.settings.klava = klava.v
 	ini.settings.autobike = autobike.v
 	ini.settings.styletest = styletest.v
 	ini.settings.styletest1 = styletest1.v
@@ -1540,8 +1561,12 @@ end
 	end
 	if dialogId == 991 and autopin.v then 
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
-		sampCloseCurrentDialogWithButton(0)
 		return false
+	end
+	for line in text:gmatch("[^\n]+") do
+	if line:find('PIN-код принят!') and autopin.v then
+		closeDialog()
+		end
 	end
 	if dialogId == 119 and autoopl.v then
 	sendchot5()
@@ -1563,6 +1588,9 @@ end
 	end
 	if dialogId == 119 and autoopl6.v then
 	sendchot13()
+	end
+	if dialogId == 15346 and adcounter.v then
+	sendad()
 	end
 	for line in text:gmatch("[^\n]+") do
 	if line:find('Вы были кикнуты за подозрение в читерстве') and recongen.v then
@@ -2873,7 +2901,8 @@ function sendchot9()
 	sampSendDialogResponse(784, 1 , 0, -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
 end
 	
@@ -3081,8 +3110,19 @@ function sendchot5()
 	sampSendDialogResponse(784, 1 , 0, -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
+end
+
+function sendad()
+	lua_thread.create(function() -- начало потока
+	sampSendDialogResponse(15346, 1, 1, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(100)
+	closeDialog()
+	end)
 end
 
 function sendchot13()
@@ -3145,7 +3185,8 @@ function sendchot13()
 	sampSendDialogResponse(784, 1 , 0, -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
 end
 
@@ -3273,7 +3314,8 @@ function sendchot12()
 	sampSendDialogResponse(783, 1 , 0, -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
 end
 
@@ -3361,7 +3403,8 @@ function sendchot10()
 	sampSendDialogResponse(784, 1 , 0, -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
 end
 
@@ -3390,7 +3433,8 @@ function sendchot11()
 	sampSendDialogResponse(33, 1 , u8:decode(autopassopl.v), -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
 end
 
@@ -3543,7 +3587,8 @@ function sendchot8()
 	sampSendDialogResponse(783, 1 , 0, -1)
 	wait(100)
 	closeDialog()
-	thisScript():reload()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Все выбранные вами налоги успешно оплачены!", 0x046D63)
 end)
 end
 
@@ -3684,7 +3729,7 @@ function imgui.OnDrawFrame()
     local windowPosY = getStructElement(input, 0xC, 4)
 
 	-- тут мы подстраиваем курсор под адекватность
-	imgui.ShowCursor = not win_state['informer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v
+	imgui.ShowCursor = not win_state['informer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
 	
 	if not win_state['main'].v  then 
           imgui.Process = false
@@ -3692,6 +3737,10 @@ function imgui.OnDrawFrame()
 	  
 	if not win_state['main'].v and win_state['informer'].v then 
           imgui.Process = true
+       end
+	   
+	if not win_state['main'].v and win_state['tup'] then
+		 imgui.Process = true
        end
 	
 	if win_state['main'].v then -- основное окошко
@@ -3776,10 +3825,11 @@ function imgui.OnDrawFrame()
 		end
 		if showSet == 1 then
 			if imgui.CollapsingHeader(u8' Майнинг') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 380), false)
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 410), false)
 				if imgui.Button(u8' Инструкция', btn_size) then win_state['shemainst'].v = not win_state['shemainst'].v end
 				if imgui.Button(u8' Схема', btn_size) then win_state['shema'].v = not win_state['shema'].v end
 				if imgui.Button(u8' Редактировать ID Текстдравов', btn_size) then win_state['shematext'].v = not win_state['shematext'].v end
+				if imgui.Button(u8' Прочие функции', btn_size) then win_state['shemafunks'].v = not win_state['shemafunks'].v end
 				imgui.Checkbox(u8'Улучшать видеокарту №1  ', video); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №4', video3)
 				imgui.Checkbox(u8'Улучшать видеокарту №5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №6  ', video5); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №8', video7)
 				imgui.Checkbox(u8'Улучшать видеокарту №9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №10', video9); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №11', video10); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №12', video11)
@@ -3812,9 +3862,10 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Мешок с мясом")); imgui.SameLine(); imgui.ToggleButton(u8'Мешок с мясом', eatmyso); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 30 минут есть еду из мешка с мясом.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта и после рестарта.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, сервер запоролен и после рестарта.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Измененный cars")); imgui.SameLine(); imgui.ToggleButton(u8'Измененный cars', carsis); imgui.SameLine(); imgui.TextQuestion(u8"Редактирование диалога /cars. Можно использовать, например, чтобы подписать местоположение машин, изменить цвет строк в диалоге и тому подобное.");
 				if carsis.v and imgui.Button(u8' Редактировать cars', btn_size) then carsys() end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс adCounter")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс adCounter', adcounter); imgui.SameLine(); imgui.TextQuestion(u8"Фикс для скрипта adCounter, т.к тот скрипт не отправляет объявления из-за новой системы /ad.");
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
@@ -3865,12 +3916,12 @@ function imgui.OnDrawFrame()
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автологин")); imgui.SameLine(); imgui.ToggleButton(u8("Автологин"), autologin)
 				if autologin.v then
-					imgui.InputText(u8'Пароль', autopass)
+					imgui.InputText(u8'Пароль', autopass, imgui.InputTextFlags.Password)
 				end
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Автопин")); imgui.SameLine(); imgui.ToggleButton(u8("Автопин"), autopin)
 				if autopin.v then
-					imgui.InputText(u8'Pin-код', autopasspin)
+					imgui.InputText(u8'Pin-код', autopasspin, imgui.InputTextFlags.Password)
 				end
 				imgui.EndChild()
 			end
@@ -4180,6 +4231,9 @@ function imgui.OnDrawFrame()
 	if win_state['tup'].v then
 		tupupdate()
 	end
+	if win_state['shemafunks'].v then
+		funksmenu()
+	end
 	if win_state['carsas'].v then
 		carsax()
 	end
@@ -4478,7 +4532,7 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8' 26.06.2021') then
-				imgui.BeginChild('##as2dasasdf457546', imgui.ImVec2(750, 215), false)
+				imgui.BeginChild('##as2dasasdf457546', imgui.ImVec2(750, 110), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text(u8"1. Фикс сундуков, рулеток и автоточилок.")
@@ -4486,6 +4540,29 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"3. Обновлен 'Умный реконнект'. Теперь вы автоматический перезайдете на сервер после рестарта, при кике")
 				imgui.Text(u8"античитом и при срабатываний защиты от реконнекта.")
 				imgui.Text(u8"4. Переписан 'Майнинг'. Теперь вы сможете улучшать ваши видеокарты на любом сервере Аризоны.")
+		imgui.EndChild()
+		end
+		if imgui.CollapsingHeader(u8' 30.06.2021') then
+				imgui.BeginChild('##as2dasasdf4572146', imgui.ImVec2(700, 215), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Фикс 'Умного реконнекта', когда из-за данной функций вас рестартило с сервера.")
+				imgui.Text(u8"2. Фикс закрытия меню на клавишу, когда открыты более 3-х imgui окна.")
+				imgui.Text(u8"3. Фикс 'Открытия меню на клавишу' и 'Перезагрузка скрипта на клавишу'.")
+				imgui.Text(u8"4. Добавлена задержка на перезаход после кика в 15 секунд.")
+				imgui.Text(u8"5. В 'Умный реконнект' добавлен перезаход, если сервер запоролен.")
+				imgui.Text(u8"6. Добавлена возможность смотреть тестовые обновления '/tu'. Тестовые обновления содержат в себе фиксы и")
+				imgui.Text(u8"исправления.")
+				imgui.Text(u8"7. В 'Майнинг' добавлен пункт 'Прочие функции'. В пункте есть 'Авто-покупка Дистилированной воды',")
+				imgui.Text(u8"'Забрать прибыль (BTC)', 'Запустить/Остановить видеокарты' и 'Залить охлаждающую жидкость'.")
+				imgui.Text(u8"8. Добавлено то, что если у вас кончается смазка для улучшения видеокарт, то функция отключается")
+				imgui.Text(u8"автоматический.")
+				imgui.Text(u8"9. Добавлена команда /strobes для включения и отключения стробоскопов у стандартных машин.")
+				imgui.Text(u8"10. Добавлен 'Фикс adCounter'. Данный фикс предназначен для скрипта 'adCounter' и добавлен по просьбе")
+				imgui.Text(u8"пиарщиков.")
+				imgui.Text(u8"11. Пароль от аккаунта и Пин-Код от карты теперь скрыты.")
+				imgui.Text(u8"12. Теперь авто-оплата налогов после завершения функции не перезагружает скрипт, а просто")
+				imgui.Text(u8"останавливает работу функций.")
 		imgui.EndChild()
 		end
 		elseif selected2 == 2 then
@@ -4500,6 +4577,7 @@ function imgui.OnDrawFrame()
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/sfind - Отключение автопоиска.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/recon - Перезайти на сервер через 30 секунд.")
 				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/recon [время] - Перезайти на сервер через указанное время(в секундах).")
+				imgui.TextColored(imgui.ImVec4(0.80, 0.73 , 0, 1.0), u8"/strobes - включение/отключение стробоскопов.")
 				imgui.Separator()
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Важно! Для того, чтобы все функции скрипта работали стабильно, нужно чтобы инвентарь был на английском языке!")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Настройть язык инвентаря вы можете в /settings. Убедительная просьба не выключать автообновления в коде.")
@@ -4643,6 +4721,7 @@ function onWindowMessage(m, p)
     if not sampIsChatInputActive() and p == 0x1B and win_state['main'].v then
         consumeWindowMessage()
         win_state['main'].v = false
+		win_state['tup'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
 		win_state['gamer'].v = false
@@ -4650,8 +4729,26 @@ function onWindowMessage(m, p)
 		win_state['redak'].v = false
 		win_state['shema'].v = false
 		win_state['shematext'].v = false
+		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['help'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['tup'].v then
+        consumeWindowMessage()
+        win_state['main'].v = false
 		win_state['tup'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shemafunks'].v = false
+		win_state['shemainst'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
@@ -4866,6 +4963,45 @@ end
 	if text:find("Сработала защита от реконнекта! Попробуйте переподключиться через") and recongen.v then
 		recongenmenu()
 	end
+	local videokarta = video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v
+	if text:find("У вас нет 2шт. смазки для видеокарты. Её можно скрафтить в подвале дома или купить на центральном рынке.") and videokarta then
+		video.v = false
+		video1.v = false
+		video2.v = false
+		video3.v = false
+		video4.v = false
+		video5.v = false
+		video6.v = false
+		video7.v = false
+		video8.v = false
+		video9.v = false
+		video10.v = false
+		video11.v = false
+		video12.v = false
+		video13.v = false
+		video14.v = false
+		video15.v = false
+		video16.v = false
+		video17.v = false
+		video18.v = false
+		video19.v = false
+		video20.v = false
+		video21.v = false
+		video22.v = false
+		video23.v = false
+		video24.v = false
+		video25.v = false
+		video26.v = false
+		video27.v = false
+		video28.v = false
+		video29.v = false
+		video30.v = false
+		video31.v = false
+		video32.v = false
+		video33.v = false
+		video34.v = false
+		video35.v = false
+	end
 	if toch.v then
 		text = separator(text)
 		return {color, text}
@@ -5049,6 +5185,7 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	adcounter = imgui.ImBool(ini.settings.adcounter)
 	deagle = imgui.ImBool(ini.settings.deagle)
 	awp = imgui.ImBool(ini.settings.awp)
 	m4 = imgui.ImBool(ini.settings.m4)
@@ -5073,7 +5210,6 @@ function load_settings() -- загрузка настроек
 	yashik3 = imgui.ImBool(ini.settings.yashik3)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
-	klava = imgui.ImBool(ini.settings.klava)
 	autobike = imgui.ImBool(ini.settings.autobike)
 	styletest = imgui.ImBool(ini.settings.styletest)
 	styletest1 = imgui.ImBool(ini.settings.styletest1)
@@ -5708,6 +5844,152 @@ while true do
 	end
 end
 
+function stroboscopes(adress, ptr, _1, _2, _3, _4)
+	if not isCharInAnyCar(PLAYER_PED) then return end
+	
+	if not isCarSirenOn(storeCarCharIsInNoSave(PLAYER_PED)) then
+		forceCarLights(storeCarCharIsInNoSave(PLAYER_PED), 0)
+		callMethod(7086336, ptr, 2, 0, 1, 3)
+		callMethod(7086336, ptr, 2, 0, 0, 0)
+		callMethod(7086336, ptr, 2, 0, 1, 0)
+		markCarAsNoLongerNeeded(storeCarCharIsInNoSave(PLAYER_PED)) 
+		return
+	end
+
+	callMethod(adress, ptr, _1, _2, _3, _4)
+end
+
+function strobe()
+	while true do
+		wait(0)
+		
+		if isCharInAnyCar(PLAYER_PED) then
+		
+			local car = storeCarCharIsInNoSave(PLAYER_PED)
+			local driverPed = getDriverOfCar(car)
+			
+			if isCarSirenOn(car) and PLAYER_PED == driverPed then
+			
+				local ptr = getCarPointer(car) + 1440
+				forceCarLights(car, 2)
+				wait(50)
+				stroboscopes(7086336, ptr, 2, 0, 1, 3)
+
+				while isCarSirenOn(car) do
+					wait(0)
+					for i = 1, 12 do
+						wait(100)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						wait(100)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						wait(100)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						wait(100)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+					end
+					
+					if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+
+					for i = 1, 6 do
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 1, 3)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+						wait(300)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+					end
+					
+					if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+
+					for i = 1, 3 do
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 1, 3)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(60)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						wait(60)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(350)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(60)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(50)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						wait(50)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(100)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(100)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						wait(100)
+						stroboscopes(7086336, ptr, 2, 0, 0, 1)
+						stroboscopes(7086336, ptr, 2, 0, 1, 0)
+						wait(80)
+						stroboscopes(7086336, ptr, 2, 0, 1, 1)
+						stroboscopes(7086336, ptr, 2, 0, 0, 0)
+						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+					end
+					
+					if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+				end
+			end
+		end
+	end
+end
+
+function isCharInAnyCar(ped)
+	local vehicles = {602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585, 405, 587, 409, 466, 550, 492, 566, 546, 540, 551, 421, 516, 529, 485, 552, 431, 438, 437, 574, 420, 525, 408, 416, 596, 433, 597, 427, 599, 490, 528, 601, 407, 428, 544, 523, 470, 598, 499, 588, 609, 403, 498, 514, 524, 423, 532, 414, 578, 443, 486, 515, 406, 531, 573, 456, 455, 459, 543, 422, 583, 482, 478, 605, 554, 530, 418, 572, 582, 413, 440, 536, 575, 534, 567, 535, 576, 412, 402, 542, 603, 475, 568, 557, 424, 471, 504, 495, 457, 483, 508, 500, 444, 556, 429, 411, 541, 559, 415, 561, 480, 560, 562, 506, 565, 451, 434, 558, 494, 555, 502, 477, 503, 579, 400, 404, 489, 505, 479, 442, 458}
+	for i, v in ipairs(vehicles) do
+		if isCharInModel(ped, v) then return true end
+	end
+	return false
+end
+
 function roulette()
 while true do 
 	if checked_test.v and krytim then
@@ -5819,7 +6101,13 @@ while true do
       active5 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
+		end
+		wait(0)
 	end
+end
+	
+function raznoe()
+while true do 
 	if podarki.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -5828,6 +6116,776 @@ while true do
 	sampSendDialogResponse(1449, 1 , 3, -1)
 	wait(100)
 	closeDialog()
+	end
+	if water.v then 
+	sampSendClickTextdraw(2134)
+	wait(200)
+	sampSendClickTextdraw(2128)
+	wait(200)
+	sampSendDialogResponse(3082, 1 , 1, -1)
+	wait(100)
+	sampCloseCurrentDialogWithButton(0) 
+	wait(400)
+	end
+	if btc.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15274, 1 , 1, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Сбор прибыли закончен. Функция выключилась автоматический.", 0x046D63)
+	btc.v = false
+	end
+	if liquid.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно залили жидкость в видеокарты. Функция выключилась автоматический.", 0x046D63)
+	liquid.v = false
+	end
+	if pusk.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
+	wait(10000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	wait(100)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно запустили или остановили видеокарты. Функция выключилась автоматический.", 0x046D63)
+	pusk.v = false
 	end
 	if platina.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
@@ -6361,6 +7419,24 @@ function shemamenu()
 		end
 	end
 	
+function funksmenu()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(782, 120), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' Прочие функции', win_state['shemafunks'], imgui.WindowFlags.NoResize) then
+		imgui.BeginChild('##asdasasddf2131543', imgui.ImVec2(800, 80), false)
+		imgui.Columns(2, _, false)
+		imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт.")
+		imgui.Checkbox(u8'Запустить/Остановить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает или останавливает видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.NextColumn()
+		imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.EndChild()
+		imgui.End()
+		end
+	end
+	
 function shemainstr()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
@@ -6387,10 +7463,9 @@ function tupupdate()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
-	if imgui.Begin(u8' Тестовые обновления v2.6', win_state['tup'], imgui.WindowFlags.NoResize) then
+	if imgui.Begin(u8' Тестовые обновления v2.7', win_state['tup'], imgui.WindowFlags.NoResize) then
 			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"1. Фикс 'Умного реконнекта', когда из-за данной функций вас рестартило с сервера.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"2. Добавлена задержка на перезаход после кика в 15 секунд.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -6463,7 +7538,8 @@ function scriptinfo()
 	imgui.Separator()
 	imgui.TextColoredRGB("Автор: {FF0000}Bunya{FF0000}")
 	imgui.TextColoredRGB("Помогает в тестировании: {008000}Роман{008000}")
-	imgui.TextColoredRGB("Идеи, которые были осуществлены в скрипте, предлагали: {FFD700}Роман, Июнь, Саня, Алексей, kriper2009 и Islamov.{FFD700}")
+	imgui.TextColoredRGB("Идеи, которые были осуществлены в скрипте, предлагали: {FFD700}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль и{FFD700}")
+	imgui.TextColoredRGB("{FFD700}mizert.{FFD700}")
 	imgui.TextColoredRGB("Актуальная версия скрипта: {00C2BB}"..thisScript().version.."{FFFFFF}")
 	if imgui.Button(u8"Тема на БХ", imgui.ImVec2(720, 25)) then os.execute("start https://www.blast.hk/threads/89343/") end
 end
@@ -7051,4 +8127,13 @@ function inventory()
 		wait(1000)
 		sampSendClickTextdraw(2077)
 end)
+end
+
+function onReceivePacket(id)
+	if recongen.v then
+	    if id == 37 then
+			i, p = sampGetCurrentServerAddress()
+			sampConnectToServer(i, p)
+		end
+	end
 end
