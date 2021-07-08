@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.7.1')
+script_version('2.7.2')
 
 local use = false
 local close = false
@@ -15,6 +15,18 @@ local close3 = false
 local close4 = false
 local close5 = false
 local fontsize = nil
+local kamensession = 0
+local metalsession = 0
+local bronzasession = 0
+local silversession = 0
+local goldsession = 0
+local sborsession = 0
+local zpsession = 0
+local kamenitog = 0
+local metalitog = 0
+local bronzaitog = 0
+local silveritog = 0
+local golditog = 0
 krytim = true
 
 local restore_text = false
@@ -160,6 +172,10 @@ mouseCoord = false
 token = 1 
 mouseCoord2 = false 
 mouseCoord3 = false 
+mouseCoord4 = false 
+mouseCoord5 = false 
+mouseCoord6 = false
+mouseCoord7 = false  
 getServerColored = '' 
 
 blackbase = {} -- 
@@ -180,9 +196,40 @@ edit_size_y						= imgui.ImInt(-1)
 russian_characters				= { [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
 	
+local cfg = inicfg.load({
+    databest = {
+        best = 0
+    },
+	paramssnake = {
+       fontColor = 0xFFFFFFFF,
+       snakeColor = 0xFF1E90FF,
+       deadSnakeColor = 0xFF0000CD,
+       bgColor = 0xC8000000,
+       ceilColor = 0xFF696969,
+       appleColor = 0xFFFF0000,
+       wallColor = 0xFFC0C0C0,
+       speedsnake = 0.5,
+       fieldSize = 12,
+       hasWalls = false
+    },
+    datasnake = {
+        record = 0
+    },
+	shahta = {
+		kamentime = 0,
+		metaltime = 0,
+		bronzatime = 0,
+		silvertime = 0,
+		goldtime = 0,
+		zptime = 0,
+		sbortime = 0
+	}
+}, 'Mono\\mini-games.ini')	
+	
 local SET = {
  	settings = {
 		autologin = false,
+		autoryda = false,
 		autopin = false,
 		autopay = false,
 		autoopl = false,
@@ -193,10 +240,20 @@ local SET = {
 		autoopl5 = false,
 		autoopl6 = false,
 		lock = false,
-		autopass = '',
-		autopasspin = '',
+		autokamen = '8000',
+		autometal = '4000',
+		autobronza = '40000',
+		autosilver = '100000',
+		autogold = '80000',
+		autopass = '123456',
+		autopasspin = '123456',
 		autoklava = '114',
 		autoklavareload = '115',
+		pismoreal = '1) ',
+		pismoreal1 = '2) ',
+		pismoreal2 = '3) ',
+		pismoreal3 = '4) ',
+		pismoreal4 = '5) ',
 		activator = 'mono',
 		autopassopl = '6',
 		autopassopl1 = '15',
@@ -265,8 +322,11 @@ local SET = {
 		shematext36 = '2208',
 		timecout = false,
 		gangzones = false,
+		ryda = false,
 		zones = false,
 		assistant = false,
+		assistant1 = false,
+		assistant2 = false,
 		tag = '',
 		enable_tag = false,
 		chatInfo = false,
@@ -295,6 +355,7 @@ local SET = {
 		eatmyso = false,
 		mvdhelp = false,
 		chatcalc = false,
+		pismo = false,
 		yashik = false,
 		yashik1 = false,
 		yashik2 = false,
@@ -312,6 +373,10 @@ local SET = {
 		infoY = 0,
 		infoX2 = 0,
 		infoY2 = 0,
+		infoX3 = 0,
+		infoY3 = 0,
+		infoX4 = 0,
+		infoY4 = 0,
 		spOtr = '',
 		timefix = 3,
 		enableskin = false,
@@ -320,6 +385,14 @@ local SET = {
 	assistant = {
 		asX = 1,
 		asY = 1
+	},
+	assistant1 = {
+		asX3 = 1,
+		asY3 = 1
+	},
+	assistant2 = {
+		asX4 = 1,
+		asY4 = 1
 	},
 	DIALOG_EDITOR = 
 		{
@@ -336,6 +409,18 @@ local SET = {
 		online = true,
 		ping = true,
 		hpcar = true
+	},
+	shahtainformer = {
+		kamen = true,
+		metal = true,
+		bronza = true,
+		silver = true,
+		gold = true,
+		zp = true,
+		sbor = true
+	},
+	pismoinformer = {
+		
 	}
 }
 
@@ -359,6 +444,7 @@ win_state['yashiki'] = imgui.ImBool(false)
 win_state['games'] = imgui.ImBool(false)
 win_state['redak'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
+win_state['shahtamenu'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
 win_state['shemafunks'] = imgui.ImBool(false)
@@ -370,6 +456,9 @@ win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
 win_state['base'] = imgui.ImBool(false)
 win_state['informer'] = imgui.ImBool(false)
+win_state['pismoinformer'] = imgui.ImBool(false)
+win_state['shahtainformer'] = imgui.ImBool(false)
+win_state['pismotext'] = imgui.ImBool(false)
 win_state['regst'] = imgui.ImBool(false)
 win_state['renew'] = imgui.ImBool(false)
 win_state['find'] = imgui.ImBool(false)
@@ -1086,12 +1175,16 @@ function mainmenu()
 			win_state['shemainst'].v = not win_state['shemainst'].v
 		elseif win_state['shematext'].v then
 			win_state['shematext'].v = not win_state['shematext'].v
+		elseif win_state['pismotext'].v then
+			win_state['pismotext'].v = not win_state['pismotext'].v
 		elseif win_state['shemafunks'].v then
 			win_state['shemafunks'].v = not win_state['shemafunks'].v
 		elseif win_state['redak'].v then
 			win_state['redak'].v = not win_state['redak'].v
 		elseif win_state['games'].v then
 			win_state['games'].v = not win_state['games'].v
+		elseif win_state['shahtamenu'].v then
+			win_state['shahtamenu'].v = not win_state['shahtamenu'].v
 		end
 		win_state['main'].v = not win_state['main'].v
 		imgui.Process = win_state['main'].v
@@ -1143,11 +1236,14 @@ function main()
 	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD)
 	lua_thread.create(showInputHelp)
 	lua_thread.create(informerperem)
+	lua_thread.create(informerperemshahta)
+	lua_thread.create(informerperempismo)
 	lua_thread.create(roulette)
 	lua_thread.create(raznoe)
 	lua_thread.create(shemamain)
 	lua_thread.create(ponggame)
 	lua_thread.create(eating)
+	lua_thread.create(shahta)
 	lua_thread.create(snakegaming)
 	lua_thread.create(calculator)
 	lua_thread.create(rpgunsin)
@@ -1234,7 +1330,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shematext'].v or win_state['shemafunks'].v or win_state['shemainst'].v or win_state['tup'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemafunks'].v or win_state['shemainst'].v or win_state['pismotext'].v or win_state['tup'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -1365,7 +1461,18 @@ function saveSettings(args, key)
 	ini.informer.online = infonline.v
 	ini.informer.ping = infping.v
 	ini.informer.hpcar = infhpcar.v
+	
+	ini.shahtainformer.kamen = infkamen.v
+	ini.shahtainformer.metal = infmetal.v
+	ini.shahtainformer.bronza = infbronza.v
+	ini.shahtainformer.silver = infsilver.v
+	ini.shahtainformer.gold = infgold.v
+	ini.shahtainformer.zp = infzp.v
+	ini.shahtainformer.sbor = infsbor.v
+	
 	ini.settings.assistant = assistant.v
+	ini.settings.assistant1 = assistant1.v
+	ini.settings.assistant2 = assistant2.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
 	ini.settings.adcounter = adcounter.v
@@ -1388,6 +1495,7 @@ function saveSettings(args, key)
 	ini.settings.eatmyso = eatmyso.v
 	ini.settings.mvdhelp = mvdhelp.v
 	ini.settings.chatcalc = chatcalc.v
+	ini.settings.pismo = pismo.v
 	ini.settings.yashik = yashik.v
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
@@ -1406,6 +1514,7 @@ function saveSettings(args, key)
 	ini.settings.skin = localskin.v
 	ini.settings.timecout = timecout.v
 	ini.settings.gangzones = gangzones.v
+	ini.settings.ryda = ryda.v
 	ini.settings.zones = zones.v
 	ini.settings.chatInfo = chatInfo.v
 	ini.settings.raskladka = raskladka.v
@@ -1415,9 +1524,19 @@ function saveSettings(args, key)
 	ini.settings.infoY = infoY
 	ini.settings.infoX2 = infoX2
 	ini.settings.infoY2 = infoY2
+	ini.settings.infoX3 = infoX3
+	ini.settings.infoY3 = infoY3
+	ini.settings.infoX4 = infoX4
+	ini.settings.infoY4 = infoY4
 	ini.settings.findX = findX
 	ini.settings.findY = findY
 	ini.settings.tag = u8:decode(rtag.v)
+	
+	ini.settings.autokamen = u8:decode(autokamen.v)
+	ini.settings.autometal = u8:decode(autometal.v)
+	ini.settings.autobronza = u8:decode(autobronza.v)
+	ini.settings.autosilver = u8:decode(autosilver.v)
+	ini.settings.autogold = u8:decode(autogold.v)
 	
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autopasspay = u8:decode(autopasspay.v)
@@ -1488,8 +1607,14 @@ function saveSettings(args, key)
 	ini.settings.knifeone = u8:decode(knifeone.v)
 	ini.settings.knifetwo = u8:decode(knifetwo.v)
 	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
+	ini.settings.pismoreal = u8:decode(pismoreal.v)
+	ini.settings.pismoreal1 = u8:decode(pismoreal1.v)
+	ini.settings.pismoreal2 = u8:decode(pismoreal2.v)
+	ini.settings.pismoreal3 = u8:decode(pismoreal3.v)
+	ini.settings.pismoreal4 = u8:decode(pismoreal4.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
+	ini.settings.autoryda = autoryda.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autoopl = autoopl.v
 	ini.settings.autoopl1 = autoopl1.v
@@ -1503,6 +1628,10 @@ function saveSettings(args, key)
 
 	ini.assistant.asX = asX
 	ini.assistant.asY = asY
+	ini.assistant1.asX3 = asX3
+	ini.assistant1.asY3 = asY3
+	ini.assistant2.asX4 = asX4
+	ini.assistant2.asY4 = asY4
 
 	ini.settings.enable_tag = enable_tag.v
 	ini.settings.spOtr = u8:decode(spOtr.v)
@@ -1830,14 +1959,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close6 = true
 		end
 		if close6 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close6 = false
         active6 = false
       end
@@ -1855,14 +1980,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close7 = true
 		end
 		if close7 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close7 = false
         active7 = false
       end
@@ -1880,14 +2001,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close8 = true
 		end
 		if close8 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close8 = false
         active8 = false
       end
@@ -1905,14 +2022,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close9 = true
 		end
 		if close9 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close9 = false
         active9 = false
       end
@@ -1930,14 +2043,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close10 = true
 		end
 		if close10 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close10 = false
         active10 = false
       end
@@ -1955,14 +2064,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close11 = true
 		end
 		if close11 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close11 = false
         active11 = false
       end
@@ -1980,14 +2085,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close12 = true
 		end
 		if close12 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close12 = false
         active12 = false
       end
@@ -2005,14 +2106,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close13 = true
 		end
 		if close13 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close13 = false
         active13 = false
       end
@@ -2030,14 +2127,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close14 = true
 		end
 		if close14 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close14 = false
         active14 = false
       end
@@ -2055,14 +2148,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close15 = true
 		end
 		if close15 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close15 = false
         active15 = false
       end
@@ -2080,14 +2169,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close16 = true
 		end
 		if close16 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close16 = false
         active16 = false
       end
@@ -2105,14 +2190,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close17 = true
 		end
 		if close17 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close17 = false
         active17 = false
       end
@@ -2130,14 +2211,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close18 = true
 		end
 		if close18 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close18 = false
         active18 = false
       end
@@ -2155,14 +2232,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close19 = true
 		end
 		if close19 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close19 = false
         active19 = false
       end
@@ -2180,14 +2253,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close20 = true
 		end
 		if close20 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close20 = false
         active20 = false
       end
@@ -2205,14 +2274,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close21 = true
 		end
 		if close21 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close21 = false
         active21 = false
       end
@@ -2230,14 +2295,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close22 = true
 		end
 		if close22 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close22 = false
         active22 = false
       end
@@ -2255,14 +2316,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close23 = true
 		end
 		if close23 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close23 = false
         active23 = false
       end
@@ -2280,14 +2337,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close24 = true
 		end
 		if close24 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close24 = false
         active24 = false
       end
@@ -2305,14 +2358,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close25 = true
 		end
 		if close25 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close25 = false
         active25 = false
       end
@@ -2330,14 +2379,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close26 = true
 		end
 		if close26 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close26 = false
         active26 = false
       end
@@ -2355,14 +2400,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close27 = true
 		end
 		if close27 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close27 = false
         active27 = false
       end
@@ -2380,14 +2421,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close28 = true
 		end
 		if close28 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close28 = false
         active28 = false
       end
@@ -2405,14 +2442,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close29 = true
 		end
 		if close29 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close29 = false
         active29 = false
       end
@@ -2430,14 +2463,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close30 = true
 		end
 		if close30 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close30 = false
         active30 = false
       end
@@ -2455,14 +2484,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close31 = true
 		end
 		if close31 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close31 = false
         active31 = false
       end
@@ -2480,14 +2505,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close32 = true
 		end
 		if close32 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close32 = false
         active32 = false
       end
@@ -2505,14 +2526,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close33 = true
 		end
 		if close33 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close33 = false
         active33 = false
       end
@@ -2530,14 +2547,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close34 = true
 		end
 		if close34 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close34 = false
         active34 = false
       end
@@ -2555,14 +2568,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close35 = true
 		end
 		if close35 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close35 = false
         active35 = false
       end
@@ -2580,14 +2589,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close36 = true
 		end
 		if close36 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close36 = false
         active36 = false
       end
@@ -2605,14 +2610,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close37 = true
 		end
 		if close37 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close37 = false
         active37 = false
       end
@@ -2630,14 +2631,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close38 = true
 		end
 		if close38 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close38 = false
         active38 = false
       end
@@ -2655,14 +2652,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close39 = true
 		end
 		if close39 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close39 = false
         active39 = false
       end
@@ -2680,14 +2673,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close40 = true
 		end
 		if close40 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close40 = false
         active40 = false
       end
@@ -2705,14 +2694,10 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         close41 = true
 		end
 		if close41 then
-        wait(111)
-        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
-		wait(111)
-		sampSendClickTextdraw(2135)
         close41 = false
         active41 = false
       end
@@ -2779,9 +2764,9 @@ function sendchot6()
 	wait(100)
 	closeDialog()
 	wait(200)
-	setVirtualKeyDown(key.VK_N, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_N, false)
+	sampSendClickTextdraw(2110)
+	wait(300)
+	sendKey(128)
 	wait(200)
 	sampSendDialogResponse(33, 1 , u8:decode(autopasspaypin.v), -1)
 	wait(200)
@@ -3802,13 +3787,21 @@ function imgui.OnDrawFrame()
     local windowPosY = getStructElement(input, 0xC, 4)
 
 	-- тут мы подстраиваем курсор под адекватность
-	imgui.ShowCursor = not win_state['informer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
+	imgui.ShowCursor = not win_state['informer'].v and not win_state['pismoinformer'].v and not win_state['shahtainformer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
 	
 	if not win_state['main'].v  then 
           imgui.Process = false
        end
 	  
 	if not win_state['main'].v and win_state['informer'].v then 
+          imgui.Process = true
+       end
+	   
+	if not win_state['main'].v and win_state['pismoinformer'].v then 
+          imgui.Process = true
+       end
+	   
+	if not win_state['main'].v and win_state['shahtainformer'].v then 
           imgui.Process = true
        end
 	   
@@ -3897,28 +3890,8 @@ function imgui.OnDrawFrame()
 			end
 		end
 		if showSet == 1 then
-			if imgui.CollapsingHeader(u8' Майнинг') then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 375), false)
-				if imgui.Button(u8' Инструкция', btn_size25) then win_state['shemainst'].v = not win_state['shemainst'].v end
-				imgui.SameLine()
-				if imgui.Button(u8' Схема', btn_size25) then win_state['shema'].v = not win_state['shema'].v end
-				if imgui.Button(u8' Редактировать ID Текстдравов', btn_size25) then win_state['shematext'].v = not win_state['shematext'].v end
-				imgui.SameLine()
-				if imgui.Button(u8' Прочие функции', btn_size25) then win_state['shemafunks'].v = not win_state['shemafunks'].v end
-				if imgui.Button(u8' Завершить улучшение видеокарт', btn_size) then videofailed() end
-				imgui.Checkbox(u8'Улучшать видеокарту №1  ', video); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №4', video3)
-				imgui.Checkbox(u8'Улучшать видеокарту №5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №6  ', video5); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №8', video7)
-				imgui.Checkbox(u8'Улучшать видеокарту №9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №10', video9); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №11', video10); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №12', video11)
-				imgui.Checkbox(u8'Улучшать видеокарту №13', video12); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №14', video13); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №15', video14); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №16', video15)
-				imgui.Checkbox(u8'Улучшать видеокарту №17', video16); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №18', video17); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №19', video18); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №20', video19)
-				imgui.Checkbox(u8'Улучшать видеокарту №21', video20); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №22', video21); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №23', video22); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №24', video23)
-				imgui.Checkbox(u8'Улучшать видеокарту №25', video24); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №26', video25); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №27', video26); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №28', video27)
-				imgui.Checkbox(u8'Улучшать видеокарту №29', video28); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №30', video29); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №31', video30); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №32', video31)
-				imgui.Checkbox(u8'Улучшать видеокарту №33', video32); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №34', video33); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №35', video34); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №36', video35)
-				imgui.EndChild()
-			end
 			if imgui.CollapsingHeader(u8' Модификации') then
-				imgui.BeginChild('##as2dasasdf468', imgui.ImVec2(750, 315), false)
+				imgui.BeginChild('##as2dasasdf468', imgui.ImVec2(750, 350), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру. PC - не отображает luxe машины. Mobile - отображает luxe машины.")
@@ -3948,6 +3921,18 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Заметки")); imgui.SameLine(); imgui.ToggleButton(u8'Заметки', pismo)
+				if pismo.v then
+					imgui.SameLine()
+					if imgui.Button(u8'Переместить') then 
+						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63)
+						win_state['settings'].v = not win_state['settings'].v 
+						win_state['main'].v = not win_state['main'].v
+						win_state['informer'].v = not win_state['informer'].v
+						win_state['shahtainformer'].v = not win_state['shahtainformer'].v
+						mouseCoord6 = true 
+					end
+				end
 				imgui.Text(u8(" Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 					imgui.InputText(u8'', autoklava)
 					imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
@@ -3956,8 +3941,54 @@ function imgui.OnDrawFrame()
 					imgui.InputText(u8'  ', activator)
 				imgui.EndChild()
 			end
-			if imgui.CollapsingHeader(u8' RP Guns') then
-				rpguns()
+			if imgui.CollapsingHeader(u8' Майнинг') then
+				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 375), false)
+				if imgui.Button(u8' Инструкция', btn_size25) then win_state['shemainst'].v = not win_state['shemainst'].v end
+				imgui.SameLine()
+				if imgui.Button(u8' Схема', btn_size25) then win_state['shema'].v = not win_state['shema'].v end
+				if imgui.Button(u8' Редактировать ID Текстдравов', btn_size25) then win_state['shematext'].v = not win_state['shematext'].v end
+				imgui.SameLine()
+				if imgui.Button(u8' Прочие функции', btn_size25) then win_state['shemafunks'].v = not win_state['shemafunks'].v end
+				if imgui.Button(u8' Завершить улучшение видеокарт', btn_size) then videofailed() end
+				imgui.Checkbox(u8'Улучшать видеокарту №1  ', video); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №4', video3)
+				imgui.Checkbox(u8'Улучшать видеокарту №5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №6  ', video5); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №8', video7)
+				imgui.Checkbox(u8'Улучшать видеокарту №9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №10', video9); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №11', video10); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №12', video11)
+				imgui.Checkbox(u8'Улучшать видеокарту №13', video12); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №14', video13); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №15', video14); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №16', video15)
+				imgui.Checkbox(u8'Улучшать видеокарту №17', video16); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №18', video17); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №19', video18); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №20', video19)
+				imgui.Checkbox(u8'Улучшать видеокарту №21', video20); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №22', video21); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №23', video22); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №24', video23)
+				imgui.Checkbox(u8'Улучшать видеокарту №25', video24); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №26', video25); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №27', video26); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №28', video27)
+				imgui.Checkbox(u8'Улучшать видеокарту №29', video28); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №30', video29); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №31', video30); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №32', video31)
+				imgui.Checkbox(u8'Улучшать видеокарту №33', video32); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №34', video33); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №35', video34); imgui.SameLine(); imgui.Checkbox(u8'Улучшать видеокарту №36', video35)
+				imgui.EndChild()
+			end
+			if imgui.CollapsingHeader(u8' Шахтёр') then
+				imgui.BeginChild('##asdasasdd434', imgui.ImVec2(800, 190), false)
+				if imgui.Button(u8' Редактировать цены на ресурсы', btn_size) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
+				imgui.Checkbox(u8'Автоальт на руде', autoryda)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Включить счетчик руд")); imgui.SameLine(); imgui.ToggleButton(u8'Включить счетчик руд', ryda)
+				if ryda.v then
+					imgui.SameLine()
+					if imgui.Button(u8'Переместить') then 
+						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63)
+						win_state['settings'].v = not win_state['settings'].v 
+						win_state['main'].v = not win_state['main'].v
+						win_state['informer'].v = not win_state['informer'].v
+						win_state['pismoinformer'].v = not win_state['pismoinformer'].v
+						mouseCoord5 = true 
+					end
+				end
+				imgui.SameLine(380)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение камня")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение камня', infkamen)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение металла")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение металла', infmetal)
+				imgui.SameLine(380)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение бронзы")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение бронзы', infbronza)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение серебра")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение серебра', infsilver)
+				imgui.SameLine(380)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение золота")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение золота', infgold)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение собранной руды")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение собранной руды', infsbor)
+				imgui.SameLine(380)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение заработка")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение денег', infzp)
+				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Информер') then
 				imgui.BeginChild('##25252', imgui.ImVec2(750, 190), false)
@@ -3969,6 +4000,8 @@ function imgui.OnDrawFrame()
 						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63)
 						win_state['settings'].v = not win_state['settings'].v 
 						win_state['main'].v = not win_state['main'].v 
+						win_state['shahtainformer'].v = not win_state['shahtainformer'].v
+						win_state['pismoinformer'].v = not win_state['pismoinformer'].v
 						mouseCoord = true 
 					end
 				end
@@ -3986,6 +4019,9 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение ФПС")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение ФПС', inffps)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отображение времени")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение времени', infTime)
 				imgui.EndChild()
+			end
+			if imgui.CollapsingHeader(u8' RP Guns') then
+				rpguns()
 			end
 			if imgui.CollapsingHeader(u8' Авторизация') then
 				imgui.BeginChild('##asdasasddf764', imgui.ImVec2(750, 60), false)
@@ -4298,6 +4334,12 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
+	if win_state['pismotext'].v then
+		pismomenu()
+	end
+	if win_state['shahtamenu'].v then
+		shahtared()
+	end
 	if win_state['shematext'].v then
 		shemamenu()
 	end
@@ -4317,7 +4359,7 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(850, 400), imgui.Cond.FirstUseEver)
 		if imgui.Begin(u8' Bank Menu ', win_state['bank'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 330), false)
+				imgui.BeginChild('##asdasasddf323452354', imgui.ImVec2(800, 330), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку, дом и бизнес"), autoopl); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl.v then
@@ -4673,6 +4715,26 @@ function imgui.OnDrawFrame()
 			end
 		imgui.PopStyleColor()
 		end
+	if win_state['pismoinformer'].v then -- окно информера
+		imgui.SetNextWindowPos(imgui.ImVec2(infoX4, infoY4), imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.0, 0.0, 0.0, 0.3))
+		if imgui.Begin("Mono Tools2", win_state['pismoinformer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
+			infobarpismo()
+			imgui.End()
+			end
+		imgui.PopStyleColor()
+		end
+	if win_state['shahtainformer'].v then -- окно информера
+		imgui.SetNextWindowPos(imgui.ImVec2(infoX3, infoY3), imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.0, 0.0, 0.0, 0.3))
+		if imgui.Begin("Mono Tools1", win_state['shahtainformer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
+			infobarshahta()
+			imgui.End()
+			end
+		imgui.PopStyleColor()
+		end
 	end
 	
 function infobar()
@@ -4690,6 +4752,29 @@ function infobar()
 			if infTime.v then imgui.Text(u8("• Время: "..os.date("%H:%M:%S"))) end
 			if infonline.v then imgui.Text(u8("• Онлайн за сессию: "..get_timer(sessiononline))) end
 		end
+		
+function infobarshahta()
+		if infkamen.v or infmetal.v or infbronza.v or infsilver.v or infgold.v or infzp.v or infsbor.v then imgui.SameLine(140) imgui.VerticalSeparator() imgui.Text(u8"   За сессию") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"   За всё время") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"   Доход") end
+		if infkamen.v then imgui.Separator() imgui.Text(u8("• Собрано камня: ")) imgui.SameLine(175) imgui.Text(u8(""..kamensession)) imgui.SameLine(265) imgui.Text(u8(''.. tostring(cfg.shahta.kamentime))) imgui.SameLine(345) imgui.Text(u8(""..kamenitog)) end
+		if infmetal.v then imgui.Text(u8("• Собрано металла: "))imgui.SameLine(175)  imgui.Text(u8(""..metalsession)) imgui.SameLine(265) imgui.Text(u8(''.. tostring(cfg.shahta.metaltime))) imgui.SameLine(345) imgui.Text(u8(""..metalitog)) end
+		if infbronza.v then imgui.Text(u8("• Собрано бронзы: ")) imgui.SameLine(175) imgui.Text(u8(""..bronzasession)) imgui.SameLine(265) imgui.Text(u8(''.. tostring(cfg.shahta.bronzatime))) imgui.SameLine(345) imgui.Text(u8(""..bronzaitog)) end
+		if infsilver.v then imgui.Text(u8("• Собрано серебра: ")) imgui.SameLine(175) imgui.Text(u8(""..silversession)) imgui.SameLine(265) imgui.Text(u8(''.. tostring(cfg.shahta.silvertime))) imgui.SameLine(345) imgui.Text(u8(""..silveritog)) end
+		if infgold.v then imgui.Text(u8("• Собрано золота: ")) imgui.SameLine(175) imgui.Text(u8(""..goldsession)) imgui.SameLine(265) imgui.Text(u8(''.. tostring(cfg.shahta.goldtime))) imgui.SameLine(345) imgui.Text(u8(""..golditog)) end
+		if infsbor.v then imgui.Separator() imgui.Text(u8("• Собрано ресурсов: ")) imgui.SameLine(175) imgui.Text(u8(""..sborsession)) imgui.SameLine(265) imgui.Text(u8(''.. tostring(cfg.shahta.sbortime))) end
+		if infzp.v then imgui.Separator() imgui.Text(u8("• Заработано: ")) imgui.SameLine(150) imgui.Text(u8(""..zpsession)) imgui.SameLine(240) imgui.Text(u8(""..cfg.shahta.zptime)) end
+	end
+	
+function infobarpismo()
+		local btn_size12 = imgui.ImVec2(200, 30)
+		if pismo.v then 
+		imgui.Text(pismoreal.v) 
+		imgui.Text(pismoreal1.v) 
+		imgui.Text(pismoreal2.v) 
+		imgui.Text(pismoreal3.v) 
+		imgui.Text(pismoreal4.v) 
+		end
+		if imgui.Button(u8' Редактировать', btn_size12) then win_state['pismotext'].v = not win_state['pismotext'].v end
+	end
 
 function imgui.Link(link,name,myfunc)
   myfunc = type(name) == 'boolean' and name or myfunc or false
@@ -4805,8 +4890,10 @@ function onWindowMessage(m, p)
 		win_state['redak'].v = false
 		win_state['shema'].v = false
 		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		win_state['pismotext'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
@@ -4823,13 +4910,35 @@ function onWindowMessage(m, p)
 		win_state['redak'].v = false
 		win_state['shema'].v = false
 		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		win_state['pismotext'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
 		win_state['help'].v = false
     end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['pismotext'].v then
+        consumeWindowMessage()
+        win_state['main'].v = false
+		win_state['tup'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['shemainst'].v = false
+		win_state['pismotext'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['help'].v = false
+	end
 end
 
 function all_trim(s)
@@ -4952,6 +5061,8 @@ function sampev.onServerMessage(color, text)
 	elseif color == 869033727 and text:match("%[R%] .*") then -- получение ранга и ID игрока, который последним написал в /r чат, для тэгов биндера
 		lastrradiozv, lastrradioID = text:match('%[R%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
 	elseif text:match("Банковский чек") and autopay.v then
+		sendchot6()
+	elseif text:match("Для получения PayDay вы должны отыграть минимум 20 минут.") and autopay.v then
 		sendchot6()
 	elseif text:match("Этот транспорт зарегистрирован") and lock.v then
 		sampSendChat('/lock')
@@ -5160,9 +5271,13 @@ function load_settings() -- загрузка настроек
 	
 	gangzones = imgui.ImBool(ini.settings.gangzones)
 	zones = imgui.ImBool(ini.settings.zones)
+	ryda = imgui.ImBool(ini.settings.ryda)
 	assistant = imgui.ImBool(ini.settings.assistant)
+	assistant1 = imgui.ImBool(ini.settings.assistant1)
+	assistant2 = imgui.ImBool(ini.settings.assistant2)
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
+	autoryda = imgui.ImBool(ini.settings.autoryda)
 	autopin = imgui.ImBool(ini.settings.autopin)
 	autoopl = imgui.ImBool(ini.settings.autoopl)
 	autoopl1 = imgui.ImBool(ini.settings.autoopl1)
@@ -5173,6 +5288,13 @@ function load_settings() -- загрузка настроек
 	autoopl6 = imgui.ImBool(ini.settings.autoopl6)
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
+	
+	autokamen = imgui.ImBuffer(u8(ini.settings.autokamen), 256)
+	autometal = imgui.ImBuffer(u8(ini.settings.autometal), 256)
+	autobronza = imgui.ImBuffer(u8(ini.settings.autobronza), 256)
+	autosilver = imgui.ImBuffer(u8(ini.settings.autosilver), 256)
+	autogold = imgui.ImBuffer(u8(ini.settings.autogold), 256)
+	
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autopasspay = imgui.ImBuffer(u8(ini.settings.autopasspay), 256)
 	autopasspaypin = imgui.ImBuffer(u8(ini.settings.autopasspaypin), 256)
@@ -5185,6 +5307,11 @@ function load_settings() -- загрузка настроек
 	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
+	pismoreal = imgui.ImBuffer(u8(ini.settings.pismoreal), 2560)
+	pismoreal1 = imgui.ImBuffer(u8(ini.settings.pismoreal1), 2560)
+	pismoreal2 = imgui.ImBuffer(u8(ini.settings.pismoreal2), 2560)
+	pismoreal3 = imgui.ImBuffer(u8(ini.settings.pismoreal3), 2560)
+	pismoreal4 = imgui.ImBuffer(u8(ini.settings.pismoreal4), 2560)
 	shematext1 = imgui.ImBuffer(u8(ini.settings.shematext1), 256)
 	shematext2 = imgui.ImBuffer(u8(ini.settings.shematext2), 256)
 	shematext3 = imgui.ImBuffer(u8(ini.settings.shematext3), 256)
@@ -5258,6 +5385,14 @@ function load_settings() -- загрузка настроек
 	infonline = imgui.ImBool(ini.informer.online)
 	infping = imgui.ImBool(ini.informer.ping)
 	infhpcar = imgui.ImBool(ini.informer.hpcar)
+	
+	infkamen = imgui.ImBool(ini.shahtainformer.kamen)
+	infmetal = imgui.ImBool(ini.shahtainformer.metal)
+	infbronza = imgui.ImBool(ini.shahtainformer.bronza)
+	infsilver = imgui.ImBool(ini.shahtainformer.silver)
+	infgold = imgui.ImBool(ini.shahtainformer.gold)
+	infzp = imgui.ImBool(ini.shahtainformer.zp)
+	infsbor = imgui.ImBool(ini.shahtainformer.sbor)
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
@@ -5280,6 +5415,7 @@ function load_settings() -- загрузка настроек
 	eatmyso = imgui.ImBool(ini.settings.eatmyso)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
 	chatcalc = imgui.ImBool(ini.settings.chatcalc)
+	pismo = imgui.ImBool(ini.settings.pismo)
 	yashik = imgui.ImBool(ini.settings.yashik)
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
@@ -5306,10 +5442,18 @@ function load_settings() -- загрузка настроек
 	infoY = ini.settings.infoY
 	infoX2 = ini.settings.infoX2
 	infoY2 = ini.settings.infoY2
+	infoX3 = ini.settings.infoX3
+	infoY3 = ini.settings.infoY3
+	infoX4 = ini.settings.infoX4
+	infoY4 = ini.settings.infoY4
 	findX = ini.settings.findX
 	findY = ini.settings.findY
 	asX = ini.assistant.asX
 	asY = ini.assistant.asY
+	asX3 = ini.assistant1.asX3
+	asY3 = ini.assistant1.asY3
+	asX4 = ini.assistant2.asX4
+	asY4 = ini.assistant2.asY4
 end
 
 function showInputHelp()
@@ -5593,7 +5737,7 @@ end
 function shemamain()
 while true do 
 	if video.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active6 = true
       sampSendChat("/invent")
@@ -5604,7 +5748,7 @@ while true do
       wait(15000)
 	end
 	if video1.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active7 = true
       sampSendChat("/invent")
@@ -5615,7 +5759,7 @@ while true do
       wait(15000)
 	end
 	if video2.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active8 = true
       sampSendChat("/invent")
@@ -5626,7 +5770,7 @@ while true do
       wait(15000)
 	end
 	if video3.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active9 = true
       sampSendChat("/invent")
@@ -5637,7 +5781,7 @@ while true do
       wait(15000)
 	end
 	if video4.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active10 = true
       sampSendChat("/invent")
@@ -5648,7 +5792,7 @@ while true do
       wait(15000)
 	end
 	if video5.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active11 = true
       sampSendChat("/invent")
@@ -5659,7 +5803,7 @@ while true do
       wait(15000)
 	end
 	if video6.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active12 = true
       sampSendChat("/invent")
@@ -5670,7 +5814,7 @@ while true do
       wait(15000)
 	end
 	if video7.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active13 = true
       sampSendChat("/invent")
@@ -5681,7 +5825,7 @@ while true do
       wait(15000)
 	end
 	if video8.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active14 = true
       sampSendChat("/invent")
@@ -5692,7 +5836,7 @@ while true do
       wait(15000)
 	end
 	if video9.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active15 = true
       sampSendChat("/invent")
@@ -5703,7 +5847,7 @@ while true do
       wait(15000)
 	end
 	if video10.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active16 = true
       sampSendChat("/invent")
@@ -5714,7 +5858,7 @@ while true do
       wait(15000)
 	end
 	if video11.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active17 = true
       sampSendChat("/invent")
@@ -5725,7 +5869,7 @@ while true do
       wait(15000)
 	end
 	if video12.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active18 = true
       sampSendChat("/invent")
@@ -5736,7 +5880,7 @@ while true do
       wait(15000)
 	end
 	if video13.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active19 = true
       sampSendChat("/invent")
@@ -5747,7 +5891,7 @@ while true do
       wait(15000)
 	end
 	if video14.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active20 = true
       sampSendChat("/invent")
@@ -5758,7 +5902,7 @@ while true do
       wait(15000)
 	end
 	if video15.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active21 = true
       sampSendChat("/invent")
@@ -5769,7 +5913,7 @@ while true do
       wait(15000)
 	end
 	if video16.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active22 = true
       sampSendChat("/invent")
@@ -5780,7 +5924,7 @@ while true do
       wait(15000)
 	end
 	if video17.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active23 = true
       sampSendChat("/invent")
@@ -5791,7 +5935,7 @@ while true do
       wait(15000)
 	end
 	if video18.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active24 = true
       sampSendChat("/invent")
@@ -5802,7 +5946,7 @@ while true do
       wait(15000)
 	end
 	if video19.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active25 = true
       sampSendChat("/invent")
@@ -5813,7 +5957,7 @@ while true do
       wait(15000)
 	end
 	if video20.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active26 = true
       sampSendChat("/invent")
@@ -5824,7 +5968,7 @@ while true do
       wait(15000)
 	end
 	if video21.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active27 = true
       sampSendChat("/invent")
@@ -5835,7 +5979,7 @@ while true do
       wait(15000)
 	end
 	if video22.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active28 = true
       sampSendChat("/invent")
@@ -5846,7 +5990,7 @@ while true do
       wait(15000)
 	end
 	if video23.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active29 = true
       sampSendChat("/invent")
@@ -5857,7 +6001,7 @@ while true do
       wait(15000)
 	end
 	if video24.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active30 = true
       sampSendChat("/invent")
@@ -5868,7 +6012,7 @@ while true do
       wait(15000)
 	end
 	if video25.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active31 = true
       sampSendChat("/invent")
@@ -5879,7 +6023,7 @@ while true do
       wait(15000)
 	end
 	if video26.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active32 = true
       sampSendChat("/invent")
@@ -5890,7 +6034,7 @@ while true do
       wait(15000)
 	end
 	if video27.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active33 = true
       sampSendChat("/invent")
@@ -5901,7 +6045,7 @@ while true do
       wait(15000)
 	end
 	if video28.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active34 = true
       sampSendChat("/invent")
@@ -5912,7 +6056,7 @@ while true do
       wait(15000)
 	end
 	if video29.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active35 = true
       sampSendChat("/invent")
@@ -5923,7 +6067,7 @@ while true do
       wait(15000)
 	end
 	if video30.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active36 = true
       sampSendChat("/invent")
@@ -5934,7 +6078,7 @@ while true do
       wait(15000)
 	end
 	if video31.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active37 = true
       sampSendChat("/invent")
@@ -5945,7 +6089,7 @@ while true do
       wait(15000)
 	end
 	if video32.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active38 = true
       sampSendChat("/invent")
@@ -5956,7 +6100,7 @@ while true do
       wait(15000)
 	end
 	if video33.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active39 = true
       sampSendChat("/invent")
@@ -5967,7 +6111,7 @@ while true do
       wait(15000)
 	end
 	if video34.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active40 = true
       sampSendChat("/invent")
@@ -5978,7 +6122,7 @@ while true do
       wait(15000)
 	end
 	if video35.v then
-	  sampSendClickTextdraw(2110)
+	  closeDialog()
 	  wait(500)
       active41 = true
       sampSendChat("/invent")
@@ -7098,6 +7242,17 @@ while true do
 		wait(0)
 	end
 end
+
+function shahta()
+while true do 
+	local x, y, z = getCharCoordinates(PLAYER_PED)
+	local result, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "{73B461}Для добычи ископаемого")
+	if autoryda.v and result then
+	sendKey(1024)
+		end
+	wait(0)
+	end
+end
 		
 function eating()
 while true do 
@@ -7153,6 +7308,88 @@ if zones.v and not workpause then -- показываем информер и его перемещение
 					asX = math.floor(asX)
 					asY = math.floor(asY)
 					mouseCoord3 = false
+					showCursor(false, false)
+				end
+			end
+		else
+			win_state['ass'].v = false
+		end
+		wait(0)
+		end
+	end
+	
+function informerperemshahta()
+while true do
+if ryda.v and not workpause then -- показываем информер и его перемещение
+			if not win_state['regst'].v then win_state['shahtainformer'].v = true end
+
+			if mouseCoord5 then
+				showCursor(true, true)
+				infoX3, infoY3 = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					infoX3 = math.floor(infoX3)
+					infoY3 = math.floor(infoY3)
+					mouseCoord5 = false
+					showCursor(false, false)
+					win_state['main'].v = not win_state['main'].v
+					win_state['settings'].v = not win_state['settings'].v
+				end
+			end
+		else
+			win_state['shahtainformer'].v = false
+		end
+
+		if assistant1.v and developMode == 1 and isPlayerSoldier then -- координатор и его перемещение
+			if not win_state['regst'].v then win_state['ass'].v = true end
+
+			if mouseCoord4 then
+				showCursor(true, true)
+				asX3, asY3 = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					asX3 = math.floor(asX3)
+					asY3 = math.floor(asY3)
+					mouseCoord4 = false
+					showCursor(false, false)
+				end
+			end
+		else
+			win_state['ass'].v = false
+		end
+		wait(0)
+		end
+	end
+	
+function informerperempismo()
+while true do
+if pismo.v and not workpause then -- показываем информер и его перемещение
+			if not win_state['regst'].v then win_state['pismoinformer'].v = true end
+
+			if mouseCoord6 then
+				showCursor(true, true)
+				infoX4, infoY4 = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					infoX4 = math.floor(infoX4)
+					infoY4 = math.floor(infoY4)
+					mouseCoord6 = false
+					showCursor(false, false)
+					win_state['main'].v = not win_state['main'].v
+					win_state['settings'].v = not win_state['settings'].v
+				end
+			end
+		else
+			win_state['pismoinformer'].v = false
+		end
+
+		if assistant2.v and developMode == 1 and isPlayerSoldier then -- координатор и его перемещение
+			if not win_state['regst'].v then win_state['ass'].v = true end
+
+			if mouseCoord7 then
+				showCursor(true, true)
+				asX4, asY4 = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					asX4 = math.floor(asX4)
+					asY4 = math.floor(asY4)
+					mouseCoord7 = false
 					showCursor(false, false)
 				end
 			end
@@ -7567,6 +7804,23 @@ function shemamenu()
 		end
 	end
 	
+function shahtared()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(782, 205), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' Редактирование цен на ресурсы', win_state['shahtamenu'], imgui.WindowFlags.NoResize) then
+			imgui.BeginChild('##asdasasddf4324', imgui.ImVec2(800, 160), false)
+			imgui.InputText(u8'Введите стоймость камня', autokamen)
+			imgui.InputText(u8'Введите стоймость металла', autometal)
+			imgui.InputText(u8'Введите стоймость бронзы', autobronza)
+			imgui.InputText(u8'Введите стоймость серебра', autosilver)
+			imgui.InputText(u8'Введите стоймость золота', autogold)
+			imgui.EndChild()
+			imgui.End()
+		end
+	end
+	
 function funksmenu()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
@@ -7606,17 +7860,41 @@ function shemainstr()
 		end
 	end
 	
+function pismomenu()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(645, 205), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' ', win_state['pismotext'], imgui.WindowFlags.NoResize) then
+			imgui.BeginChild('##asdasasddf213121', imgui.ImVec2(800, 160), false)
+			imgui.InputText(u8'Введите текст', pismoreal)
+			imgui.InputText(u8'Введите текст ', pismoreal1)
+			imgui.InputText(u8'Введите текст  ', pismoreal2)
+			imgui.InputText(u8'Введите текст   ', pismoreal3)
+			imgui.InputText(u8'Введите текст    ', pismoreal4)
+			imgui.EndChild()
+			imgui.End()
+		end
+	end
+	
 function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
 	if imgui.Begin(u8' Тестовые обновления v2.7', win_state['tup'], imgui.WindowFlags.NoResize) then
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Фикс, когда при улучшении видеокарты не закрывался инвентарь и диалог.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Фикс функционала в 'Прочие Функции' в Майнинге.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Добавлена кнопка 'Завершить улучшение видеокарт'. Нужна для того, чтобы быстро снять все галочки и завершить улучшение")
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 300), false)
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс, когда при улучшении видеокарты не закрывался инвентарь и диалог.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс функционала в 'Прочие Функции' в Майнинге.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Добавлена кнопка 'Завершить улучшение видеокарт'. Нужна для того, чтобы быстро снять все галочки и завершить улучшение")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"видеокарт.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Небольшой фикс улучшения видеокарт. Также при улучшении видеокарт больше не закрывается инвентарь.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс 'Пополнение депозита', когда с открытым инвентарем не работало пополнение. Также теперь работает в свернутом режиме.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Биндер и Настройки' добавлен пункт 'Шахтёр'. В данном пункте можно включить счетчик руд и автоальт. Автоальт срабатывает")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"только на шахте у руды.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс Текстовых окон в меню.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Биндер и Настройки' - 'Модификации' добавлена функция 'Заметки'. С данной функцией вы сможете разместить окно с заметкой у")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"себя на экране с нужным вам текстом и перемещать его в любое место на экране. ")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -7717,27 +7995,6 @@ function imgui.CustomButton(gg, color, colorHovered, colorActive, size)
     imgui.PopStyleColor(3)
     return result
 end
-
-local cfg = inicfg.load({
-    databest = {
-        best = 0
-    },
-	paramssnake = {
-       fontColor = 0xFFFFFFFF,
-       snakeColor = 0xFF1E90FF,
-       deadSnakeColor = 0xFF0000CD,
-       bgColor = 0xC8000000,
-       ceilColor = 0xFF696969,
-       appleColor = 0xFFFF0000,
-       wallColor = 0xFFC0C0C0,
-       speedsnake = 0.5,
-       fieldSize = 12,
-       hasWalls = false
-    },
-    datasnake = {
-        record = 0
-    }
-}, 'Mono\\mini-games.ini')
 
 function gamelist()
     local X, Y = getScreenResolution()
@@ -8327,3 +8584,121 @@ function videofailed()
 	video34.v = false
 	video35.v = false
 end
+
+function sendKey(key)
+    local _, myId = sampGetPlayerIdByCharHandle(PLAYER_PED)
+    local data = allocateMemory(68)
+    sampStorePlayerOnfootData(myId, data)
+    setStructElement(data, 4, 2, key, false)
+	setStructElement(data, 36, 1, key, false)
+    sampSendOnfootData(data)
+    freeMemory(data)
+end
+
+function Search3Dtext(x, y, z, radius, patern)
+    local text = ""
+    local color = 0
+    local posX = 0.0
+    local posY = 0.0
+    local posZ = 0.0
+    local distance = 0.0
+    local ignoreWalls = false
+    local player = -1
+    local vehicle = -1
+    local result = false
+
+    for id = 0, 2048 do
+        if sampIs3dTextDefined(id) then
+            local text2, color2, posX2, posY2, posZ2, distance2, ignoreWalls2, player2, vehicle2 = sampGet3dTextInfoById(id)
+            if getDistanceBetweenCoords3d(x, y, z, posX2, posY2, posZ2) < radius then
+                if string.len(patern) ~= 0 then
+                    if string.match(text2, patern, 0) ~= nil then result = true end
+                else
+                    result = true
+                end
+                if result then
+                    text = text2
+                    color = color2
+                    posX = posX2
+                    posY = posY2
+                    posZ = posZ2
+                    distance = distance2
+                    ignoreWalls = ignoreWalls2
+                    player = player2
+                    vehicle = vehicle2
+                    radius = getDistanceBetweenCoords3d(x, y, z, posX, posY, posZ)
+                end
+            end
+        end
+    end
+    return result, text, color, posX, posY, posZ, distance, ignoreWalls, player, vehicle
+end
+
+function sampev.onDisplayGameText(style, tm, text)
+	if text == "stone + 1" then
+		kamensession = kamensession + 1
+		kamenitog = kamensession * autokamen.v
+		cfg.shahta.kamentime = cfg.shahta.kamentime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "stone + 2" then
+		kamensession = kamensession + 2
+		kamenitog = kamensession * autokamen.v
+		cfg.shahta.kamentime = cfg.shahta.kamentime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text == "metal + 1" then
+		metalsession = metalsession + 1
+		metalitog = metalsession * autometal.v
+		cfg.shahta.metaltime = cfg.shahta.metaltime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "metal + 2" then
+		metalsession = metalsession + 2
+		metalitog = metalsession * autometal.v
+		cfg.shahta.metaltime = cfg.shahta.metaltime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text == "bronze + 1" then
+		bronzasession = bronzasession + 1
+		bronzaitog = bronzasession * autobronza.v
+		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "bronze + 2" then
+		bronzasession = bronzasession + 2
+		bronzaitog = bronzasession * autobronza.v
+		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text == "silver + 1" then
+		silversession = silversession + 1
+		silveritog = silversession * autosilver.v
+		cfg.shahta.silvertime = cfg.shahta.silvertime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "silver + 2" then
+		silversession = silversession + 2
+		silveritog = silversession * autosilver.v
+		cfg.shahta.silvertime = cfg.shahta.silvertime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text == "gold + 1" then
+		goldsession = goldsession + 1
+		golditog = goldsession * autogold.v
+		cfg.shahta.goldtime = cfg.shahta.goldtime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "gold + 2" then
+		goldsession = goldsession + 2
+		golditog = goldsession * autogold.v
+		cfg.shahta.goldtime = cfg.shahta.goldtime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	sborsession = kamensession + metalsession + bronzasession + silversession + goldsession
+	zpsession = kamenitog + metalitog + bronzaitog + silveritog + golditog
+	cfg.shahta.zptime = (cfg.shahta.kamentime*autokamen.v) + (cfg.shahta.metaltime*autometal.v) + (cfg.shahta.bronzatime*autobronza.v) + (cfg.shahta.silvertime*autosilver.v) + (cfg.shahta.goldtime*autogold.v)
+	cfg.shahta.sbortime = cfg.shahta.kamentime + cfg.shahta.metaltime + cfg.shahta.bronzatime + cfg.shahta.silvertime + cfg.shahta.goldtime
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+end
+
+function imgui.VerticalSeparator()
+    local p = imgui.GetCursorScreenPos()
+    imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x, p.y + imgui.GetContentRegionMax().y), imgui.GetColorU32(imgui.GetStyle().Colors[imgui.Col.Separator]))
+end
+	
