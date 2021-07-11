@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.7.2')
+script_version('2.8')
 
 local use = false
 local close = false
@@ -143,7 +143,7 @@ chars = {
 
 ole32.CoInitializeEx(nil, 2 + 4)
 
-mlogo, errorPic, classifiedPic, pentagonPic, accessDeniedPic, gameServer, nasosal_rang = nil, nil, nil, nil, nil, nil -- 
+mlogo, errorPic, classifiedPic, pentagonPic, accessDeniedPic, gameServer = nil, nil, nil, nil, nil, nil -- 
 srv, arm = nil, nil -- 
 whitelist, superID, vigcout, narcout, order = 0, 0, 0, 0, 0
 regDialogOpen, regAcc, UpdateNahuy, checking, getLeader, checkupd = false, false, false, false, false
@@ -223,6 +223,11 @@ local cfg = inicfg.load({
 		goldtime = 0,
 		zptime = 0,
 		sbortime = 0
+	},
+	adpred = {
+		piarsh = 0,
+		vippiarsh = 0,
+		datetime = os.date("%d.%m.%Y")
 	}
 }, 'Mono\\mini-games.ini')	
 	
@@ -245,15 +250,23 @@ local SET = {
 		autobronza = '40000',
 		autosilver = '100000',
 		autogold = '80000',
+		kdpusk = '10',
 		autopass = '123456',
 		autopasspin = '123456',
 		autoklava = '114',
 		autoklavareload = '115',
+		autodrone = '67',
+		autodronev2 = '49',
+		autodronev3 = '67',
+		autodronev4 = '50',
 		pismoreal = '1) ',
 		pismoreal1 = '2) ',
 		pismoreal2 = '3) ',
 		pismoreal3 = '4) ',
 		pismoreal4 = '5) ',
+		adsec = '60',
+		vipadsec = '60',
+		adredak = '/ad В 165 баре много девочек и пива.',
 		activator = 'mono',
 		autopassopl = '6',
 		autopassopl1 = '15',
@@ -444,6 +457,9 @@ win_state['yashiki'] = imgui.ImBool(false)
 win_state['games'] = imgui.ImBool(false)
 win_state['redak'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
+win_state['piar'] = imgui.ImBool(false)
+win_state['oscripte'] = imgui.ImBool(false)
+win_state['oscriptepeople'] = imgui.ImBool(false)
 win_state['shahtamenu'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
@@ -474,6 +490,7 @@ local btc = imgui.ImBool(false)
 local liquid = imgui.ImBool(false)
 local pusk = imgui.ImBool(false)
 local platina = imgui.ImBool(false)
+local moneta = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
@@ -516,6 +533,8 @@ local video32 = imgui.ImBool(false)
 local video33 = imgui.ImBool(false)
 local video34 = imgui.ImBool(false)
 local video35 = imgui.ImBool(false)
+local addad = imgui.ImBool(false)
+local vipaddad = imgui.ImBool(false)
 local checktochilki = false
 local checktochilki1 = false
 local checktochilki2 = false
@@ -1160,6 +1179,12 @@ function mainmenu()
 			win_state['gamer'].v = not win_state['gamer'].v
 		elseif win_state['bank'].v then
 			win_state['bank'].v = not win_state['bank'].v
+		elseif win_state['piar'].v then
+			win_state['piar'].v = not win_state['piar'].v
+		elseif win_state['oscripte'].v then
+			win_state['oscripte'].v = not win_state['oscripte'].v
+		elseif win_state['oscriptepeople'].v then
+			win_state['oscriptepeople'].v = not win_state['oscriptepeople'].v
 		elseif win_state['shema'].v then
 			win_state['shema'].v = not win_state['shema'].v
 		elseif win_state['tup'].v then
@@ -1239,6 +1264,7 @@ function main()
 	lua_thread.create(informerperemshahta)
 	lua_thread.create(informerperempismo)
 	lua_thread.create(roulette)
+	lua_thread.create(piarad)
 	lua_thread.create(raznoe)
 	lua_thread.create(shemamain)
 	lua_thread.create(ponggame)
@@ -1287,6 +1313,7 @@ function main()
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
+		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autodronev2.v)) and isKeyJustPressed(u8:decode(autodrone.v)) then drone() end
 		
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
@@ -1538,6 +1565,7 @@ function saveSettings(args, key)
 	ini.settings.autosilver = u8:decode(autosilver.v)
 	ini.settings.autogold = u8:decode(autogold.v)
 	
+	ini.settings.kdpusk = u8:decode(kdpusk.v)
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autopasspay = u8:decode(autopasspay.v)
 	ini.settings.autopasspaypin = u8:decode(autopasspaypin.v)
@@ -1607,11 +1635,18 @@ function saveSettings(args, key)
 	ini.settings.knifeone = u8:decode(knifeone.v)
 	ini.settings.knifetwo = u8:decode(knifetwo.v)
 	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
+	ini.settings.autodrone = u8:decode(autodrone.v)
+	ini.settings.autodronev2 = u8:decode(autodronev2.v)
+	ini.settings.autodronev3 = u8:decode(autodronev3.v)
+	ini.settings.autodronev4 = u8:decode(autodronev4.v)
 	ini.settings.pismoreal = u8:decode(pismoreal.v)
 	ini.settings.pismoreal1 = u8:decode(pismoreal1.v)
 	ini.settings.pismoreal2 = u8:decode(pismoreal2.v)
 	ini.settings.pismoreal3 = u8:decode(pismoreal3.v)
 	ini.settings.pismoreal4 = u8:decode(pismoreal4.v)
+	ini.settings.adsec = u8:decode(adsec.v)
+	ini.settings.vipadsec = u8:decode(vipadsec.v)
+	ini.settings.adredak = u8:decode(adredak.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.autoryda = autoryda.v
@@ -3812,13 +3847,15 @@ function imgui.OnDrawFrame()
 	if win_state['main'].v then -- основное окошко
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(260, 205), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(260, 270), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
 		if imgui.Button(u8' Roulette Tools', btn_size) then win_state['yashiki'].v = not win_state['yashiki'].v end
 		if imgui.Button(u8' Bank Menu', btn_size) then win_state['bank'].v = not win_state['bank'].v end
-		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
+		if imgui.Button(u8' Piar Menu', btn_size) then win_state['piar'].v = not win_state['piar'].v end
 		if imgui.Button(u8' Мини игры', btn_size) then win_state['gamer'].v = not win_state['gamer'].v end
+		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
+		if imgui.Button(u8' О скрипте', btn_size) then win_state['oscripte'].v = not win_state['oscripte'].v end
 		imgui.End()
 	end
     
@@ -3891,9 +3928,10 @@ function imgui.OnDrawFrame()
 		end
 		if showSet == 1 then
 			if imgui.CollapsingHeader(u8' Модификации') then
-				imgui.BeginChild('##as2dasasdf468', imgui.ImVec2(750, 350), false)
+				imgui.BeginChild('##as2dasasdf468', imgui.ImVec2(750, 410), false)
 				imgui.Columns(2, _, false)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру. PC - не отображает luxe машины. Mobile - отображает luxe машины.")
 				if launcher.v then
 				if launcherpc.v then launcherm.v = false end
@@ -3915,11 +3953,10 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Измененный cars")); imgui.SameLine(); imgui.ToggleButton(u8'Измененный cars', carsis); imgui.SameLine(); imgui.TextQuestion(u8"Редактирование диалога /cars. Можно использовать, например, чтобы подписать местоположение машин, изменить цвет строк в диалоге и тому подобное.");
 				if carsis.v and imgui.Button(u8' Редактировать cars', btn_size) then carsys() end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс adCounter")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс adCounter', adcounter); imgui.SameLine(); imgui.TextQuestion(u8"Фикс для скрипта adCounter, т.к тот скрипт не отправляет объявления из-за новой системы /ad.");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
 				imgui.NextColumn()
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Заметки")); imgui.SameLine(); imgui.ToggleButton(u8'Заметки', pismo)
 				if pismo.v then
@@ -3934,10 +3971,18 @@ function imgui.OnDrawFrame()
 					end
 				end
 				imgui.Text(u8(" Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
-					imgui.InputText(u8'', autoklava)
-					imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
+					imgui.InputText(u8'    ', autoklava)
+				imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
 					imgui.InputText(u8' ', autoklavareload)
-					imgui.Text(u8(" Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
+				imgui.Text(u8("Запуск дрона на клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"В полях нужно ввести коды клавиш для запуска дрона. По умолчанию поставлено на С + 1. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
+					imgui.PushItemWidth(105)
+					imgui.InputText(u8'', autodrone) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'      ', autodronev2)
+					imgui.PopItemWidth()
+				imgui.Text(u8("Закрытие дрона на клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"В полях нужно ввести коды клавиш для запуска дрона. По умолчанию поставлено на С + 2. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
+					imgui.PushItemWidth(105)
+					imgui.InputText(u8'##', autodronev3) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'###', autodronev4)
+					imgui.PopItemWidth()
+				imgui.Text(u8(" Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
 					imgui.InputText(u8'  ', activator)
 				imgui.EndChild()
 			end
@@ -4253,64 +4298,7 @@ function imgui.OnDrawFrame()
 		imgui.End()
 	end
 	if win_state['yashiki'].v then -- окно с настройками
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(850, 465), imgui.Cond.FirstUseEver)
-		if imgui.Begin(u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
-				imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 380), false)
-				imgui.Columns(2, _, false)
-				imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
-				imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
-				imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
-				imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
-				imgui.Checkbox(u8'Обменять подарки', podarki); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся подарки.")  
-				imgui.Checkbox(u8'Обменять гражданские талоны на рулетки', platina); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся гражданские талоны.")  
-				imgui.NextColumn()
-				imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
-				imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
-				imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
-				imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-				imgui.InputText(u8'Задержка', zadervka)
-				imgui.NextColumn()
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
-				imgui.InputText(u8'Задержка ',zadervkav2)
-				imgui.NextColumn()
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе работать не будет! Если включить 'всегда открывать' -")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"то скрипт будет открывать выбранные сундуки даже после")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезахода. Если включить 'открыть сундук' - то скрипт будет")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"открывать выбранные сундуки до перезахода. Также если")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перестали открываться сундуки, то зайдите в /settings")
-				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"и включите инвентарь на русский и снова на английский.")
-				imgui.EndChild()
-			end
-			if checked_test.v then
-			checked_test.v = true
-			checked_test2.v = false
-			checked_test3.v = false
-			checked_test4.v = false
-			end
-			if checked_test2.v then
-			checked_test2.v = true
-			checked_test.v = false
-			checked_test3.v = false
-			checked_test4.v = false
-			end
-			if checked_test3.v then
-			checked_test4.v = false
-			checked_test3.v = true
-			checked_test2.v = false
-			checked_test.v = false
-			end
-			if checked_test4.v then
-			checked_test3.v = false
-			checked_test2.v = false
-			checked_test.v = false
-			checked_test4.v = true
-			end
-		imgui.End()
+		yashikisroulette()
 	end
 	if win_state['redak'].v then 
 		rpredak()
@@ -4417,6 +4405,36 @@ function imgui.OnDrawFrame()
 			end
 		imgui.End()
 	end
+	if win_state['piar'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(680, 480), imgui.Cond.FirstUseEver)
+		if imgui.Begin(u8' Piar Menu ', win_state['piar'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
+				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 407), false)
+				getArizonaName()
+				imgui.EndChild()
+			end
+		imgui.End()
+	end
+	if win_state['oscripte'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(680, 235), imgui.Cond.FirstUseEver)
+		if imgui.Begin(u8' О скрипте ', win_state['oscripte'], imgui.WindowFlags.NoResize) then
+				imgui.BeginChild('##asdasasddf4346', imgui.ImVec2(660, 190), false)
+				scriptinfo()
+				imgui.EndChild()
+			end
+		imgui.End()
+	end
+	if win_state['oscriptepeople'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(680, 235), imgui.Cond.FirstUseEver)
+		if imgui.Begin(u8' Спасибо всем, а в частности тем, кто перечислен ниже, за их участие в развитий скрипта! ', win_state['oscriptepeople'], imgui.WindowFlags.NoResize) then
+				imgui.BeginChild('##asdasasddf434665', imgui.ImVec2(651, 190), false)
+				scriptinfopeople()
+				imgui.EndChild()
+			end
+		imgui.End()
+	end
 	if win_state['gamer'].v then -- основное окошко
 		local btn_size23 = imgui.ImVec2(-25, 0) -- а это "шаблоны" размеров кнопок
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
@@ -4443,16 +4461,12 @@ function imgui.OnDrawFrame()
 		imgui.Separator()
 		if imgui.Selectable(u8"Обновления скрипта") then selected2 = 1 end
 		imgui.Separator()
-		if imgui.Selectable(u8"Коды клавиш") then selected2 = 3 end			
-		imgui.Separator()
-		if imgui.Selectable(u8"О скрипте") then selected2 = 4 end			
+		if imgui.Selectable(u8"Коды клавиш") then selected2 = 3 end		
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
 		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 350), true)
 		if selected2 == 0 then selected2 = 1
-		elseif selected2 == 4 then
-		scriptinfo()
 		elseif selected2 == 3 then
 		imgui.Text(u8"Коды клавиш")
 		imgui.Columns(2, _,false)
@@ -4683,6 +4697,35 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"останавливает работу функций.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 11.07.2021') then
+				imgui.BeginChild('##as2dasasdf45722146', imgui.ImVec2(700, 215), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. фикс функции 'Улучшение видеокарт'. Больше при улучшений видеокарт не закрывается инвентарь.")
+				imgui.Text(u8"2. Фикс функционала в 'Прочие Функции' в Майнинге.")
+				imgui.Text(u8"3. Фикс 'Пополнение депозита', когда с открытым инвентарем не работало пополнение.")
+				imgui.Text(u8"4. Фикс Текстовых окон в меню.")
+				imgui.Text(u8"5. Фикс, когда при включенном автолоке, если вы садились в чужой автомобиль, то удалялась строчка из чата,")
+				imgui.Text(u8"кому принадлежит данный автомобиль.")
+				imgui.Text(u8"6. Фикс, когда срабатывала команда /lock в чужом транспорте.")
+				imgui.Text(u8"7. Фикс функции 'Пополнение Депозита', когда пополнение не работало в свернутом режиме.")
+				imgui.Text(u8"8. Добавлена кнопка 'Завершить улучшение видеокарт'. Нужна для того, чтобы быстро снять все галочки и")
+				imgui.Text(u8"завершить улучшение видеокарт.")
+				imgui.Text(u8"9. В 'Прочие функции' добавлена возможность менять задержку для включения видеокарт, заливки жидкости и")
+				imgui.Text(u8"так далее.")
+				imgui.Text(u8"10. В 'Биндер и Настройки' добавлен пункт 'Шахтёр'. В данном пункте можно включить счетчик руд и автоальт.")
+				imgui.Text(u8"Автоальт срабатывает только на шахте у руды.")
+				imgui.Text(u8"11. В 'Биндер и Настройки' - 'Модификации' добавлена функция 'Заметки'. С данной функцией вы сможете")
+				imgui.Text(u8"разместить окно с заметкой у себя на экране с нужным вам текстом и перемещать его в любое место на экране.")
+				imgui.Text(u8"12. В 'Биндер и Настройки' - 'Модификации' добавлена возможность настроить клавиши на включение")
+				imgui.Text(u8"и отключение дрона.")
+				imgui.Text(u8"13. Добавлен пукнт 'Piar Menu'. С помощью данного функционала вы сможете подавать объявление в /ad")
+				imgui.Text(u8"в автоматическом режиме с нужной вам задержкой. Также тут имеется счетчик поданных объявлений,")
+				imgui.Text(u8"который каждый день обнуляется.")
+				imgui.Text(u8"14. В 'Roulette Tools' добавлена возможность обменять зловещие монеты на улучшение для автомобиля.")
+				imgui.Text(u8"15. Окно 'О скрипте' перенесено из 'Помощь' в меню скрипта.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 2 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -4897,6 +4940,9 @@ function onWindowMessage(m, p)
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
+		win_state['piar'].v = false
+		win_state['oscripte'].v = false
+		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['tup'].v then
@@ -4917,6 +4963,9 @@ function onWindowMessage(m, p)
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
+		win_state['piar'].v = false
+		win_state['oscripte'].v = false
+		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['pismotext'].v then
@@ -4937,6 +4986,9 @@ function onWindowMessage(m, p)
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
+		win_state['piar'].v = false
+		win_state['oscripte'].v = false
+		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
 	end
 end
@@ -5064,7 +5116,7 @@ function sampev.onServerMessage(color, text)
 		sendchot6()
 	elseif text:match("Для получения PayDay вы должны отыграть минимум 20 минут.") and autopay.v then
 		sendchot6()
-	elseif text:match("Этот транспорт зарегистрирован") and lock.v then
+	elseif text:match("^Этот транспорт зарегистрирован на жителя {9ACD32}" ..userNick) and lock.v then
 		sampSendChat('/lock')
 	elseif text:find("Вам был добавлен предмет") then
 		krytim = true
@@ -5091,6 +5143,9 @@ function sampev.onServerMessage(color, text)
 	end
 	if text:match("У тебя недостаточно гражданских талонов!") and platina.v then
 		platina.v = false
+	end
+	if text:match("У тебя нет зловещих монет!") and moneta.v then
+		moneta.v = false
 	end
 	if text:match("Вам был добавлен предмет 'Сертификат") or text:match("Вам был добавлен предмет 'Золото'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") or text:match("Вам был добавлен предмет 'Серебро'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") and checked_test.v then
 		checked_test.v = false
@@ -5149,6 +5204,14 @@ end
 	end
 	if text:find("Сработала защита от реконнекта! Попробуйте переподключиться через") and recongen.v then
 		recongenmenu()
+	end
+	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") then
+		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") then
+		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	local videokarta = video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v
 	if text:find("У вас нет 2шт. смазки для видеокарты. Её можно скрафтить в подвале дома или купить на центральном рынке.") and videokarta then
@@ -5295,6 +5358,7 @@ function load_settings() -- загрузка настроек
 	autosilver = imgui.ImBuffer(u8(ini.settings.autosilver), 256)
 	autogold = imgui.ImBuffer(u8(ini.settings.autogold), 256)
 	
+	kdpusk = imgui.ImBuffer(u8(ini.settings.kdpusk), 256)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autopasspay = imgui.ImBuffer(u8(ini.settings.autopasspay), 256)
 	autopasspaypin = imgui.ImBuffer(u8(ini.settings.autopasspaypin), 256)
@@ -5307,11 +5371,18 @@ function load_settings() -- загрузка настроек
 	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
+	autodrone = imgui.ImBuffer(u8(ini.settings.autodrone), 256)
+	autodronev2 = imgui.ImBuffer(u8(ini.settings.autodronev2), 256)
+	autodronev3 = imgui.ImBuffer(u8(ini.settings.autodronev3), 256)
+	autodronev4 = imgui.ImBuffer(u8(ini.settings.autodronev4), 256)
 	pismoreal = imgui.ImBuffer(u8(ini.settings.pismoreal), 2560)
 	pismoreal1 = imgui.ImBuffer(u8(ini.settings.pismoreal1), 2560)
 	pismoreal2 = imgui.ImBuffer(u8(ini.settings.pismoreal2), 2560)
 	pismoreal3 = imgui.ImBuffer(u8(ini.settings.pismoreal3), 2560)
 	pismoreal4 = imgui.ImBuffer(u8(ini.settings.pismoreal4), 2560)
+	adsec = imgui.ImBuffer(u8(ini.settings.adsec), 100)
+	vipadsec = imgui.ImBuffer(u8(ini.settings.vipadsec), 100)
+	adredak = imgui.ImBuffer(u8(ini.settings.adredak), 1000)
 	shematext1 = imgui.ImBuffer(u8(ini.settings.shematext1), 256)
 	shematext2 = imgui.ImBuffer(u8(ini.settings.shematext2), 256)
 	shematext3 = imgui.ImBuffer(u8(ini.settings.shematext3), 256)
@@ -6410,8 +6481,6 @@ while true do
 	closeDialog()
 	end
 	if water.v then 
-	sampSendClickTextdraw(2134)
-	wait(200)
 	sampSendClickTextdraw(2128)
 	wait(200)
 	sampSendDialogResponse(3082, 1 , 1, -1)
@@ -6468,9 +6537,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
-	wait(200)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6519,9 +6587,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
-	wait(200)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6570,9 +6637,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
-	wait(200)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6621,9 +6687,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
-	wait(200)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6724,8 +6789,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6774,8 +6839,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6824,8 +6889,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6874,8 +6939,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -6976,8 +7041,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -7026,8 +7091,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -7076,8 +7141,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -7126,8 +7191,8 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно 10 секунд.", 0x046D63)
-	wait(10000)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
@@ -7189,6 +7254,45 @@ while true do
 	sampSendDialogResponse(8672, 1 , 17, -1)
 	wait(100)
 	closeDialog()
+	end
+	if moneta.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(9542, 1 , 24, -1)
+	wait(100)
+	closeDialog()
+			end
+		wait(0)
+	end
+end
+
+function piarad()
+while true do
+	if addad.v then
+	closeDialog()
+	wait(100)
+	sampSendChat(u8:decode (adredak.v))
+	wait(300)
+	sampSendDialogResponse(15346, 1, 1, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(100)
+	closeDialog()
+	wait(adsec.v*1000)
+	end
+	if vipaddad.v then
+	closeDialog()
+	wait(100)
+	sampSendChat(u8:decode (adredak.v))
+	wait(300)
+	sampSendDialogResponse(15346, 1, 2, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(100)
+	closeDialog()
+	wait(vipadsec.v*1000)
 			end
 		wait(0)
 	end
@@ -7416,7 +7520,7 @@ function drone()
 		sampAddChatMessage("[Mono Tools]{FFFFFF} Управление дроном клавишами: {00C2BB}W, A, S, D, Space, Shift{FFFFFF}.", 0x046D63)
 		sampAddChatMessage("[Mono Tools]{FFFFFF} Режимы дрона: {00C2BB}Numpad1, Numpad2, Numpad3{FFFFFF}.", 0x046D63)
 		sampAddChatMessage("[Mono Tools]{FFFFFF} Скорость полета дрона: {00C2BB}+(быстрей), -(медленней){FFFFFF}.", 0x046D63)
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Заверешить пилотирование дроном можно клавишей {00C2BB}Enter{FFFFFF}.", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Завершить пилотирование дроном можно клавишей {00C2BB}Enter{FFFFFF} или установленной вами комбинацией клавиш.", 0x046D63)
 		while true do
 			wait(0)
 			if flymode == 0 then
@@ -7609,7 +7713,7 @@ function drone()
 					setInfraredVision(false)
 					setNightVision(false)
 				end
-				if isKeyDown(VK_RETURN) then
+				if isKeyDown(VK_RETURN) or isKeyJustPressed(u8:decode(autodronev4.v)) and isKeyJustPressed(u8:decode(autodronev3.v)) then
 					setInfraredVision(false)
 					setNightVision(false)
 					restoreCameraJumpcut()
@@ -7781,6 +7885,69 @@ function rpredak()
 		end
 	end
 	
+function yashikisroulette()
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(850, 465), imgui.Cond.FirstUseEver)
+	if imgui.Begin(u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar) then
+			imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 390), false)
+			imgui.Columns(2, _, false)
+			imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
+			imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
+			imgui.Checkbox(u8'Открыть золотые рулетки', checked_test3)
+			imgui.Checkbox(u8'Открыть платиновые рулетки', checked_test4)
+			imgui.Checkbox(u8'Обменять подарки', podarki); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся подарки.")  
+			imgui.Checkbox(u8'Обменять гражданские талоны на рулетки', platina); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся гражданские талоны.")  
+			imgui.Checkbox(u8'Обменять зловещие монеты на улучшение для авто', moneta); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
+			imgui.NextColumn()
+			imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
+			imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
+			imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
+			imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
+			imgui.InputText(u8'Задержка', zadervka)
+			imgui.NextColumn()
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
+			imgui.InputText(u8'Задержка ',zadervkav2)
+			imgui.NextColumn()
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе работать не будет! Если включить 'всегда открывать' -")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"то скрипт будет открывать выбранные сундуки даже после")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перезахода. Если включить 'открыть сундук' - то скрипт будет")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"открывать выбранные сундуки до перезахода. Также если")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"перестали открываться сундуки, то зайдите в /settings")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"и включите инвентарь на русский и снова на английский.")
+			imgui.EndChild()
+			end
+			if checked_test.v then
+			checked_test.v = true
+			checked_test2.v = false
+			checked_test3.v = false
+			checked_test4.v = false
+			end
+			if checked_test2.v then
+			checked_test2.v = true
+			checked_test.v = false
+			checked_test3.v = false
+			checked_test4.v = false
+			end
+			if checked_test3.v then
+			checked_test4.v = false
+			checked_test3.v = true
+			checked_test2.v = false
+			checked_test.v = false
+			end
+			if checked_test4.v then
+			checked_test3.v = false
+			checked_test2.v = false
+			checked_test.v = false
+			checked_test4.v = true
+			end
+		imgui.End()
+		end
+	
 function shemamenu()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
@@ -7825,15 +7992,16 @@ function funksmenu()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(782, 120), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(782, 145), imgui.Cond.FirstUseEver)
 	if imgui.Begin(u8' Прочие функции', win_state['shemafunks'], imgui.WindowFlags.NoResize) then
-		imgui.BeginChild('##asdasasddf2131543', imgui.ImVec2(800, 80), false)
-		imgui.Columns(2, _, false)
-		imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт.")
+		imgui.BeginChild('##asdasasddf2131543', imgui.ImVec2(800, 100), false)
+		imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - нужно перезайти на сервер.")
+		imgui.SameLine(400)
 		imgui.Checkbox(u8'Запустить/Остановить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает или останавливает видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
-		imgui.NextColumn()
 		imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.SameLine(400)
 		imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.InputText(u8'Задержка для прочих функций', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд.")
 		imgui.EndChild()
 		imgui.End()
 		end
@@ -7882,22 +8050,67 @@ function tupupdate()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
-	if imgui.Begin(u8' Тестовые обновления v2.7', win_state['tup'], imgui.WindowFlags.NoResize) then
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 300), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс, когда при улучшении видеокарты не закрывался инвентарь и диалог.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс функционала в 'Прочие Функции' в Майнинге.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Добавлена кнопка 'Завершить улучшение видеокарт'. Нужна для того, чтобы быстро снять все галочки и завершить улучшение")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"видеокарт.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Небольшой фикс улучшения видеокарт. Также при улучшении видеокарт больше не закрывается инвентарь.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс 'Пополнение депозита', когда с открытым инвентарем не работало пополнение. Также теперь работает в свернутом режиме.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Биндер и Настройки' добавлен пункт 'Шахтёр'. В данном пункте можно включить счетчик руд и автоальт. Автоальт срабатывает")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"только на шахте у руды.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс Текстовых окон в меню.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Биндер и Настройки' - 'Модификации' добавлена функция 'Заметки'. С данной функцией вы сможете разместить окно с заметкой у")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"себя на экране с нужным вам текстом и перемещать его в любое место на экране. ")
+	if imgui.Begin(u8' Тестовые обновления v2.8', win_state['tup'], imgui.WindowFlags.NoResize) then
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 100), false)
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
 			imgui.EndChild()
 			imgui.End()
 		end
+	end
+	
+function getArizonaName()
+	local btn_size29 = imgui.ImVec2(230, 0)
+	if sampGetCurrentServerName():find("Phoenix") then gameServer = "Phoenix" end
+	if sampGetCurrentServerName():find("Tucson") then gameServer = "Tucson" end
+	if sampGetCurrentServerName():find("Scottdale") then gameServer = "Scottdale" end
+	if sampGetCurrentServerName():find("Chandler") then gameServer = "Chandler" end
+	if sampGetCurrentServerName():find("Brainburg") then gameServer = "Brainburg" end
+	if sampGetCurrentServerName():find("Saint Rose") then gameServer = "Saint Rose" end
+	if sampGetCurrentServerName():find("Mesa") then gameServer = "Mesa" end
+	if sampGetCurrentServerName():find("Red Rock") then gameServer = "Red Rock" end
+	if sampGetCurrentServerName():find("Yuma") then gameServer = "Yuma" end
+	if sampGetCurrentServerName():find("Surprise") then gameServer = "Surprise" end
+	if sampGetCurrentServerName():find("Prescott") then gameServer = "Prescott" end
+	if sampGetCurrentServerName():find("Glendale") then gameServer = "Glendale" end
+	if sampGetCurrentServerName():find("Kingman") then gameServer = "Kingman" end
+	if sampGetCurrentServerName():find("Winslow") then gameServer = "Winslow" end
+	if sampGetCurrentServerName():find("Payson") then gameServer = "Payson" end
+	if sampGetCurrentServerName():find("Gilbert") then gameServer = "Gilbert" end
+	if cfg.adpred.datetime ~= os.date("%d.%m.%Y") then 
+	cfg.adpred.datetime = os.date("%d.%m.%Y")
+	cfg.adpred.piarsh = 0 
+	cfg.adpred.vippiarsh = 0
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	imgui.VerticalSeparator() imgui.SameLine(650) imgui.VerticalSeparator()
+	imgui.Separator()
+	imgui.Text(u8('  '..gameServer)) imgui.SameLine() imgui.Text("|") imgui.SameLine() imgui.Text(u8(nickName))
+	imgui.Separator()
+	imgui.Text(u8('  ' ..cfg.adpred.datetime)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh))
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'*Счетчик объявлений скидывается на 0 каждый день. В скором времени сделаю сохранение по дням.')
+	imgui.PushItemWidth(50)
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine() imgui.InputText(u8'Задержка(сек)', adsec)
+	imgui.SameLine()
+	if imgui.Button(u8'Отправить объявление сейчас', btn_size29) then adtravel() end
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк)', vipadsec)
+	imgui.PopItemWidth()
+	imgui.SameLine() 
+	if imgui.Button(u8'Отправить VIP объявление сейчас', btn_size29) then adtravel2() end
+	imgui.PushItemWidth(627)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'         ', adredak)
+	imgui.Separator()
+	imgui.PopItemWidth()
 	end
 
 function rpguns()
@@ -7961,16 +8174,23 @@ function carsax()
 end
 
 function scriptinfo()
-	imgui.Text(u8"О скрипте")
 	imgui.Columns(2, _,false)
 	imgui.SetColumnWidth(-1, 800)
-	imgui.Separator()
 	imgui.TextColoredRGB("Автор: {FF0000}Bunya{FF0000}")
 	imgui.TextColoredRGB("Помогает в тестировании: {008000}Роман{008000}")
-	imgui.TextColoredRGB("Идеи, которые были осуществлены в скрипте, предлагали: {FFD700}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль и{FFD700}")
-	imgui.TextColoredRGB("{FFD700}mizert.{FFD700}")
-	imgui.TextColoredRGB("Актуальная версия скрипта: {00C2BB}"..thisScript().version.."{FFFFFF}")
-	if imgui.Button(u8"Тема на БХ", imgui.ImVec2(720, 25)) then os.execute("start https://www.blast.hk/threads/89343/") end
+	imgui.Text(u8("Группа в VK, на которую стоит подписаться:")) imgui.SameLine(265) imgui.Link('https://vk.com/monopolyfam','click')
+	imgui.TextColoredRGB("Промо-код на 09, 11 и 12, за который можно получить 1.000.000$ от Монополистов: {FFA500}#monopoly{FFA500}")
+	if imgui.Button(u8"Игроки, которые предлагали идеи и они были осуществлены", imgui.ImVec2(650, 25)) then win_state['oscriptepeople'].v = not win_state['oscriptepeople'].v end
+	if imgui.Button(u8"Поддержать Автора лайком и оставить отзыв", imgui.ImVec2(319, 25)) then os.execute("start https://www.blast.hk/threads/89343/") end
+	imgui.SameLine()
+	if imgui.Button(u8"Поддержать Автора материально", imgui.ImVec2(319, 25)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
+	if imgui.Button(u8"Сообщить о баге или предложить идею", imgui.ImVec2(650, 25)) then os.execute("start https://www.blast.hk/threads/89343/page-30000") end
+end
+
+function scriptinfopeople()
+	imgui.Columns(2, _,false)
+	imgui.SetColumnWidth(-1, 800)
+	imgui.TextColoredRGB("{FFD700}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777 и Graph_Bavles.{FFD700}")
 end
 
 function imgui.CenterText(text)
@@ -8700,5 +8920,32 @@ end
 function imgui.VerticalSeparator()
     local p = imgui.GetCursorScreenPos()
     imgui.GetWindowDrawList():AddLine(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x, p.y + imgui.GetContentRegionMax().y), imgui.GetColorU32(imgui.GetStyle().Colors[imgui.Col.Separator]))
-end
+end	
+
+function adtravel()
+lua_thread.create(function()
+	closeDialog()
+	wait(100)
+	sampSendChat(u8:decode (adredak.v))
+	wait(300)
+	sampSendDialogResponse(15346, 1, 1, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(100)
+	closeDialog()
+		end)
+	end
 	
+function adtravel2()
+lua_thread.create(function()
+	closeDialog()
+	wait(100)
+	sampSendChat(u8:decode (adredak.v))
+	wait(300)
+	sampSendDialogResponse(15346, 1, 2, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(100)
+	closeDialog()
+		end)
+	end
