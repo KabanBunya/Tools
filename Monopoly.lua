@@ -5435,7 +5435,6 @@ function autoupdate(json_url, prefix, url)
 					  sampAddChatMessage(('[Mono Tools]{FFFFFF} Ознакомиться со всеми обновлениями вы сможете в Меню скрипта - помощь - обновления.'), 0x046D63)
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
-					  testupdate()
                     end
                     if status1 == dlstatus.STATUSEX_ENDDOWNLOAD then
                       if goupdatestatus == nil then
