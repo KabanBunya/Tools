@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.8.1')
+script_version('2.8.2')
 
 local use = false
 local close = false
@@ -3797,6 +3797,7 @@ end
 
 function recongeniusis()
 	lua_thread.create(function()
+	wait(100)
 	sampDisconnectWithReason(quit)
 	wait(600000)
 	sampSetGamestate(1)
@@ -3805,6 +3806,7 @@ end
 
 function recongenmenu()
 	lua_thread.create(function()
+	wait(100)
 	sampDisconnectWithReason(quit)
 	wait(15000)
 	sampSetGamestate(1)
@@ -5319,7 +5321,7 @@ end
 	if text:find("Технический рестарт через 02 минут. Советуем завершить текущую сессию") and recongen.v then
 		recongeniusis()
 	end
-	if text:find("Сработала защита от реконнекта! Попробуйте переподключиться через (%d+) секунд") and recongen.v then
+	if color == -10270721 and text:find("Сработала защита от реконнекта! Попробуйте переподключиться через (%d+) секунд") and recongen.v then
 		recongenmenu()
 	end
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") then
@@ -5339,7 +5341,7 @@ end
 	elseif text:find("Вам был добавлен предмет 'Золотая рулетка'.") and podarki.v then
 		zolotopodarki = zolotopodarki + 1
 		itogopodarkov = itogopodarkov + 20
-	elseif text:find("Вам был добавлен предмет 'Чемодан (коричневый)'.") and podarki.v then
+	elseif text:find("Вам был добавлен предмет 'Чемодан") and podarki.v then
 		chemodanpodarki = chemodanpodarki + 1
 		itogopodarkov = itogopodarkov + 20
 	end
@@ -8194,6 +8196,8 @@ function tupupdate()
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Теперь после авто-обмена подарков пишется, чего и сколько вы получили с обмена и сколько подарков на это потратили.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Майнинг' - 'Прочие функции' добавлена функция 'Напоминания'. Если функция включена, то в указанный день скрипт уведомит")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"вас о том, что нужно забрать биткоины и обслужить видеокарты.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс когда в счетчике подарков не засчитывался чемодан.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс краша игры при использований 'Умного реконнекта'.")
 			imgui.EndChild()
 			imgui.End()
 		end
