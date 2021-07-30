@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.8.2')
+script_version('2.9')
 
 local use = false
 local close = false
@@ -34,6 +34,7 @@ local serebrorulpodarki = 0
 local zolotopodarki = 0
 local chemodanpodarki = 0
 local itogopodarkov = 0
+local itogobtc = 0
 krytim = true
 
 local restore_text = false
@@ -243,6 +244,34 @@ local SET = {
  	settings = {
 		autologin = false,
 		autoryda = false,
+		skuptrava = false,
+		skupbronzarul = false,
+		skupserebrorul = false,
+		skupgoldrul = false,
+		skupplatinarul = false,
+		skupkamen = false,
+		skupmetal = false,
+		skupbronza = false,
+		skupserebro = false,
+		skupgold = false,
+		skuppodarki = false,
+		skuptalon = false,
+		skupsemtalon = false,
+		skupskidtalon = false,
+		skuptochkamen = false,
+		skuptochamulet = false,
+		skuplarec = false,
+		skuptt = false,
+		skupmoneta = false,
+		skuplen = false,
+		skupxlopok = false,
+		skuprespekt = false,
+		skupmaterial = false,
+		skupdrova = false,
+		skupantibiotik = false,
+		skuptsr = false,
+		skupsemmoneta = false,
+		skupauto = false,
 		autopin = false,
 		autopay = false,
 		autoopl = false,
@@ -275,7 +304,62 @@ local SET = {
 		pismoreal4 = '5) ',
 		adsec = '60',
 		vipadsec = '60',
-		adredak = '/ad В 165 баре много девочек и пива.',
+		famadsec = '60',
+		vradsec = '60',
+		adredak = 'В 165 баре много девочек и пива.',
+		skuptravacol = '1',
+		skuptravacena = '1000',
+		skupbronzarulcol = '1',
+		skupbronzarulcena = '15000',
+		skupserebrorulcol = '1',
+		skupserebrorulcena = '95000',
+		skupgoldrulcol = '1',
+		skupgoldrulcena = '300000',
+		skupplatinarulcol = '1',
+		skupplatinarulcena = '600000',
+		skupkamencol = '1',
+		skupkamencena = '10000',
+		skupmetalcol = '1',
+		skupmetalcena = '5000',
+		skupbronzacol = '1',
+		skupbronzacena = '50000',
+		skupserebrocol = '1',
+		skupserebrocena = '100000',
+		skupgoldcol = '1',
+		skupgoldcena = '50000',
+		skuppodarkicol = '1',
+		skuppodarkicena = '10000',
+		skuptaloncol = '1',
+		skuptaloncena = '7000',
+		skupsemtaloncol = '1',
+		skupsemtaloncena = '17000',
+		skupskidtaloncol = '1',
+		skupskidtaloncena = '2000000',
+		skuptochkamencol = '1',
+		skuptochkamencena = '80000',
+		skuptochamuletcena = '200000',
+		skuplareccol = '1',
+		skuplareccena = '300000',
+		skupttcena = '9000000',
+		skupmonetacol = '1',
+		skupmonetacena = '2000',
+		skuplencol = '1',
+		skuplencena = '2000',
+		skupxlopokcol = '1',
+		skupxlopokcena = '1500',
+		skuprespektcol = '1',
+		skuprespektcena = '2000',
+		skupmaterialcol = '1',
+		skupmaterialcena = '100',
+		skupdrovacol = '1',
+		skupdrovacena = '100',
+		skupantibiotikcol = '1',
+		skupantibiotikcena = '10000',
+		skuptsrcol = '1',
+		skuptsrcena = '15000',
+		skupsemmonetacol = '1',
+		skupsemmonetacena = '5000',
+		skupautocena = '2000000',
 		activator = 'mono',
 		autopassopl = '6',
 		autopassopl1 = '15',
@@ -383,6 +467,8 @@ local SET = {
 		yashik1 = false,
 		yashik2 = false,
 		yashik3 = false,
+		otkrytie = true,
+		otkrytie2 = false,
 		ndr = false,
 		toch = false,
 		autobike = false,
@@ -468,6 +554,9 @@ win_state['games'] = imgui.ImBool(false)
 win_state['redak'] = imgui.ImBool(false)
 win_state['bank'] = imgui.ImBool(false)
 win_state['piar'] = imgui.ImBool(false)
+win_state['skup'] = imgui.ImBool(false)
+win_state['skup2'] = imgui.ImBool(false)
+win_state['skup3'] = imgui.ImBool(false)
 win_state['oscripte'] = imgui.ImBool(false)
 win_state['oscriptepeople'] = imgui.ImBool(false)
 win_state['shahtamenu'] = imgui.ImBool(false)
@@ -475,6 +564,7 @@ win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
 win_state['shemafunks'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
+win_state['skupshema'] = imgui.ImBool(false)
 win_state['tup'] = imgui.ImBool(false)
 win_state['timeyved'] = imgui.ImBool(false)
 win_state['carsas'] = imgui.ImBool(false)
@@ -502,6 +592,7 @@ local liquid = imgui.ImBool(false)
 local pusk = imgui.ImBool(false)
 local platina = imgui.ImBool(false)
 local moneta = imgui.ImBool(false)
+local tochkamen = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
@@ -546,6 +637,8 @@ local video34 = imgui.ImBool(false)
 local video35 = imgui.ImBool(false)
 local addad = imgui.ImBool(false)
 local vipaddad = imgui.ImBool(false)
+local famaddad = imgui.ImBool(false)
+local vraddad = imgui.ImBool(false)
 local checktochilki = false
 local checktochilki1 = false
 local checktochilki2 = false
@@ -1192,6 +1285,12 @@ function mainmenu()
 			win_state['bank'].v = not win_state['bank'].v
 		elseif win_state['piar'].v then
 			win_state['piar'].v = not win_state['piar'].v
+		elseif win_state['skup'].v then
+			win_state['skup'].v = not win_state['skup'].v
+		elseif win_state['skup2'].v then
+			win_state['skup2'].v = not win_state['skup2'].v
+		elseif win_state['skup3'].v then
+			win_state['skup3'].v = not win_state['skup3'].v
 		elseif win_state['oscripte'].v then
 			win_state['oscripte'].v = not win_state['oscripte'].v
 		elseif win_state['oscriptepeople'].v then
@@ -1223,6 +1322,8 @@ function mainmenu()
 			win_state['games'].v = not win_state['games'].v
 		elseif win_state['shahtamenu'].v then
 			win_state['shahtamenu'].v = not win_state['shahtamenu'].v
+		elseif win_state['skupshema'].v then
+			win_state['skupshema'].v = not win_state['skupshema'].v
 		end
 		win_state['main'].v = not win_state['main'].v
 		imgui.Process = win_state['main'].v
@@ -1276,6 +1377,7 @@ function main()
 	lua_thread.create(informerperem)
 	lua_thread.create(informerperemshahta)
 	lua_thread.create(informerperempismo)
+	lua_thread.create(rouletteyashik)
 	lua_thread.create(roulette)
 	lua_thread.create(piarad)
 	lua_thread.create(raznoe)
@@ -1377,7 +1479,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemafunks'].v or win_state['shemainst'].v or win_state['pismotext'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemafunks'].v or win_state['shemainst'].v or win_state['skupshema'].v or win_state['pismotext'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -1548,6 +1650,8 @@ function saveSettings(args, key)
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
 	ini.settings.yashik3 = yashik3.v
+	ini.settings.otkrytie = otkrytie.v
+	ini.settings.otkrytie2 = otkrytie2.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
 	ini.settings.autobike = autobike.v
@@ -1668,6 +1772,8 @@ function saveSettings(args, key)
 	ini.settings.pismoreal4 = u8:decode(pismoreal4.v)
 	ini.settings.adsec = u8:decode(adsec.v)
 	ini.settings.vipadsec = u8:decode(vipadsec.v)
+	ini.settings.famadsec = u8:decode(famadsec.v)
+	ini.settings.vradsec = u8:decode(vradsec.v)
 	ini.settings.adredak = u8:decode(adredak.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
@@ -1682,6 +1788,89 @@ function saveSettings(args, key)
 	ini.settings.autoopl6 = autoopl6.v
 	ini.settings.autopay = autopay.v
 	ini.settings.lock = lock.v
+	
+	ini.settings.skuptravacol = u8:decode(skuptravacol.v)
+	ini.settings.skuptravacena = u8:decode(skuptravacena.v)
+	ini.settings.skupbronzarulcol = u8:decode(skupbronzarulcol.v)
+	ini.settings.skupbronzarulcena = u8:decode(skupbronzarulcena.v)
+	ini.settings.skupserebrorulcol = u8:decode(skupserebrorulcol.v)
+	ini.settings.skupserebrorulcena = u8:decode(skupserebrorulcena.v)
+	ini.settings.skupgoldrulcol = u8:decode(skupgoldrulcol.v)
+	ini.settings.skupgoldrulcena = u8:decode(skupgoldrulcena.v)
+	ini.settings.skupplatinarulcol = u8:decode(skupplatinarulcol.v)
+	ini.settings.skupplatinarulcena = u8:decode(skupplatinarulcena.v)
+	ini.settings.skupkamencol = u8:decode(skupkamencol.v)
+	ini.settings.skupkamencena = u8:decode(skupkamencena.v)
+	ini.settings.skupmetalcol = u8:decode(skupmetalcol.v)
+	ini.settings.skupmetalcena = u8:decode(skupmetalcena.v)
+	ini.settings.skupbronzacol = u8:decode(skupbronzacol.v)
+	ini.settings.skupbronzacena = u8:decode(skupbronzacena.v)
+	ini.settings.skupserebrocol = u8:decode(skupserebrocol.v)
+	ini.settings.skupserebrocena = u8:decode(skupserebrocena.v)
+	ini.settings.skupgoldcol = u8:decode(skupgoldcol.v)
+	ini.settings.skupgoldcena = u8:decode(skupgoldcena.v)
+	ini.settings.skuppodarkicol = u8:decode(skuppodarkicol.v)
+	ini.settings.skuppodarkicena = u8:decode(skuppodarkicena.v)
+	ini.settings.skuptaloncol = u8:decode(skuptaloncol.v)
+	ini.settings.skuptaloncena = u8:decode(skuptaloncena.v)
+	ini.settings.skupsemtaloncol = u8:decode(skupsemtaloncol.v)
+	ini.settings.skupsemtaloncena = u8:decode(skupsemtaloncena.v)
+	ini.settings.skupskidtaloncol = u8:decode(skupskidtaloncol.v)
+	ini.settings.skupskidtaloncena = u8:decode(skupskidtaloncena.v)
+	ini.settings.skuptochkamencol = u8:decode(skuptochkamencol.v)
+	ini.settings.skuptochkamencena = u8:decode(skuptochkamencena.v)
+	ini.settings.skuptochamuletcena = u8:decode(skuptochamuletcena.v)
+	ini.settings.skuplareccol = u8:decode(skuplareccol.v)
+	ini.settings.skuplareccena = u8:decode(skuplareccena.v)
+	ini.settings.skupttcena = u8:decode(skupttcena.v)
+	ini.settings.skupmonetacol = u8:decode(skupmonetacol.v)
+	ini.settings.skupmonetacena = u8:decode(skupmonetacena.v)
+	ini.settings.skuplencol = u8:decode(skuplencol.v)
+	ini.settings.skuplencena = u8:decode(skuplencena.v)
+	ini.settings.skupxlopokcol = u8:decode(skupxlopokcol.v)
+	ini.settings.skupxlopokcena = u8:decode(skupxlopokcena.v)
+	ini.settings.skuprespektcol = u8:decode(skuprespektcol.v)
+	ini.settings.skuprespektcena = u8:decode(skuprespektcena.v)
+	ini.settings.skupmaterialcol = u8:decode(skupmaterialcol.v)
+	ini.settings.skupmaterialcena = u8:decode(skupmaterialcena.v)
+	ini.settings.skupdrovacol = u8:decode(skupdrovacol.v)
+	ini.settings.skupdrovacena = u8:decode(skupdrovacena.v)
+	ini.settings.skupantibiotikcol = u8:decode(skupantibiotikcol.v)
+	ini.settings.skupantibiotikcena = u8:decode(skupantibiotikcena.v)
+	ini.settings.skuptsrcol = u8:decode(skuptsrcol.v)
+	ini.settings.skuptsrcena = u8:decode(skuptsrcena.v)
+	ini.settings.skupsemmonetacol = u8:decode(skupsemmonetacol.v)
+	ini.settings.skupsemmonetacena = u8:decode(skupsemmonetacena.v)
+	ini.settings.skupautocena = u8:decode(skupautocena.v)
+	
+	ini.settings.skuptrava = skuptrava.v
+	ini.settings.skupbronzarul = skupbronzarul.v
+	ini.settings.skupserebrorul = skupserebrorul.v
+	ini.settings.skupgoldrul = skupgoldrul.v
+	ini.settings.skupplatinarul = skupplatinarul.v
+	ini.settings.skupkamen = skupkamen.v
+	ini.settings.skupmetal = skupmetal.v
+	ini.settings.skupbronza = skupbronza.v
+	ini.settings.skupserebro = skupserebro.v
+	ini.settings.skupgold = skupgold.v
+	ini.settings.skuppodarki = skuppodarki.v
+	ini.settings.skuptalon = skuptalon.v
+	ini.settings.skupsemtalon = skupsemtalon.v
+	ini.settings.skupskidtalon = skupskidtalon.v
+	ini.settings.skuptochkamen = skuptochkamen.v
+	ini.settings.skuptochamulet = skuptochamulet.v
+	ini.settings.skuplarec = skuplarec.v
+	ini.settings.skuptt = skuptt.v
+	ini.settings.skupmoneta = skupmoneta.v
+	ini.settings.skuplen = skuplen.v
+	ini.settings.skupxlopok = skupxlopok.v
+	ini.settings.skuprespekt = skuprespekt.v
+	ini.settings.skupmaterial = skupmaterial.v
+	ini.settings.skupdrova = skupdrova.v
+	ini.settings.skupantibiotik = skupantibiotik.v
+	ini.settings.skuptsr = skuptsr.v
+	ini.settings.skupsemmoneta = skupsemmoneta.v
+	ini.settings.skupauto = skupauto.v
 
 	ini.assistant.asX = asX
 	ini.assistant.asY = asY
@@ -1810,21 +1999,21 @@ end
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
-  if checked_test5.v and active then
+  if checked_test5.v and active and otkrytie.v then
     lua_thread.create(function()
 	 if data.modelId == 19918 then
 		wait(1000)
         sampSendClickTextdraw(id)
 		use = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use = false
         close = true
       end
-      if close then
+      if close and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -1834,21 +2023,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-  if checked_test6.v and active1 then
+  if checked_test6.v and active1 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 19613 then
 		wait(1000)
         sampSendClickTextdraw(id)
         use1 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use1 = false
         close1 = true
       end
-      if close1 then
+      if close1 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -1858,21 +2047,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-  if checked_test7.v and active2 then
+  if checked_test7.v and active2 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1353 then
         wait(1000)
         sampSendClickTextdraw(id)
         use2 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use2 = false
         close2 = true
       end
-      if close2 then
+      if close2 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -1882,14 +2071,14 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-    if checked_test8.v and active3 then
+    if checked_test8.v and active3 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1240 then
         wait(1000)
         sampSendClickTextdraw(id)
         use3 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use3 then 
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use3 and otkrytie.v then 
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
@@ -1898,7 +2087,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		use3 = false
 		close3 = true
 	  end
-      if close3 then
+      if close3 and otkrytie.v then
         wait(300)
         setVirtualKeyDown(VK_ESCAPE, true)
 		wait(111)
@@ -1908,21 +2097,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	   end
     end)
   end
-  if checked_test9.v and active4 then
+  if checked_test9.v and active4 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1240 then
         wait(1000)
         sampSendClickTextdraw(id)
         use4 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use4 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use4 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use4 = false
         close4 = true
       end
-      if close4 then
+      if close4 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -1932,21 +2121,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-	if checked_test10.v and active5 then
+	if checked_test10.v and active5 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
         wait(1000)
         sampSendClickTextdraw(id)
         use5 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use5 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use5 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use5 = false
         close5 = true
       end
-      if close5 then
+      if close5 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -1956,21 +2145,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-	if yashik.v and active then
+	if yashik.v and active and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 19918 then
         wait(1000)
         sampSendClickTextdraw(id)
         use = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use = false
         close = true
       end
-      if close then
+      if close and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -1980,21 +2169,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-  if yashik1.v and active1 then
+  if yashik1.v and active1 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 19613 then
         wait(1000)
         sampSendClickTextdraw(id)
         use1 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use1 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use1 = false
         close1 = true
       end
-      if close1 then
+      if close1 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -2004,21 +2193,21 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-  if yashik2.v and active2 then
+  if yashik2.v and active2 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1353 then
         wait(1000)
         sampSendClickTextdraw(id)
         use2 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use2 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use2 = false
         close2 = true
       end
-      if close2 then
+      if close2 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
@@ -2028,27 +2217,223 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-	if yashik3.v and active5 then
+	if yashik3.v and active5 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
         wait(1000)
         sampSendClickTextdraw(id)
         use3 = true
       end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use3 then
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use3 and otkrytie.v then
         clickID = id + 1
 		wait(500)
         sampSendClickTextdraw(clickID)
         use3 = false
         close3 = true
       end
-      if close3 then
+      if close3 and otkrytie.v then
         wait(300)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
         close3 = false
         active3 = false
+      end
+    end)
+  end
+	 if checked_test5.v and active and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 19918 then
+        wait(111)
+        sampSendClickTextdraw(id)
+		wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active = false
+      end
+    end)
+  end
+  if checked_test6.v and active1 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 19613 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active1 = false
+      end
+    end)
+  end
+  if checked_test7.v and active2 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1353 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active2 = false
+      end
+    end)
+  end
+    if checked_test8.v and active3 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1240 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        use3 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use3 then 
+        clickID = id + 1
+        sampSendClickTextdraw(clickID)
+		wait(1000)
+		sampSendClickTextdraw(2048)
+		use3 = false
+		close3 = true
+	  end
+      if close3 then
+        wait(111)
+        setVirtualKeyDown(VK_ESCAPE, true)
+		wait(111)
+		setVirtualKeyDown(VK_ESCAPE, false)
+		close3 = false
+        active3 = false
+	   end
+    end)
+  end
+  if checked_test9.v and active4 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1240 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active4 = false
+		end
+	 end)
+	end
+	if checked_test10.v and active5 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1733 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active5 = false
+      end
+    end)
+  end
+	if yashik.v and active and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 19918 then
+        wait(111)
+        sampSendClickTextdraw(id)
+       wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active = false
+      end
+    end)
+  end
+  if yashik1.v and active1 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 19613 then
+        wait(111)
+		sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active1 = false
+      end
+    end)
+  end
+  if yashik2.v and active2 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1353 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active2 = false
+      end
+    end)
+  end
+	if yashik3.v and active5 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1733 then
+        wait(111)
+        sampSendClickTextdraw(id)
+        wait(222)
+		sampSendClickTextdraw(2302)
+        wait(333)
+        sampSendClickTextdraw(2110)
+		wait(444)
+		sampSendClickTextdraw(2110)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+		wait(111)
+		sampSendClickTextdraw(2135)
+        active5 = false
       end
     end)
   end
@@ -3923,12 +4308,13 @@ function imgui.OnDrawFrame()
 	if win_state['main'].v then -- основное окошко
 		
 		imgui.SetNextWindowPos(imgui.ImVec2(sw / 2, sh / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(260, 270), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(260, 302), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Mono Tools ', win_state['main'], imgui.WindowFlags.NoResize)
 		if imgui.Button(u8' Биндер и Настройки', btn_size) then win_state['settings'].v = not win_state['settings'].v end
 		if imgui.Button(u8' Roulette Tools', btn_size) then win_state['yashiki'].v = not win_state['yashiki'].v end
 		if imgui.Button(u8' Bank Menu', btn_size) then win_state['bank'].v = not win_state['bank'].v end
 		if imgui.Button(u8' Piar Menu', btn_size) then win_state['piar'].v = not win_state['piar'].v end
+		if imgui.Button(u8' Skup Menu', btn_size) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
 		if imgui.Button(u8' Мини игры', btn_size) then win_state['gamer'].v = not win_state['gamer'].v end
 		if imgui.Button(u8' Помощь', btn_size) then win_state['help'].v = not win_state['help'].v end
 		if imgui.Button(u8' О скрипте', btn_size) then win_state['oscripte'].v = not win_state['oscripte'].v end
@@ -4047,19 +4433,19 @@ function imgui.OnDrawFrame()
 					end
 				end
 				imgui.Text(u8(" Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
-					imgui.InputText(u8'    ', autoklava)
+					imgui.InputText(u8'##1', autoklava)
 				imgui.Text(u8(" Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
-					imgui.InputText(u8' ', autoklavareload)
+					imgui.InputText(u8'##2', autoklavareload)
 				imgui.Text(u8("Запуск дрона на клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"В полях нужно ввести коды клавиш для запуска дрона. По умолчанию поставлено на С + 1. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 					imgui.PushItemWidth(105)
-					imgui.InputText(u8'', autodrone) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'      ', autodronev2)
+					imgui.InputText(u8'##3', autodrone) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'##4', autodronev2)
 					imgui.PopItemWidth()
 				imgui.Text(u8("Закрытие дрона на клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"В полях нужно ввести коды клавиш для запуска дрона. По умолчанию поставлено на С + 2. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 					imgui.PushItemWidth(105)
-					imgui.InputText(u8'##', autodronev3) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'###', autodronev4)
+					imgui.InputText(u8'##5', autodronev3) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'##6', autodronev4)
 					imgui.PopItemWidth()
 				imgui.Text(u8(" Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
-					imgui.InputText(u8'  ', activator)
+					imgui.InputText(u8'##7', activator)
 				imgui.EndChild()
 			end
 			if imgui.CollapsingHeader(u8' Майнинг') then
@@ -4219,6 +4605,7 @@ function imgui.OnDrawFrame()
 					end
 				end
 				imgui.SliderInt(u8" Коррекция времени", timefix, 0, 5)
+				if imgui.Button(u8' Вернуть значения скупа по умолчанию', btn_size) then skuppoymol() end
 			end
 		elseif showSet == 3 then -- настройки клавиш
 			imgui.Columns(2, _, false)
@@ -4409,6 +4796,9 @@ function imgui.OnDrawFrame()
 	if win_state['shemainst'].v then
 		shemainstr()
 	end
+	if win_state['skupshema'].v then
+		shemaskup()
+	end
 	if win_state['tup'].v then
 		tupupdate()
 	end
@@ -4430,52 +4820,52 @@ function imgui.OnDrawFrame()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку, дом и бизнес"), autoopl); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
-					imgui.InputText(u8'Коммуналка', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
-					imgui.InputText(u8'Бизнес', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Авто ##8', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Коммуналка ##9', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом ##10', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Бизнес ##11', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за коммуналку, дом и бизнес"), autoopl2); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl2.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Коммуналка ', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом ', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
-					imgui.InputText(u8'Бизнес ', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Коммуналка ##12', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом ##13', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Бизнес ##14', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку и дом")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку и дом"), autoopl1); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl1.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто ', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
-					imgui.InputText(u8'Коммуналка  ', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом  ', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Авто ##15', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Коммуналка ##16', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом ##17', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за коммуналку и дом")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за коммуналку и дом"), autoopl5); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl5.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Коммуналка   ', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
-					imgui.InputText(u8'Дом   ', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
+					imgui.InputText(u8'Коммуналка ##18', autopassopl1); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата коммуналки' и вписываете получившиеся номер строки. По умолчанию стоит 15 строка.")
+					imgui.InputText(u8'Дом ##19', autopassopl2); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за дом' и вписываете получившиеся номер строки. По умолчанию стоит 16 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто и бизнес"), autoopl3); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl3.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто  ', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
-					imgui.InputText(u8'Бизнес  ', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Авто ##20', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Бизнес ##21', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за бизнес"), autoopl6); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl6.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Бизнес   ', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
+					imgui.InputText(u8'Бизнес ##22', autopassopl3); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за бизнес' и вписываете получившиеся номер строки. По умолчанию стоит 17 строка.")
 				end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто"), autoopl4); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
 				if autoopl4.v then
 					imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Номера строк:")
-					imgui.InputText(u8'Авто    ', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
+					imgui.InputText(u8'Авто ##23', autopassopl); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Оплата налогов за авто' и вписываете получившиеся номер строки. По умолчанию стоит 6 строка.")
 				end
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8(" Пополнение депозита каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Пополнение депозита каждый PD"), autopay); imgui.SameLine(); imgui.TextQuestion(u8"Пополняет депозит на указанную сумму когда скрипт видит в чате 'Банковский чек'. Также вы должны в этот момент стоять у кассы в Банке, иначе депозит не пополнится.");
 				if autopay.v then
-					imgui.InputText(u8'Номер строки', autopasspaypin); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Пополнения Депозита' и вписываете получившиеся номер строки. По умолчанию стоит 8 строка.")
-					imgui.InputText(u8'Сумма', autopasspay); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать сумму пополнения. По умолчанию стоит 5.000.000$")
+					imgui.InputText(u8'Номер строки ##24', autopasspaypin); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Пополнения Депозита' и вписываете получившиеся номер строки. По умолчанию стоит 8 строка.")
+					imgui.InputText(u8'Сумма ##25', autopasspay); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать сумму пополнения. По умолчанию стоит 5.000.000$")
 			end
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Оплату налогов включать только один из нужных вам")
 				imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"пунктов! Также внимательно читайте как и что нужно настроить.")
@@ -4486,8 +4876,35 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(680, 480), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Piar Menu ', win_state['piar'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 407), false)
+				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 405), false)
 				getArizonaName()
+				imgui.EndChild()
+		imgui.End()
+	end
+	if win_state['skup'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(718, 578), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8' Skup Menu ', win_state['skup'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
+				imgui.BeginChild('##asdasasddf32345235412', imgui.ImVec2(688, 499), false)
+				getArizonaSkup()
+				imgui.EndChild()
+		imgui.End()
+	end
+	if win_state['skup2'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(718, 578), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8' Skup Menu ', win_state['skup2'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
+				imgui.BeginChild('##asdasasddf3234432', imgui.ImVec2(688, 499), false)
+				getArizonaSkup2str()
+				imgui.EndChild()
+		imgui.End()
+	end
+	if win_state['skup3'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(718, 578), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8' Skup Menu ', win_state['skup3'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
+				imgui.BeginChild('##asdasasddf2121', imgui.ImVec2(688, 493), false)
+				getArizonaSkup3str()
 				imgui.EndChild()
 		imgui.End()
 	end
@@ -4800,6 +5217,33 @@ function imgui.OnDrawFrame()
 				imgui.Text(u8"15. Окно 'О скрипте' перенесено из 'Помощь' в меню скрипта.")
 		imgui.EndChild()
 		end
+		if imgui.CollapsingHeader(u8' 30.07.2021') then
+				imgui.BeginChild('##as2dasasdf457434', imgui.ImVec2(700, 215), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text(u8"1. Фикс сундуков (кикало за флуд функциями)")
+				imgui.Text(u8"2. Фикс улучшения видеокарт (кикало за флуд функциями)")
+				imgui.Text(u8"3. Фикс ложного срабатывания 'Пополнение депозита' (кикало за флуд функциями)")
+				imgui.Text(u8"4. Фикс imgui окон (некоторые окна не сворачивались)")
+				imgui.Text(u8"5. Фикс 'Умного реконнекта' (иногда крашило игру и реагировал на сообщения от игроков)")
+				imgui.Text(u8"6. Фикс открытия рулеток (не работало, если включено открытие сундуков)")
+				imgui.Text(u8"7. Добавлено 'Skup Menu'. Теперь вы сможете быстро выставлять нужные товары на скупку.")
+				imgui.Text(u8"8. В 'Roulette Tools' добавлен пункт 'Обмен зловещих монет на точильные камни'.")
+				imgui.Text(u8"9. В 'Roulette Tools' добавлено 2 способа открытия сундуков. Тестируйте сами, какой из способов у вас работает")
+				imgui.Text(u8"стабильнее.")
+				imgui.Text(u8"10. В 'Piar Menu' добавлена возможность отправлять ваш текст в /vr и /fam.")
+				imgui.Text(u8"11. В 'Умный реконнект' добавлен перезаход после 'You are banned from this server'.")
+				imgui.Text(u8"12. В 'Авторизация' добавлено то, что если в настройках указан неверный пароль, то скрипт больше не пробует")
+				imgui.Text(u8"зайти, используя сразу 3 попытки, а пишет в чате, что введенен неверный пароль и даёт возможность ввести его")
+				imgui.Text(u8"вручную.")
+				imgui.Text(u8"13. В 'Майнинг' - 'Прочие функции' добавлена функция 'Напоминание'. Если функция включена, то в указанный")
+				imgui.Text(u8" день скрипт уведомит вас о том, что нужно забрать биткоины и обслужить видеокарты.")
+				imgui.Text(u8"14. Теперь задержка в 'Майнинг' - 'Прочие функции' влияет на улучшение видеокарт.")
+				imgui.Text(u8"15. Теперь после авто-обмена подарков пишется, чего и сколько вы получили с обмена и сколько подарков на")
+				imgui.Text(u8"это потратили.")
+				imgui.Text(u8"16. После авто-сбора биткоинов пишется, сколько биткоинов вы собрали.")
+		imgui.EndChild()
+		end
 		elseif selected2 == 2 then
 			imgui.Text(u8"Команды скрипта")
 			imgui.Separator()
@@ -5011,11 +5455,15 @@ function onWindowMessage(m, p)
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		win_state['skupshema'].v = false
 		win_state['pismotext'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
 		win_state['piar'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
@@ -5035,11 +5483,15 @@ function onWindowMessage(m, p)
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		win_state['skupshema'].v = false
 		win_state['pismotext'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
 		win_state['piar'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
@@ -5059,11 +5511,15 @@ function onWindowMessage(m, p)
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		win_state['skupshema'].v = false
 		win_state['pismotext'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
 		win_state['piar'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
@@ -5083,11 +5539,15 @@ function onWindowMessage(m, p)
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
+		win_state['skupshema'].v = false
 		win_state['pismotext'].v = false
 		pong = false
 		snaketaken = false
 		win_state['bank'].v = false
 		win_state['piar'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
@@ -5263,8 +5723,9 @@ function sampev.onServerMessage(color, text)
 	if text:match("У тебя недостаточно гражданских талонов!") and platina.v then
 		platina.v = false
 	end
-	if text:match("У тебя нет зловещих монет!") and moneta.v then
+	if text:match("У тебя нет зловещих монет!") and moneta.v or tochkamen.v then
 		moneta.v = false
+		tochkamen.v = false
 	end
 	if text:match("Вам был добавлен предмет 'Сертификат") or text:match("Вам был добавлен предмет 'Золото'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") or text:match("Вам был добавлен предмет 'Серебро'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") and checked_test.v then
 		checked_test.v = false
@@ -5318,7 +5779,7 @@ end
 			notf.addNotification("Вам удалось улучшить скин или аксессуар, поздравляем!", 3, 2)
 			return false
 	end
-	if text:find("Технический рестарт через 02 минут. Советуем завершить текущую сессию") and recongen.v then
+	if color == -1104335361 and text:find("Технический рестарт через 02 минут. Советуем завершить текущую сессию") and recongen.v then
 		recongeniusis()
 	end
 	if color == -10270721 and text:find("Сработала защита от реконнекта! Попробуйте переподключиться через (%d+) секунд") and recongen.v then
@@ -5345,44 +5806,15 @@ end
 		chemodanpodarki = chemodanpodarki + 1
 		itogopodarkov = itogopodarkov + 20
 	end
-	local videokarta = video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v
+	if text:match("Вы вывели {ffffff}(%d+) BTC{ffff00}, осталось на счету видеокарты:") and btc.v then
+		lua_thread.create(function()
+		wait(10)
+		bitkoin = text:match('(%d+)')
+		itogobtc = itogobtc + bitkoin
+		end)
+	end
 	if text:find("У вас нет 2шт. смазки для видеокарты. Её можно скрафтить в подвале дома или купить на центральном рынке.") and videokarta then
-		video.v = false
-		video1.v = false
-		video2.v = false
-		video3.v = false
-		video4.v = false
-		video5.v = false
-		video6.v = false
-		video7.v = false
-		video8.v = false
-		video9.v = false
-		video10.v = false
-		video11.v = false
-		video12.v = false
-		video13.v = false
-		video14.v = false
-		video15.v = false
-		video16.v = false
-		video17.v = false
-		video18.v = false
-		video19.v = false
-		video20.v = false
-		video21.v = false
-		video22.v = false
-		video23.v = false
-		video24.v = false
-		video25.v = false
-		video26.v = false
-		video27.v = false
-		video28.v = false
-		video29.v = false
-		video30.v = false
-		video31.v = false
-		video32.v = false
-		video33.v = false
-		video34.v = false
-		video35.v = false
+		videoover()
 	end
 	if toch.v then
 		text = separator(text)
@@ -5484,6 +5916,35 @@ function load_settings() -- загрузка настроек
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
 	
+	skuptrava = imgui.ImBool(ini.settings.skuptrava)
+	skupbronzarul = imgui.ImBool(ini.settings.skupbronzarul)
+	skupserebrorul = imgui.ImBool(ini.settings.skupserebrorul)
+	skupgoldrul = imgui.ImBool(ini.settings.skupgoldrul)
+	skupplatinarul = imgui.ImBool(ini.settings.skupplatinarul)
+	skupkamen = imgui.ImBool(ini.settings.skupkamen)
+	skupmetal = imgui.ImBool(ini.settings.skupmetal)
+	skupbronza = imgui.ImBool(ini.settings.skupbronza)
+	skupserebro = imgui.ImBool(ini.settings.skupserebro)
+	skupgold = imgui.ImBool(ini.settings.skupgold)
+	skuppodarki = imgui.ImBool(ini.settings.skuppodarki)
+	skuptalon = imgui.ImBool(ini.settings.skuptalon)
+	skupsemtalon = imgui.ImBool(ini.settings.skupsemtalon)
+	skupskidtalon = imgui.ImBool(ini.settings.skupskidtalon)
+	skuptochkamen = imgui.ImBool(ini.settings.skuptochkamen)
+	skuptochamulet = imgui.ImBool(ini.settings.skuptochamulet)
+	skuplarec = imgui.ImBool(ini.settings.skuplarec)
+	skuptt = imgui.ImBool(ini.settings.skuptt)
+	skupmoneta = imgui.ImBool(ini.settings.skupmoneta)
+	skuplen = imgui.ImBool(ini.settings.skuplen)
+	skupxlopok = imgui.ImBool(ini.settings.skupxlopok)
+	skuprespekt = imgui.ImBool(ini.settings.skuprespekt)
+	skupmaterial = imgui.ImBool(ini.settings.skupmaterial)
+	skupdrova = imgui.ImBool(ini.settings.skupdrova)
+	skupantibiotik = imgui.ImBool(ini.settings.skupantibiotik)
+	skuptsr = imgui.ImBool(ini.settings.skuptsr)
+	skupsemmoneta = imgui.ImBool(ini.settings.skupsemmoneta)
+	skupauto = imgui.ImBool(ini.settings.skupauto)
+
 	autokamen = imgui.ImBuffer(u8(ini.settings.autokamen), 256)
 	autometal = imgui.ImBuffer(u8(ini.settings.autometal), 256)
 	autobronza = imgui.ImBuffer(u8(ini.settings.autobronza), 256)
@@ -5515,7 +5976,64 @@ function load_settings() -- загрузка настроек
 	pismoreal4 = imgui.ImBuffer(u8(ini.settings.pismoreal4), 2560)
 	adsec = imgui.ImBuffer(u8(ini.settings.adsec), 100)
 	vipadsec = imgui.ImBuffer(u8(ini.settings.vipadsec), 100)
+	famadsec = imgui.ImBuffer(u8(ini.settings.famadsec), 100)
+	vradsec = imgui.ImBuffer(u8(ini.settings.vradsec), 100)
 	adredak = imgui.ImBuffer(u8(ini.settings.adredak), 1000)
+	
+	skuptravacol = imgui.ImBuffer(u8(ini.settings.skuptravacol), 256)
+	skuptravacena = imgui.ImBuffer(u8(ini.settings.skuptravacena), 256)
+	skupbronzarulcol = imgui.ImBuffer(u8(ini.settings.skupbronzarulcol), 256)
+	skupbronzarulcena = imgui.ImBuffer(u8(ini.settings.skupbronzarulcena), 256)
+	skupserebrorulcol = imgui.ImBuffer(u8(ini.settings.skupserebrorulcol), 256)
+	skupserebrorulcena = imgui.ImBuffer(u8(ini.settings.skupserebrorulcena), 256)
+	skupgoldrulcol = imgui.ImBuffer(u8(ini.settings.skupgoldrulcol), 256)
+	skupgoldrulcena = imgui.ImBuffer(u8(ini.settings.skupgoldrulcena), 256)
+	skupplatinarulcol = imgui.ImBuffer(u8(ini.settings.skupplatinarulcol), 256)
+	skupplatinarulcena = imgui.ImBuffer(u8(ini.settings.skupplatinarulcena), 256)
+	skupkamencol = imgui.ImBuffer(u8(ini.settings.skupkamencol), 256)
+	skupkamencena = imgui.ImBuffer(u8(ini.settings.skupkamencena), 256)
+	skupmetalcol = imgui.ImBuffer(u8(ini.settings.skupmetalcol), 256)
+	skupmetalcena = imgui.ImBuffer(u8(ini.settings.skupmetalcena), 256)
+	skupbronzacol = imgui.ImBuffer(u8(ini.settings.skupbronzacol), 256)
+	skupbronzacena = imgui.ImBuffer(u8(ini.settings.skupbronzacena), 256)
+	skupserebrocol = imgui.ImBuffer(u8(ini.settings.skupserebrocol), 256)
+	skupserebrocena = imgui.ImBuffer(u8(ini.settings.skupserebrocena), 256)
+	skupgoldcol = imgui.ImBuffer(u8(ini.settings.skupgoldcol), 256)
+	skupgoldcena = imgui.ImBuffer(u8(ini.settings.skupgoldcena), 256)
+	skuppodarkicol = imgui.ImBuffer(u8(ini.settings.skuppodarkicol), 256)
+	skuppodarkicena = imgui.ImBuffer(u8(ini.settings.skuppodarkicena), 256)
+	skuptaloncol = imgui.ImBuffer(u8(ini.settings.skuptaloncol), 256)
+	skuptaloncena = imgui.ImBuffer(u8(ini.settings.skuptaloncena), 256)
+	skupsemtaloncol = imgui.ImBuffer(u8(ini.settings.skupsemtaloncol), 256)
+	skupsemtaloncena = imgui.ImBuffer(u8(ini.settings.skupsemtaloncena), 256)
+	skupskidtaloncol = imgui.ImBuffer(u8(ini.settings.skupskidtaloncol), 256)
+	skupskidtaloncena = imgui.ImBuffer(u8(ini.settings.skupskidtaloncena), 256)
+	skuptochkamencol = imgui.ImBuffer(u8(ini.settings.skuptochkamencol), 256)
+	skuptochkamencena = imgui.ImBuffer(u8(ini.settings.skuptochkamencena), 256)
+	skuptochamuletcena = imgui.ImBuffer(u8(ini.settings.skuptochamuletcena), 256)
+	skuplareccol = imgui.ImBuffer(u8(ini.settings.skuplareccol), 256)
+	skuplareccena = imgui.ImBuffer(u8(ini.settings.skuplareccena), 256)
+	skupttcena = imgui.ImBuffer(u8(ini.settings.skupttcena), 256) 
+	skupmonetacol = imgui.ImBuffer(u8(ini.settings.skupmonetacol), 256)
+	skupmonetacena = imgui.ImBuffer(u8(ini.settings.skupmonetacena), 256) 
+	skuplencol = imgui.ImBuffer(u8(ini.settings.skuplencol), 256)
+	skuplencena = imgui.ImBuffer(u8(ini.settings.skuplencena), 256) 
+	skupxlopokcol = imgui.ImBuffer(u8(ini.settings.skupxlopokcol), 256)
+	skupxlopokcena = imgui.ImBuffer(u8(ini.settings.skupxlopokcena), 256) 
+	skuprespektcol = imgui.ImBuffer(u8(ini.settings.skuprespektcol), 256)
+	skuprespektcena = imgui.ImBuffer(u8(ini.settings.skuprespektcena), 256) 
+	skupmaterialcol = imgui.ImBuffer(u8(ini.settings.skupmaterialcol), 256)
+	skupmaterialcena = imgui.ImBuffer(u8(ini.settings.skupmaterialcena), 256)
+	skupdrovacol = imgui.ImBuffer(u8(ini.settings.skupdrovacol), 256)
+	skupdrovacena = imgui.ImBuffer(u8(ini.settings.skupdrovacena), 256)
+	skupantibiotikcol = imgui.ImBuffer(u8(ini.settings.skupantibiotikcol), 256)
+	skupantibiotikcena = imgui.ImBuffer(u8(ini.settings.skupantibiotikcena), 256)
+	skuptsrcol = imgui.ImBuffer(u8(ini.settings.skuptsrcol), 256)
+	skuptsrcena = imgui.ImBuffer(u8(ini.settings.skuptsrcena), 256)
+	skupsemmonetacol = imgui.ImBuffer(u8(ini.settings.skupsemmonetacol), 256)
+	skupsemmonetacena = imgui.ImBuffer(u8(ini.settings.skupsemmonetacena), 256)
+	skupautocena = imgui.ImBuffer(u8(ini.settings.skupautocena), 256)
+	
 	shematext1 = imgui.ImBuffer(u8(ini.settings.shematext1), 256)
 	shematext2 = imgui.ImBuffer(u8(ini.settings.shematext2), 256)
 	shematext3 = imgui.ImBuffer(u8(ini.settings.shematext3), 256)
@@ -5625,6 +6143,8 @@ function load_settings() -- загрузка настроек
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
 	yashik3 = imgui.ImBool(ini.settings.yashik3)
+	otkrytie = imgui.ImBool(ini.settings.otkrytie)
+	otkrytie2 = imgui.ImBool(ini.settings.otkrytie2)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
 	autobike = imgui.ImBool(ini.settings.autobike)
@@ -6490,6 +7010,11 @@ end
 function roulette()
 while true do 
 	if checked_test.v and krytim then
+	checked_test2.v = false
+	checked_test3.v = false
+	checked_test4.v = false
+	otkrytie.v = false
+	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
@@ -6500,6 +7025,11 @@ while true do
       krytim = false
     end
     if checked_test2.v and krytim then
+	checked_test.v = false
+	checked_test3.v = false
+	checked_test4.v = false
+	otkrytie.v = false
+	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
@@ -6509,7 +7039,12 @@ while true do
       sampSendClickTextdraw(2091)
       krytim = false
     end
-      if checked_test3.v and krytim then
+    if checked_test3.v and krytim then
+	checked_test2.v = false
+	checked_test.v = false
+	checked_test4.v = false
+	otkrytie.v = false
+	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
@@ -6520,6 +7055,11 @@ while true do
       krytim = false
     end
     if checked_test4.v and krytim then
+	checked_test2.v = false
+	checked_test3.v = false
+	checked_test.v = false
+	otkrytie.v = false
+	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
@@ -6528,77 +7068,153 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
+			end
+		wait(0)
 	end
-	if checked_test5.v then
+end
+
+function rouletteyashik()
+while true do 
+	if checked_test5.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
-    if checked_test6.v then
+    if checked_test6.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
-    if checked_test7.v then
+    if checked_test7.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if checked_test8.v then
+	if checked_test8.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active3 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if checked_test9.v then
+	if checked_test9.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active4 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if checked_test10.v then
+	if checked_test10.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if yashik.v then
+	if yashik.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
-	if yashik1.v then
+	if yashik1.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
-	if yashik2.v then
+	if yashik2.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
-	if yashik3.v then
+	if yashik3.v and otkrytie.v then
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
-		end
+	end
+	if checked_test5.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+    end
+    if checked_test6.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active1 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+    end
+    if checked_test7.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active2 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test8.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active3 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test9.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active4 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test10.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active5 = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if yashik.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik1.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active1 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik2.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active2 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik3.v and otkrytie2.v then
+	  sampSendClickTextdraw(2110)
+	  wait(500)
+      active5 = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+		end	
 		wait(0)
 	end
 end
@@ -6871,8 +7487,9 @@ while true do
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Сбор прибыли закончен. Функция выключилась автоматический.", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно вывели {00C2BB}"..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", 0x046D63)
 	btc.v = false
+	itogobtc = 0
 	end
 	if liquid.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
@@ -7397,6 +8014,15 @@ while true do
 	sampSendDialogResponse(9542, 1 , 24, -1)
 	wait(100)
 	closeDialog()
+	end
+	if tochkamen.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(9542, 1 , 0, -1)
+	wait(100)
+	closeDialog()
 			end
 		wait(0)
 	end
@@ -7407,7 +8033,7 @@ while true do
 	if addad.v then
 	closeDialog()
 	wait(100)
-	sampSendChat(u8:decode (adredak.v))
+	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
@@ -7419,7 +8045,7 @@ while true do
 	if vipaddad.v then
 	closeDialog()
 	wait(100)
-	sampSendChat(u8:decode (adredak.v))
+	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	sampSendDialogResponse(15346, 1, 2, -1)
 	wait(200)
@@ -7427,7 +8053,17 @@ while true do
 	wait(100)
 	closeDialog()
 	wait(vipadsec.v*1000)
-			end
+	end
+	if famaddad.v then
+	wait(100)
+	sampSendChat(u8:decode ('/fam '..adredak.v))
+	wait(famadsec.v*1000)
+	end
+	if vraddad.v then
+	wait(100)
+	sampSendChat(u8:decode ('/vr '..adredak.v))
+	wait(vradsec.v*1000)
+		end
 		wait(0)
 	end
 end
@@ -7978,42 +8614,42 @@ function rpredak()
 	imgui.Begin(u8' Редактирование отыгровок', win_state['redak'], imgui.WindowFlags.NoResize)
 			imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 400), false)
 			imgui.Columns(2, _, false)
-			imgui.InputText(u8'Desert Eagle /do', deagleone)
-			imgui.InputText(u8'Desert Eagle /me', deagletwo)
+			imgui.InputText(u8'Desert Eagle /do ##26', deagleone)
+			imgui.InputText(u8'Desert Eagle /me ##27', deagletwo)
 			imgui.NextColumn()
-			imgui.InputText(u8'Винтовка M4 /do', m4one)
-			imgui.InputText(u8'Винтовка M4 /me', m4two)
+			imgui.InputText(u8'Винтовка M4 /do ##28', m4one)
+			imgui.InputText(u8'Винтовка M4 /me ##29', m4two)
 			imgui.Separator()
 			imgui.NextColumn()
-			imgui.InputText(u8'Sniper /do', awpone)
-			imgui.InputText(u8'Sniper /me', awptwo)
+			imgui.InputText(u8'Sniper /do ##30', awpone)
+			imgui.InputText(u8'Sniper /me ##31', awptwo)
 			imgui.NextColumn()
-			imgui.InputText(u8'Узи /do', uzione)
-			imgui.InputText(u8'Узи /me', uzitwo)
+			imgui.InputText(u8'Узи /do ##32', uzione)
+			imgui.InputText(u8'Узи /me ##33', uzitwo)
 			imgui.Separator()
 			imgui.NextColumn()
-			imgui.InputText(u8'Автомат АК-47 /do', ak47one)
-			imgui.InputText(u8'Автомат АК-47 /me', ak47two)
+			imgui.InputText(u8'Автомат АК-47 /do ##34', ak47one)
+			imgui.InputText(u8'Автомат АК-47 /me ##35', ak47two)
 			imgui.NextColumn()
-			imgui.InputText(u8'MP5 /do', mp5one)
-			imgui.InputText(u8'MP5 /me', mp5two)
+			imgui.InputText(u8'MP5 /do ##36', mp5one)
+			imgui.InputText(u8'MP5 /me ##37', mp5two)
 			imgui.Separator()
 			imgui.NextColumn()
-			imgui.InputText(u8'ShotGun /do', shotgunone)
-			imgui.InputText(u8'ShotGun /me', shotguntwo)
+			imgui.InputText(u8'ShotGun /do ##38', shotgunone)
+			imgui.InputText(u8'ShotGun /me ##39', shotguntwo)
 			imgui.NextColumn()
-			imgui.InputText(u8'Rifle /do', rifleone)
-			imgui.InputText(u8'Rifle /me', rifletwo)
+			imgui.InputText(u8'Rifle /do ##40', rifleone)
+			imgui.InputText(u8'Rifle /me ##41', rifletwo)
 			imgui.Separator()
 			imgui.NextColumn()
-			imgui.InputText(u8'Нож /do', knifeone)
-			imgui.InputText(u8'Нож /me', knifetwo)
+			imgui.InputText(u8'Нож /do ##42', knifeone)
+			imgui.InputText(u8'Нож /me ##43', knifetwo)
 			imgui.NextColumn()
-			imgui.InputText(u8'Тайзер /do', tazerone)
-			imgui.InputText(u8'Тайзер /me', tazertwo)
+			imgui.InputText(u8'Тайзер /do ##44', tazerone)
+			imgui.InputText(u8'Тайзер /me ##45', tazertwo)
 			imgui.Separator()
 			imgui.NextColumn()
-			imgui.InputText(u8'Убрать оружие /me', ybralone)
+			imgui.InputText(u8'Убрать оружие /me ##46', ybralone)
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -8021,9 +8657,9 @@ function rpredak()
 function yashikisroulette()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(850, 465), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(850, 485), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-			imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 390), false)
+			imgui.BeginChild('##asdasasddf', imgui.ImVec2(800, 420), false)
 			imgui.Columns(2, _, false)
 			imgui.Checkbox(u8'Открыть бронзовые рулетки', checked_test)
 			imgui.Checkbox(u8'Открыть серебряные  рулетки', checked_test2)
@@ -8032,18 +8668,24 @@ function yashikisroulette()
 			imgui.Checkbox(u8'Обменять подарки', podarki); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся подарки.")  
 			imgui.Checkbox(u8'Обменять гражданские талоны на рулетки', platina); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Эдвардом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся гражданские талоны.")  
 			imgui.Checkbox(u8'Обменять зловещие монеты на улучшение для авто', moneta); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
+			imgui.Checkbox(u8'Обменять зловещие монеты на точильные камни', tochkamen); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
 			imgui.NextColumn()
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Способ открытия сундуков №1")); imgui.SameLine(); imgui.ToggleButton(u8'Способ открытия сундуков №1', otkrytie) imgui.SameLine(); imgui.TextQuestion(u8"В скрипте есть 2 способа открытия сундуков, но как мне кажется, способ №1 самый стабильный. Но тестируйте и выбирайте сами, какой способ у вас лучше работает. Также теперь не нужно будет снимать галочки, чтобы прекратить открывать сундуки, ведь вы можете просто выключить данный ползунок и скрипт перестанет открывать сундуки. Также при прокрутке рулеток данная функция выключается т.к скрипт не может открывать и сундуки и рулетки, поэтому, не забывайте после прокрутки рулеток выбрать способ открытия сундуков.")
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Способ открытия сундуков №2")); imgui.SameLine(); imgui.ToggleButton(u8'Способ открытия сундуков №2', otkrytie2)
+			if otkrytie.v then otkrytie2.v = false
+			elseif otkrytie2.v then otkrytie.v = false
+			end
 			imgui.Checkbox(u8'Открывать обычный сундук', checked_test5)
 			imgui.Checkbox(u8'Открывать донатный сундук', checked_test6)
 			imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7)
 			imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10)
-			imgui.InputText(u8'Задержка', zadervka)
+			imgui.InputText(u8'Задержка ##47', zadervka)
 			imgui.NextColumn()
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik)
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1)
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2)
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3)
-			imgui.InputText(u8'Задержка ',zadervkav2)
+			imgui.InputText(u8'Задержка ##48',zadervkav2)
 			imgui.NextColumn()
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Важно! Включать либо открывать сундук или всегда открывать.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Иначе работать не будет! Если включить 'всегда открывать' -")
@@ -8091,12 +8733,12 @@ function shemamenu()
 			imgui.SameLine()
 			if imgui.Button(u8' Выключить отображение ID Текстдравов', btn_size12) then toggle = false end
 			imgui.PushItemWidth(80)
-			imgui.InputText(u8'№1', shematext1); imgui.SameLine(125); imgui.InputText(u8'№2', shematext2); imgui.SameLine(250); imgui.InputText(u8'№3', shematext3); imgui.SameLine(375); imgui.InputText(u8'№4', shematext4); imgui.SameLine(500); imgui.InputText(u8'№5', shematext5); imgui.SameLine(625); imgui.InputText(u8'№6', shematext6)
-			imgui.InputText(u8'№7', shematext7); imgui.SameLine(125); imgui.InputText(u8'№8', shematext8); imgui.SameLine(250); imgui.InputText(u8'№9', shematext9); imgui.SameLine(375); imgui.InputText(u8'№10', shematext10); imgui.SameLine(); imgui.InputText(u8'№11', shematext11); imgui.SameLine(); imgui.InputText(u8'№12', shematext12)
-			imgui.InputText(u8'№13', shematext13); imgui.SameLine(); imgui.InputText(u8'№14', shematext14); imgui.SameLine(); imgui.InputText(u8'№15', shematext15); imgui.SameLine(); imgui.InputText(u8'№16', shematext16); imgui.SameLine(); imgui.InputText(u8'№17', shematext17); imgui.SameLine(); imgui.InputText(u8'№18', shematext18)
-			imgui.InputText(u8'№19', shematext19); imgui.SameLine(); imgui.InputText(u8'№20', shematext20); imgui.SameLine(); imgui.InputText(u8'№21', shematext21); imgui.SameLine(); imgui.InputText(u8'№22', shematext22); imgui.SameLine(); imgui.InputText(u8'№23', shematext23); imgui.SameLine(); imgui.InputText(u8'№24', shematext24)
-			imgui.InputText(u8'№25', shematext25); imgui.SameLine(); imgui.InputText(u8'№26', shematext26); imgui.SameLine(); imgui.InputText(u8'№27', shematext27); imgui.SameLine(); imgui.InputText(u8'№28', shematext28); imgui.SameLine(); imgui.InputText(u8'№29', shematext29); imgui.SameLine(); imgui.InputText(u8'№30', shematext30)
-			imgui.InputText(u8'№31', shematext31); imgui.SameLine(); imgui.InputText(u8'№32', shematext32); imgui.SameLine(); imgui.InputText(u8'№33', shematext33); imgui.SameLine(); imgui.InputText(u8'№34', shematext34); imgui.SameLine(); imgui.InputText(u8'№35', shematext35); imgui.SameLine(); imgui.InputText(u8'№36', shematext36)
+			imgui.InputText(u8'№1 ##49', shematext1); imgui.SameLine(129); imgui.InputText(u8'№2 ##50', shematext2); imgui.SameLine(258); imgui.InputText(u8'№3 ##51', shematext3); imgui.SameLine(387); imgui.InputText(u8'№4 ##52', shematext4); imgui.SameLine(516); imgui.InputText(u8'№5 ##53', shematext5); imgui.SameLine(645); imgui.InputText(u8'№6 ##54', shematext6)
+			imgui.InputText(u8'№7 ##55', shematext7); imgui.SameLine(129); imgui.InputText(u8'№8 ##56', shematext8); imgui.SameLine(258); imgui.InputText(u8'№9 ##57', shematext9); imgui.SameLine(387); imgui.InputText(u8'№10 ##58', shematext10); imgui.SameLine(); imgui.InputText(u8'№11 ##59', shematext11); imgui.SameLine(); imgui.InputText(u8'№12 ##60', shematext12)
+			imgui.InputText(u8'№13 ##61', shematext13); imgui.SameLine(); imgui.InputText(u8'№14 ##62', shematext14); imgui.SameLine(); imgui.InputText(u8'№15 ##63', shematext15); imgui.SameLine(); imgui.InputText(u8'№16 ##64', shematext16); imgui.SameLine(); imgui.InputText(u8'№17 ##65', shematext17); imgui.SameLine(); imgui.InputText(u8'№18 ##66', shematext18)
+			imgui.InputText(u8'№19 ##67', shematext19); imgui.SameLine(); imgui.InputText(u8'№20 ##68', shematext20); imgui.SameLine(); imgui.InputText(u8'№21 ##69', shematext21); imgui.SameLine(); imgui.InputText(u8'№22 ##70', shematext22); imgui.SameLine(); imgui.InputText(u8'№23 ##71', shematext23); imgui.SameLine(); imgui.InputText(u8'№24 ##72', shematext24)
+			imgui.InputText(u8'№25 ##73', shematext25); imgui.SameLine(); imgui.InputText(u8'№26 ##74', shematext26); imgui.SameLine(); imgui.InputText(u8'№27 ##75', shematext27); imgui.SameLine(); imgui.InputText(u8'№28 ##76', shematext28); imgui.SameLine(); imgui.InputText(u8'№29 ##77', shematext29); imgui.SameLine(); imgui.InputText(u8'№30 ##78', shematext30)
+			imgui.InputText(u8'№31 ##79', shematext31); imgui.SameLine(); imgui.InputText(u8'№32 ##80', shematext32); imgui.SameLine(); imgui.InputText(u8'№33 ##81', shematext33); imgui.SameLine(); imgui.InputText(u8'№34 ##82', shematext34); imgui.SameLine(); imgui.InputText(u8'№35 ##83', shematext35); imgui.SameLine(); imgui.InputText(u8'№36 ##84', shematext36)
 			imgui.PopItemWidth()
 			imgui.EndChild()
 			imgui.End()
@@ -8109,11 +8751,11 @@ function shahtared()
 	imgui.SetNextWindowSize(imgui.ImVec2(782, 205), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Редактирование цен на ресурсы', win_state['shahtamenu'], imgui.WindowFlags.NoResize)
 			imgui.BeginChild('##asdasasddf4324', imgui.ImVec2(800, 160), false)
-			imgui.InputText(u8'Введите стоймость камня', autokamen)
-			imgui.InputText(u8'Введите стоймость металла', autometal)
-			imgui.InputText(u8'Введите стоймость бронзы', autobronza)
-			imgui.InputText(u8'Введите стоймость серебра', autosilver)
-			imgui.InputText(u8'Введите стоймость золота', autogold)
+			imgui.InputText(u8'Введите стоймость камня ##85', autokamen)
+			imgui.InputText(u8'Введите стоймость металла ##86', autometal)
+			imgui.InputText(u8'Введите стоймость бронзы ##87', autobronza)
+			imgui.InputText(u8'Введите стоймость серебра ##88', autosilver)
+			imgui.InputText(u8'Введите стоймость золота ##89', autogold)
 			imgui.EndChild()
 			imgui.End()
 	end
@@ -8133,9 +8775,9 @@ function funksmenu()
 		imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
 		imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
 		if napominalka.v then
-		imgui.InputText(u8'Дата срабатывания напоминания', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
+		imgui.InputText(u8'Дата срабатывания напоминания ##90', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
 		end
-		imgui.InputText(u8'Задержка для майнинг функций', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, улучшение видеокарт и так далее.")
+		imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, улучшение видеокарт и так далее.")
 		imgui.EndChild()
 		imgui.End()
 	end
@@ -8160,6 +8802,24 @@ function shemainstr()
 			imgui.End()
 	end
 	
+function shemaskup()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(850, 210), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8' Инструкция', win_state['skupshema'], imgui.WindowFlags.NoResize)
+			imgui.BeginChild('##asdasasddf21312122', imgui.ImVec2(800, 170), false)
+			imgui.Text(u8"1) Для начала поставьте галочку на тех товарах, которые хотите скупать.")
+			imgui.Text(u8"2) Введите количество товара и цену за штуку в соответствующих полях.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ СТИРАЙТЕ ПОЛНОСТЬЮ ЦИФРЫ С ПОЛЕЙ ИНАЧЕ СКРИПТ ПЕРЕСТАНЕТ РАБОТАТЬ! НО, ЕСЛИ ВЫ ВСЁ ЖЕ СЛУЧАЙНО")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"СДЕЛАЛИ ЭТО, ТО ПОСЛЕ ПЕРЕЗАГРУЗКИ СКРИПТА, ПЕРЕЙДИТЕ В 'МЕНЮ СКРИПТА - БИНДЕР И НАСТРОЙКИ - ПРОЧИЕ НАСТРОЙКИ'")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" И НАЖМИТЕ НА КНОПКУ 'ВЕРНУТЬ ЗНАЧЕНИЯ СКУПА ПО УМОЛЧАНИЮ'.")
+			imgui.Text(u8"3) Встаньте в лавку, введите название, и нажмите альт, чтобы попасть в начальное меню лавки. Далее откройте меню скрипта -")
+			imgui.Text(u8"'Skup Menu' и нажмите на кнопку 'Выставить товары на скуп'.")
+			imgui.EndChild()
+			imgui.End()
+	end
+	
 function pismomenu()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
@@ -8167,11 +8827,11 @@ function pismomenu()
 	imgui.SetNextWindowSize(imgui.ImVec2(645, 205), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' ', win_state['pismotext'], imgui.WindowFlags.NoResize)
 			imgui.BeginChild('##asdasasddf213121', imgui.ImVec2(800, 160), false)
-			imgui.InputText(u8'Введите текст', pismoreal)
-			imgui.InputText(u8'Введите текст ', pismoreal1)
-			imgui.InputText(u8'Введите текст  ', pismoreal2)
-			imgui.InputText(u8'Введите текст   ', pismoreal3)
-			imgui.InputText(u8'Введите текст    ', pismoreal4)
+			imgui.InputText(u8'Введите текст ##92', pismoreal)
+			imgui.InputText(u8'Введите текст ##93', pismoreal1)
+			imgui.InputText(u8'Введите текст ##94', pismoreal2)
+			imgui.InputText(u8'Введите текст ##95', pismoreal3)
+			imgui.InputText(u8'Введите текст ##96', pismoreal4)
 			imgui.EndChild()
 			imgui.End()
 	end
@@ -8181,23 +8841,9 @@ function tupupdate()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
-	imgui.Begin(u8' Тестовые обновления v2.8', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 300), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс сундуков (я потестил, за флуд функциями не кикало. Советую использовать только тогда, когда не играете, а качаете")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"депозит например. Если что, отписывайте в теме на БХ. Также если используете 'Умный Реконнект' тогда даже если кикнет,")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"то вы перезайдете в игру и продолжите открывать сундуки.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс улучшения видеокарт. Вроде больше не кикает за флуд функциями, но нужно проверять еще. Также теперь задержка в")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"'Прочие функции' влияет и на улучшение видеокарт.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс ложного срабатывания 'Пополнение депозита' и кика за флуд функциями.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс когда нельзя было свернуть некоторые imgui окна.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Умный реконнект' добавлен перезаход после 'You are banned from this server'.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Авторизация' добавлено то, что если в настройках указан неверный пароль, то скрипт больше не пробует зайти, используя")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"сразу 3 попытки, а пишет в чате, что введенен неверный пароль и даёт возможность ввести его вручную.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Теперь после авто-обмена подарков пишется, чего и сколько вы получили с обмена и сколько подарков на это потратили.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- В 'Майнинг' - 'Прочие функции' добавлена функция 'Напоминания'. Если функция включена, то в указанный день скрипт уведомит")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"вас о том, что нужно забрать биткоины и обслужить видеокарты.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс когда в счетчике подарков не засчитывался чемодан.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс краша игры при использований 'Умного реконнекта'.")
+	imgui.Begin(u8' Тестовые обновления v2.9', win_state['tup'], imgui.WindowFlags.NoResize)
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -8215,7 +8861,7 @@ function timeyveddate()
 	end
 	
 function getArizonaName()
-	local btn_size29 = imgui.ImVec2(230, 0)
+	local btn_size29 = imgui.ImVec2(227, 0)
 	if sampGetCurrentServerName():find("Phoenix") then gameServer = "Phoenix" end
 	if sampGetCurrentServerName():find("Tucson") then gameServer = "Tucson" end
 	if sampGetCurrentServerName():find("Scottdale") then gameServer = "Scottdale" end
@@ -8250,25 +8896,185 @@ function getArizonaName()
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8'*Счетчик объявлений скидывается на 0 каждый день. В скором времени сделаю сохранение по дням.')
 	imgui.PushItemWidth(50)
 	imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine() imgui.InputText(u8'Задержка(сек)', adsec)
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine() imgui.InputText(u8'Задержка(сек) ##97', adsec)
 	imgui.SameLine()
 	if imgui.Button(u8'Отправить объявление сейчас', btn_size29) then adtravel() end
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк)', vipadsec)
-	imgui.PopItemWidth()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##98', vipadsec)
 	imgui.SameLine() 
 	if imgui.Button(u8'Отправить VIP объявление сейчас', btn_size29) then adtravel2() end
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /fam', famaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##199', famadsec)
+	imgui.SameLine() 
+	if imgui.Button(u8'Отправить текст в /fam сейчас', btn_size29) then adtravel3() end
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr', vraddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200', vradsec)
+	imgui.SameLine() 
+	if imgui.Button(u8'Отправить текст в /vr сейчас', btn_size29) then adtravel4() end
+	imgui.PopItemWidth()
 	imgui.PushItemWidth(627)
-	imgui.Text('') imgui.SameLine() imgui.InputText(u8'         ', adredak)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'##99', adredak)
 	imgui.Separator()
 	imgui.PopItemWidth()
-	end
+end
 
+function getArizonaSkup()
+	local btn_size29 = imgui.ImVec2(30, 30)
+	local btn_size30 = imgui.ImVec2(325, 0)
+	
+	load_static()
+	
+	imgui.PushItemWidth(83)
+	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
+    imgui.Separator()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Счастливая травка', skuptrava) imgui.SameLine(177) imgui.InputText(u8'##100', skuptravacol) imgui.SameLine(281) imgui.InputText(u8'##101', skuptravacena) imgui.SameLine(385) imgui.Text(u8("За "..skuptravacol.v.." шт. товара нужно заплатить "..itogoskuptrava..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронзовая рулетка', skupbronzarul) imgui.SameLine(177) imgui.InputText(u8'##102', skupbronzarulcol) imgui.SameLine(281) imgui.InputText(u8'##103', skupbronzarulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupbronzarulcol.v.." шт. товара нужно заплатить "..itogoskupbronzarul..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебряная рулетка', skupserebrorul) imgui.SameLine(177) imgui.InputText(u8'##104', skupserebrorulcol) imgui.SameLine(281) imgui.InputText(u8'##133', skupserebrorulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupserebrorulcol.v.." шт. товара нужно заплатить "..itogoskupserebrorul..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золотая рулетка', skupgoldrul) imgui.SameLine(177) imgui.InputText(u8'##105', skupgoldrulcol) imgui.SameLine(281) imgui.InputText(u8'##134', skupgoldrulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupgoldrulcol.v.." шт. товара нужно заплатить "..itogoskupgoldrul..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Платиновая рулетка', skupplatinarul) imgui.SameLine(177) imgui.InputText(u8'##106', skupplatinarulcol) imgui.SameLine(281) imgui.InputText(u8'##135', skupplatinarulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupplatinarulcol.v.." шт. товара нужно заплатить "..itogoskupplatinarul..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Камень', skupkamen) imgui.SameLine(177) imgui.InputText(u8'##107', skupkamencol) imgui.SameLine(281) imgui.InputText(u8'##136', skupkamencena) imgui.SameLine(385) imgui.Text(u8("За "..skupkamencol.v.." шт. товара нужно заплатить "..itogoskupkamen..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Металл', skupmetal) imgui.SameLine(177) imgui.InputText(u8'##108', skupmetalcol) imgui.SameLine(281) imgui.InputText(u8'##137', skupmetalcena) imgui.SameLine(385) imgui.Text(u8("За "..skupmetalcol.v.." шт. товара нужно заплатить "..itogoskupmetal..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронза', skupbronza) imgui.SameLine(177) imgui.InputText(u8'##109', skupbronzacol) imgui.SameLine(281) imgui.InputText(u8'##138', skupbronzacena) imgui.SameLine(385) imgui.Text(u8("За "..skupbronzacol.v.." шт. товара нужно заплатить "..itogoskupbronza..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебро', skupserebro) imgui.SameLine(177) imgui.InputText(u8'##110', skupserebrocol) imgui.SameLine(281) imgui.InputText(u8'##139', skupserebrocena) imgui.SameLine(385) imgui.Text(u8("За "..skupserebrocol.v.." шт. товара нужно заплатить "..itogoskupserebro..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золото', skupgold) imgui.SameLine(177) imgui.InputText(u8'##111', skupgoldcol) imgui.SameLine(281) imgui.InputText(u8'##140', skupgoldcena) imgui.SameLine(385) imgui.Text(u8("За "..skupgoldcol.v.." шт. товара нужно заплатить "..itogoskupgold..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Подарки', skuppodarki) imgui.SameLine(177) imgui.InputText(u8'##112', skuppodarkicol) imgui.SameLine(281) imgui.InputText(u8'##141', skuppodarkicena) imgui.SameLine(385) imgui.Text(u8("За "..skuppodarkicol.v.." шт. товара нужно заплатить "..itogoskuppodarki..'$')) 
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..skuptovaracol.." шт. товара нужно заплатить "..itogoskuptovara..'$')) 
+	imgui.Separator()
+	imgui.Text('')
+	imgui.SameLine(285)
+	if imgui.Button(u8'1', btn_size29) then 
+	win_state['skup'].v = true
+	win_state['skup2'].v = false 
+	win_state['skup3'].v = false 
+	end
+	imgui.SameLine()
+	if imgui.Button(u8'2', btn_size29) then 
+	win_state['skup2'].v = true
+	win_state['skup'].v = false 
+	win_state['skup3'].v = false 
+	end
+	imgui.SameLine()
+	if imgui.Button(u8'3', btn_size29) then 
+	win_state['skup3'].v = true
+	win_state['skup'].v = false  
+	win_state['skup2'].v = false  
+	end
+	imgui.Text('') imgui.SameLine() if imgui.Button(u8'Инструкция', btn_size30) then win_state['skupshema'].v = not win_state['skupshema'].v end 
+	imgui.SameLine() if imgui.Button(u8'Выставить товары на скуп', btn_size30) then skuptovarov() end
+	imgui.Separator()
+	imgui.PopItemWidth()
+end
+
+function getArizonaSkup2str()
+	local btn_size29 = imgui.ImVec2(30, 30)
+	local btn_size30 = imgui.ImVec2(325, 0)
+	
+	load_static()
+	
+	imgui.PushItemWidth(83)
+	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
+    imgui.Separator()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Гражданский талон', skuptalon) imgui.SameLine(177) imgui.InputText(u8'##113', skuptaloncol) imgui.SameLine(281) imgui.InputText(u8'##142', skuptaloncena) imgui.SameLine(385) imgui.Text(u8("За "..skuptaloncol.v.." шт. товара нужно заплатить "..itogoskuptalon..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..skupsemtaloncol.v.." шт. товара нужно заплатить "..itogoskupsemtalon..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..skupskidtaloncol.v.." шт. товара нужно заплатить "..itogoskupskidtalon..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..skuptochkamencol.v.." шт. товара нужно заплатить "..itogoskuptochkamen..'$')) 
+	imgui.PushItemWidth(187)
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..itogoskuptochamulet..'$')) 
+	imgui.PopItemWidth()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..skuplareccol.v.." шт. товара нужно заплатить "..itogoskuplarec..'$')) 
+	imgui.PushItemWidth(187)
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Твин Турбо', skuptt) imgui.SameLine(177) imgui.InputText(u8'##148', skupttcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..itogoskuptt..'$')) 
+	imgui.PopItemWidth()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Зловещая монета', skupmoneta) imgui.SameLine(177) imgui.InputText(u8'##120', skupmonetacol) imgui.SameLine(281) imgui.InputText(u8'##149', skupmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..skupmonetacol.v.." шт. товара нужно заплатить "..itogoskupmoneta..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Лён', skuplen) imgui.SameLine(177) imgui.InputText(u8'##121', skuplencol) imgui.SameLine(281) imgui.InputText(u8'##150', skuplencena) imgui.SameLine(385) imgui.Text(u8("За "..skuplencol.v.." шт. товара нужно заплатить "..itogoskuplen..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлопок', skupxlopok) imgui.SameLine(177) imgui.InputText(u8'##122', skupxlopokcol) imgui.SameLine(281) imgui.InputText(u8'##151', skupxlopokcena) imgui.SameLine(385) imgui.Text(u8("За "..skupxlopokcol.v.." шт. товара нужно заплатить "..itogoskupxlopok..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бандитский респект', skuprespekt) imgui.SameLine(177) imgui.InputText(u8'##123', skuprespektcol) imgui.SameLine(281) imgui.InputText(u8'##152', skuprespektcena) imgui.SameLine(385) imgui.Text(u8("За "..skuprespektcol.v.." шт. товара нужно заплатить "..itogoskuprespekt..'$')) 
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..skuptovaracol.." шт. товара нужно заплатить "..itogoskuptovara..'$')) 
+	imgui.Separator()
+	imgui.Text('')
+	imgui.SameLine(285)
+	if imgui.Button(u8'1', btn_size29) then 
+	win_state['skup'].v = true
+	win_state['skup2'].v = false
+	win_state['skup3'].v = false 
+	end
+	imgui.SameLine()
+	if imgui.Button(u8'2', btn_size29) then 
+	win_state['skup2'].v = true
+	win_state['skup'].v = false 
+	end
+	imgui.SameLine()
+	if imgui.Button(u8'3', btn_size29) then 
+	win_state['skup3'].v = true
+	win_state['skup'].v = false 
+	win_state['skup2'].v = false 
+	end
+	imgui.Text('') imgui.SameLine() if imgui.Button(u8'Инструкция', btn_size30) then win_state['skupshema'].v = not win_state['skupshema'].v end 
+	imgui.SameLine() if imgui.Button(u8'Выставить товары на скуп', btn_size30) then skuptovarov() end
+	imgui.Separator()
+	imgui.PopItemWidth()
+end
+
+function getArizonaSkup3str()
+	local btn_size29 = imgui.ImVec2(30, 30)
+	local btn_size30 = imgui.ImVec2(325, 0)
+	
+	load_static()
+	
+	imgui.PushItemWidth(83)
+	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
+    imgui.Separator()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Материалы', skupmaterial) imgui.SameLine(177) imgui.InputText(u8'##124', skupmaterialcol) imgui.SameLine(281) imgui.InputText(u8'##153', skupmaterialcena) imgui.SameLine(385) imgui.Text(u8("За "..skupmaterialcol.v.." шт. товара нужно заплатить "..itogoskupmaterial..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Дрова', skupdrova) imgui.SameLine(177) imgui.InputText(u8'##125', skupdrovacol) imgui.SameLine(281) imgui.InputText(u8'##154', skupdrovacena) imgui.SameLine(385) imgui.Text(u8("За "..skupdrovacol.v.." шт. товара нужно заплатить "..itogoskupdrova..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Антибиотики', skupantibiotik) imgui.SameLine(177) imgui.InputText(u8'##126', skupantibiotikcol) imgui.SameLine(281) imgui.InputText(u8'##155', skupantibiotikcena) imgui.SameLine(385) imgui.Text(u8("За "..skupantibiotikcol.v.." шт. товара нужно заплатить "..itogoskupantibiotik..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отмычки от ТСР', skuptsr) imgui.SameLine(177) imgui.InputText(u8'##127', skuptsrcol) imgui.SameLine(281) imgui.InputText(u8'##156', skuptsrcena) imgui.SameLine(385) imgui.Text(u8("За "..skuptsrcol.v.." шт. товара нужно заплатить "..itogoskuptsr..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейные монеты', skupsemmoneta) imgui.SameLine(177) imgui.InputText(u8'##128', skupsemmonetacol) imgui.SameLine(281) imgui.InputText(u8'##157', skupsemmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..skupsemmonetacol.v.." шт. товара нужно заплатить "..itogoskupsemmoneta..'$')) 
+	imgui.PushItemWidth(187)
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Улучшение для авто', skupauto) imgui.SameLine(177) imgui.InputText(u8'##158', skupautocena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..itogoskupauto..'$')) 
+	imgui.PopItemWidth()
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..skuptovaracol.." шт. товара нужно заплатить "..itogoskuptovara..'$')) 
+	imgui.Separator()
+	imgui.Text('')
+	imgui.SameLine(285)
+	if imgui.Button(u8'1', btn_size29) then 
+	win_state['skup'].v = true
+	win_state['skup2'].v = false 
+	win_state['skup3'].v = false 
+	end
+	imgui.SameLine()
+	if imgui.Button(u8'2', btn_size29) then 
+	win_state['skup2'].v = true
+	win_state['skup'].v = false 
+	win_state['skup3'].v = false
+	end
+	imgui.SameLine()
+	if imgui.Button(u8'3', btn_size29) then 
+	win_state['skup3'].v = true
+	win_state['skup'].v = false 
+	win_state['skup2'].v = false 
+	end
+	imgui.Text('') imgui.SameLine() if imgui.Button(u8'Инструкция', btn_size30) then win_state['skupshema'].v = not win_state['skupshema'].v end 
+	imgui.SameLine() if imgui.Button(u8'Выставить товары на скуп', btn_size30) then skuptovarov() end
+	imgui.Separator()
+	imgui.PopItemWidth()
+end
+	
 function rpguns()
 	local btn_size12 = imgui.ImVec2(810, 30)
 	imgui.BeginChild('##as2dasasdf433433', imgui.ImVec2(2000, 260), false)
@@ -8345,7 +9151,8 @@ end
 function scriptinfopeople()
 	imgui.Columns(2, _,false)
 	imgui.SetColumnWidth(-1, 800)
-	imgui.TextColoredRGB("{FFD700}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777 и Graph_Bavles.{FFD700}")
+	imgui.TextColoredRGB("{FFD700}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777, Graph_Bavles, Илья{FFD700}")
+	imgui.TextColoredRGB("{FFD700}и COSMIK.{FFD700}")
 end
 
 function imgui.CenterText(text)
@@ -9107,7 +9914,7 @@ function adtravel()
 lua_thread.create(function()
 	closeDialog()
 	wait(100)
-	sampSendChat(u8:decode (adredak.v))
+	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
@@ -9121,12 +9928,953 @@ function adtravel2()
 lua_thread.create(function()
 	closeDialog()
 	wait(100)
-	sampSendChat(u8:decode (adredak.v))
+	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	sampSendDialogResponse(15346, 1, 2, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
 	wait(100)
 	closeDialog()
-		end)
+	end)
+end
+
+function adtravel3()
+lua_thread.create(function()
+	sampSendChat(u8:decode ('/fam '..adredak.v))
+	end)
+end
+
+function adtravel4()
+lua_thread.create(function()
+	sampSendChat(u8:decode ('/vr '..adredak.v))
+	end)
+end
+
+function load_static()
+	itogoskuptrava = skuptravacol.v * skuptravacena.v
+	itogoskupbronzarul = skupbronzarulcol.v * skupbronzarulcena.v
+	itogoskupserebrorul = skupserebrorulcol.v * skupserebrorulcena.v
+	itogoskupgoldrul = skupgoldrulcol.v * skupgoldrulcena.v
+	itogoskupplatinarul = skupplatinarulcol.v * skupplatinarulcena.v
+	itogoskupkamen = skupkamencol.v * skupkamencena.v
+	itogoskupmetal = skupmetalcol.v * skupmetalcena.v
+	itogoskupbronza = skupbronzacol.v * skupbronzacena.v
+	itogoskupserebro = skupserebrocol.v * skupserebrocena.v
+	itogoskupgold = skupgoldcol.v * skupgoldcena.v
+	itogoskuppodarki = skuppodarkicol.v * skuppodarkicena.v
+	itogoskuptalon = skuptaloncol.v * skuptaloncena.v
+	itogoskupsemtalon = skupsemtaloncol.v * skupsemtaloncena.v
+	itogoskupskidtalon = skupskidtaloncol.v * skupskidtaloncena.v
+	itogoskuptochkamen = skuptochkamencol.v * skuptochkamencena.v
+	itogoskuptochamulet = 1 * skuptochamuletcena.v
+	itogoskuplarec = skuplareccol.v * skuplareccena.v
+	itogoskuptt = 1 * skupttcena.v
+	itogoskupmoneta = skupmonetacol.v * skupmonetacena.v
+	itogoskuplen = skuplencol.v * skuplencena.v
+	itogoskupxlopok = skupxlopokcol.v * skupxlopokcena.v
+	itogoskuprespekt = skuprespektcol.v * skuprespektcena.v
+	itogoskupmaterial = skupmaterialcol.v * skupmaterialcena.v
+	itogoskupdrova = skupdrovacol.v * skupdrovacena.v
+	itogoskupantibiotik = skupantibiotikcol.v * skupantibiotikcena.v
+	itogoskuptsr = skuptsrcol.v * skuptsrcena.v
+	itogoskupsemmoneta = skupsemmonetacol.v * skupsemmonetacena.v
+	itogoskupauto = 1 * skupautocena.v
+	
+	if skuptrava.v then skuptravacool = skuptravacol.v else skuptravacool = 0 end
+	if skupbronzarul.v then skupbronzarulcool = skupbronzarulcol.v else skupbronzarulcool = 0 end
+	if skupserebrorul.v then skupserebrorulcool = skupserebrorulcol.v else skupserebrorulcool = 0 end
+	if skupgoldrul.v then skupgoldrulcool = skupgoldrulcol.v else skupgoldrulcool = 0 end
+	if skupplatinarul.v then skupplatinarulcool = skupplatinarulcol.v else skupplatinarulcool = 0 end
+	if skupkamen.v then skupkamencool = skupkamencol.v else skupkamencool = 0 end
+	if skupmetal.v then skupmetalcool = skupmetalcol.v else skupmetalcool = 0 end
+	if skupbronza.v then skupbronzacool = skupbronzacol.v else skupbronzacool = 0 end
+	if skupserebro.v then skupserebrocool = skupserebrocol.v else skupserebrocool = 0 end
+	if skupgold.v then skupgoldcool = skupgoldcol.v else skupgoldcool = 0 end
+	if skuppodarki.v then skuppodarkicool = skuppodarkicol.v else skuppodarkicool = 0 end
+	if skuptrava.v then skuptravacennik = itogoskuptrava else skuptravacennik = 0 end
+	if skupbronzarul.v then skupbronzarulcennik = itogoskupbronzarul else skupbronzarulcennik = 0 end
+	if skupserebrorul.v then skupserebrorulcennik = itogoskupserebrorul else skupserebrorulcennik = 0 end
+	if skupgoldrul.v then skupgoldrulcennik = itogoskupgoldrul else skupgoldrulcennik = 0 end
+	if skupplatinarul.v then skupplatinarulcennik = itogoskupplatinarul else skupplatinarulcennik = 0 end
+	if skupkamen.v then skupkamencennik = itogoskupkamen else skupkamencennik = 0 end
+	if skupmetal.v then skupmetalcennik = itogoskupmetal else skupmetalcennik = 0 end
+	if skupbronza.v then skupbronzacennik = itogoskupbronza else skupbronzacennik = 0 end
+	if skupserebro.v then skupserebrocennik = itogoskupserebro else skupserebrocennik = 0 end
+	if skupgold.v then skupgoldcennik = itogoskupgold else skupgoldcennik = 0 end
+	if skuppodarki.v then skuppodarkicennik = itogoskuppodarki else skuppodarkicennik = 0 end
+	if skuptalon.v then skuptaloncool = skuptaloncol.v else skuptaloncool = 0 end
+	if skupsemtalon.v then skupsemtaloncool = skupsemtaloncol.v else skupsemtaloncool = 0 end
+	if skupskidtalon.v then skupskidtaloncool = skupskidtaloncol.v else skupskidtaloncool = 0 end
+	if skuptochkamen.v then skuptochkamencool = skuptochkamencol.v else skuptochkamencool = 0 end
+	if skuptochamulet.v then skuptochamuletcool = 1 else skuptochamuletcool = 0 end
+	if skuplarec.v then skuplareccool = skuplareccol.v else skuplareccool = 0 end
+	if skuptt.v then skupttcool = 1 else skupttcool = 0 end
+	if skupmoneta.v then skupmonetacool = skupmonetacol.v else skupmonetacool = 0 end
+	if skuplen.v then skuplencool = skuplencol.v else skuplencool = 0 end
+	if skupxlopok.v then skupxlopokcool = skupxlopokcol.v else skupxlopokcool = 0 end
+	if skuprespekt.v then skuprespektcool = skuprespektcol.v else skuprespektcool = 0 end
+	if skuptalon.v then skuptaloncennik = itogoskuptalon else skuptaloncennik = 0 end
+	if skupsemtalon.v then skupsemtaloncennik = itogoskupsemtalon else skupsemtaloncennik = 0 end
+	if skupskidtalon.v then skupskidtaloncennik = itogoskupskidtalon else skupskidtaloncennik = 0 end
+	if skuptochkamen.v then skuptochkamencennik = itogoskuptochkamen else skuptochkamencennik = 0 end
+	if skuptochamulet.v then skuptochamuletcennik = itogoskuptochamulet else skuptochamuletcennik = 0 end
+	if skuplarec.v then skuplareccennik = itogoskuplarec else skuplareccennik = 0 end
+	if skuptt.v then skupttcennik = itogoskuptt else skupttcennik = 0 end
+	if skupmoneta.v then skupmonetacennik = itogoskupmoneta else skupmonetacennik = 0 end
+	if skuplen.v then skuplencennik = itogoskuplen else skuplencennik = 0 end
+	if skupxlopok.v then skupxlopokcennik = itogoskupxlopok else skupxlopokcennik = 0 end
+	if skuprespekt.v then skuprespektcennik = itogoskuprespekt else skuprespektcennik = 0 end
+	if skupmaterial.v then skupmaterialcool = skupmaterialcol.v else skupmaterialcool = 0 end
+	if skupdrova.v then skupdrovacool = skupdrovacol.v else skupdrovacool = 0 end
+	if skupantibiotik.v then skupantibiotikcool = skupantibiotikcol.v else skupantibiotikcool = 0 end
+	if skuptsr.v then skuptsrcool = skuptsrcol.v else skuptsrcool = 0 end
+	if skupsemmoneta.v then skupsemmonetacool = skupsemmonetacol.v else skupsemmonetacool = 0 end
+	if skupauto.v then skupautocool = 1 else skupautocool = 0 end
+	if skupmaterial.v then skupmaterialcennik = itogoskupmaterial else skupmaterialcennik = 0 end
+	if skupdrova.v then skupdrovacennik = itogoskupdrova else skupdrovacennik = 0 end
+	if skupantibiotik.v then skupantibiotikcennik = itogoskupantibiotik else skupantibiotikcennik = 0 end
+	if skuptsr.v then skuptsrcennik = itogoskuptsr else skuptsrcennik = 0 end
+	if skupsemmoneta.v then skupsemmonetacennik = itogoskupsemmoneta else skupsemmonetacennik = 0 end
+	if skupauto.v then skupautocennik = itogoskupauto else skupautocennik = 0 end
+	
+	skuptovaracol = skuptravacool + skupbronzarulcool + skupserebrorulcool + skupgoldrulcool + skupplatinarulcool + skupkamencool + skupmetalcool + skupbronzacool + skupserebrocool + skupgoldcool + skuppodarkicool + skuptaloncool + skupsemtaloncool + skupskidtaloncool + skuptochkamencool + skuptochamuletcool + skuplareccool + skupttcool + skupmonetacool + skuplencool + skupxlopokcool + skuprespektcool + skupmaterialcool + skupdrovacool + skupantibiotikcool + skuptsrcool + skupsemmonetacool + skupautocool
+	itogoskuptovara = skuptravacennik + skupbronzarulcennik + skupserebrorulcennik + skupgoldrulcennik + skupplatinarulcennik + skupkamencennik + skupmetalcennik + skupbronzacennik + skupserebrocennik + skupgoldcennik + skuppodarkicennik + skuptaloncennik + skupsemtaloncennik + skupskidtaloncennik + skuptochkamencennik + skuptochamuletcennik + skuplareccennik + skupttcennik + skupmonetacennik + skuplencennik + skupxlopokcennik + skuprespektcennik + skupmaterialcennik + skupdrovacennik + skupantibiotikcennik + skuptsrcennik + skupsemmonetacennik + skupautocennik
+end
+
+function skuptovarov()
+lua_thread.create(function()
+	if skuptrava.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 1, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuptravacol.v..','..skuptravacena.v)
 	end
+	if skupbronzarul.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 8, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupbronzarulcol.v..','..skupbronzarulcena.v)
+	end
+	if skupserebrorul.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 9, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupserebrorulcol.v..','..skupserebrorulcena.v)
+	end
+	if skupgoldrul.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 10, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupgoldrulcol.v..','..skupgoldrulcena.v)
+	end
+	if skupplatinarul.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 10, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupplatinarulcol.v..','..skupplatinarulcena.v)
+	end
+	if skupkamen.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 4, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupkamencol.v..','..skupkamencena.v)
+	end
+	if skupmetal.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 5, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupmetalcol.v..','..skupmetalcena.v)
+	end
+	if skupbronza.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 6, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupbronzacol.v..','..skupbronzacena.v)
+	end
+	if skupserebro.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 7, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupserebrocol.v..','..skupserebrocena.v)
+	end
+	if skupgold.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 8, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupgoldcol.v..','..skupgoldcena.v)
+	end
+	if skuppodarki.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 5, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuppodarkicol.v..','..skuppodarkicena.v)
+	end
+	if skuptalon.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 5, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuptaloncol.v..','..skuptaloncena.v)
+	end
+	if skupsemtalon.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 12, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupsemtaloncol.v..','..skupsemtaloncena.v)
+	end
+	if skupskidtalon.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 4, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupskidtaloncol.v..','..skupskidtaloncena.v)
+	end
+	if skuptochkamen.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 18, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuptochkamencol.v..','..skuptochkamencena.v)
+	end
+	if skuptochamulet.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuptochamuletcena.v)
+	end
+	if skuplarec.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 1, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuplareccol.v..','..skuplareccena.v)
+	end
+	if skuptt.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 7, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupttcena.v)
+	end
+	if skupmoneta.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 17, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupmonetacol.v..','..skupmonetacena.v)
+	end
+	if skuplen.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 3, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuplencol.v..','..skuplencena.v)
+	end
+	if skupxlopok.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 2, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupxlopokcol.v..','..skupxlopokcena.v)
+	end
+	if skuprespekt.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 16, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuprespektcol.v..','..skuprespektcena.v)
+	end
+	if skupmaterial.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 1, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupmaterialcol.v..','..skupmaterialcena.v)
+	end
+	if skupdrova.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 18, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupdrovacol.v..','..skupdrovacena.v)
+	end
+	if skupantibiotik.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 6, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupantibiotikcol.v..','..skupantibiotikcena.v)
+	end
+	if skuptsr.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 7, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skuptsrcol.v..','..skuptsrcena.v)
+	end
+	if skupsemmoneta.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 14, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupsemmonetacol.v..','..skupsemmonetacena.v)
+	end
+	if skupauto.v then 
+	sampSendDialogResponse(3040, 1, 0, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 19, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 20, -1)
+	wait(500)
+	sampSendDialogResponse(3050, 1, 8, -1)
+	wait(500)
+	sampSendDialogResponse(3060, 1, 1, ''..skupautocena.v)
+		end
+	end)
+end
+
+function skuppoymol()
+		skuptravacol.v = '1'
+		skuptravacena.v = '1000'
+		skupbronzarulcol.v = '1'
+		skupbronzarulcena.v = '15000'
+		skupserebrorulcol.v = '1'
+		skupserebrorulcena.v = '95000'
+		skupgoldrulcol.v = '1'
+		skupgoldrulcena.v = '300000'
+		skupplatinarulcol.v = '1'
+		skupplatinarulcena.v = '600000'
+		skupkamencol.v = '1'
+		skupkamencena.v = '10000'
+		skupmetalcol.v = '1'
+		skupmetalcena.v = '5000'
+		skupbronzacol.v = '1'
+		skupbronzacena.v = '50000'
+		skupserebrocol.v = '1'
+		skupserebrocena.v = '100000'
+		skupgoldcol.v = '1'
+		skupgoldcena.v = '50000'
+		skuppodarkicol.v = '1'
+		skuppodarkicena.v = '10000'
+		skuptaloncol.v = '1'
+		skuptaloncena.v = '7000'
+		skupsemtaloncol.v = '1'
+		skupsemtaloncena.v = '17000'
+		skupskidtaloncol.v = '1'
+		skupskidtaloncena.v = '2000000'
+		skuptochkamencol.v = '1'
+		skuptochkamencena.v = '80000'
+		skuptochamuletcena.v = '200000'
+		skuplareccol.v = '1'
+		skuplareccena.v = '300000'
+		skupttcena.v = '9000000'
+		skupmonetacol.v = '1'
+		skupmonetacena.v = '2000'
+		skuplencol.v = '1'
+		skuplencena.v = '2000'
+		skupxlopokcol.v = '1'
+		skupxlopokcena.v = '1500'
+		skuprespektcol.v = '1'
+		skuprespektcena.v = '2000'
+		skupmaterialcol.v = '1'
+		skupmaterialcena.v = '100'
+		skupdrovacol.v = '1'
+		skupdrovacena.v = '100'
+		skupantibiotikcol.v = '1'
+		skupantibiotikcena.v = '10000'
+		skuptsrcol.v = '1'
+		skuptsrcena.v = '15000'
+		skupsemmonetacol.v = '1'
+		skupsemmonetacena.v = '5000'
+		skupautocena.v = '2000000'
+		saveSettings(4)
+	end
+	
+function videoover()
+local videokarta = video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v
+	video.v = false
+	video1.v = false
+	video2.v = false
+	video3.v = false
+	video4.v = false
+	video5.v = false
+	video6.v = false
+	video7.v = false
+	video8.v = false
+	video9.v = false
+	video10.v = false
+	video11.v = false
+	video12.v = false
+	video13.v = false
+	video14.v = false
+	video15.v = false
+	video16.v = false
+	video17.v = false
+	video18.v = false
+	video19.v = false
+	video20.v = false
+	video21.v = false
+	video22.v = false
+	video23.v = false
+	video24.v = false
+	video25.v = false
+	video26.v = false
+	video27.v = false
+	video28.v = false
+	video29.v = false
+	video30.v = false
+	video31.v = false
+	video32.v = false
+	video33.v = false
+	video34.v = false
+	video35.v = false
+end
+	
+	
