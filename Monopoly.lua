@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('2.9')
+script_version('2.9.1')
 
 local use = false
 local close = false
@@ -35,6 +35,36 @@ local zolotopodarki = 0
 local chemodanpodarki = 0
 local itogopodarkov = 0
 local itogobtc = 0
+itogoskuptrava = 0
+itogoskupbronzarul = 0
+itogoskupserebrorul = 0
+itogoskupgoldrul = 0
+itogoskupplatinarul = 0
+itogoskupkamen = 0
+itogoskupmetal = 0
+itogoskupbronza = 0
+itogoskupserebro = 0
+itogoskupgold = 0
+itogoskuppodarki = 0
+itogoskuptalon = 0
+itogoskupsemtalon = 0
+itogoskupskidtalon = 0
+itogoskuptochkamen = 0
+itogoskuptochamulet = 0
+itogoskuplarec = 0
+itogoskuptt = 0
+itogoskupmoneta = 0
+itogoskuplen = 0
+itogoskupxlopok = 0
+itogoskuprespekt = 0
+itogoskupmaterial = 0
+itogoskupdrova = 0
+itogoskupantibiotik = 0
+itogoskuptsr = 0
+itogoskupsemmoneta = 0
+itogoskupauto = 0
+skuptovaracol = 0
+itogoskuptovara = 0
 krytim = true
 
 local restore_text = false
@@ -4605,7 +4635,6 @@ function imgui.OnDrawFrame()
 					end
 				end
 				imgui.SliderInt(u8" Коррекция времени", timefix, 0, 5)
-				if imgui.Button(u8' Вернуть значения скупа по умолчанию', btn_size) then skuppoymol() end
 			end
 		elseif showSet == 3 then -- настройки клавиш
 			imgui.Columns(2, _, false)
@@ -4883,27 +4912,27 @@ function imgui.OnDrawFrame()
 	end
 	if win_state['skup'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(718, 578), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(718, 610), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Skup Menu ', win_state['skup'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-				imgui.BeginChild('##asdasasddf32345235412', imgui.ImVec2(688, 499), false)
+				imgui.BeginChild('##asdasasddf32345235412', imgui.ImVec2(688, 531), false)
 				getArizonaSkup()
 				imgui.EndChild()
 		imgui.End()
 	end
 	if win_state['skup2'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(718, 578), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(718, 610), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Skup Menu ', win_state['skup2'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-				imgui.BeginChild('##asdasasddf3234432', imgui.ImVec2(688, 499), false)
+				imgui.BeginChild('##asdasasddf3234432', imgui.ImVec2(688, 531), false)
 				getArizonaSkup2str()
 				imgui.EndChild()
 		imgui.End()
 	end
 	if win_state['skup3'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(718, 578), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(718, 610), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Skup Menu ', win_state['skup3'], imgui.WindowFlags.NoResize + imgui.WindowFlags.MenuBar)
-				imgui.BeginChild('##asdasasddf2121', imgui.ImVec2(688, 493), false)
+				imgui.BeginChild('##asdasasddf2121', imgui.ImVec2(688, 525), false)
 				getArizonaSkup3str()
 				imgui.EndChild()
 		imgui.End()
@@ -5813,7 +5842,7 @@ end
 		itogobtc = itogobtc + bitkoin
 		end)
 	end
-	if text:find("У вас нет 2шт. смазки для видеокарты. Её можно скрафтить в подвале дома или купить на центральном рынке.") and videokarta then
+	if text:find("У вас нет 2шт. смазки для видеокарты. Её можно скрафтить в подвале дома или купить на центральном рынке.") then
 		videoover()
 	end
 	if toch.v then
@@ -7238,6 +7267,35 @@ while true do
 	sampCloseCurrentDialogWithButton(0) 
 	wait(400)
 	end
+	if platina.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(1449, 1 , 4, -1)
+	wait(200)
+	sampSendDialogResponse(8672, 1 , 17, -1)
+	wait(100)
+	closeDialog()
+	end
+	if moneta.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(9542, 1 , 24, -1)
+	wait(100)
+	closeDialog()
+	end
+	if tochkamen.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(9542, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	end
 	if btc.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -7994,36 +8052,7 @@ while true do
 	wait(100)
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно запустили или остановили видеокарты. Функция выключилась автоматический.", 0x046D63)
 	pusk.v = false
-	end
-	if platina.v then 
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(1449, 1 , 4, -1)
-	wait(200)
-	sampSendDialogResponse(8672, 1 , 17, -1)
-	wait(100)
-	closeDialog()
-	end
-	if moneta.v then 
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(9542, 1 , 24, -1)
-	wait(100)
-	closeDialog()
-	end
-	if tochkamen.v then 
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(9542, 1 , 0, -1)
-	wait(100)
-	closeDialog()
-			end
+		end
 		wait(0)
 	end
 end
@@ -8806,18 +8835,16 @@ function shemaskup()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(850, 210), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(850, 160), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Инструкция', win_state['skupshema'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf21312122', imgui.ImVec2(800, 170), false)
-			imgui.Text(u8"1) Для начала поставьте галочку на тех товарах, которые хотите скупать.")
-			imgui.Text(u8"2) Введите количество товара и цену за штуку в соответствующих полях.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ СТИРАЙТЕ ПОЛНОСТЬЮ ЦИФРЫ С ПОЛЕЙ ИНАЧЕ СКРИПТ ПЕРЕСТАНЕТ РАБОТАТЬ! НО, ЕСЛИ ВЫ ВСЁ ЖЕ СЛУЧАЙНО")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"СДЕЛАЛИ ЭТО, ТО ПОСЛЕ ПЕРЕЗАГРУЗКИ СКРИПТА, ПЕРЕЙДИТЕ В 'МЕНЮ СКРИПТА - БИНДЕР И НАСТРОЙКИ - ПРОЧИЕ НАСТРОЙКИ'")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" И НАЖМИТЕ НА КНОПКУ 'ВЕРНУТЬ ЗНАЧЕНИЯ СКУПА ПО УМОЛЧАНИЮ'.")
-			imgui.Text(u8"3) Встаньте в лавку, введите название, и нажмите альт, чтобы попасть в начальное меню лавки. Далее откройте меню скрипта -")
-			imgui.Text(u8"'Skup Menu' и нажмите на кнопку 'Выставить товары на скуп'.")
-			imgui.EndChild()
-			imgui.End()
+		imgui.BeginChild('##asdasasddf21312122', imgui.ImVec2(800, 110), false)
+		imgui.Text(u8"1) Для начала поставьте галочку на тех товарах, которые хотите скупать.")
+		imgui.Text(u8"2) Введите количество товара и цену за штуку в соответствующих полях.")
+		imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ НАЖИМАЙТЕ НА КНОПКУ 'РАССЧИТАТЬ ТОВАРЫ', ЕСЛИ ЗАПОЛНИЛИ НЕ ВСЕ ПОЛЯ!")
+		imgui.Text(u8"3) Встаньте в лавку, введите название, и нажмите альт, чтобы попасть в начальное меню лавки. Далее откройте меню скрипта -")
+		imgui.Text(u8"'Skup Menu' и нажмите на кнопку 'Выставить товары на скуп'.")
+		imgui.EndChild()
+		imgui.End()
 	end
 	
 function pismomenu()
@@ -8843,7 +8870,10 @@ function tupupdate()
 	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v2.9', win_state['tup'], imgui.WindowFlags.NoResize)
 			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс 'Измененный cars' (не работала функция и крашил скрипт)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс 'Улучшение видеокарт' (не выключалась функция, когда заканчивались смазки)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс 'Обмен зловещих монет на точилки' (не работала функция)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"- Фикс 'Skup Menu' (больше не крашит скрипт, если убрать данные с полей ввода)")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -8921,9 +8951,6 @@ end
 function getArizonaSkup()
 	local btn_size29 = imgui.ImVec2(30, 30)
 	local btn_size30 = imgui.ImVec2(325, 0)
-	
-	load_static()
-	
 	imgui.PushItemWidth(83)
 	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
 	imgui.Separator()
@@ -8963,6 +8990,8 @@ function getArizonaSkup()
 	win_state['skup2'].v = false  
 	end
 	imgui.Text('') imgui.SameLine() if imgui.Button(u8'Инструкция', btn_size30) then win_state['skupshema'].v = not win_state['skupshema'].v end 
+	imgui.SameLine() if imgui.Button(u8'Рассчитать товары', btn_size30) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.Button(u8' Вернуть значения скупа по умолчанию', btn_size30) then skuppoymol() end
 	imgui.SameLine() if imgui.Button(u8'Выставить товары на скуп', btn_size30) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
@@ -8971,9 +9000,6 @@ end
 function getArizonaSkup2str()
 	local btn_size29 = imgui.ImVec2(30, 30)
 	local btn_size30 = imgui.ImVec2(325, 0)
-	
-	load_static()
-	
 	imgui.PushItemWidth(83)
 	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
 	imgui.Separator()
@@ -9016,6 +9042,8 @@ function getArizonaSkup2str()
 	win_state['skup2'].v = false 
 	end
 	imgui.Text('') imgui.SameLine() if imgui.Button(u8'Инструкция', btn_size30) then win_state['skupshema'].v = not win_state['skupshema'].v end 
+	imgui.SameLine() if imgui.Button(u8'Рассчитать товары', btn_size30) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.Button(u8' Вернуть значения скупа по умолчанию', btn_size30) then skuppoymol() end
 	imgui.SameLine() if imgui.Button(u8'Выставить товары на скуп', btn_size30) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
@@ -9024,9 +9052,6 @@ end
 function getArizonaSkup3str()
 	local btn_size29 = imgui.ImVec2(30, 30)
 	local btn_size30 = imgui.ImVec2(325, 0)
-	
-	load_static()
-	
 	imgui.PushItemWidth(83)
 	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
 	imgui.Separator()
@@ -9070,6 +9095,8 @@ function getArizonaSkup3str()
 	win_state['skup2'].v = false 
 	end
 	imgui.Text('') imgui.SameLine() if imgui.Button(u8'Инструкция', btn_size30) then win_state['skupshema'].v = not win_state['skupshema'].v end 
+	imgui.SameLine() if imgui.Button(u8'Рассчитать товары', btn_size30) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.Button(u8' Вернуть значения скупа по умолчанию', btn_size30) then skuppoymol() end
 	imgui.SameLine() if imgui.Button(u8'Выставить товары на скуп', btn_size30) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
@@ -9115,7 +9142,7 @@ function carsax()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(510, 520), imgui.Cond.FirstUseEver)
-	imgui.Begin(u8' Редактировать cars', win_state['carsas'], imgui.WindowFlags.NoResize)
+	if imgui.Begin(u8' Редактировать cars', win_state['carsas'], imgui.WindowFlags.NoResize) then
         if imgui.InputTextMultiline(u8'', buf, imgui.ImVec2(485, 420)) then 
             sampShowDialog(INFO[1],INFO[3],u8:decode(buf.v),INFO[4],INFO[5],INFO[2])
             sampSetDialogClientside(false)
@@ -9129,6 +9156,7 @@ function carsax()
 				ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] = nil
 				sampShowDialog(INFO[1],INFO[3],INFO[6],INFO[4],INFO[5],INFO[2]) 
 				sampSetDialogClientside(false)
+			end
 		end
         imgui.End()
     end
@@ -10838,7 +10866,6 @@ function skuppoymol()
 	end
 	
 function videoover()
-local videokarta = video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v
 	video.v = false
 	video1.v = false
 	video2.v = false
