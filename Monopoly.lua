@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.0')
+script_version('3.1')
 
 local use = false
 local close = false
@@ -35,6 +35,7 @@ local zolotopodarki = 0
 local chemodanpodarki = 0
 local itogopodarkov = 0
 local itogobtc = 0
+local font = renderCreateFont('Arial', 10, 5)
 itogoskuptrava = 0
 itogoskupbronzarul = 0
 itogoskupserebrorul = 0
@@ -274,6 +275,7 @@ local SET = {
  	settings = {
 		autologin = false,
 		dialogupdate = false,
+		dialogfix = false,
 		autoryda = false,
 		skuptrava = false,
 		skupbronzarul = false,
@@ -313,6 +315,7 @@ local SET = {
 		autoopl5 = false,
 		autoopl6 = false,
 		lock = false,
+		wallhack = false,
 		autokamen = '8000',
 		autometal = '4000',
 		autobronza = '40000',
@@ -324,6 +327,7 @@ local SET = {
 		autopasspin = '123456',
 		autoklava = '114',
 		autoklavareload = '115',
+		autoklavawallhack = '122',
 		autodrone = '67',
 		autodronev2 = '49',
 		autodronev3 = '67',
@@ -480,6 +484,8 @@ local SET = {
 		awp = false,
 		m4 = false,
 		otgun = false,
+		bindreshim = false,
+		droneoption = false,
 		uzi = false,
 		ak47 = false,
 		tazer = false,
@@ -1309,6 +1315,7 @@ function main()
 	lua_thread.create(strobe)
 	lua_thread.create(obnovlenie)
 	lua_thread.create(findi)
+	lua_thread.create(whoption)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1352,7 +1359,6 @@ function main()
 		
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
-		ping = sampGetPlayerPing(myID)
 		interior = getActiveInterior() -- получаем инту
 		
 		local chatstring = sampGetChatString(99)
@@ -1454,15 +1460,19 @@ function main()
 		end
 		dialogIncoming = 0
 		end
-		for i = 0, sampGetMaxPlayerId(true) do 
+		for i = 0, sampGetMaxPlayerId(true) do
 			if sampIsPlayerConnected(i) then
 				local result, ped = sampGetCharHandleBySampPlayerId(i)
 				if result then
 					local positionX, positionY, positionZ = getCharCoordinates(ped)
 					local localX, localY, localZ = getCharCoordinates(PLAYER_PED)
 					local distance = getDistanceBetweenCoords3d(positionX, positionY, positionZ, localX, localY, localZ)
-					if droneActive then
+					if distance >= 1 and droneActive and developMode ~= 1 then
 						EmulShowNameTag(i, false)
+					elseif droneActive and developMode == 1 then
+						EmulShowNameTag(i, true)
+					else
+						EmulShowNameTag(i, true)
 					end
 				end
 			end
@@ -1571,6 +1581,8 @@ function saveSettings(args, key)
 	ini.settings.ybral = ybral.v
 	ini.settings.mp5 = mp5.v
 	ini.settings.otgun = otgun.v
+	ini.settings.bindreshim = bindreshim.v
+	ini.settings.droneoption = droneoption.v
 	ini.settings.shotgun = shotgun.v
 	ini.settings.rifle = rifle.v
 	ini.settings.knife = knife.v
@@ -1694,6 +1706,7 @@ function saveSettings(args, key)
 	ini.settings.knifeone = u8:decode(knifeone.v)
 	ini.settings.knifetwo = u8:decode(knifetwo.v)
 	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
+	ini.settings.autoklavawallhack = u8:decode(autoklavawallhack.v)
 	ini.settings.autodrone = u8:decode(autodrone.v)
 	ini.settings.autodronev2 = u8:decode(autodronev2.v)
 	ini.settings.autodronev3 = u8:decode(autodronev3.v)
@@ -1712,6 +1725,7 @@ function saveSettings(args, key)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.dialogupdate = dialogupdate.v
+	ini.settings.dialogfix = dialogfix.v
 	ini.settings.autoryda = autoryda.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autoopl = autoopl.v
@@ -1723,6 +1737,7 @@ function saveSettings(args, key)
 	ini.settings.autoopl6 = autoopl6.v
 	ini.settings.autopay = autopay.v
 	ini.settings.lock = lock.v
+	ini.settings.wallhack = wallhack.v
 	
 	ini.settings.skuptravacol = u8:decode(skuptravacol.v)
 	ini.settings.skuptravacena = u8:decode(skuptravacena.v)
@@ -4658,19 +4673,21 @@ function imgui.OnDrawFrame()
 	end
 	
 function infobar()
-			if infHP.v then imgui.Text(u8(" • Здоровье: "..healNew)) end
-			if infArmour.v then imgui.Text(u8(" • Броня: "..armourNew)) end
-			if infCity.v then imgui.Text(u8(" • Город: "..playerCity)) end
-			if infRajon.v then imgui.Text(u8(" • Район: "..ZoneInGame)) end
-			if inffps.v then imgui.Text(u8(" • ФПС: "..tostring(fraimrei))) end
-			if infping.v then imgui.Text(u8(" • Пинг: "..ping)) end
+			if infHP.v then imgui.Text(u8(" • Здоровье: "..healNew..' ')) end
+			if infArmour.v then imgui.Text(u8(" • Броня: "..armourNew..' ')) end
+			if infCity.v then imgui.Text(u8(" • Город: "..playerCity..' ')) end
+			if infRajon.v then imgui.Text(u8(" • Район: "..ZoneInGame..' ')) end
+			if inffps.v then imgui.Text(u8(" • ФПС: "..tostring(fraimrei)..' ')) end
+			_, PINGUPDATE = sampGetPlayerIdByCharHandle(PLAYER_PED)
+			ping = sampGetPlayerPing(PINGUPDATE)
+			if infping.v then imgui.Text(u8(" • Пинг: "..ping..' ')) end
 			if isCharInAnyCar(PLAYER_PED) and infhpcar.v then 
 				car = storeCarCharIsInNoSave(playerPed)
 				carhp = getCarHealth(car)
-			imgui.Text(u8(" • ХП т/с: " ..carhp)) end
-			if infKv.v then imgui.Text(u8(" • Квадрат: "..tostring(locationPos()))) end
-			if infTime.v then imgui.Text(u8(" • Время: "..os.date("%H:%M:%S                    "))) end
-			if infonline.v then imgui.Text(u8(" • Онлайн за сессию: "..get_timer(sessiononline))) end
+			imgui.Text(u8(" • ХП т/с: " ..carhp..' ')) end
+			if infKv.v then imgui.Text(u8(" • Квадрат: "..tostring(locationPos())..' ')) end
+			if infTime.v then imgui.Text(u8(" • Время: "..os.date("%H:%M:%S")..' ')) end
+			if infonline.v then imgui.Text(u8(" • Онлайн за сессию: "..get_timer(sessiononline)..' ')) end
 		end
 		
 function infobarshahta()
@@ -4748,7 +4765,11 @@ function rcmd(cmd, text, delay) -- функция для биндера, без которой не будет ни 
 						keystatus = true
 						local strings = split(text, '~', false) -- обрабатываем текст бинда
 						for i, g in ipairs(strings) do -- начинаем непосредественный вывод текста по строкам
+							if bindreshim.v then
 							if not g:find("{bwait:") then sampProcessChatInput(tags(tostring(g))) end
+							else
+							if not g:find("{bwait:") then sampSendChat(tags(tostring(g))) end
+								end
 							wait(g:match("%{bwait:(%d+)%}"))
 						end
 						keystatus = false
@@ -4766,7 +4787,11 @@ function rcmd(cmd, text, delay) -- функция для биндера, без которой не будет ни 
 				local strings = split(text, '~', false)
 				keystatus = true
 				for i, g in ipairs(strings) do
+					if bindreshim.v then
 					if not g:find("{bwait:") then sampProcessChatInput(tags(tostring(g))) end
+					else
+					if not g:find("{bwait:") then sampSendChat(tags(tostring(g))) end
+					end
 					wait(g:match("%{bwait:(%d+)%}"))
 				end
 				keystatus = false
@@ -5020,10 +5045,12 @@ function fixpricecopia()
 	lua_thread.create(function()
 		wait(10000)
 		sampSendChat("/mm")
-		wait(500)
-		setVirtualKeyDown(VK_ESCAPE, true)
-		wait(40)
-		setVirtualKeyDown(VK_ESCAPE, false)
+		wait(200)
+		sampSendDialogResponse(722, 1 , 8, -1)
+		wait(200)
+		sampCloseCurrentDialogWithButton(1)
+		wait(200)
+		sampCloseCurrentDialogWithButton(1)
 		end)
 	end
 
@@ -5059,6 +5086,9 @@ function sampev.onServerMessage(color, text)
 		fixprice()
 	end
 	if text:match("Добро пожаловать на Arizona Role Play!") and mvdhelp.v then
+		fixpricecopia()
+	end
+	if text:match("Добро пожаловать на Arizona Role Play!") and dialogfix.v then
 		fixpricecopia()
 	end
 	local today_date = os.date("%d.%m.%y")
@@ -5267,6 +5297,7 @@ function load_settings() -- загрузка настроек
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
 	dialogupdate = imgui.ImBool(ini.settings.dialogupdate)
+	dialogfix = imgui.ImBool(ini.settings.dialogfix)
 	autoryda = imgui.ImBool(ini.settings.autoryda)
 	autopin = imgui.ImBool(ini.settings.autopin)
 	autoopl = imgui.ImBool(ini.settings.autoopl)
@@ -5278,6 +5309,7 @@ function load_settings() -- загрузка настроек
 	autoopl6 = imgui.ImBool(ini.settings.autoopl6)
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
+	wallhack = imgui.ImBool(ini.settings.wallhack)
 	
 	skuptrava = imgui.ImBool(ini.settings.skuptrava)
 	skupbronzarul = imgui.ImBool(ini.settings.skupbronzarul)
@@ -5328,6 +5360,7 @@ function load_settings() -- загрузка настроек
 	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
+	autoklavawallhack = imgui.ImBuffer(u8(ini.settings.autoklavawallhack), 256)
 	autodrone = imgui.ImBuffer(u8(ini.settings.autodrone), 256)
 	autodronev2 = imgui.ImBuffer(u8(ini.settings.autodronev2), 256)
 	autodronev3 = imgui.ImBuffer(u8(ini.settings.autodronev3), 256)
@@ -5460,6 +5493,8 @@ function load_settings() -- загрузка настроек
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
 	otgun = imgui.ImBool(ini.settings.otgun)
+	bindreshim = imgui.ImBool(ini.settings.bindreshim)
+	droneoption = imgui.ImBool(ini.settings.droneoption)
 
 	infHP = imgui.ImBool(ini.informer.hp)
 	infArmour = imgui.ImBool(ini.informer.armour)
@@ -7496,10 +7531,33 @@ while true do
 	end
 end
 
+function whoption()
+while true do
+	if isKeyJustPressed(u8:decode(autoklavawallhack.v)) and wallhack.v then
+			nameTagOn()
+			repeat
+			wait(0)
+			if isKeyDown(119) then
+				nameTagOff()
+				wait(1000)
+				nameTagOn()
+			end
+			if wallhack.v == false then
+				nameTagOff()
+			end
+			until isKeyJustPressed(u8:decode(autoklavawallhack.v))
+			while isKeyJustPressed(u8:decode(autoklavawallhack.v)) do
+			wait(10)
+			end
+			nameTagOff()
+		end
+		wait(0)
+	end
+end
+
 function obnovlenie()
 while true do
 	if WHupdate.v then
-		local font = renderCreateFont('Arial', 10, 5)
 		for _, obj_hand in pairs(getAllObjects()) do
             local modelid = getObjectModel(obj_hand)
             if modelid == 2886 then
@@ -7508,9 +7566,10 @@ while true do
                     local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
                     if res then
                         local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
+						mils = tonumber(string.format("%.f", dist))
                         local c1,c2 = convert3DCoordsToScreen(x,y,z)
                         local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{CD0000}Пропавший предмет\n{ffffff}Дистанция: '..dist..'m.'
+                        local text = '{CD0000}Пропавший предмет\n{ffffff}Дистанция: '..mils..'m.'
                         renderDrawLine(c1,c2,o1,o2,1,-1)
                         renderFontDrawText(font,text,o1,o2,-1)
                     end
@@ -7522,9 +7581,10 @@ while true do
                     local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
                     if res then
                         local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
+						mils = tonumber(string.format("%.f", dist))
                         local c1,c2 = convert3DCoordsToScreen(x,y,z)
                         local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{FF4500}Покорёженый металл\n{ffffff}Дистанция: '..dist..'m.'
+                        local text = '{FF4500}Покорёженый металл\n{ffffff}Дистанция: '..mils..'m.'
                         renderDrawLine(c1,c2,o1,o2,1,-1)
                         renderFontDrawText(font,text,o1,o2,-1)
 						end
@@ -7536,9 +7596,10 @@ while true do
                     local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
                     if res then
                         local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
+						mils = tonumber(string.format("%.f", dist))
                         local c1,c2 = convert3DCoordsToScreen(x,y,z)
                         local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{FFD700}Железные обломки\n{ffffff}Дистанция: '..dist..'m.'
+                        local text = '{FFD700}Железные обломки\n{ffffff}Дистанция: '..mils..'m.'
                         renderDrawLine(c1,c2,o1,o2,1,-1)
                         renderFontDrawText(font,text,o1,o2,-1)
 						end
@@ -7550,9 +7611,10 @@ while true do
                     local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
                     if res then
                         local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
+						mils = tonumber(string.format("%.f", dist))
                         local c1,c2 = convert3DCoordsToScreen(x,y,z)
                         local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{0000FF}Ржавые детали\n{ffffff}Дистанция: '..dist..'m.'
+                        local text = '{0000FF}Ржавые детали\n{ffffff}Дистанция: '..mils..'m.'
                         renderDrawLine(c1,c2,o1,o2,1,-1)
                         renderFontDrawText(font,text,o1,o2,-1)
                     end
@@ -8490,12 +8552,13 @@ function kirkamenu()
 function bitkoinoknomenu()
 	local sw, sh = getScreenResolution() 
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(1.331, 1.163))
-		imgui.SetNextWindowSize(imgui.ImVec2(375, 280), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(375, 305), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Улучшение видеокарт ', win_state['bitkoinwinokno'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Инструкция', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-210, 0)) then win_state['shemainst'].v = not win_state['shemainst'].v end
 				imgui.SameLine()
 				if imgui.CustomButton(u8'Редактировать ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['shematext'].v = not win_state['shematext'].v end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выбрать первые 20 видеокарт', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then videotrue() end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Завершить улучшение видеокарт', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then videofailed() end
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1  ', video); imgui.SameLine(); imgui.Checkbox(u8'№2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'№3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'№4  ', video3) imgui.SameLine(); imgui.Checkbox(u8'№5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'№6', video5)
 			    imgui.Text('') imgui.SameLine()  imgui.Checkbox(u8'№7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'№8  ', video7) imgui.SameLine(); imgui.Checkbox(u8'№9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'№10', video9); imgui.SameLine(); imgui.Checkbox(u8'№11', video10); imgui.SameLine(); imgui.Checkbox(u8'№12', video11)
@@ -8789,7 +8852,7 @@ function updatewinmenu()
 		imgui.EndChild()
 		end
 		if imgui.CollapsingHeader(u8'Ответы на вопросы Burning Man') then
-				imgui.BeginChild('##as2dasasdf45454', imgui.ImVec2(950, 80), false)
+				imgui.BeginChild('##as2dasasdf45434', imgui.ImVec2(950, 80), false)
 				imgui.Columns(2, _, false)
 				imgui.SetColumnWidth(-1, 800)
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"Вопрос: Правда ли, что на Burning Man можно купить только лед и кофе? Ответ: Да.")
@@ -8799,10 +8862,12 @@ function updatewinmenu()
 		imgui.EndChild()
 		end
 		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог после входа в игру")); imgui.SameLine(); imgui.ToggleButton(u8("Убирать диалог после входа в игру"), dialogupdate) imgui.SameLine() imgui.TextQuestion(u8"Функция закрывает диалог с поздравлением от Аризоны после спавна персонажа.")
-	    imgui.SameLine(343)
+	    imgui.SameLine(320)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать сундук 7-й годовщины', newroulette) imgui.SameLine() imgui.TextQuestion(u8"Функция автоматический крутить рулетку в сундуке 7-й годовщины. Перед активацией функции, сначала откройте рулетку, нажав на сундук. Функция перестанет крутить рулетку, если у вас закончились монеты.")
+		imgui.SameLine(598)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Показать маркеры для прохождения лабиринта ##212', labirint) imgui.SameLine() imgui.TextQuestion(u8"Функция ставит чекпоинты в лабиринте, тем самым показывая вам маршрут для его прохождения.")
-		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Фикс инвентаря")); imgui.SameLine(); imgui.ToggleButton(u8("Фикс инвентаря"), dialogfix) imgui.SameLine() imgui.TextQuestion(u8"Функция через 10 секунд после спавна открывает /mm и закрывает, чтобы разбагать инвентарь. Инвентарь багается из-за 'Убирать диалог после входа в игру'.")
+		imgui.SameLine(328)
 		imgui.Checkbox(u8'ВХ на пропавший предмет, железные обломки, ржавые детали и покорёженый металл', WHupdate) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение. Данные предметы находятся на острове и нужны для выполнения квеста или обмена на аксессуары.")
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением достопримечательностей:') imgui.SameLine() imgui.TextQuestion(u8"Функция активирует на радаре метку с местонахождением достопримечательности. Нужно для прохождения квеста.")
@@ -8987,12 +9052,30 @@ function nastroikamenu()
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Персонализация") then selected3 = 4 end	
 		imgui.Separator()
+		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Для разработчиков") then selected3 = 6 end	
+		imgui.Separator()
 		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Обновления") then selected3 = 5 end				
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
 		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 460), true)
 		if selected3 == 0 then selected3 = 1
+		elseif selected3 == 6 then
+			imgui.Columns(2, _, false)
+			imgui.Text('') imgui.SameLine() imgui.Text(u8"Для разработчиков")
+			imgui.Separator()
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'Режим работы Биндера:')
+			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный")); imgui.SameLine(); imgui.ToggleButton(u8' ', bindreshim); imgui.SameLine(); imgui.Text(u8("Продвинутый")) imgui.SameLine() imgui.TextQuestion(u8"Есть 2 режима работы биндера. Режим 'Обычный' - биндер не оставляет написанный текст в чате и не работают скриптовые команды через биндер. Режим 'Продвинутый' - оставляет написанный ранее текст в чате, но зато работают команды скрипта через биндер.")
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'Режим работы Дрона:')
+			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный")); imgui.SameLine(); imgui.ToggleButton(u8'  ', droneoption); imgui.SameLine(); imgui.Text(u8("Продвинутый")) imgui.SameLine() imgui.TextQuestion(u8"Есть 2 режима работы дрона. Режим 'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убираются ники и прочие надписи на игроках и встроен ВХ, который показывает не все ники в радиусе, а показывает ник игрока только в том случае, если вы дроном подлетели к нему.")
+			if droneoption.v then developMode = 1 end
+			imgui.NextColumn()
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать WallHack', wallhack)
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Активация WallHack на клавишу:")); imgui.SameLine(); imgui.TextQuestion(u8"WallHack - позволяет увидеть ник игрока, находясь далеко от него (функция запрещена на любых серверах - используйте на свой страх и риск и только в благих целях. Также не палится на скриншотах, если скриншот был сделан на клавишу F8.) Сначала нужно активировать WallHack. Затем в поле нужно ввести код клавиши для включения или отключения WallHack. По умолчанию поставлено на F11. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
+			imgui.PushItemWidth(213)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'###2', autoklavawallhack)
+			imgui.PopItemWidth()
+			
 		elseif selected3 == 5 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Обновления")
 			imgui.Separator()
@@ -9701,10 +9784,24 @@ function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(850, 250), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(855, 300), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v3.0', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(800, 200), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 270), false)
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс фпс при включений ВХ на острове.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таблички информера и пинга(пинг иногда отображался неверно)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Piar Menu'(крашил скрипт, если зайти в данное меню при заходе в игру)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Убраны числа в ВХ на предметы после точки.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Майнинг' добавлена возможность выбрать сразу 20 видеокарт на улучшение.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен сервер 'Show Low'.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' добавлен новый пункт 'Для разработчиков', в котором есть - режим смены работы биндера(Есть 2 режима работы биндера.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" Режим 'Обычный' - биндер не оставляет написанный текст в чате и не работают скриптовые команды через биндер. Режим 'Продвинутый' -")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" оставляет написанный ранее текст в чате, но зато работают команды скрипта через биндер), WallHack(позволяет увидеть ник игрока,")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" находясь далеко от него. Также не палится на скриншотах, если скриншот сделан на F8), настройка режима дрона(Есть 2 режима работы")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" дрона. Режим 'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убирает ники и прочие надписи на игроках")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" и встроен ВХ, который показывает не все ники в радиусе, а показывает ники игроков только в том случае, если вы дроном подлетели к нему).")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Arizona Update' добавлена функция 'Фикс Инвентаря'. Из-за функции для убирания диалога при спавне персонажа, багается инвентарь.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" Данная функция откроет /mm и закроет его, тем самым, разбагает инвентарь.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Обновлены пользователи в меню 'Игроки, которые предлагали идеи и они были осуществлены'.")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -9725,22 +9822,25 @@ function timeyveddate()
 	end
 	
 function getArizonaName()
-	if sampGetCurrentServerName():find("Phoenix") then gameServer = "Phoenix" end
-	if sampGetCurrentServerName():find("Tucson") then gameServer = "Tucson" end
-	if sampGetCurrentServerName():find("Scottdale") then gameServer = "Scottdale" end
-	if sampGetCurrentServerName():find("Chandler") then gameServer = "Chandler" end
-	if sampGetCurrentServerName():find("Brainburg") then gameServer = "Brainburg" end
-	if sampGetCurrentServerName():find("Saint Rose") then gameServer = "Saint Rose" end
-	if sampGetCurrentServerName():find("Mesa") then gameServer = "Mesa" end
-	if sampGetCurrentServerName():find("Red Rock") then gameServer = "Red Rock" end
-	if sampGetCurrentServerName():find("Yuma") then gameServer = "Yuma" end
-	if sampGetCurrentServerName():find("Surprise") then gameServer = "Surprise" end
-	if sampGetCurrentServerName():find("Prescott") then gameServer = "Prescott" end
-	if sampGetCurrentServerName():find("Glendale") then gameServer = "Glendale" end
-	if sampGetCurrentServerName():find("Kingman") then gameServer = "Kingman" end
-	if sampGetCurrentServerName():find("Winslow") then gameServer = "Winslow" end
-	if sampGetCurrentServerName():find("Payson") then gameServer = "Payson" end
-	if sampGetCurrentServerName():find("Gilbert") then gameServer = "Gilbert" end
+	if sampGetCurrentServerAddress() == "185.169.134.3" then gameServer = "Phoenix"
+	elseif sampGetCurrentServerAddress() == "185.169.134.4" then gameServer = "Tucson"
+	elseif sampGetCurrentServerAddress() == "185.169.134.43" then gameServer = "Scottdale"
+	elseif sampGetCurrentServerAddress() == "185.169.134.44" then gameServer = "Chandler"
+	elseif sampGetCurrentServerAddress() == "185.169.134.45" then gameServer = "Brainburg"
+	elseif sampGetCurrentServerAddress() == "185.169.134.5" then gameServer = "Saint Rose"
+	elseif sampGetCurrentServerAddress() == "185.169.134.59" then gameServer = "Mesa" 
+	elseif sampGetCurrentServerAddress() == "185.169.134.61" then gameServer = "Red Rock"
+	elseif sampGetCurrentServerAddress() == "185.169.134.107" then gameServer = "Yuma" 
+	elseif sampGetCurrentServerAddress() == "185.169.134.109" then gameServer = "Surprise"
+	elseif sampGetCurrentServerAddress() == "185.169.134.166" then gameServer = "Prescott"
+	elseif sampGetCurrentServerAddress() == "185.169.134.171" then gameServer = "Glendale"
+	elseif sampGetCurrentServerAddress() == "185.169.134.172" then gameServer = "Kingman"
+	elseif sampGetCurrentServerAddress() == "185.169.134.173" then gameServer = "Winslow"
+	elseif sampGetCurrentServerAddress() == "185.169.134.174" then gameServer = "Payson"
+	elseif sampGetCurrentServerAddress() == "80.66.82.191" then gameServer = "Gilbert"
+	elseif sampGetCurrentServerAddress() == "80.66.82.190" then gameServer = "Show Low"
+	else gameServer = "Неизвестно" 
+	end
 	if cfg.adpred.datetime ~= os.date("%d.%m.%Y") then 
 	cfg.adpred.datetime = os.date("%d.%m.%Y")
 	cfg.adpred.piarsh = 0 
@@ -10008,8 +10108,8 @@ function scriptinfopeople()
 	imgui.Columns(2, _,false)
 	imgui.SetColumnWidth(-1, 800)
 	imgui.Text('')
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777, Graph_Bavles, Илья{800080}")
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}и COSMIK.{800080}")
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777, Graph_Bavles, Илья,{800080}")
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}COSMIK, arabKRYT, TodFox и Владимир.{800080}")
 end
 
 function imgui.CenterText(text)
@@ -10625,6 +10725,29 @@ function videofailed()
 	video33.v = false
 	video34.v = false
 	video35.v = false
+end
+
+function videotrue()
+	video.v = true
+	video1.v = true
+	video2.v = true
+	video3.v = true
+	video4.v = true
+	video5.v = true
+	video6.v = true
+	video7.v = true
+	video8.v = true
+	video9.v = true
+	video10.v = true
+	video11.v = true
+	video12.v = true
+	video13.v = true
+	video14.v = true
+	video15.v = true
+	video16.v = true
+	video17.v = true
+	video18.v = true
+	video19.v = true
 end
 
 function sendKey(key)
@@ -11792,6 +11915,25 @@ function setMarker(type, x, y, z)
 	raknetEmulRpcReceiveBitStream(38, bs) 
 	raknetDeleteBitStream(bs)
 addOneOffSound(0, 0, 0, 1149)
+end
+
+function nameTagOn()
+	local pStSet = sampGetServerSettingsPtr()
+	NTdist = memory.getfloat(pStSet + 39)
+	NTwalls = memory.getint8(pStSet + 47)
+	NTshow = memory.getint8(pStSet + 56)
+	memory.setfloat(pStSet + 39, 1488.0)
+	memory.setint8(pStSet + 47, 0)
+	memory.setint8(pStSet + 56, 1)
+end
+
+function nameTagOff()
+    lua_thread.create(function()
+	local pStSet = sampGetServerSettingsPtr()
+	memory.setfloat(pStSet + 39, NTdist)
+	memory.setint8(pStSet + 47, NTwalls)
+	memory.setint8(pStSet + 56, NTshow)
+end)
 end
 	
 	
