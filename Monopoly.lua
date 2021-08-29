@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.0.1')
+script_version('3.0.2')
 
 local use = false
 local close = false
@@ -4418,12 +4418,12 @@ function imgui.OnDrawFrame()
 				imgui.Text('') imgui.SameLine(342) imgui.Text(u8"Arizona Update")
 				imgui.Text('')
 				imgui.Text('')
-				imgui.Text('')
-				imgui.Text('')
-				imgui.Text('')
-				imgui.Text('')
-				imgui.Text('')
-				imgui.Text('')
+				imgui.Separator()
+				imgui.Text('') imgui.SameLine(120) imgui.Text(u8'ESC - закрывает все окна, кроме основного.')
+				imgui.Text('') imgui.SameLine(90) imgui.Text(u8'F3 или установленная вами клавиша - закрывает все окна.')
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Перейти в группу VK скрипта (информация, помощь, предложения)', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
+				imgui.Separator()
 				imgui.Text('')
 				imgui.Text('')
 				imgui.Separator()
@@ -6680,6 +6680,8 @@ while true do
 	end
 	if water.v then 
 	sampSendClickTextdraw(2128)
+	wait(100)
+	sampSendClickTextdraw(2129)
 	wait(200)
 	sampSendDialogResponse(3082, 1 , 1, -1)
 	wait(100)
@@ -8761,7 +8763,7 @@ function googlewinmenu()
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Ты сампер? А может любишь мани? Тогда жми и подпишись на группу Монополи!', imgui.ImVec4(1.00, 0.19, 0.19, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-430, 0)) then os.execute("start https://vk.com/monopolyfam") end
 		imgui.SameLine()
 		if imgui.CustomButton(u8'Тыкай и будешь приходить на стримы Маркиза каждый день.', imgui.ImVec4(1.00, 0.19, 0.19, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.youtube.com/channel/UCJaqtq_cvdFZxTzPPGbwNXw/videos") end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Хочешь предложить новость, идею или заказать рекламу? Тогда жми!', imgui.ImVec4(0.41, 0.19, 0.63, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-500, 0)) then os.execute("start https://vk.com/alex_bynes") end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Хочешь предложить новость, идею или заказать рекламу? Тогда жми!', imgui.ImVec4(0.41, 0.19, 0.63, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-500, 0)) then os.execute("start https://vk.com/mono_tools") end
 		imgui.SameLine()
 		if imgui.CustomButton(u8'Кстати ты можешь стать спонсором скрипта, пожертвовав копеечку на развитие', imgui.ImVec4(0.41, 0.19, 0.63, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
 		imgui.EndChild()
@@ -9784,12 +9786,13 @@ function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(855, 300), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(855, 320), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v3.0', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 270), false)
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 290), false)
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс фпс при включений ВХ на острове.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таблички информера и пинга(пинг иногда отображался неверно)")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Piar Menu'(крашил скрипт, если зайти в данное меню при заходе в игру)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс дистилированной воды.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Убраны числа в ВХ на предметы после точки.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Майнинг' добавлена возможность выбрать сразу 20 видеокарт на улучшение.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен сервер 'Show Low'.")
