@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.0.2')
+script_version('3.0.3')
 
 local use = false
 local close = false
@@ -266,8 +266,18 @@ local cfg = inicfg.load({
 	adpred = {
 		piarsh = 0,
 		vippiarsh = 0,
-		datetime = os.date("%d.%m.%Y"),
-		adminforma = ''
+		piarsh1 = 0,
+		vippiarsh1 = 0,
+		piarsh2 = 0,
+		vippiarsh2 = 0,
+		piarsh3 = 0,
+		vippiarsh3 = 0,
+		piarsh4 = 0,
+		vippiarsh4 = 0,
+		piarsh5 = 0,
+		vippiarsh5 = 0,
+		piarsh6 = 0,
+		vippiarsh6 = 0
 	}
 }, 'Mono\\mini-games.ini')	
 	
@@ -462,6 +472,7 @@ local SET = {
 		shematext34 = '2204',
 		shematext35 = '2206',
 		shematext36 = '2208',
+		watertext = '2128',
 		timecout = false,
 		gangzones = false,
 		ryda = false,
@@ -498,6 +509,7 @@ local SET = {
 		eathouse = false,
 		eatmyso = false,
 		mvdhelp = false,
+		antilomka = false,
 		napominalka = false,
 		chatcalc = false,
 		pismo = false,
@@ -1316,6 +1328,7 @@ function main()
 	lua_thread.create(obnovlenie)
 	lua_thread.create(findi)
 	lua_thread.create(whoption)
+	lua_thread.create(autobmx)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1428,18 +1441,6 @@ function main()
 				if(not sampIsChatInputActive() and not sampIsDialogActive()) then
 					sampSetChatInputEnabled(true)
 				end
-			end
-		end
-		
-		if not sampIsChatInputActive() and isCharOnAnyBike(playerPed) and isKeyDown(0xA0) and autobike.v then
-			if bike[getCarModel(storeCarCharIsInNoSave(playerPed))] then
-				setGameKeyState(16, 255)
-				wait(10)
-				setGameKeyState(16, 0)
-			elseif not sampIsChatInputActive() and moto[getCarModel(storeCarCharIsInNoSave(playerPed))] and autobike.v then
-				setGameKeyState(1, -128)
-				wait(10)
-				setGameKeyState(1, 0)
 			end
 		end
 		
@@ -1592,6 +1593,7 @@ function saveSettings(args, key)
 	ini.settings.eathouse = eathouse.v
 	ini.settings.eatmyso = eatmyso.v
 	ini.settings.mvdhelp = mvdhelp.v
+	ini.settings.antilomka = antilomka.v
 	ini.settings.napominalka = napominalka.v
 	ini.settings.chatcalc = chatcalc.v
 	ini.settings.pismo = pismo.v
@@ -1684,6 +1686,7 @@ function saveSettings(args, key)
 	ini.settings.shematext34 = u8:decode(shematext34.v)
 	ini.settings.shematext35 = u8:decode(shematext35.v)
 	ini.settings.shematext36 = u8:decode(shematext36.v)
+	ini.settings.watertext = u8:decode(watertext.v)
 	ini.settings.deagleone = u8:decode(deagleone.v)
 	ini.settings.deagletwo = u8:decode(deagletwo.v)
 	ini.settings.awpone = u8:decode(awpone.v)
@@ -4572,9 +4575,9 @@ function imgui.OnDrawFrame()
 	
 	if win_state['piar'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(651, 385), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(651, 377), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Piar Menu ', win_state['piar'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 361), false)
+				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 353), false)
 				getArizonaName()
 				imgui.EndChild()
 		imgui.End()
@@ -5175,11 +5178,51 @@ end
 		recongenmenu()
 	end
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") then
+		if os.date("%A") == 'Monday' then
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		end
+		if os.date("%A") == 'Tuesday' then
+		cfg.adpred.piarsh1 = cfg.adpred.piarsh1 + 1
+		end
+		if os.date("%A") == 'Wednesday' then
+		cfg.adpred.piarsh2 = cfg.adpred.piarsh2 + 1
+		end
+		if os.date("%A") == 'Thursday' then
+		cfg.adpred.piarsh3 = cfg.adpred.piarsh3 + 1
+		end
+		if os.date("%A") == 'Friday' then
+		cfg.adpred.piarsh4 = cfg.adpred.piarsh4 + 1
+		end
+		if os.date("%A") == 'Saturday' then
+		cfg.adpred.piarsh5 = cfg.adpred.piarsh5 + 1
+		end
+		if os.date("%A") == 'Sunday' then
+		cfg.adpred.piarsh6 = cfg.adpred.piarsh6 + 1
+		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") then
+		if os.date("%A") == 'Monday' then
 		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
+		end
+		if os.date("%A") == 'Tuesday' then
+		cfg.adpred.vippiarsh1 = cfg.adpred.vippiarsh1 + 1
+		end
+		if os.date("%A") == 'Wednesday' then
+		cfg.adpred.vippiarsh2 = cfg.adpred.vippiarsh2 + 1
+		end
+		if os.date("%A") == 'Thursday' then
+		cfg.adpred.vippiarsh3 = cfg.adpred.vippiarsh3 + 1
+		end
+		if os.date("%A") == 'Friday' then
+		cfg.adpred.vippiarsh4 = cfg.adpred.vippiarsh4 + 1
+		end
+		if os.date("%A") == 'Saturday' then
+		cfg.adpred.vippiarsh5 = cfg.adpred.vippiarsh5 + 1
+		end
+		if os.date("%A") == 'Sunday' then
+		cfg.adpred.vippiarsh6 = cfg.adpred.vippiarsh6 + 1
+		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	if text:find("Не может быть! Тут целых 5 кусков серебра!") and podarki.v then
@@ -5208,6 +5251,7 @@ end
 	if text:find("У вас недостаточно монет") then
 		newroulette.v = false
 	end
+	if antilomka.v and text:find('У вас началась сильная ломка') or text:find('Вашему персонажу нужно принять') then return false end
 	if toch.v then
 		text = separator(text)
 		return {color, text}
@@ -5467,6 +5511,7 @@ function load_settings() -- загрузка настроек
 	shematext34 = imgui.ImBuffer(u8(ini.settings.shematext34), 256)
 	shematext35 = imgui.ImBuffer(u8(ini.settings.shematext35), 256)
 	shematext36 = imgui.ImBuffer(u8(ini.settings.shematext36), 256)
+	watertext = imgui.ImBuffer(u8(ini.settings.watertext), 256)
 	activator = imgui.ImBuffer(u8(ini.settings.activator), 256)
 	deagleone = imgui.ImBuffer(u8(ini.settings.deagleone), 256)
 	deagletwo = imgui.ImBuffer(u8(ini.settings.deagletwo), 256)
@@ -5535,6 +5580,7 @@ function load_settings() -- загрузка настроек
 	eathouse = imgui.ImBool(ini.settings.eathouse)
 	eatmyso = imgui.ImBool(ini.settings.eatmyso)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
+	antilomka = imgui.ImBool(ini.settings.antilomka)
 	napominalka = imgui.ImBool(ini.settings.napominalka)
 	chatcalc = imgui.ImBool(ini.settings.chatcalc)
 	pismo = imgui.ImBool(ini.settings.pismo)
@@ -6402,6 +6448,23 @@ function isCharInAnyCar(ped)
 	return false
 end
 
+function autobmx()
+while true do 
+	if not sampIsChatInputActive() and isCharOnAnyBike(playerPed) and isKeyDown(0xA0) and autobike.v then
+		if bike[getCarModel(storeCarCharIsInNoSave(playerPed))] then
+			setGameKeyState(16, 255)
+			wait(10)
+			setGameKeyState(16, 0)
+		elseif not sampIsChatInputActive() and moto[getCarModel(storeCarCharIsInNoSave(playerPed))] and autobike.v then
+			setGameKeyState(1, -128)
+			wait(10)
+			setGameKeyState(1, 0)
+			end
+			end
+		wait(0)
+	end
+end
+
 function roulette()
 while true do 
 	if checked_test.v and krytim then
@@ -6679,9 +6742,7 @@ while true do
 	closeDialog()
 	end
 	if water.v then 
-	sampSendClickTextdraw(2128)
-	wait(100)
-	sampSendClickTextdraw(2129)
+	sampSendClickTextdraw(watertext.v)
 	wait(200)
 	sampSendDialogResponse(3082, 1 , 1, -1)
 	wait(100)
@@ -8553,7 +8614,7 @@ function kirkamenu()
 		
 function bitkoinoknomenu()
 	local sw, sh = getScreenResolution() 
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(1.331, 1.163))
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(1.331, 1.068))
 		imgui.SetNextWindowSize(imgui.ImVec2(375, 305), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Улучшение видеокарт ', win_state['bitkoinwinokno'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
@@ -9071,13 +9132,17 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Режим работы Дрона:')
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный")); imgui.SameLine(); imgui.ToggleButton(u8'  ', droneoption); imgui.SameLine(); imgui.Text(u8("Продвинутый")) imgui.SameLine() imgui.TextQuestion(u8"Есть 2 режима работы дрона. Режим 'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убираются ники и прочие надписи на игроках и встроен ВХ, который показывает не все ники в радиусе, а показывает ник игрока только в том случае, если вы дроном подлетели к нему.")
 			if droneoption.v then developMode = 1 end
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Включить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(250, 0)) then toggle = true end 
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выключить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(250, 0)) then toggle = false end
+			imgui.PushItemWidth(250)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
+			imgui.PopItemWidth()
 			imgui.NextColumn()
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать WallHack', wallhack)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8("Активация WallHack на клавишу:")); imgui.SameLine(); imgui.TextQuestion(u8"WallHack - позволяет увидеть ник игрока, находясь далеко от него (функция запрещена на любых серверах - используйте на свой страх и риск и только в благих целях. Также не палится на скриншотах, если скриншот был сделан на клавишу F8.) Сначала нужно активировать WallHack. Затем в поле нужно ввести код клавиши для включения или отключения WallHack. По умолчанию поставлено на F11. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 			imgui.PushItemWidth(213)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'###2', autoklavawallhack)
 			imgui.PopItemWidth()
-			
 		elseif selected3 == 5 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Обновления")
 			imgui.Separator()
@@ -9420,6 +9485,8 @@ function nastroikamenu()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, сервер запоролен, пишет 'You are banned from this server' и после рестарта.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Фикс adCounter")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс adCounter', adcounter); imgui.SameLine(); imgui.TextQuestion(u8"Фикс для скрипта adCounter, т.к тот скрипт не отправляет объявления из-за новой системы /ad.");
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Анти-ломка")); imgui.SameLine(); imgui.ToggleButton(u8'Анти-ломка', antilomka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при ломке у вас больше не будет тряски камеры.")
+				
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
@@ -9676,7 +9743,7 @@ function funksmenu()
 	imgui.Begin(u8' Прочие функции', win_state['shemafunks'], imgui.WindowFlags.NoResize)
 		imgui.BeginChild('##asdasasddf2131543', imgui.ImVec2(800, 160), false)
 		imgui.Text('')
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - нужно перезайти на сервер.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить/Остановить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает или останавливает видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции вы должны стоять у полки с видеокартами.")
@@ -9786,13 +9853,14 @@ function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(855, 320), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(855, 410), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v3.0', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 290), false)
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 380), false)
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс фпс при включений ВХ на острове.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таблички информера и пинга(пинг иногда отображался неверно)")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Piar Menu'(крашил скрипт, если зайти в данное меню при заходе в игру)")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс дистилированной воды.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таймцикла при использовании автобайка.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Убраны числа в ВХ на предметы после точки.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Майнинг' добавлена возможность выбрать сразу 20 видеокарт на улучшение.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен сервер 'Show Low'.")
@@ -9805,6 +9873,10 @@ function tupupdate()
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Arizona Update' добавлена функция 'Фикс Инвентаря'. Из-за функции для убирания диалога при спавне персонажа, багается инвентарь.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" Данная функция откроет /mm и закроет его, тем самым, разбагает инвентарь.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Обновлены пользователи в меню 'Игроки, которые предлагали идеи и они были осуществлены'.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Модификации' добавлена анти-ломка. Теперь при ломке не будет качаться камера.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлены 2 кнопки - 'Включение и отключение ID текстдравов'.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлена возможность изменить ID текстдрава для покупки дестилированной воды.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен счётчик объявлений на неделю и кнопка для обнуления счётчика.")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -9844,25 +9916,34 @@ function getArizonaName()
 	elseif sampGetCurrentServerAddress() == "80.66.82.190" then gameServer = "Show Low"
 	else gameServer = "Неизвестно" 
 	end
-	if cfg.adpred.datetime ~= os.date("%d.%m.%Y") then 
-	cfg.adpred.datetime = os.date("%d.%m.%Y")
-	cfg.adpred.piarsh = 0 
-	cfg.adpred.vippiarsh = 0
-	inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
 	imgui.VerticalSeparator() imgui.SameLine(650) imgui.VerticalSeparator()
 	imgui.Separator()
 	imgui.Text(u8('  '..gameServer)) imgui.SameLine() imgui.Text("|") imgui.SameLine() imgui.Text(u8(nickName))
 	imgui.Separator()
-	imgui.Text(u8('  ' ..cfg.adpred.datetime)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh))
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8'*Счетчик объявлений скидывается на 0 каждый день. В скором времени сделаю сохранение по дням.')
+	imgui.Text(u8('  Понедельник')) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh))
+	imgui.Text(u8('  Вторник')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh1)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh1))
+	imgui.Text(u8('  Среда')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh2)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh2))
+	imgui.Text(u8('  Четверг')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh3)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh3))
+	imgui.Text(u8('  Пятница')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh4)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh4))
+	imgui.Text(u8('  Суббота')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh5)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh5))
+	imgui.Text(u8('  Воскресенье')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh6)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh6))
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Обнулить счётчик объявлений', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then 
+	cfg.adpred.piarsh = 0 
+	cfg.adpred.vippiarsh = 0 
+	cfg.adpred.piarsh1 = 0 
+	cfg.adpred.vippiarsh1 = 0  
+	cfg.adpred.piarsh2 = 0 
+	cfg.adpred.vippiarsh2 = 0  
+	cfg.adpred.piarsh3 = 0 
+	cfg.adpred.vippiarsh3 = 0  
+	cfg.adpred.piarsh4 = 0 
+	cfg.adpred.vippiarsh4 = 0  
+	cfg.adpred.piarsh5 = 0 
+	cfg.adpred.vippiarsh5 = 0  
+	cfg.adpred.piarsh6 = 0 
+	cfg.adpred.vippiarsh6 = 0  
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
 	imgui.PushItemWidth(50)
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97', adsec)
@@ -11937,6 +12018,12 @@ function nameTagOff()
 	memory.setint8(pStSet + 47, NTwalls)
 	memory.setint8(pStSet + 56, NTshow)
 end)
+end
+
+function sampev.onSetPlayerDrunk(drunkLevel)
+	if antilomka.v then
+    return {1}
+	end
 end
 	
 	
