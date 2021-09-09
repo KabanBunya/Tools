@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.0.3')
+script_version('3.0.4')
 
 local use = false
 local close = false
@@ -15,27 +15,29 @@ local close3 = false
 local close4 = false
 local close5 = false
 local fontsize = nil
-local kamensession = 0
-local metalsession = 0
-local bronzasession = 0
-local silversession = 0
-local goldsession = 0
-local sborsession = 0
-local zpsession = 0
-local kamenitog = 0
-local metalitog = 0
-local bronzaitog = 0
-local silveritog = 0
-local golditog = 0
-local azpodarki = 0
-local moneypodarki = 0
-local serebropodarki = 0
-local serebrorulpodarki = 0
-local zolotopodarki = 0
-local chemodanpodarki = 0
-local itogopodarkov = 0
-local itogobtc = 0
+kamensession = 0
+metalsession = 0
+bronzasession = 0
+silversession = 0
+goldsession = 0
+sborsession = 0
+zpsession = 0
+kamenitog = 0
+metalitog = 0
+bronzaitog = 0
+silveritog = 0
+golditog = 0
+azpodarki = 0
+moneypodarki = 0
+serebropodarki = 0
+serebrorulpodarki = 0
+zolotopodarki = 0
+chemodanpodarki = 0
+itogopodarkov = 0
+itogobtc = 0
 local font = renderCreateFont('Arial', 10, 5)
+local connected = false
+local connecting = false
 itogoskuptrava = 0
 itogoskupbronzarul = 0
 itogoskupserebrorul = 0
@@ -133,6 +135,18 @@ assert(res, 'Library "imcustom" не найдена. Cкачать все нужны файлы и библиотеки
 local res, notf = pcall(import, "imgui_notf.lua")
 assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
+local res, wm = pcall(require, "lib.windows.message")
+assert(res, 'Library "WIN MESSAGE" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+------------------------------------------------------------------
+local res = pcall(require, "luairc")
+assert(res, 'Library "luairc" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+------------------------------------------------------------------
+
+-----------------------------------------------
+local new                   = imgui 
+local str                   = ffi.string
+local jsonDir               = getGameDirectory().."\\moonloader\\config\\Mono\\messanger.json"
+-----------------------------------------------
 
 local function closeDialog()
 	sampSetDialogClientside(true)
@@ -215,7 +229,7 @@ mouseCoord4 = false
 mouseCoord5 = false 
 mouseCoord6 = false
 mouseCoord7 = false  
-getServerColored = '' 
+getServerColored = ''
 
 blackbase = {} -- 
 names = {} -- 
@@ -234,7 +248,16 @@ edit_size_x						= imgui.ImInt(-1)
 edit_size_y						= imgui.ImInt(-1)
 russian_characters				= { [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
-	
+
+local cfg1 = {
+    message = {
+        nick = "User",
+        channels = {
+            "#monotools" 
+        }
+    }
+}
+
 local cfg = inicfg.load({
     databest = {
         best = 0
@@ -598,6 +621,7 @@ win_state['help'] = imgui.ImBool(false)
 win_state['nastroikawin'] = imgui.ImBool(false)
 win_state['googlewin'] = imgui.ImBool(false)
 win_state['updatewin'] = imgui.ImBool(false)
+win_state['messanger'] = imgui.ImBool(false)
 win_state['prazdnikwin'] = imgui.ImBool(false)
 win_state['robotwin'] = imgui.ImBool(false)
 win_state['bomjwin'] = imgui.ImBool(false)
@@ -748,6 +772,13 @@ local inputBufferText = imgui.ImBuffer(256)
 local sessionStart = os.time()
 local sessiononline = 0
 local buf = imgui.ImBuffer(2056)
+local stringField = imgui.ImBuffer(130)
+local changeNickField = imgui.ImBuffer(19)
+local chats = cfg1.message.channels
+local messages = {}
+local users = {}
+local lastMessage = 0
+local needFocus = false	
 local INFO = {
     nil,
     nil,
@@ -774,6 +805,17 @@ local hlam = imgui.ImInt(1)
 
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
+end
+
+if doesFileExist(jsonDir) then
+    local f = io.open(jsonDir, "a+")
+    cfg1 = decodeJson(f:read("*a"))
+    f:close()
+else
+    createDirectory(getGameDirectory().."\\moonloader\\config\\Mono")
+    local f = io.open(jsonDir, "w")
+    f:write(encodeJson(cfg1))
+    f:close()
 end
 
 hk._SETTINGS.noKeysMessage = u8("Пусто")
@@ -969,7 +1011,7 @@ apply_custom_style()
 
 function files_add()
 	if not doesDirectoryExist("moonloader\\config\\Mono\\icons") then createDirectory('moonloader\\config\\Mono\\icons') end
-	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arzupdate.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\prazdnik.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\robot.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bomj.png') then
+	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arzupdate.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\prazdnik.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\robot.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bomj.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') then
 	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF0000}Ошибка!{FFFFFF} У вас отсутствуют нужные картинки для работы скрипта, начинаю скачивание.", 0x046D63)
 	downloadUrlToFile('https://i.imgur.com/1jMFPBg.png', getWorkingDirectory() .. '/config/Mono/icons/2048.png')
 	downloadUrlToFile('https://i.imgur.com/hMrVjAa.png', getWorkingDirectory() .. '/config/Mono/icons/bitcoin.png')
@@ -1004,6 +1046,7 @@ function files_add()
 	downloadUrlToFile('https://i.imgur.com/BM1UZXR.png', getWorkingDirectory() .. '/config/Mono/icons/prazdnik.png')
 	downloadUrlToFile('https://i.imgur.com/3J2FOpM.png', getWorkingDirectory() .. '/config/Mono/icons/robot.png')
 	downloadUrlToFile('https://i.imgur.com/l64AQZQ.png', getWorkingDirectory() .. '/config/Mono/icons/bomj.png')
+	downloadUrlToFile('https://i.imgur.com/jvLuHc6.png', getWorkingDirectory() .. '/config/Mono/icons/messanger.png')
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скачивание картинок завершено! Через 10 секунд скрипт запустится, спасибо за ожидание.", 0x046D63)
 	photo_load()
 	end
@@ -1157,6 +1200,8 @@ function mainmenu()
 			win_state['googlewin'].v = not win_state['googlewin'].v
 		elseif win_state['updatewin'].v then
 			win_state['updatewin'].v = not win_state['updatewin'].v
+		elseif win_state['messanger'].v then
+			win_state['messanger'].v = not win_state['messanger'].v
 		elseif win_state['yashiki'].v then
 			win_state['yashiki'].v = not win_state['yashiki'].v
 		elseif win_state['obmentrade'].v then
@@ -1281,7 +1326,9 @@ function main()
 	winprazdnik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/prazdnik.png')
 	winrobot = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/robot.png')
 	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bomj.png')
+	winmessage = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация: {00C2BB}/"..activator.v.."{FFFFFF}. Тестовые обновления: {00C2BB}/tu", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF5C40}Добавлен чат для общения! Обязательно заходи, общайся, тестируй и при багах отписывай в группу скрипта.", 0x046D63)
 	
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
@@ -1329,6 +1376,7 @@ function main()
 	lua_thread.create(findi)
 	lua_thread.create(whoption)
 	lua_thread.create(autobmx)
+	lua_thread.create(connectarz)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -1528,12 +1576,14 @@ function onQuitGame()
 	imgui.ReleaseTexture(winprazdnik)
 	imgui.ReleaseTexture(winrobot)
 	imgui.ReleaseTexture(winbomj)
+	imgui.ReleaseTexture(winmessage)
 end
 
 function onScriptTerminate(script, quitGame)
 	if script == thisScript() then
 		showCursor(false)
 		saveSettings(1)
+		saveJson(cfg1, jsonDir) 
 			end
 		end
 
@@ -4328,10 +4378,12 @@ function imgui.OnDrawFrame()
 		imgui.Begin(u8'Mono Tools', win_state['main'], imgui.WindowFlags.NoResize)
 		imgui.Image(winbackground, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.Text('')
-	imgui.SameLine(365)	
+	imgui.SameLine(335)	
 	if imgui.ImageButton(winpusk, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['windowspusk'].v = not win_state['windowspusk'].v end
 	imgui.SameLine()
 	if imgui.ImageButton(winsetting, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['nastroikawin'].v = not win_state['nastroikawin'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winmessage, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
 	imgui.SameLine()
 	if imgui.ImageButton(winhelper, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['help'].v = not win_state['help'].v end
 	imgui.SameLine()
@@ -4408,7 +4460,8 @@ function imgui.OnDrawFrame()
 				if imgui.ImageButton(winedge, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['googlewin'].v = not win_state['googlewin'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(355) 
 				if imgui.ImageButton(winarzupdate, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['updatewin'].v = not win_state['updatewin'].v win_state['windowspusk'].v = false end
-				
+				imgui.SameLine(440) 
+				if imgui.ImageButton(winmessage, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v win_state['windowspusk'].v = false end
 				
 				imgui.Text('') imgui.SameLine(12) imgui.Text(u8"Trade Menu")
 				imgui.SameLine(100) 
@@ -4419,6 +4472,8 @@ function imgui.OnDrawFrame()
 				imgui.Text('') imgui.SameLine(277) imgui.Text(u8"Браузер")
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(342) imgui.Text(u8"Arizona Update")
+				imgui.SameLine(100) 
+				imgui.Text('') imgui.SameLine(460) imgui.Text(u8"Чат")
 				imgui.Text('')
 				imgui.Text('')
 				imgui.Separator()
@@ -4527,6 +4582,10 @@ function imgui.OnDrawFrame()
 	
 	if win_state['updatewin'].v then
 		updatewinmenu()
+	end
+	
+	if win_state['messanger'].v then
+		messangerwinmenu()
 	end
 	
 	if win_state['prazdnikwin'].v then
@@ -4862,6 +4921,7 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['updatewin'].v = false
+		win_state['messanger'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['tup'].v then
         consumeWindowMessage()
@@ -4900,6 +4960,7 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['updatewin'].v = false
+		win_state['messanger'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['timeyved'].v then
         consumeWindowMessage()
@@ -4938,6 +4999,7 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['updatewin'].v = false
+		win_state['messanger'].v = false
     end
 end
 
@@ -6462,6 +6524,13 @@ while true do
 			end
 			end
 		wait(0)
+	end
+end
+
+function connectarz()
+while true do 
+	if connected then s:think() wait(1000) else wait(0)
+		end
 	end
 end
 
@@ -9049,6 +9118,161 @@ function updatewinmenu()
 		imgui.End()
 	end
 	
+function messangerwinmenu()
+        local sw, sh = getScreenResolution()
+        imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.Always, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(800, 470), imgui.Cond.FirstUseEver)
+
+        imgui.Begin(u8("Чат"), win_state['messanger'], imgui.WindowFlags.NoResize)
+            lockPlayerControl(true)
+            local drawList = imgui.GetWindowDrawList()
+            local draw = imgui.GetCursorScreenPos() 
+            
+            drawList:AddRectFilled(imgui.ImVec2(draw.x, draw.y), imgui.ImVec2(draw.x+140, draw.y+470), imgui.ColorConvertFloat4ToU32(imgui.ImVec4(0.18, 0.21, 0.25, 0.25)))
+            drawList:AddRectFilled(imgui.ImVec2(draw.x+658, draw.y), imgui.ImVec2(draw.x+800, draw.y+470), imgui.ColorConvertFloat4ToU32(imgui.ImVec4(0.18, 0.21, 0.25, 0.25)))
+            
+           
+            imgui.SetCursorPos(imgui.ImVec2(780, 4))
+            imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0.65, 0.48, 0.79, 1.00))
+            imgui.PopStyleColor()
+            imgui.SameLine()
+            imgui.SetCursorPos(imgui.ImVec2(780, 4))
+            imgui.SetCursorPos(imgui.ImVec2(0, 35))
+            imgui.BeginChild('##ChannelsMain', imgui.ImVec2(-0.1, -10), false)
+                imgui.BeginChild("##ChannelsList", imgui.ImVec2(140, -0.1), false)
+                    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0.65, 0.48, 0.79, 1.00))
+                    imgui.CentrText(u8"Чаты:")
+                    imgui.PopStyleColor()
+                    if #chats ~= 0 and connected then
+                        for i = 1, #chats do
+                            if chats[i] then
+                            imgui.SelectText(u8(chats[i]), i)
+                            end
+                        end
+                    end
+                    local wWidth = imgui.GetWindowHeight()
+                    imgui.SetCursorPosY(wWidth - (connected and 25 or 25))
+					if connected then
+						if imgui.CustomButton(u8'Выключить чат', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-0.1, 0)) then
+                            serverDisconnect()
+                            window_selected = 0
+						end
+                    end
+                imgui.EndChild()
+                imgui.SameLine()
+                imgui.BeginChild('##ChannelsChat', imgui.ImVec2(505, 0), false)
+                    if connected then
+                        imgui.BeginChild("##ChannelsMessages", imgui.ImVec2(0, 390), false) 
+                            if messages[chats[window_selected]] and #messages[chats[window_selected]] ~= 0 then
+                                local clipper = imgui.ImGuiListClipper(#messages[chats[window_selected]])
+                                while clipper:Step() do
+                                    for i = clipper.DisplayStart + 1, clipper.DisplayEnd do
+                                        if messages[chats[window_selected]][i] ~= nil then
+                                            imgui.TextColoredRGB(messages[chats[window_selected]][i])
+                                        end
+                                    end
+                                end
+							end
+                            imgui.SetScrollY(imgui.GetScrollMaxY())
+                        imgui.EndChild()
+                        imgui.BeginChild('##ChannelsInput', imgui.ImVec2(0, 0), false)
+                            local wsize = imgui.GetWindowSize()
+                            imgui.SetCursorPosY(wsize.y - 25)
+                            imgui.PushItemWidth(wsize.x - 100)
+							imgui.PushItemWidth(300)
+							if imgui.InputText('##InputMessage', stringField, imgui.InputTextFlags.EnterReturnsTrue) then
+								sendMessage()
+								stringField.v = ''
+                                needFocus = true
+							end
+							imgui.PopItemWidth()	
+                            if connected and window_selected ~= 0 and needFocus then imgui.SetKeyboardFocusHere() needFocus = false end
+                            imgui.SameLine(310)
+							if imgui.CustomButton(u8'Отправить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(192, 0)) then
+                                sendMessage()
+								stringField.v = ''
+                            end
+                        imgui.EndChild()
+                    else
+                        local wsize = imgui.GetWindowSize()
+                        local tsize = imgui.CalcTextSize(u8"Вы не подключены к чату.")
+                        imgui.SetCursorPosX((wsize.x - tsize.x) * 0.5)
+                        imgui.SetCursorPosY((wsize.y - tsize.y) * 0.4)
+                        imgui.TextDisabled(u8"Вы не подключены к чату.")
+
+                        local tsize = imgui.CalcTextSize(u8"Подключиться")
+                        imgui.SetCursorPosX((wsize.x - tsize.x - 10) * 0.5)
+                        imgui.SetCursorPosY((wsize.y + tsize.y + 50) * 0.4)
+						if imgui.CustomButton(u8'Подключиться', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(100, 0)) then
+                            imgui.OpenPopup('##StartConnection')
+							window_selected = 1
+                        end
+                        imgui.SetNextWindowSize(imgui.ImVec2(800, 470), imgui.Cond.Always)
+                        if imgui.BeginPopupModal('##StartConnection', _, imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove) then
+                            local wsize = imgui.GetWindowSize()
+                            imgui.SetCursorPosY(wsize.y * 0.4)
+                            imgui.CentrText(u8"Подключение...")
+                            imgui.CentrText(u8"На время подключения игра может зависнуть.", true)
+                            imgui.CentrText(u8"После подключения данное окно пропадет.", true)
+							imgui.CentrText(u8"Если скрипт крашнет - перезапустите его и попробуйте снова.", true)
+                            if not connecting then startConnect() end
+                            imgui.EndPopup() 
+                        end
+                    end
+                imgui.EndChild()
+                imgui.SameLine()
+                local online = 0
+                imgui.BeginChild("##ChannelsUserList", imgui.ImVec2(140, 379), false)
+                    imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0.65, 0.48, 0.79, 1.00))
+                    imgui.CentrText(u8"В сети:")
+                    imgui.PopStyleColor()
+                    if users[chats[window_selected]] and #users[chats[window_selected]] ~= 0 then
+                        local clipper = imgui.ImGuiListClipper(#users[chats[window_selected]])
+                        while clipper:Step() do
+                            for i = clipper.DisplayStart + 1, clipper.DisplayEnd do
+                                if users[chats[window_selected]][i] ~= nil then
+                                    imgui.CentrText(u8(users[chats[window_selected]][i]))
+                                    online = online+1
+                                end
+                            end
+                        end
+                    end
+                imgui.EndChild()
+                imgui.SetCursorPos(imgui.ImVec2(659, 379))
+                imgui.BeginChild("##SettingButton", imgui.ImVec2(0, 0), false)
+                    imgui.Separator()
+                    imgui.CentrText(u8(string.format("Всего в сети: %d", online)))
+					if imgui.CustomButton(u8'Настройки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-0.1, 0)) then
+                        imgui.OpenPopup('##SettingsList')
+                    end
+                    imgui.SetNextWindowSize(imgui.ImVec2(800, 470), imgui.Cond.Always)
+                    if imgui.BeginPopupModal('##SettingsList', win_state['messanger'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove) then
+                        local wsize = imgui.GetWindowSize()
+                        imgui.SetCursorPosY(wsize.y * 0.4)
+                        imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+                        imgui.PushItemWidth(300)
+                        imgui.NewInputText('##ChangeNick', changeNickField, 300, u8"Введите новый ник (текущий ник: "..cfg1.message.nick..")", 2)
+                        imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+                        imgui.Text("")
+                        imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+						if imgui.CustomButton(u8'Закрыть настройки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(300, 0)) then
+                            local tempField = u8:decode(str(changeNickField.v))
+                            local tempField = string.gsub(tempField, " ", "")
+                            if #tempField ~= 0 then
+                                cfg1.message.nick = tempField
+                                if connected then s:send("NICK %s", u8(cfg1.message.nick)) end
+								saveJson(cfg1, jsonDir)
+                            end
+                            imgui.Text(changeNickField.v)
+                            imgui.CloseCurrentPopup() 
+                        end
+                        imgui.EndPopup() 
+                    end
+                imgui.EndChild()
+            imgui.EndChild()   
+        imgui.End()
+    end
+	
 function prazdnikwinmenu()
 	local tLastKeys = {} -- это у нас для клавиш
 	local input = sampGetInputInfoPtr()
@@ -9853,9 +10077,9 @@ function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(855, 410), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(855, 430), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v3.0', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 380), false)
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 400), false)
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс фпс при включений ВХ на острове.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таблички информера и пинга(пинг иногда отображался неверно)")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Piar Menu'(крашил скрипт, если зайти в данное меню при заходе в игру)")
@@ -9877,6 +10101,7 @@ function tupupdate()
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлены 2 кнопки - 'Включение и отключение ID текстдравов'.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлена возможность изменить ID текстдрава для покупки дестилированной воды.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен счётчик объявлений на неделю и кнопка для обнуления счётчика.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлен 'Чат' в тестовом режиме (исходник взял у Котовский)")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -11058,6 +11283,7 @@ function photo_load()
 	winprazdnik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/prazdnik.png')
 	winrobot = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/robot.png')
 	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bomj.png')
+	winmessage = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	end
 
 function load_static()
@@ -12025,5 +12251,256 @@ function sampev.onSetPlayerDrunk(drunkLevel)
     return {1}
 	end
 end
+
+function chatmsg(text)
+    sampAddChatMessage(string.format("[Mono Tools]{FFFFFF} %s", text), 0x046D63)
+end
+
+function startConnect()
+    lua_thread.create(function()
+        if not connected and not connecting then
+            connecting = true
+            wait(100)
+            s = irc.new{nick = cfg1.message.nick} --! Проверка на ник.
+            s:connect("irc.esper.net")
+            for k, v in pairs(chats) do
+                s:join(v)
+                messages[v] = {}
+                users[v] = {}
+            end
+            s:hook("OnChat", onIRCMessage)
+            s:hook("OnRaw", onIRCRaw)
+            s:hook("OnJoin", onIRCJoin)
+            s:hook("OnPart", onIRCPart)
+            s:hook("OnQuit", onIRCQuit)
+            s:hook("NickChange", onIRCNickChange)
+            s:hook("OnKick", onIRCKick)
+            s:hook("OnModeChange", onIRCModeChange)
+            s:hook("OnDisconnect", onIRCDisconnect)
+            connected = true
+            connecting = false
+        end
+    end)
+end
+
+function serverDisconnect()
+    if connected then
+        connected = false
+        s:disconnect()
+        for k, v in pairs(chats) do
+            if chats[i] then
+                messages[v] = nil
+                users[v] = nil
+                chats[i] = nil
+            end
+        end
+        window_selected = 0
+    end
+end
+
+function sendMessage()
+    if window_selected ~= 0 then
+        local tempField = u8:decode(str(stringField.v))
+        local tempCheck = string.gsub(tempField, " ", "")
+        if tempCheck ~= '' and tempCheck ~= nil then
+            if os.time() - lastMessage > 1 then
+                if tempField:sub(1, 1) ~= "/" then
+                    s:sendChat(chats[window_selected], u8(tempField))
+                    table.insert(messages[chats[window_selected]], string.format("%s: %s", cfg1.message.nick, tempField))
+                else
+                    if tempField:find("/pm") then
+                        local toNick, message = tempField:match("/pm (%S+) (.*)")
+
+                        s:send(u8(string.format("PRIVMSG %s :%s", toNick, message)))
+                        table.insert(messages[chats[window_selected]], string.format("{A77BCA}[PM >> %s]: %s", toNick, message))
+                    else
+                        table.insert(messages[chats[window_selected]], "{A77BCA}[*] {C3C3C3}Неизвестная команда!")
+                    end
+                end
+                imgui.Text(stringField.v)
+                lastMessage = os.time()
+            else
+                table.insert(messages[chats[window_selected]], "{A77BCA}[*] {C3C3C3}Пожалуйста, не флудите.")
+                imgui.Text(stringField.v)
+            end
+        end
+    end
+end
+
+  function imgui.SelectText(text, index)
+        if imgui.Selectable(text, (window_selected == index and true or false)) then window_selected = index end
+    end
+    function imgui.CentrText(text, disabled)
+        local width = imgui.GetWindowSize().x
+        local calc = imgui.CalcTextSize(text).x 
+        imgui.SetCursorPosX((width - calc) * 0.5)
+        if disabled then
+            imgui.TextDisabled(text)
+        else
+            imgui.Text(text)
+        end
+    end
+    function imgui.RightText(text, disabled)
+        local width = imgui.GetWindowSize().x
+        local calc = imgui.CalcTextSize(text).x 
+        imgui.SetCursorPosX((width - calc) - 5)
+        if disabled then
+            imgui.TextDisabled(text)
+        else
+            imgui.Text(text)
+        end
+    end
+	
+function onIRCMessage(user, channel, message)
+    if channel and messages[channel] then
+        table.insert(messages[channel], u8:decode(string.format("%s: %s", user.nick, message)))
+    elseif channel == cfg1.message.nick then
+        if window_selected ~= 0 then table.insert(messages[chats[window_selected]], u8:decode(string.format("{A77BCA}[PM << %s]: %s", user.nick, message)))
+       end
+    end
+end
+function onIRCRaw(line)
+    print(line)
+    if line:find(cfg1.message.nick.." = .* :(.*)") then        
+        local channel, nick = line:match(cfg1.message.nick.." = (.*) :(.*)")
+        for w in string.gmatch(nick, "%S+") do
+            local w = string.gsub(w, "@", "")
+            table.insert(users[channel], w)
+        end
+    end
+    if line:find("Cannot join channel %(%+b%) %- you are banned") then
+        local channel = line:match(cfg1.message.nick.." (%S+).*%:Cannot join channel %(%+b%) %- you are banned")
+        table.insert(messages[channel], "{FA8072}Вы заблокированы в данном чате.")
+    end
+end
+function onIRCJoin(user, channel)
+    local userNick = string.gsub(user.nick, "@", "")
+    if userNick:find(cfg1.message.nick) then
+        table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Вы подключились к чату.")
+        if userNick == "User" then
+            table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Внимание! У Вас установлен стандартный ник.")
+            table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Вы можете изменить свой ник в настройках.")
+        end
+        table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Доступные команды:")
+        table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}/pm [nick] [message] - приватное сообщение.")
+		table.insert(messages[channel], "{A77BCA}[*] {FF5C40}Группа VK скрипта - {A77BCA}https://vk.com/mono_tools {FF5C40}(подпишись, если не сложно)")
+    else
+        table.insert(users[channel], userNick)
+        table.insert(messages[channel], string.format("{A77BCA}[*] {C3C3C3}%s подключился к чату.", userNick))
+    end
+end
+function onIRCPart(user, channel)
+    local userNick = string.gsub(user.nick, "@", "")
+    if users[channel] then
+        for i=1, #users[channel] do
+            if users[channel][i] == userNick then
+                table.remove(users[channel], i)
+                break
+            end
+        end
+        if messages[channel] then table.insert(messages[channel], string.format("{A77BCA}[*] {C3C3C3}%s вышел из чата.", userNick)) end
+    end
+end
+function onIRCQuit(user, message)
+    local userNick = string.gsub(user.nick, "@", "")
+    if users[channel] then
+        for i=1, #users[channel] do
+            if users[channel][i] == userNick then
+                table.remove(users[channel], i)
+                break
+            end
+        end
+        if messages[channel] then table.insert(messages[channel], string.format("{A77BCA}[*] {C3C3C3}%s отключился от чата.", userNick)) end
+    end
+end
+function onIRCNickChange(user, newnick, channel)
+    local userNick = string.gsub(user.nick, "@", "")
+    if users[channel] then
+        for i=1, #users[channel] do
+            if users[channel][i] == userNick then
+                table.remove(users[channel], i)
+                table.insert(users[channel], newnick)
+                break
+            end
+        end
+        if messages[channel] then table.insert(messages[channel], string.format("{A77BCA}[*] {C3C3C3}%s изменил ник на %s", userNick, newnick)) end
+    end
+end
+function onIRCKick(channel, nick, kicker, reason)
+    if users[channel] then
+        for i=1, #users[channel] do
+            if users[channel][i] == nick then
+                table.remove(users[channel], i)
+                break
+            end
+        end
+        if messages[channel] then table.insert(messages[channel], string.format("{A77BCA}[*] {C3C3C3}%s был кикнут администратором %s", nick, kicker.nick)) end
+    end
+end
+function onIRCModeChange(user, target, modes, ...)
+    if modes:find("b") then
+        local banNick = string.match(..., "(%S+)!")
+        if modes == "-b" then
+            if messages[target] then table.insert(messages[target], string.format("{A77BCA}[*] {C3C3C3}%s был разблокирован администратором %s", banNick, user.nick)) end
+        else
+            if messages[target] then table.insert(messages[target], string.format("{A77BCA}[*] {C3C3C3}%s был заблокирован администратором %s", banNick, user.nick)) end
+        end
+    end 
+end
+function onIRCDisconnect(message, error)
+    if error then
+        if connected then
+            connected = false
+            s:disconnect()
+            for k, v in pairs(chats) do
+                if chats[i] then
+                    messages[v] = nil
+                    users[v] = nil
+                    chats[i] = nil
+                end
+            end
+            window_selected = 0
+            chatmsg("Вы были отключены от сервера за AFK")
+        end
+    end
+end
+
+function memset(addr, arr)
+	for i = 1, #arr do
+		memory.write(addr + i - 1, arr[i], 1, true)
+	end
+end
+
+function imgui.NewInputText(lable, val, width, hint, hintpos)
+    local hint = hint and hint or ''
+    local hintpos = tonumber(hintpos) and tonumber(hintpos) or 1
+    local cPos = imgui.GetCursorPos()
+    imgui.PushItemWidth(width)
+    local result = imgui.InputText(lable, val)
+    if #val.v == 0 then
+        local hintSize = imgui.CalcTextSize(hint)
+        if hintpos == 2 then imgui.SameLine(cPos.x + (width - hintSize.x) / 2)
+        elseif hintpos == 3 then imgui.SameLine(cPos.x + (width - hintSize.x - 5))
+        else imgui.SameLine(cPos.x + 5) end
+        imgui.TextColored(imgui.ImVec4(1.00, 1.00, 1.00, 0.40), tostring(hint))
+    end
+    imgui.PopItemWidth()
+    return result
+end
+
+function saveJson(data, path)
+    if doesFileExist(path) then os.remove(path) end
+    if type(data) ~= 'table' then return end
+    local f = io.open(path, 'a+')
+    local writing_data = encodeJson(data)
+    f:write(writing_data)
+    f:close()
+end
+
+	
+
+
+
+
 	
 	
