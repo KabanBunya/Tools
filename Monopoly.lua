@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.0.4')
+script_version('3.0.5')
 
 local use = false
 local close = false
@@ -547,6 +547,8 @@ local SET = {
 		autobike = false,
 		styletest = true,
 		styletest1 = false,
+		autochat = true,
+		chatmessage = true,
 		infoX = 0,
 		infoY = 0,
 		infoX2 = 0,
@@ -1327,6 +1329,7 @@ function main()
 	winrobot = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/robot.png')
 	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bomj.png')
 	winmessage = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
+	podklchat()
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация: {00C2BB}/"..activator.v.."{FFFFFF}. Тестовые обновления: {00C2BB}/tu", 0x046D63)
 	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF5C40}Добавлен чат для общения! Обязательно заходи, общайся, тестируй и при багах отписывай в группу скрипта.", 0x046D63)
 	
@@ -1392,6 +1395,8 @@ function main()
 	sampRegisterChatCommand('sfind', sfind) -- регистрируем команду
 	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
 	sampRegisterChatCommand('tu', testupdate) -- регистрируем команду
+	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
+	sampRegisterChatCommand('pm', pmchat) -- регистрируем команду
 	sampRegisterChatCommand("strobes", function()
 		if isCharInAnyCar(PLAYER_PED) then
 			local car = storeCarCharIsInNoSave(PLAYER_PED)
@@ -1639,6 +1644,8 @@ function saveSettings(args, key)
 	ini.settings.knife = knife.v
 	ini.settings.launcherpc = launcherpc.v
 	ini.settings.launcherm = launcherm.v
+	ini.settings.autochat = autochat.v
+	ini.settings.chatmessage = chatmessage.v
 	ini.settings.eat = eat.v
 	ini.settings.eathouse = eathouse.v
 	ini.settings.eatmyso = eatmyso.v
@@ -4150,6 +4157,28 @@ function testupdate()
 win_state['tup'].v = not win_state['tup'].v
 end
 
+function monochat(params)
+    if not connected then chatmsg("Вы не подключены к серверу.") return end
+    local tempField = string.match(params, "(.*)")
+	if tempField == nil or tempField == "" then chatmsg("Используйте: /mc [Сообщение]") return end
+    s:sendChat(chats[window_selected], u8(tempField))
+    if window_selected ~= 0 then table.insert(messages[chats[window_selected]], string.format("%s: %s", cfg1.message.nick, tempField)) end
+	if chatmessage.v then
+    sampAddChatMessage("[#monotools] {A77BCA}"..cfg1.message.nick..": {FFFFFF}"..tempField, 0x046D63)
+	end
+end
+
+function pmchat(params)
+    if not connected then chatmsg("Вы не подключены к серверу.") return end
+    local toNick, msg = string.match(params, "(%S+) (.*)")
+	if toNick == nil or toNick == '' or msg == nil or msg == "" then chatmsg("Используйте: /pm [Ник] [Сообщение]") return end
+    s:send(u8(string.format("PRIVMSG %s :%s", toNick, msg)))
+    if window_selected ~= 0 then table.insert(messages[chats[window_selected]], string.format("{A77BCA}[PM >> %s]: %s", toNick, msg)) end
+	if chatmessage.v then
+    sampAddChatMessage("[#monotools] {A77BCA}[PM >> "..toNick.."]: {FFFFFF}"..msg, 0x046D63)
+	end
+end
+
 function afind(arg)
 	if arg == '' then
 		notf.addNotification("[Mono Tools]: введите ID", 3, 3) -- когда не введено ID
@@ -5118,6 +5147,16 @@ function fixpricecopia()
 		sampCloseCurrentDialogWithButton(1)
 		end)
 	end
+	
+function podklchat()
+		if autochat.v then
+		win_state['messanger'].v = true 
+		if not connecting then startConnect()
+		window_selected = 1
+		win_state['messanger'].v = false
+			end
+		end
+	end
 
 function sampev.onServerMessage(color, text)
 	if color == 1721355519 and text:match("%[F%] .*") then -- получение ранга и ID игрока, который последним написал в /f чат, для тэгов биндера
@@ -5638,6 +5677,8 @@ function load_settings() -- загрузка настроек
 	knife = imgui.ImBool(ini.settings.knife)
 	launcherpc = imgui.ImBool(ini.settings.launcherpc)
 	launcherm = imgui.ImBool(ini.settings.launcherm)
+	autochat = imgui.ImBool(ini.settings.autochat)
+	chatmessage = imgui.ImBool(ini.settings.chatmessage)
 	eat = imgui.ImBool(ini.settings.eat)
 	eathouse = imgui.ImBool(ini.settings.eathouse)
 	eatmyso = imgui.ImBool(ini.settings.eatmyso)
@@ -9254,7 +9295,13 @@ function messangerwinmenu()
                         imgui.NewInputText('##ChangeNick', changeNickField, 300, u8"Введите новый ник (текущий ник: "..cfg1.message.nick..")", 2)
                         imgui.SetCursorPosX((wsize.x * 0.5) - 150)
                         imgui.Text("")
-                        imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+						imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+						imgui.Checkbox(u8'Авто-подключение к чату', autochat) imgui.SameLine() imgui.TextQuestion(u8"Если включено, то при запуске скрипта вы будете автоматический подключаться к чату. По умолчанию включено.")
+						imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+						imgui.Checkbox(u8'Выводить сообщения из чата в игровой чат', chatmessage) imgui.SameLine() imgui.TextQuestion(u8"Если включено, то вы сможете читать сообщения из чата в скрипте в игровом чате и отвечать на них. По умолчанию включено.")
+						imgui.SetCursorPosX((wsize.x * 0.5) - 150)
+                        imgui.Text("")
+						imgui.SetCursorPosX((wsize.x * 0.5) - 150)
 						if imgui.CustomButton(u8'Закрыть настройки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(300, 0)) then
                             local tempField = u8:decode(str(changeNickField.v))
                             local tempField = string.gsub(tempField, " ", "")
@@ -12307,12 +12354,18 @@ function sendMessage()
                 if tempField:sub(1, 1) ~= "/" then
                     s:sendChat(chats[window_selected], u8(tempField))
                     table.insert(messages[chats[window_selected]], string.format("%s: %s", cfg1.message.nick, tempField))
+					if chatmessage.v then
+					sampAddChatMessage("[#monotools] {A77BCA}"..cfg1.message.nick..": {FFFFFF}"..tempField, 0x046D63)
+					end
                 else
                     if tempField:find("/pm") then
                         local toNick, message = tempField:match("/pm (%S+) (.*)")
 
                         s:send(u8(string.format("PRIVMSG %s :%s", toNick, message)))
                         table.insert(messages[chats[window_selected]], string.format("{A77BCA}[PM >> %s]: %s", toNick, message))
+						if chatmessage.v then
+						sampAddChatMessage("[#monotools] {A77BCA}[PM >> "..toNick.."]: {FFFFFF}"..message, 0x046D63)
+						end
                     else
                         table.insert(messages[chats[window_selected]], "{A77BCA}[*] {C3C3C3}Неизвестная команда!")
                     end
@@ -12354,8 +12407,15 @@ end
 function onIRCMessage(user, channel, message)
     if channel and messages[channel] then
         table.insert(messages[channel], u8:decode(string.format("%s: %s", user.nick, message)))
-    elseif channel == cfg1.message.nick then
+		if chatmessage.v then
+		sampAddChatMessage(u8:decode(string.format("[#monotools] {A77BCA}"..user.nick..": {FFFFFF}"..message.." {C3C3C3}(/mc)")), 0x046D63)
+		end
+	end
+    if channel == cfg1.message.nick then
         if window_selected ~= 0 then table.insert(messages[chats[window_selected]], u8:decode(string.format("{A77BCA}[PM << %s]: %s", user.nick, message)))
+		if chatmessage.v then
+		sampAddChatMessage(u8:decode(string.format("[#monotools] {A77BCA}[PM << %s]: {FFFFFF}%s {C3C3C3}(/pm)", user.nick, message)), 0x046D63)
+		end
        end
     end
 end
@@ -12381,12 +12441,21 @@ function onIRCJoin(user, channel)
             table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Внимание! У Вас установлен стандартный ник.")
             table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Вы можете изменить свой ник в настройках.")
         end
+		if chatmessage.v then 
+		sampAddChatMessage("[#monotools] {C3C3C3}Вы подключились к чату.", 0x046D63)
+		sampAddChatMessage("[#monotools] {C3C3C3}Доступные команды:", 0x046D63)
+		sampAddChatMessage("[#monotools] {C3C3C3}/mc [message] - обычное сообщение.", 0x046D63)
+		sampAddChatMessage("[#monotools] {C3C3C3}/pm [nick] [message] - приватное сообщение.", 0x046D63)
+		end
         table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Доступные команды:")
         table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}/pm [nick] [message] - приватное сообщение.")
 		table.insert(messages[channel], "{A77BCA}[*] {FF5C40}Группа VK скрипта - {A77BCA}https://vk.com/mono_tools {FF5C40}(подпишись, если не сложно)")
     else
         table.insert(users[channel], userNick)
         table.insert(messages[channel], string.format("{A77BCA}[*] {C3C3C3}%s подключился к чату.", userNick))
+		if chatmessage.v then 
+		sampAddChatMessage("[#monotools] {C3C3C3}"..userNick.." подключился к чату.", 0x046D63)
+		end
     end
 end
 function onIRCPart(user, channel)
