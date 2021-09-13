@@ -348,7 +348,6 @@ local SET = {
 		autoopl5 = false,
 		autoopl6 = false,
 		lock = false,
-		wallhack = false,
 		autokamen = '8000',
 		autometal = '4000',
 		autobronza = '40000',
@@ -360,7 +359,6 @@ local SET = {
 		autopasspin = '123456',
 		autoklava = '114',
 		autoklavareload = '115',
-		autoklavawallhack = '122',
 		autodrone = '67',
 		autodronev2 = '49',
 		autodronev3 = '67',
@@ -1331,7 +1329,6 @@ function main()
 	winmessage = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	podklchat()
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация: {00C2BB}/"..activator.v.."{FFFFFF}. Тестовые обновления: {00C2BB}/tu", 0x046D63)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF5C40}Добавлен чат для общения! Обязательно заходи, общайся, тестируй и при багах отписывай в группу скрипта.", 0x046D63)
 	
 	if mass_bind ~= nil then
 		for k, p in ipairs(mass_bind) do
@@ -1377,7 +1374,6 @@ function main()
 	lua_thread.create(strobe)
 	lua_thread.create(obnovlenie)
 	lua_thread.create(findi)
-	lua_thread.create(whoption)
 	lua_thread.create(autobmx)
 	lua_thread.create(connectarz)
 	if raskladka.v then
@@ -1766,7 +1762,6 @@ function saveSettings(args, key)
 	ini.settings.knifeone = u8:decode(knifeone.v)
 	ini.settings.knifetwo = u8:decode(knifetwo.v)
 	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
-	ini.settings.autoklavawallhack = u8:decode(autoklavawallhack.v)
 	ini.settings.autodrone = u8:decode(autodrone.v)
 	ini.settings.autodronev2 = u8:decode(autodronev2.v)
 	ini.settings.autodronev3 = u8:decode(autodronev3.v)
@@ -1797,7 +1792,6 @@ function saveSettings(args, key)
 	ini.settings.autoopl6 = autoopl6.v
 	ini.settings.autopay = autopay.v
 	ini.settings.lock = lock.v
-	ini.settings.wallhack = wallhack.v
 	
 	ini.settings.skuptravacol = u8:decode(skuptravacol.v)
 	ini.settings.skuptravacena = u8:decode(skuptravacena.v)
@@ -3207,30 +3201,6 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
     end)
   end
-	if eatmyso.v and active42 then 
-	 lua_thread.create(function()
-		if data.modelId == 2805 then 
-		sampSendClickTextdraw(2132)
-		use42 = true
-		end
-		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use42 then 
-		clickID = id + 1
-		sampSendClickTextdraw(clickID)
-		use42 = false
-        close42 = true
-		end
-		if close42 then
-		wait(111)
-        sampSendClickTextdraw(2110)
-		wait(111)
-		sampCloseCurrentDialogWithButton(1)
-		wait(111)
-		sampSendClickTextdraw(2135)
-        close42 = false
-        active42 = false
-		end
-	end)
-end
 	lua_thread.create(function()
 	if data.modelId == 1615 and checktochilki then
 		if id ~= 2108 and checktochilki then
@@ -5216,8 +5186,10 @@ function sampev.onServerMessage(color, text)
 	if text:match("У тебя недостаточно гражданских талонов!") and platina.v then
 		platina.v = false
 	end
-	if text:match("У тебя нет зловещих монет!") and moneta.v or tochkamen.v then
+	if text:match("У тебя нет зловещих монет!") and moneta.v then
 		moneta.v = false
+	end
+	if text:match("У тебя нет зловещих монет!") and tochkamen.v then
 		tochkamen.v = false
 	end
 	if text:match("Вам был добавлен предмет 'Сертификат") or text:match("Вам был добавлен предмет 'Золото'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") or text:match("Вам был добавлен предмет 'Серебро'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") and checked_test.v then
@@ -5454,7 +5426,6 @@ function load_settings() -- загрузка настроек
 	autoopl6 = imgui.ImBool(ini.settings.autoopl6)
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
-	wallhack = imgui.ImBool(ini.settings.wallhack)
 	
 	skuptrava = imgui.ImBool(ini.settings.skuptrava)
 	skupbronzarul = imgui.ImBool(ini.settings.skupbronzarul)
@@ -5505,7 +5476,6 @@ function load_settings() -- загрузка настроек
 	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
-	autoklavawallhack = imgui.ImBuffer(u8(ini.settings.autoklavawallhack), 256)
 	autodrone = imgui.ImBuffer(u8(ini.settings.autodrone), 256)
 	autodronev2 = imgui.ImBuffer(u8(ini.settings.autodronev2), 256)
 	autodronev3 = imgui.ImBuffer(u8(ini.settings.autodronev3), 256)
@@ -7704,30 +7674,6 @@ while true do
 	end
 end
 
-function whoption()
-while true do
-	if isKeyJustPressed(u8:decode(autoklavawallhack.v)) and wallhack.v then
-			nameTagOn()
-			repeat
-			wait(0)
-			if isKeyDown(119) then
-				nameTagOff()
-				wait(1000)
-				nameTagOn()
-			end
-			if wallhack.v == false then
-				nameTagOff()
-			end
-			until isKeyJustPressed(u8:decode(autoklavawallhack.v))
-			while isKeyJustPressed(u8:decode(autoklavawallhack.v)) do
-			wait(10)
-			end
-			nameTagOff()
-		end
-		wait(0)
-	end
-end
-
 function obnovlenie()
 while true do
 	if WHupdate.v then
@@ -7981,8 +7927,7 @@ end
 function eating()
 while true do 
 	if eat.v and eatmyso.v then
-		active42 = true
-		sampSendChat("/invent")
+		sampSendChat("/meatbag")
 		wait(1800000)
 		end
 	if eat.v and eathouse.v then 
@@ -9262,7 +9207,7 @@ function messangerwinmenu()
                     end
                 imgui.EndChild()
                 imgui.SameLine()
-                local online = 0
+                local chatonline = 0
                 imgui.BeginChild("##ChannelsUserList", imgui.ImVec2(140, 379), false)
                     imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(0.65, 0.48, 0.79, 1.00))
                     imgui.CentrText(u8"В сети:")
@@ -9273,7 +9218,7 @@ function messangerwinmenu()
                             for i = clipper.DisplayStart + 1, clipper.DisplayEnd do
                                 if users[chats[window_selected]][i] ~= nil then
                                     imgui.CentrText(u8(users[chats[window_selected]][i]))
-                                    online = online+1
+                                    chatonline = chatonline + 1
                                 end
                             end
                         end
@@ -9282,7 +9227,7 @@ function messangerwinmenu()
                 imgui.SetCursorPos(imgui.ImVec2(659, 379))
                 imgui.BeginChild("##SettingButton", imgui.ImVec2(0, 0), false)
                     imgui.Separator()
-                    imgui.CentrText(u8(string.format("Всего в сети: %d", online)))
+                    imgui.CentrText(u8(string.format("Всего в сети: %d", chatonline)))
 					if imgui.CustomButton(u8'Настройки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-0.1, 0)) then
                         imgui.OpenPopup('##SettingsList')
                     end
@@ -9308,7 +9253,8 @@ function messangerwinmenu()
                             if #tempField ~= 0 then
                                 cfg1.message.nick = tempField
                                 if connected then s:send("NICK %s", u8(cfg1.message.nick)) end
-								saveJson(cfg1, jsonDir)
+								saveSettings(1)
+								saveJson(cfg1, jsonDir) 
                             end
                             imgui.Text(changeNickField.v)
                             imgui.CloseCurrentPopup() 
@@ -9407,13 +9353,6 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выключить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(250, 0)) then toggle = false end
 			imgui.PushItemWidth(250)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
-			imgui.PopItemWidth()
-			imgui.NextColumn()
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать WallHack', wallhack)
-			imgui.Text('') imgui.SameLine() imgui.Text(u8("Активация WallHack на клавишу:")); imgui.SameLine(); imgui.TextQuestion(u8"WallHack - позволяет увидеть ник игрока, находясь далеко от него (функция запрещена на любых серверах - используйте на свой страх и риск и только в благих целях. Также не палится на скриншотах, если скриншот был сделан на клавишу F8.) Сначала нужно активировать WallHack. Затем в поле нужно ввести код клавиши для включения или отключения WallHack. По умолчанию поставлено на F11. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
-			imgui.PushItemWidth(213)
-			imgui.Text('') imgui.SameLine() imgui.InputText(u8'###2', autoklavawallhack)
-			imgui.PopItemWidth()
 		elseif selected3 == 5 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Обновления")
 			imgui.Separator()
@@ -10124,9 +10063,9 @@ function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(855, 430), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(855, 660), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v3.0', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 400), false)
+			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 630), false)
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс фпс при включений ВХ на острове.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таблички информера и пинга(пинг иногда отображался неверно)")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Piar Menu'(крашил скрипт, если зайти в данное меню при заходе в игру)")
@@ -10149,6 +10088,19 @@ function tupupdate()
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлена возможность изменить ID текстдрава для покупки дестилированной воды.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен счётчик объявлений на неделю и кнопка для обнуления счётчика.")
 			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлен 'Чат' в тестовом режиме (исходник взял у Котовский)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлено 'Авто-подключение к чату'. Теперь вам не нужно заходить в меню и подключаться к чату - скрипт сделает всё сам при входе в")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" игру или после перезагрузки скрипта. По умолчанию - включено.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлено 'Выводить сообщения из чата в игровой чат'. Теперь вы сможете общаться друг с другом не заходя в меню скрипта. Если")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" функция включена, то вы будете видеть сообщения других пользователей в обычном чате и сможете отвечать на них.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" По умолчанию - включено.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 1.0, 1.0), u8" [13.09.2021]")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Skup Menu'(вместо ларьцов выставлялись точильные амулеты)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Trade Menu'(не работал обмен монет на точильные камни)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Из скрипта убран WallHack(по вашим просьбам)")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Авто-еда из мешка с мясом теперь работает через команду, а не инвентарь.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлено напоминание в чате о том, как сменить ник, выключить сообщения из чата в скрипте в игровой чат и выключить")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" авто-подключению к чату.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Теперь настройки чата сохраняются, если вы нажали 'Закрыть настройки'.")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -11829,7 +11781,7 @@ lua_thread.create(function()
 	wait(500)
 	sampSendDialogResponse(3050, 1, 20, -1)
 	wait(500)
-	sampSendDialogResponse(3050, 1, 1, -1)
+	sampSendDialogResponse(3050, 1, 2, -1)
 	wait(500)
 	sampSendDialogResponse(3060, 1, 1, ''..skuplareccol.v..','..skuplareccena.v)
 	end
@@ -12437,15 +12389,17 @@ function onIRCJoin(user, channel)
     local userNick = string.gsub(user.nick, "@", "")
     if userNick:find(cfg1.message.nick) then
         table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Вы подключились к чату.")
-        if userNick == "User" then
-            table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Внимание! У Вас установлен стандартный ник.")
-            table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Вы можете изменить свой ник в настройках.")
-        end
+        table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Выключить или включить 'Авто-подключение к чату при заходе в игру', сменить")
+		table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}ник, выключить или включить сообщения в чате вы можете в настройках чата.")
 		if chatmessage.v then 
 		sampAddChatMessage("[#monotools] {C3C3C3}Вы подключились к чату.", 0x046D63)
 		sampAddChatMessage("[#monotools] {C3C3C3}Доступные команды:", 0x046D63)
 		sampAddChatMessage("[#monotools] {C3C3C3}/mc [message] - обычное сообщение.", 0x046D63)
 		sampAddChatMessage("[#monotools] {C3C3C3}/pm [nick] [message] - приватное сообщение.", 0x046D63)
+		sampAddChatMessage("[#monotools] {FF5C40}Важно! {C3C3C3}Выключить 'Авто-подключение к чату при заходе в игру' вы можете в 'Меню скрипта' - 'Чат' - 'Настройки'.", 0x046D63)
+		sampAddChatMessage("[#monotools] {FF5C40}Важно! {C3C3C3}Сменить ник вы можете в 'Меню скрипта' - 'Чат' - 'Настройки'.", 0x046D63)
+		sampAddChatMessage("[#monotools] {FF5C40}Важно! {C3C3C3}Выключить сообщения в чате вы можете в 'Меню скрипта' - 'Чат' - 'Настройки'.", 0x046D63)
+		sampAddChatMessage("[#monotools] {FF5C40}Важно! {C3C3C3}Группа VK скрипта - {A77BCA}https://vk.com/mono_tools {C3C3C3}(подпишись, если не сложно)", 0x046D63)
 		end
         table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}Доступные команды:")
         table.insert(messages[channel], "{A77BCA}[*] {C3C3C3}/pm [nick] [message] - приватное сообщение.")
