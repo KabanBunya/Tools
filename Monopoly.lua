@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.0.6')
+script_version('3.1')
 
 local use = false
 local close = false
@@ -15,6 +15,8 @@ local close3 = false
 local close4 = false
 local close5 = false
 local fontsize = nil
+delplayer = false
+local npc, infnpc = {}, {}
 kamensession = 0
 metalsession = 0
 bronzasession = 0
@@ -136,16 +138,20 @@ local res, notf = pcall(import, "imgui_notf.lua")
 assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
 local res, wm = pcall(require, "lib.windows.message")
-assert(res, 'Library "WIN MESSAGE" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "WIN MESSAGE" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
 local res = pcall(require, "luairc")
-assert(res, 'Library "luairc" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "luairc" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+------------------------------------------------------------------
+local res, effil = pcall(require, "effil")
+assert(res, 'effil" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
 
 -----------------------------------------------
 local new                   = imgui 
 local str                   = ffi.string
 local jsonDir               = getGameDirectory().."\\moonloader\\config\\Mono\\messanger.json"
+local keyvk, servervk, tsvk
 -----------------------------------------------
 
 local function closeDialog()
@@ -222,7 +228,6 @@ bstatus = 0
 state = false 
 keystatus = false 
 mouseCoord = false 
-token = 1 
 mouseCoord2 = false 
 mouseCoord3 = false 
 mouseCoord4 = false 
@@ -301,14 +306,18 @@ local cfg = inicfg.load({
 		vippiarsh5 = 0,
 		piarsh6 = 0,
 		vippiarsh6 = 0
+	},
+	main = {
+		tokenvk = '',
+		idvk = '',
+		groupvk = ''
 	}
 }, 'Mono\\mini-games.ini')	
 	
 local SET = {
  	settings = {
 		autologin = false,
-		dialogupdate = false,
-		dialogfix = false,
+		dialogclose = false,
 		autoryda = false,
 		skuptrava = false,
 		skupbronzarul = false,
@@ -359,6 +368,9 @@ local SET = {
 		autopasspin = '123456',
 		autoklava = '114',
 		autoklavareload = '115',
+		fasttrade = '82',
+		fastinvfam = '69',
+		fastinv = '81',
 		autodrone = '67',
 		autodronev2 = '49',
 		autodronev3 = '67',
@@ -507,6 +519,9 @@ local SET = {
 		raskladka = false,
 		recongen = false,
 		carsis = false,
+		tradefast = false,
+		faminvfast = false,
+		invfast = false,
 		keyT = false,
 		launcher = false,
 		adcounter = false,
@@ -529,8 +544,11 @@ local SET = {
 		eat = false,
 		eathouse = false,
 		eatmyso = false,
+		jmeat = false,
+		jfish = false,
 		mvdhelp = false,
 		antilomka = false,
+		antispawn = false,
 		napominalka = false,
 		chatcalc = false,
 		pismo = false,
@@ -545,8 +563,8 @@ local SET = {
 		autobike = false,
 		styletest = true,
 		styletest1 = false,
-		autochat = true,
-		chatmessage = true,
+		autochat = false,
+		chatmessage = false,
 		infoX = 0,
 		infoY = 0,
 		infoX2 = 0,
@@ -557,6 +575,7 @@ local SET = {
 		infoY4 = 0,
 		spOtr = '',
 		timefix = 3,
+		zadervkajump = 2,
 		enableskin = false,
 		skin = 1,
 	},
@@ -620,11 +639,7 @@ win_state['leaders'] = imgui.ImBool(false)
 win_state['help'] = imgui.ImBool(false)
 win_state['nastroikawin'] = imgui.ImBool(false)
 win_state['googlewin'] = imgui.ImBool(false)
-win_state['updatewin'] = imgui.ImBool(false)
 win_state['messanger'] = imgui.ImBool(false)
-win_state['prazdnikwin'] = imgui.ImBool(false)
-win_state['robotwin'] = imgui.ImBool(false)
-win_state['bomjwin'] = imgui.ImBool(false)
 win_state['gamer'] = imgui.ImBool(false)
 win_state['yashiki'] = imgui.ImBool(false)
 win_state['obmentrade'] = imgui.ImBool(false)
@@ -642,6 +657,7 @@ win_state['skup'] = imgui.ImBool(false)
 win_state['skup2'] = imgui.ImBool(false)
 win_state['skup3'] = imgui.ImBool(false)
 win_state['oscripte'] = imgui.ImBool(false)
+win_state['vkmessage'] = imgui.ImBool(false)
 win_state['oscriptepeople'] = imgui.ImBool(false)
 win_state['shahtamenu'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
@@ -649,10 +665,12 @@ win_state['shematext'] = imgui.ImBool(false)
 win_state['shemafunks'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
 win_state['skupshema'] = imgui.ImBool(false)
+win_state['piarshema'] = imgui.ImBool(false)
 win_state['pravila2048'] = imgui.ImBool(false)
 win_state['pravilapong'] = imgui.ImBool(false)
 win_state['pravilasnake'] = imgui.ImBool(false)
 win_state['tup'] = imgui.ImBool(false)
+win_state['updatetext'] = imgui.ImBool(false)
 win_state['timeyved'] = imgui.ImBool(false)
 win_state['carsas'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
@@ -671,47 +689,13 @@ local checked_test = imgui.ImBool(false)
 local checked_test2 = imgui.ImBool(false)
 local checked_test3 = imgui.ImBool(false)
 local checked_test4 = imgui.ImBool(false)
-local newroulette = imgui.ImBool(false)
+local delplayeractive = imgui.ImBool(false)
 local podarki = imgui.ImBool(false)
 local water = imgui.ImBool(false)
 local btc = imgui.ImBool(false)
 local liquid = imgui.ImBool(false)
 local pusk = imgui.ImBool(false)
 local platina = imgui.ImBool(false)
-local labirint = imgui.ImBool(false)
-local WHupdate = imgui.ImBool(false)
-local prazdnik = imgui.ImBool(false)
-local prazdnik1 = imgui.ImBool(false)
-local prazdnik2 = imgui.ImBool(false)
-local prazdnik3 = imgui.ImBool(false)
-local prazdnik4 = imgui.ImBool(false)
-local prazdnik5 = imgui.ImBool(false)
-local prazdnik6 = imgui.ImBool(false)
-robot = imgui.ImBool(false)
-robot1 = imgui.ImBool(false)
-robot2 = imgui.ImBool(false)
-robot3 = imgui.ImBool(false)
-robot4 = imgui.ImBool(false)
-robot5 = imgui.ImBool(false)
-robot6 = imgui.ImBool(false)
-robot7 = imgui.ImBool(false)
-robot8 = imgui.ImBool(false)
-robot9 = imgui.ImBool(false)
-robot10 = imgui.ImBool(false)
-robot11 = imgui.ImBool(false)
-robot12 = imgui.ImBool(false)
-robot13 = imgui.ImBool(false)
-robot14 = imgui.ImBool(false)
-bomj = imgui.ImBool(false)
-bomj1 = imgui.ImBool(false)
-bomj2 = imgui.ImBool(false)
-bomj3 = imgui.ImBool(false)
-bomj4 = imgui.ImBool(false)
-bomj5 = imgui.ImBool(false)
-bomj6 = imgui.ImBool(false)
-bomj7 = imgui.ImBool(false)
-bomj8 = imgui.ImBool(false)
-bomj9 = imgui.ImBool(false)
 local moneta = imgui.ImBool(false)
 local tochkamen = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
@@ -761,6 +745,7 @@ local vipaddad = imgui.ImBool(false)
 local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
 local saddad = imgui.ImBool(false)
+local addvk = imgui.ImBool(false)
 local checktochilki = false
 local checktochilki1 = false
 local checktochilki2 = false
@@ -787,6 +772,9 @@ local INFO = {
     nil,
     nil
 }
+local tokenvkBuf = imgui.ImBuffer(cfg.main.tokenvk, 128)
+local idvkBuf = imgui.ImBuffer(tostring(cfg.main.idvk), 128)
+local groupvkBuf = imgui.ImBuffer(tostring(cfg.main.groupvk), 128)
 
 function savedialog()
 	ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] = u8:decode(buf.v):gsub('\n', '|_TB_|')
@@ -875,6 +863,22 @@ function patch()
 	end
 end
 patch()
+
+local function send_player_stream(id, i)
+	if i then
+		local bs = raknetNewBitStream()
+		raknetBitStreamWriteInt16(bs, id)
+		raknetBitStreamWriteInt8(bs, i[1])
+		raknetBitStreamWriteInt32(bs, i[2])
+		raknetBitStreamWriteFloat(bs, i[3].x)
+		raknetBitStreamWriteFloat(bs, i[3].y)
+		raknetBitStreamWriteFloat(bs, i[3].z)
+		raknetBitStreamWriteFloat(bs, i[4])
+		raknetBitStreamWriteInt32(bs, i[5])
+		raknetBitStreamWriteInt8(bs, i[6])
+		raknetEmulRpcReceiveBitStream(32, bs)
+	end
+end
 
 function apply_custom_style1()
     imgui.SwitchContext()
@@ -1011,7 +1015,7 @@ apply_custom_style()
 
 function files_add()
 	if not doesDirectoryExist("moonloader\\config\\Mono\\icons") then createDirectory('moonloader\\config\\Mono\\icons') end
-	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arzupdate.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\prazdnik.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\robot.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bomj.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') then
+	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
 	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF0000}Ошибка!{FFFFFF} У вас отсутствуют нужные картинки для работы скрипта, начинаю скачивание.", 0x046D63)
 	downloadUrlToFile('https://i.imgur.com/1jMFPBg.png', getWorkingDirectory() .. '/config/Mono/icons/2048.png')
 	downloadUrlToFile('https://i.imgur.com/hMrVjAa.png', getWorkingDirectory() .. '/config/Mono/icons/bitcoin.png')
@@ -1020,6 +1024,7 @@ function files_add()
 	downloadUrlToFile('https://i.imgur.com/J7SIdEY.png', getWorkingDirectory() .. '/config/Mono/icons/edge.png')
 	downloadUrlToFile('https://i.imgur.com/YJRJQZj.png', getWorkingDirectory() .. '/config/Mono/icons/helper.png')
 	downloadUrlToFile('https://i.imgur.com/dgj49cm.png', getWorkingDirectory() .. '/config/Mono/icons/img0.png')
+	downloadUrlToFile('https://i.imgur.com/wM1EGPv.png', getWorkingDirectory() .. '/config/Mono/icons/img1.png')
 	downloadUrlToFile('https://i.imgur.com/FfQIlL5.png', getWorkingDirectory() .. '/config/Mono/icons/info.png')
 	downloadUrlToFile('https://i.imgur.com/s385sfd.png', getWorkingDirectory() .. '/config/Mono/icons/kirka.png')
 	downloadUrlToFile('https://i.imgur.com/0NN5Y08.png', getWorkingDirectory() .. '/config/Mono/icons/left.png')
@@ -1042,11 +1047,15 @@ function files_add()
 	downloadUrlToFile('https://i.imgur.com/qNLWKys.png', getWorkingDirectory() .. '/config/Mono/icons/monopolynews.png')
 	downloadUrlToFile('https://i.imgur.com/SIvPMIK.png', getWorkingDirectory() .. '/config/Mono/icons/tools3.0.png')
 	downloadUrlToFile('https://i.imgur.com/boLIlH5.png', getWorkingDirectory() .. '/config/Mono/icons/arizonanews.png')
-	downloadUrlToFile('https://i.imgur.com/IPtz7GT.png', getWorkingDirectory() .. '/config/Mono/icons/arzupdate.png')
-	downloadUrlToFile('https://i.imgur.com/BM1UZXR.png', getWorkingDirectory() .. '/config/Mono/icons/prazdnik.png')
-	downloadUrlToFile('https://i.imgur.com/3J2FOpM.png', getWorkingDirectory() .. '/config/Mono/icons/robot.png')
-	downloadUrlToFile('https://i.imgur.com/l64AQZQ.png', getWorkingDirectory() .. '/config/Mono/icons/bomj.png')
 	downloadUrlToFile('https://i.imgur.com/jvLuHc6.png', getWorkingDirectory() .. '/config/Mono/icons/messanger.png')
+	downloadUrlToFile('https://i.imgur.com/wIka9G8.png', getWorkingDirectory() .. '/config/Mono/icons/inst.png')
+	downloadUrlToFile('https://i.imgur.com/TmPI3PC.png', getWorkingDirectory() .. '/config/Mono/icons/inst1.png')
+	downloadUrlToFile('https://i.imgur.com/K8fjjWn.png', getWorkingDirectory() .. '/config/Mono/icons/inst2.png')
+	downloadUrlToFile('https://i.imgur.com/q09IkEm.png', getWorkingDirectory() .. '/config/Mono/icons/inst3.png')
+	downloadUrlToFile('https://i.imgur.com/DKf26sp.png', getWorkingDirectory() .. '/config/Mono/icons/inst4.png')
+	downloadUrlToFile('https://i.imgur.com/huJTRua.png', getWorkingDirectory() .. '/config/Mono/icons/inst5.png')
+	downloadUrlToFile('https://i.imgur.com/OgKDrTj.png', getWorkingDirectory() .. '/config/Mono/icons/inst6.png')
+	downloadUrlToFile('https://i.imgur.com/zIvQlNl.png', getWorkingDirectory() .. '/config/Mono/icons/inst7.png')
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скачивание картинок завершено! Через 10 секунд скрипт запустится, спасибо за ожидание.", 0x046D63)
 	photo_load()
 	end
@@ -1198,8 +1207,6 @@ function mainmenu()
 			win_state['nastroikawin'].v = not win_state['nastroikawin'].v
 		elseif win_state['googlewin'].v then
 			win_state['googlewin'].v = not win_state['googlewin'].v
-		elseif win_state['updatewin'].v then
-			win_state['updatewin'].v = not win_state['updatewin'].v
 		elseif win_state['messanger'].v then
 			win_state['messanger'].v = not win_state['messanger'].v
 		elseif win_state['yashiki'].v then
@@ -1234,12 +1241,16 @@ function mainmenu()
 			win_state['skup3'].v = not win_state['skup3'].v
 		elseif win_state['oscripte'].v then
 			win_state['oscripte'].v = not win_state['oscripte'].v
+		elseif win_state['vkmessage'].v then
+			win_state['vkmessage'].v = not win_state['vkmessage'].v
 		elseif win_state['oscriptepeople'].v then
 			win_state['oscriptepeople'].v = not win_state['oscriptepeople'].v
 		elseif win_state['shema'].v then
 			win_state['shema'].v = not win_state['shema'].v
 		elseif win_state['tup'].v then
 			win_state['tup'].v = not win_state['tup'].v
+		elseif win_state['updatetext'].v then
+			win_state['updatetext'].v = not win_state['updatetext'].v
 		elseif win_state['timeyved'].v then
 			win_state['timeyved'].v = not win_state['timeyved'].v
 		elseif win_state['carsas'].v then
@@ -1263,6 +1274,8 @@ function mainmenu()
 			win_state['shahtamenu'].v = not win_state['shahtamenu'].v
 		elseif win_state['skupshema'].v then
 			win_state['skupshema'].v = not win_state['skupshema'].v
+		elseif win_state['piarshema'].v then
+			win_state['piarshema'].v = not win_state['piarshema'].v
 		elseif win_state['pravila2048'].v then
 			win_state['pravila2048'].v = not win_state['pravila2048'].v
 		elseif win_state['pravilapong'].v then
@@ -1292,8 +1305,28 @@ function main()
 	nickName = userNick:gsub('_', ' ')
 	Namenick = userNick:gsub("_.*", "")
 	Famnick = userNick:gsub(".*_", "")
+	if sampGetCurrentServerAddress() == "185.169.134.3" then gameServer = "Phoenix"
+	elseif sampGetCurrentServerAddress() == "185.169.134.4" then gameServer = "Tucson"
+	elseif sampGetCurrentServerAddress() == "185.169.134.43" then gameServer = "Scottdale"
+	elseif sampGetCurrentServerAddress() == "185.169.134.44" then gameServer = "Chandler"
+	elseif sampGetCurrentServerAddress() == "185.169.134.45" then gameServer = "Brainburg"
+	elseif sampGetCurrentServerAddress() == "185.169.134.5" then gameServer = "Saint Rose"
+	elseif sampGetCurrentServerAddress() == "185.169.134.59" then gameServer = "Mesa" 
+	elseif sampGetCurrentServerAddress() == "185.169.134.61" then gameServer = "Red Rock"
+	elseif sampGetCurrentServerAddress() == "185.169.134.107" then gameServer = "Yuma" 
+	elseif sampGetCurrentServerAddress() == "185.169.134.109" then gameServer = "Surprise"
+	elseif sampGetCurrentServerAddress() == "185.169.134.166" then gameServer = "Prescott"
+	elseif sampGetCurrentServerAddress() == "185.169.134.171" then gameServer = "Glendale"
+	elseif sampGetCurrentServerAddress() == "185.169.134.172" then gameServer = "Kingman"
+	elseif sampGetCurrentServerAddress() == "185.169.134.173" then gameServer = "Winslow"
+	elseif sampGetCurrentServerAddress() == "185.169.134.174" then gameServer = "Payson"
+	elseif sampGetCurrentServerAddress() == "80.66.82.191" then gameServer = "Gilbert"
+	elseif sampGetCurrentServerAddress() == "80.66.82.190" then gameServer = "Show Low"
+	else gameServer = "Неизвестно" 
+	end
 	files_add()
-	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
+	--winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
+	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img1.png')
     winpusk = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/pusk.png')
     winedge = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
@@ -1322,11 +1355,15 @@ function main()
 	wintools3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/tools3.0.png')
 	winmonopolynews = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/monopolynews.png')
 	winaforma = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/aforma.png')
-	winarzupdate = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/arzupdate.png')
-	winprazdnik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/prazdnik.png')
-	winrobot = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/robot.png')
-	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bomj.png')
 	winmessage = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
+	skupinst = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst.png')
+	skupinst1 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst1.png')
+	skupinst2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst2.png')
+	skupinst3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst3.png')
+	skupinst4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst4.png')
+	skupinst5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst5.png')
+	skupinst6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst6.png')
+	skupinst7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst7.png')
 	podklchat()
 	sampAddChatMessage("[Mono Tools]{FFFFFF} Скрипт успешно запущен! Версия: {00C2BB}"..thisScript().version.."{FFFFFF}. Активация: {00C2BB}/"..activator.v.."{FFFFFF}. Тестовые обновления: {00C2BB}/tu", 0x046D63)
 	
@@ -1372,7 +1409,6 @@ function main()
 	lua_thread.create(calculator)
 	lua_thread.create(rpgunsin)
 	lua_thread.create(strobe)
-	lua_thread.create(obnovlenie)
 	lua_thread.create(findi)
 	lua_thread.create(autobmx)
 	lua_thread.create(connectarz)
@@ -1405,7 +1441,6 @@ function main()
 		end
 	end)
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
-	while token == 0 do wait(0) end
 	if enableskin.v then changeSkin(-1, localskin.v) end
 	while true do
 		wait(0)
@@ -1418,6 +1453,20 @@ function main()
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklavareload.v)) then thisScript():reload() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autodronev2.v)) and isKeyJustPressed(u8:decode(autodrone.v)) then drone() end
+		
+		local validtest, pedtest = getCharPlayerIsTargeting(PLAYER_HANDLE)
+        local resulttest, idtest = sampGetPlayerIdByCharHandle(pedtest)
+		if resulttest then
+		if doesCharExist(pedtest) and tradefast.v and isKeyJustPressed(u8:decode(fasttrade.v)) and not sampIsChatInputActive() then
+			sampSendChat('/trade '..idtest)
+			end
+		if doesCharExist(pedtest) and faminvfast.v and isKeyJustPressed(u8:decode(fastinvfam.v)) and not sampIsChatInputActive() then
+			sampSendChat('/faminvite '..idtest)
+			end
+		if doesCharExist(pedtest) and invfast.v and isKeyJustPressed(u8:decode(fastinv.v)) and not sampIsChatInputActive() then
+			sampSendChat('/invite '..idtest)
+			end
+		end
 		
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
@@ -1462,7 +1511,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['prazdnikwin'].v or win_state['robotwin'].v or win_state['bomjwin'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['updatetext'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -1573,11 +1622,15 @@ function onQuitGame()
 	imgui.ReleaseTexture(wintools3)
 	imgui.ReleaseTexture(winmonopolynews)
 	imgui.ReleaseTexture(winaforma)
-	imgui.ReleaseTexture(winarzupdate)
-	imgui.ReleaseTexture(winprazdnik)
-	imgui.ReleaseTexture(winrobot)
-	imgui.ReleaseTexture(winbomj)
 	imgui.ReleaseTexture(winmessage)
+	imgui.ReleaseTexture(skupinst)
+	imgui.ReleaseTexture(skupinst1)
+	imgui.ReleaseTexture(skupinst2)
+	imgui.ReleaseTexture(skupinst3)
+	imgui.ReleaseTexture(skupinst4)
+	imgui.ReleaseTexture(skupinst5)
+	imgui.ReleaseTexture(skupinst6)
+	imgui.ReleaseTexture(skupinst7)
 end
 
 function onScriptTerminate(script, quitGame)
@@ -1645,8 +1698,11 @@ function saveSettings(args, key)
 	ini.settings.eat = eat.v
 	ini.settings.eathouse = eathouse.v
 	ini.settings.eatmyso = eatmyso.v
+	ini.settings.jmeat = jmeat.v
+	ini.settings.jfish = jfish.v
 	ini.settings.mvdhelp = mvdhelp.v
 	ini.settings.antilomka = antilomka.v
+	ini.settings.antispawn = antispawn.v
 	ini.settings.napominalka = napominalka.v
 	ini.settings.chatcalc = chatcalc.v
 	ini.settings.pismo = pismo.v
@@ -1662,6 +1718,7 @@ function saveSettings(args, key)
 	ini.settings.styletest = styletest.v
 	ini.settings.styletest1 = styletest1.v
 	ini.settings.timefix = timefix.v
+	ini.settings.zadervkajump = zadervkajump.v
 	ini.settings.enableskin = enableskin.v
 	ini.settings.skin = localskin.v
 	ini.settings.timecout = timecout.v
@@ -1672,6 +1729,9 @@ function saveSettings(args, key)
 	ini.settings.raskladka = raskladka.v
 	ini.settings.recongen = recongen.v
 	ini.settings.carsis = carsis.v
+	ini.settings.tradefast = tradefast.v
+	ini.settings.faminvfast = faminvfast.v
+	ini.settings.invfast = invfast.v
 	ini.settings.infoX = infoX
 	ini.settings.infoY = infoY
 	ini.settings.infoX2 = infoX2
@@ -1762,6 +1822,9 @@ function saveSettings(args, key)
 	ini.settings.knifeone = u8:decode(knifeone.v)
 	ini.settings.knifetwo = u8:decode(knifetwo.v)
 	ini.settings.autoklavareload = u8:decode(autoklavareload.v)
+	ini.settings.fasttrade = u8:decode(fasttrade.v)
+	ini.settings.fastinvfam = u8:decode(fastinvfam.v)
+	ini.settings.fastinv = u8:decode(fastinv.v)
 	ini.settings.autodrone = u8:decode(autodrone.v)
 	ini.settings.autodronev2 = u8:decode(autodronev2.v)
 	ini.settings.autodronev3 = u8:decode(autodronev3.v)
@@ -1779,8 +1842,7 @@ function saveSettings(args, key)
 	ini.settings.adredak = u8:decode(adredak.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
-	ini.settings.dialogupdate = dialogupdate.v
-	ini.settings.dialogfix = dialogfix.v
+	ini.settings.dialogclose = dialogclose.v
 	ini.settings.autoryda = autoryda.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autoopl = autoopl.v
@@ -1949,10 +2011,6 @@ end
 		closeDialog()
 		end
 	end
-	if dialogId == 15330 and dialogupdate.v then
-	closeDialog()
-	return false
-	end
 	if dialogId == 119 and autoopl.v then
 	sendchot5()
 	end
@@ -1986,6 +2044,14 @@ end
     nodial = false
     return false
   end
+  if dialogId == 15346 and addad.v then return false end
+  if dialogId == 15347 and addad.v then return false end
+  if dialogId == 15379 and addad.v then return false end
+  if dialogId == 15346 and vipaddad.v then return false end
+  if dialogId == 15347 and vipaddad.v then return false end
+  if dialogId == 15379 and vipaddad.v then return false end
+  if dialogId == 15330 and dialogclose.v then return false end
+  if dialogId == 15281 and video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v then return false end
   if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then
       if dialogId == 9238 then
         checked_test.v = false
@@ -2452,12 +2518,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use6 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use6 = false
         close6 = true
 		end
 		if close6 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2473,12 +2540,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use7 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use7 = false
         close7 = true
 		end
 		if close7 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2494,12 +2562,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use8 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use8 = false
         close8 = true
 		end
 		if close8 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2515,12 +2584,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use9 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use9 = false
         close9 = true
 		end
 		if close9 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2536,12 +2606,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use10 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use10 = false
         close10 = true
 		end
 		if close10 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2557,12 +2628,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use11 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use11 = false
         close11 = true
 		end
 		if close11 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2578,12 +2650,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use12 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use12 = false
         close12 = true
 		end
 		if close12 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2599,12 +2672,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use13 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use13 = false
         close13 = true
 		end
 		if close13 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2620,12 +2694,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use14 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use14 = false
         close14 = true
 		end
 		if close14 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2641,12 +2716,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use15 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use15 = false
         close15 = true
 		end
 		if close15 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2662,12 +2738,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use16 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use16 = false
         close16 = true
 		end
 		if close16 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2683,12 +2760,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use17 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use17 = false
         close17 = true
 		end
 		if close17 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2704,12 +2782,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use18 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use18 = false
         close18 = true
 		end
 		if close18 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2725,12 +2804,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use19 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use19 = false
         close19 = true
 		end
 		if close19 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2746,12 +2826,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use20 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use20 = false
         close20 = true
 		end
 		if close20 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2767,12 +2848,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use21 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use21 = false
         close21 = true
 		end
 		if close21 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2788,12 +2870,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use22 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use22 = false
         close22 = true
 		end
 		if close22 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2809,12 +2892,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use23 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use23 = false
         close23 = true
 		end
 		if close23 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2830,12 +2914,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use24 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use24 = false
         close24 = true
 		end
 		if close24 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2851,12 +2936,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use25 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use25 = false
         close25 = true
 		end
 		if close25 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2872,12 +2958,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use26 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use26 = false
         close26 = true
 		end
 		if close26 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2893,12 +2980,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use27 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use27 = false
         close27 = true
 		end
 		if close27 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2914,12 +3002,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use28 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use28 = false
         close28 = true
 		end
 		if close28 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2935,12 +3024,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use29 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use29 = false
         close29 = true
 		end
 		if close29 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2956,12 +3046,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use30 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use30 = false
         close30 = true
 		end
 		if close30 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2977,12 +3068,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use31 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use31 = false
         close31 = true
 		end
 		if close31 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -2998,12 +3090,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use32 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use32 = false
         close32 = true
 		end
 		if close32 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3019,12 +3112,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use33 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use33 = false
         close33 = true
 		end
 		if close33 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3040,12 +3134,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use34 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use34 = false
         close34 = true
 		end
 		if close34 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3061,12 +3156,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use35 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use35 = false
         close35 = true
 		end
 		if close35 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3082,12 +3178,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use36 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use36 = false
         close36 = true
 		end
 		if close36 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3103,12 +3200,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use37 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use37 = false
         close37 = true
 		end
 		if close37 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3124,12 +3222,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use38 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use38 = false
         close38 = true
 		end
 		if close38 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3145,12 +3244,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use39 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use39 = false
         close39 = true
 		end
 		if close39 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3166,12 +3266,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use40 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use40 = false
         close40 = true
 		end
 		if close40 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -3187,12 +3288,13 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		end
 		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use41 then 
 		clickID = id + 1
+		wait(500)
 		sampSendClickTextdraw(clickID)
 		use41 = false
         close41 = true
 		end
 		if close41 then
-		wait(111)
+		wait(300)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendDialogResponse(15281, 1 , 1, -1)
@@ -4284,25 +4386,13 @@ function imgui.OnDrawFrame()
     local windowPosX = getStructElement(input, 0x8, 4)
     local windowPosY = getStructElement(input, 0xC, 4)
 
-	imgui.ShowCursor = not win_state['informer'].v and not win_state['pismoinformer'].v and not win_state['shahtainformer'].v and not win_state['prazdnikwin'].v and not win_state['robotwin'].v and not win_state['bomjwin'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
+	imgui.ShowCursor = not win_state['informer'].v and not win_state['pismoinformer'].v and not win_state['shahtainformer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
 	
 	if not win_state['main'].v then 
           imgui.Process = false
        end
 	  
 	if not win_state['main'].v and win_state['informer'].v then 
-          imgui.Process = true
-       end
-	   
-	if not win_state['main'].v and win_state['prazdnikwin'].v then 
-          imgui.Process = true
-       end
-	   
-	if not win_state['main'].v and win_state['robotwin'].v then 
-          imgui.Process = true
-       end
-	   
-	if not win_state['main'].v and win_state['bomjwin'].v then 
           imgui.Process = true
        end
 	   
@@ -4318,6 +4408,10 @@ function imgui.OnDrawFrame()
 		 imgui.Process = true
        end
 	   
+	if not win_state['main'].v and win_state['updatetext'].v then
+		 imgui.Process = true
+       end
+	   
 	if not win_state['main'].v and win_state['timeyved'].v then
 		 imgui.Process = true
        end
@@ -4326,6 +4420,12 @@ function imgui.OnDrawFrame()
 		 win_state['skupshema'].v = true
 	else
 		win_state['skupshema'].v = false
+       end
+	   
+	if win_state['vkmessage'].v then
+		 win_state['piarshema'].v = true
+	else
+		win_state['piarshema'].v = false
        end
 	   
 	if win_state['games'].v then
@@ -4457,9 +4557,7 @@ function imgui.OnDrawFrame()
 				if imgui.ImageButton(winhelper, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['help'].v = not win_state['help'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(270) 
 				if imgui.ImageButton(winedge, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['googlewin'].v = not win_state['googlewin'].v win_state['windowspusk'].v = false end
-				imgui.SameLine(355) 
-				if imgui.ImageButton(winarzupdate, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['updatewin'].v = not win_state['updatewin'].v win_state['windowspusk'].v = false end
-				imgui.SameLine(440) 
+				imgui.SameLine(355)
 				if imgui.ImageButton(winmessage, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v win_state['windowspusk'].v = false end
 				
 				imgui.Text('') imgui.SameLine(12) imgui.Text(u8"Trade Menu")
@@ -4470,9 +4568,7 @@ function imgui.OnDrawFrame()
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(277) imgui.Text(u8"Браузер")
 				imgui.SameLine(100) 
-				imgui.Text('') imgui.SameLine(342) imgui.Text(u8"Arizona Update")
-				imgui.SameLine(100) 
-				imgui.Text('') imgui.SameLine(460) imgui.Text(u8"Чат")
+				imgui.Text('') imgui.SameLine(375) imgui.Text(u8"Чат")
 				imgui.Text('')
 				imgui.Text('')
 				imgui.Separator()
@@ -4517,6 +4613,10 @@ function imgui.OnDrawFrame()
 	
 	if win_state['skupshema'].v then
 		shemaskup()
+	end
+	
+	if win_state['piarshema'].v then
+		shemapiar()
 	end
 	
 	if win_state['pravila2048'].v then
@@ -4579,24 +4679,8 @@ function imgui.OnDrawFrame()
 		googlewinmenu()
 	end
 	
-	if win_state['updatewin'].v then
-		updatewinmenu()
-	end
-	
 	if win_state['messanger'].v then
 		messangerwinmenu()
-	end
-	
-	if win_state['prazdnikwin'].v then
-		prazdnikwinmenu()
-	end
-	
-	if win_state['robotwin'].v then
-		robotwinmenu()
-	end
-	
-	if win_state['bomjwin'].v then
-		bomjwinmenu()
 	end
 	
 	if win_state['redak'].v then 
@@ -4605,6 +4689,10 @@ function imgui.OnDrawFrame()
 	
 	if win_state['tup'].v then
 		tupupdate()
+	end
+	
+	if win_state['updatetext'].v then
+		textupdate()
 	end
 	
 	if win_state['carsas'].v then
@@ -4633,37 +4721,37 @@ function imgui.OnDrawFrame()
 	
 	if win_state['piar'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(651, 377), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(651, 405), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Piar Menu ', win_state['piar'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 353), false)
+				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 381), false)
 				getArizonaName()
 				imgui.EndChild()
 		imgui.End()
 	end
 	
 	if win_state['skup'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.728, 0.685))
-		imgui.SetNextWindowSize(imgui.ImVec2(688, 475), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.705, 0.6422))
+		imgui.SetNextWindowSize(imgui.ImVec2(708, 507), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Skup Menu ', win_state['skup'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf32345235412', imgui.ImVec2(688, 451), false)
+				imgui.BeginChild('##asdasasddf32345235412', imgui.ImVec2(708, 483), false)
 				getArizonaSkup()
 				imgui.EndChild()
 		imgui.End()
 	end
 	if win_state['skup2'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.728, 0.685))
-		imgui.SetNextWindowSize(imgui.ImVec2(688, 475), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.705, 0.6422))
+		imgui.SetNextWindowSize(imgui.ImVec2(708, 507), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Skup Menu ', win_state['skup2'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf3234432', imgui.ImVec2(688, 451), false)
+				imgui.BeginChild('##asdasasddf3234432', imgui.ImVec2(708, 483), false)
 				getArizonaSkup2str()
 				imgui.EndChild()
 		imgui.End()
 	end
 	if win_state['skup3'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.728, 0.685))
-		imgui.SetNextWindowSize(imgui.ImVec2(688, 475), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.705, 0.6422))
+		imgui.SetNextWindowSize(imgui.ImVec2(708, 507), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Skup Menu ', win_state['skup3'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf2121', imgui.ImVec2(688, 437), false)
+				imgui.BeginChild('##asdasasddf2121', imgui.ImVec2(708, 483), false)
 				getArizonaSkup3str()
 				imgui.EndChild()
 		imgui.End()
@@ -4679,6 +4767,16 @@ function imgui.OnDrawFrame()
 		imgui.Begin(u8' О скрипте ', win_state['oscripte'], imgui.WindowFlags.NoResize)
 				imgui.BeginChild('##asdasasddf4346', imgui.ImVec2(660, 190), false)
 				scriptinfo()
+				imgui.EndChild()
+		imgui.End()
+	end
+	
+	if win_state['vkmessage'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.859, 2.325))
+		imgui.SetNextWindowSize(imgui.ImVec2(580, 140), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8' Настройка отправки объявлений ', win_state['vkmessage'], imgui.WindowFlags.NoResize)
+				imgui.BeginChild('##asdasasddf4343232', imgui.ImVec2(580, 115), false)
+				vkmessagemain()
 				imgui.EndChild()
 		imgui.End()
 	end
@@ -4753,13 +4851,13 @@ function infobar()
 		
 function infobarshahta()
 		if infkamen.v or infmetal.v or infbronza.v or infsilver.v or infgold.v or infzp.v or infsbor.v then imgui.SameLine(140) imgui.VerticalSeparator() imgui.Text(u8"  За сессию") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"  За всё время") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"       Доход       ") end
-		if infkamen.v then imgui.Separator() imgui.Text(u8(" • Собрано камня: ")) imgui.SameLine(145) imgui.Text(u8(""..kamensession)) imgui.SameLine(218) imgui.Text(u8(''.. tostring(cfg.shahta.kamentime))) imgui.SameLine(310) imgui.Text(u8(""..kamenitog)) end
-		if infmetal.v then imgui.Text(u8(" • Собрано металла: "))imgui.SameLine(145)  imgui.Text(u8(""..metalsession)) imgui.SameLine(218) imgui.Text(u8(''.. tostring(cfg.shahta.metaltime))) imgui.SameLine(310) imgui.Text(u8(""..metalitog)) end
-		if infbronza.v then imgui.Text(u8(" • Собрано бронзы: ")) imgui.SameLine(145) imgui.Text(u8(""..bronzasession)) imgui.SameLine(218) imgui.Text(u8(''.. tostring(cfg.shahta.bronzatime))) imgui.SameLine(310) imgui.Text(u8(""..bronzaitog)) end
-		if infsilver.v then imgui.Text(u8(" • Собрано серебра: ")) imgui.SameLine(145) imgui.Text(u8(""..silversession)) imgui.SameLine(218) imgui.Text(u8(''.. tostring(cfg.shahta.silvertime))) imgui.SameLine(310) imgui.Text(u8(""..silveritog)) end
-		if infgold.v then imgui.Text(u8(" • Собрано золота: ")) imgui.SameLine(145) imgui.Text(u8(""..goldsession)) imgui.SameLine(218) imgui.Text(u8(''.. tostring(cfg.shahta.goldtime))) imgui.SameLine(310) imgui.Text(u8(""..golditog)) end
-		if infsbor.v then imgui.Separator() imgui.Text(u8(" • Собрано ресурсов: ")) imgui.SameLine(145) imgui.Text(u8(""..sborsession)) imgui.SameLine(218) imgui.Text(u8(''.. tostring(cfg.shahta.sbortime))) end
-		if infzp.v then imgui.Separator() imgui.Text(u8(" • Заработано: ")) imgui.SameLine(145) imgui.Text(u8(""..zpsession)) imgui.SameLine(218) imgui.Text(u8(""..cfg.shahta.zptime)) end
+		if infkamen.v then imgui.Separator() imgui.Text(u8(" • Собрано камня: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..kamensession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.kamentime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..kamenitog))) end
+		if infmetal.v then imgui.Text(u8(" • Собрано металла: "))imgui.SameLine(145)  imgui.Text(u8(number_separator(""..metalsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.metaltime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..metalitog))) end
+		if infbronza.v then imgui.Text(u8(" • Собрано бронзы: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..bronzasession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.bronzatime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..bronzaitog))) end
+		if infsilver.v then imgui.Text(u8(" • Собрано серебра: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..silversession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.silvertime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..silveritog))) end
+		if infgold.v then imgui.Text(u8(" • Собрано золота: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..goldsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.goldtime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..golditog))) end
+		if infsbor.v then imgui.Separator() imgui.Text(u8(" • Собрано ресурсов: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortime)))) end
+		if infzp.v then imgui.Separator() imgui.Text(u8(" • Заработано: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(""..cfg.shahta.zptime))) end
 	end
 	
 function infobarpismo()
@@ -4887,6 +4985,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['updatetext'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -4900,6 +4999,7 @@ function onWindowMessage(m, p)
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
 		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
 		pong = false
 		snaketaken = false
@@ -4915,17 +5015,18 @@ function onWindowMessage(m, p)
 		win_state['skup2'].v = false
 		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
+		win_state['vkmessage'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
-		win_state['updatewin'].v = false
 		win_state['messanger'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['tup'].v then
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['updatetext'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -4939,6 +5040,7 @@ function onWindowMessage(m, p)
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
 		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
 		pong = false
 		snaketaken = false
@@ -4954,17 +5056,59 @@ function onWindowMessage(m, p)
 		win_state['skup2'].v = false
 		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
+		win_state['vkmessage'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
-		win_state['updatewin'].v = false
+		win_state['messanger'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['updatetext'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['updatetext'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['shemainst'].v = false
+		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
+		win_state['oscripte'].v = false
+		win_state['vkmessage'].v = false
+		win_state['oscriptepeople'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
 		win_state['messanger'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['timeyved'].v then
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['updatetext'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -4978,6 +5122,7 @@ function onWindowMessage(m, p)
 		win_state['shemafunks'].v = false
 		win_state['shemainst'].v = false
 		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
 		pong = false
 		snaketaken = false
@@ -4993,11 +5138,11 @@ function onWindowMessage(m, p)
 		win_state['skup2'].v = false
 		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
+		win_state['vkmessage'].v = false
 		win_state['oscriptepeople'].v = false
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
-		win_state['updatewin'].v = false
 		win_state['messanger'].v = false
     end
 end
@@ -5100,14 +5245,14 @@ end
 
 function fixprice()
 	lua_thread.create(function()
-		wait(15000)
+		wait(10000)
 		thisScript():reload()
 		end)
 	end
 	
 function fixpricecopia()
 	lua_thread.create(function()
-		wait(10000)
+		wait(2000)
 		sampSendChat("/mm")
 		wait(200)
 		sampSendDialogResponse(722, 1 , 8, -1)
@@ -5117,6 +5262,132 @@ function fixpricecopia()
 		sampCloseCurrentDialogWithButton(1)
 		end)
 	end
+	
+function jumpspawn()
+	lua_thread.create(function()
+	wait(4000)
+	if zadervkajump.v == 1 then 
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 2 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 3 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 4 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 5 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 6 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 7 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 8 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 9 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	if zadervkajump.v == 10 then
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	wait(1000)
+	setGameKeyState(14, 255)
+	end
+	end)
+end
 	
 function podklchat()
 		if autochat.v then
@@ -5147,33 +5418,36 @@ function sampev.onServerMessage(color, text)
 	elseif text:match("Для получения PayDay вы должны отыграть минимум 20 минут.") and resultbank and autopay.v then
 		sendchot6()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and yashik.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik.v then
 		fixprice()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and yashik1.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik1.v then
 		fixprice()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and yashik2.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik2.v then
 		fixprice()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and yashik3.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik3.v then
 		fixprice()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and mvdhelp.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and mvdhelp.v then
 		fixpricecopia()
 	end
-	if text:match("Добро пожаловать на Arizona Role Play!") and dialogfix.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and dialogclose.v then
 		fixpricecopia()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and antispawn.v then
+		jumpspawn()
 	end
 	local today_date = os.date("%d.%m.%y")
-	if text:match("Добро пожаловать на Arizona Role Play!") and napominalka.v then
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and napominalka.v then
 		if string.find(today_date, napominalkadata.v) then win_state['timeyved'].v = not win_state['timeyved'].v
 		end
 	end
 	if text:match("Дружище, я обменяю тебе шкатулку, только если ты принесешь 20 подарков!") and podarki.v then
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно обменяли {00C2BB}"..itogopodarkov.."{FFFFFF} подарков! Вам выпало:", 0x046D63)
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Деньги: {00C2BB}"..moneypodarki.."{FFFFFF}$ | AZ коины: {00C2BB}"..azpodarki.."{FFFFFF} AZ | Серебро: {00C2BB}"..serebropodarki.."{FFFFFF} шт", 0x046D63)
-		sampAddChatMessage("[Mono Tools]{FFFFFF} Серебряная рулетка: {00C2BB}"..serebrorulpodarki.."{FFFFFF} шт | Золотая рулетка: {00C2BB}"..zolotopodarki.."{FFFFFF} шт | Чемодан: {00C2BB}"..chemodanpodarki.."{FFFFFF} шт", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно обменяли {00C2BB}"..number_separator(itogopodarkov).."{FFFFFF} подарков! Вам выпало:", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Деньги: {00C2BB}"..number_separator(moneypodarki).."{FFFFFF}$ | AZ коины: {00C2BB}"..number_separator(azpodarki).."{FFFFFF} AZ | Серебро: {00C2BB}"..number_separator(serebropodarki).."{FFFFFF} шт", 0x046D63)
+		sampAddChatMessage("[Mono Tools]{FFFFFF} Серебряная рулетка: {00C2BB}"..number_separator(serebrorulpodarki).."{FFFFFF} шт | Золотая рулетка: {00C2BB}"..number_separator(zolotopodarki).."{FFFFFF} шт | Чемодан: {00C2BB}"..number_separator(chemodanpodarki).."{FFFFFF} шт", 0x046D63)
 		podarki.v = false
 		azpodarki = 0
 		moneypodarki = 0
@@ -5250,51 +5524,79 @@ end
 	if color == -10270721 and text:find("Сработала защита от реконнекта! Попробуйте переподключиться через (%d+) секунд") and recongen.v then
 		recongenmenu()
 	end
-	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") then
+	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
 		if os.date("%A") == 'Monday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.piarsh..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Tuesday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh1 = cfg.adpred.piarsh1 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.piarsh1..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Wednesday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh2 = cfg.adpred.piarsh2 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.piarsh2..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Thursday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh3 = cfg.adpred.piarsh3 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.piarsh3..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Friday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh4 = cfg.adpred.piarsh4 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.piarsh4..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Saturday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh5 = cfg.adpred.piarsh5 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.piarsh5..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Sunday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.piarsh6 = cfg.adpred.piarsh6 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.piarsh6..'\n'..yvedadd)
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
-	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") then
+	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") and vipaddad.v then
 		if os.date("%A") == 'Monday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Tuesday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh1 = cfg.adpred.vippiarsh1 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh1..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Wednesday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh2 = cfg.adpred.vippiarsh2 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh2..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Thursday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh3 = cfg.adpred.vippiarsh3 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh3..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Friday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh4 = cfg.adpred.vippiarsh4 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh4..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Saturday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh5 = cfg.adpred.vippiarsh5 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh5..'\n'..yvedadd)
 		end
 		if os.date("%A") == 'Sunday' then
+		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh6 = cfg.adpred.vippiarsh6 + 1
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh6..'\n'..yvedadd)
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
@@ -5320,9 +5622,6 @@ end
 	end
 	if text:find("У вас нет 2шт. смазки для видеокарты. Её можно скрафтить в подвале дома или купить на центральном рынке.") then
 		videoover()
-	end
-	if text:find("У вас недостаточно монет") then
-		newroulette.v = false
 	end
 	if antilomka.v and text:find('У вас началась сильная ломка') or text:find('Вашему персонажу нужно принять') then return false end
 	if toch.v then
@@ -5376,6 +5675,7 @@ function autoupdate(json_url, prefix, url)
                     elseif status1 == dlstatus.STATUS_ENDDOWNLOADDATA then
                       sampAddChatMessage(('[Mono Tools]{FFFFFF} Скрипт успешно обновлён.'), 0x046D63)
 					  sampAddChatMessage(('[Mono Tools]{FFFFFF} Ознакомиться со всеми обновлениями вы сможете в Меню скрипта - помощь - обновления.'), 0x046D63)
+					  win_state['updatetext'].v = not win_state['updatetext'].v
                       goupdatestatus = true
                       lua_thread.create(function() wait(500) thisScript():reload() end)
                     end
@@ -5413,8 +5713,7 @@ function load_settings() -- загрузка настроек
 	assistant2 = imgui.ImBool(ini.settings.assistant2)
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
-	dialogupdate = imgui.ImBool(ini.settings.dialogupdate)
-	dialogfix = imgui.ImBool(ini.settings.dialogfix)
+	dialogclose = imgui.ImBool(ini.settings.dialogclose)
 	autoryda = imgui.ImBool(ini.settings.autoryda)
 	autopin = imgui.ImBool(ini.settings.autopin)
 	autoopl = imgui.ImBool(ini.settings.autoopl)
@@ -5476,6 +5775,9 @@ function load_settings() -- загрузка настроек
 	autopassopl3 = imgui.ImBuffer(u8(ini.settings.autopassopl3), 256)
 	autoklava = imgui.ImBuffer(u8(ini.settings.autoklava), 256)
 	autoklavareload = imgui.ImBuffer(u8(ini.settings.autoklavareload), 256)
+	fasttrade = imgui.ImBuffer(u8(ini.settings.fasttrade), 256)
+	fastinvfam = imgui.ImBuffer(u8(ini.settings.fastinvfam), 256)
+	fastinv = imgui.ImBuffer(u8(ini.settings.fastinv), 256)
 	autodrone = imgui.ImBuffer(u8(ini.settings.autodrone), 256)
 	autodronev2 = imgui.ImBuffer(u8(ini.settings.autodronev2), 256)
 	autodronev3 = imgui.ImBuffer(u8(ini.settings.autodronev3), 256)
@@ -5606,6 +5908,7 @@ function load_settings() -- загрузка настроек
 	knifeone = imgui.ImBuffer(u8(ini.settings.knifeone), 256)
 	knifetwo = imgui.ImBuffer(u8(ini.settings.knifetwo), 256)
 	timefix = imgui.ImInt(ini.settings.timefix)
+	zadervkajump = imgui.ImInt(ini.settings.zadervkajump)
 	localskin = imgui.ImInt(ini.settings.skin)
 	enableskin = imgui.ImBool(ini.settings.enableskin)
 	otgun = imgui.ImBool(ini.settings.otgun)
@@ -5652,8 +5955,11 @@ function load_settings() -- загрузка настроек
 	eat = imgui.ImBool(ini.settings.eat)
 	eathouse = imgui.ImBool(ini.settings.eathouse)
 	eatmyso = imgui.ImBool(ini.settings.eatmyso)
+	jmeat = imgui.ImBool(ini.settings.jmeat)
+	jfish = imgui.ImBool(ini.settings.jfish)
 	mvdhelp = imgui.ImBool(ini.settings.mvdhelp)
 	antilomka = imgui.ImBool(ini.settings.antilomka)
+	antispawn = imgui.ImBool(ini.settings.antispawn)
 	napominalka = imgui.ImBool(ini.settings.napominalka)
 	chatcalc = imgui.ImBool(ini.settings.chatcalc)
 	pismo = imgui.ImBool(ini.settings.pismo)
@@ -5672,6 +5978,9 @@ function load_settings() -- загрузка настроек
 	raskladka = imgui.ImBool(ini.settings.raskladka)
 	recongen = imgui.ImBool(ini.settings.recongen)
 	carsis = imgui.ImBool(ini.settings.carsis)
+	tradefast = imgui.ImBool(ini.settings.tradefast)
+	faminvfast = imgui.ImBool(ini.settings.faminvfast)
+	invfast = imgui.ImBool(ini.settings.invfast)
 	timecout = imgui.ImBool(ini.settings.timecout)
 	rtag = imgui.ImBuffer(u8(ini.settings.tag), 256)
 	enable_tag = imgui.ImBool(ini.settings.enable_tag)
@@ -5982,7 +6291,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext1.v))
       wait(15000)
 	end
@@ -5993,7 +6302,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext2.v))
       wait(15000)
 	end
@@ -6004,7 +6313,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext3.v))
       wait(15000)
 	end
@@ -6015,7 +6324,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext4.v))
       wait(15000)
 	end
@@ -6026,7 +6335,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext5.v))
       wait(15000)
 	end
@@ -6037,7 +6346,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext6.v))
       wait(15000)
 	end
@@ -6048,7 +6357,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext7.v))
       wait(15000)
 	end
@@ -6059,7 +6368,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext8.v))
       wait(15000)
 	end
@@ -6070,7 +6379,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext9.v))
       wait(15000)
 	end
@@ -6081,7 +6390,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext10.v))
       wait(15000)
 	end
@@ -6092,7 +6401,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext11.v))
       wait(15000)
 	end
@@ -6103,7 +6412,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext12.v))
       wait(15000)
 	end
@@ -6114,7 +6423,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext13.v))
       wait(15000)
 	end
@@ -6125,7 +6434,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext14.v))
       wait(15000)
 	end
@@ -6136,7 +6445,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext15.v))
       wait(15000)
 	end
@@ -6147,7 +6456,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext16.v))
       wait(15000)
 	end
@@ -6158,7 +6467,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext17.v))
       wait(15000)
 	end
@@ -6169,7 +6478,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext18.v))
       wait(15000)
 	end
@@ -6180,7 +6489,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext19.v))
       wait(15000)
 	end
@@ -6191,7 +6500,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext20.v))
       wait(15000)
 	end
@@ -6202,7 +6511,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext21.v))
       wait(15000)
 	end
@@ -6213,7 +6522,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext22.v))
       wait(15000)
 	end
@@ -6224,7 +6533,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext23.v))
       wait(15000)
 	end
@@ -6235,7 +6544,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext24.v))
       wait(15000)
 	end
@@ -6246,7 +6555,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext25.v))
       wait(15000)
 	end
@@ -6257,7 +6566,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext26.v))
       wait(15000)
 	end
@@ -6268,7 +6577,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext27.v))
       wait(15000)
 	end
@@ -6279,7 +6588,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext28.v))
       wait(15000)
 	end
@@ -6290,7 +6599,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext29.v))
       wait(15000)
 	end
@@ -6301,7 +6610,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext30.v))
       wait(15000)
 	end
@@ -6312,7 +6621,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext31.v))
       wait(15000)
 	end
@@ -6323,7 +6632,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext32.v))
       wait(15000)
 	end
@@ -6334,7 +6643,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext33.v))
       wait(15000)
 	end
@@ -6345,7 +6654,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext34.v))
       wait(15000)
 	end
@@ -6356,7 +6665,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext35.v))
       wait(15000)
 	end
@@ -6367,7 +6676,7 @@ while true do
       sampSendChat("/invent")
 	  wait(500)
 	  sampSendClickTextdraw(2108)
-	  wait(kdpusk.v*1000)
+	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext36.v))
       wait(15000)
 		end
@@ -6605,19 +6914,6 @@ while true do
       sampSendClickTextdraw(2110)
 	  wait(1000)
       sampSendClickTextdraw(2091)
-      krytim = false
-	end
-	if newroulette.v and krytim then
-	checked_test2.v = false
-	checked_test3.v = false
-	checked_test4.v = false
-	checked_test.v = false
-	otkrytie.v = false
-	otkrytie2.v = false
-	  wait(111)
-	  closeDialog()
-      wait(1000)
-      sampSendClickTextdraw(2100)
       krytim = false
 			end
 		wait(0)
@@ -7629,6 +7925,8 @@ while true do
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15379, 1, 0, -1)
 	wait(100)
 	closeDialog()
 	wait(adsec.v*1000)
@@ -7641,6 +7939,8 @@ while true do
 	sampSendDialogResponse(15346, 1, 2, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15379, 1, 0, -1)
 	wait(100)
 	closeDialog()
 	wait(vipadsec.v*1000)
@@ -7670,196 +7970,6 @@ while true do
 			sampSendChat('/find '..id_find) -- сообщение в чат
 			wait(2000) -- задержка между /find
 		end
-		wait(0)
-	end
-end
-
-function obnovlenie()
-while true do
-	if WHupdate.v then
-		for _, obj_hand in pairs(getAllObjects()) do
-            local modelid = getObjectModel(obj_hand)
-            if modelid == 2886 then
-                if isObjectOnScreen(obj_hand) then
-                    local x,y,z = getCharCoordinates(PLAYER_PED)
-                    local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
-                    if res then
-                        local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
-						mils = tonumber(string.format("%.f", dist))
-                        local c1,c2 = convert3DCoordsToScreen(x,y,z)
-                        local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{CD0000}Пропавший предмет\n{ffffff}Дистанция: '..mils..'m.'
-                        renderDrawLine(c1,c2,o1,o2,1,-1)
-                        renderFontDrawText(font,text,o1,o2,-1)
-                    end
-				end
-			end
-			if modelid == 934 then
-                if isObjectOnScreen(obj_hand) then
-                    local x,y,z = getCharCoordinates(PLAYER_PED)
-                    local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
-                    if res then
-                        local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
-						mils = tonumber(string.format("%.f", dist))
-                        local c1,c2 = convert3DCoordsToScreen(x,y,z)
-                        local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{FF4500}Покорёженый металл\n{ffffff}Дистанция: '..mils..'m.'
-                        renderDrawLine(c1,c2,o1,o2,1,-1)
-                        renderFontDrawText(font,text,o1,o2,-1)
-						end
-					end
-				end
-			if modelid == 850 then
-                if isObjectOnScreen(obj_hand) then
-                    local x,y,z = getCharCoordinates(PLAYER_PED)
-                    local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
-                    if res then
-                        local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
-						mils = tonumber(string.format("%.f", dist))
-                        local c1,c2 = convert3DCoordsToScreen(x,y,z)
-                        local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{FFD700}Железные обломки\n{ffffff}Дистанция: '..mils..'m.'
-                        renderDrawLine(c1,c2,o1,o2,1,-1)
-                        renderFontDrawText(font,text,o1,o2,-1)
-						end
-					end
-				end
-			if modelid == 1362 then
-                if isObjectOnScreen(obj_hand) then
-                    local x,y,z = getCharCoordinates(PLAYER_PED)
-                    local res,x1,y1,z1 = getObjectCoordinates(obj_hand)
-                    if res then
-                        local dist = getDistanceBetweenCoords3d(x,y,z,x1,y1,z1)
-						mils = tonumber(string.format("%.f", dist))
-                        local c1,c2 = convert3DCoordsToScreen(x,y,z)
-                        local o1,o2 = convert3DCoordsToScreen(x1,y1,z1)
-                        local text = '{0000FF}Ржавые детали\n{ffffff}Дистанция: '..mils..'m.'
-                        renderDrawLine(c1,c2,o1,o2,1,-1)
-                        renderFontDrawText(font,text,o1,o2,-1)
-                    end
-				end
-			end
-		end
-	end
-	if labirint.v then
-	createCheckpoint(2, -1410.7764,-15.1167,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1410.9436,-34.0902,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1393.3833,-17.4601,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1396.7317,-26.1053,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1402.2668,-32.2269,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1408.9229,-55.1759,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1411.0349,-67.2609,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1407.7104,-72.5888,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1403.5201,-61.5499,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1387.9364,-39.1543,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1365.8726,-39.3457,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1346.5680,-64.7529,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1341.9646,-56.8953,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1357.2194,-41.7623,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1349.4955,-32.3300,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1340.5527,-37.3811,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1338.9095,-15.4209,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1328.9750,-17.4985,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1317.8438,-17.0559,14.3484, 1, 1, 1, 1)
-	createCheckpoint(2, -1323.1193,-27.6095,14.3484, 1, 1, 1, 1)
-	createCheckpoint(1, -1310.4318,-37.1627,14.3484, 1, 1, 1, 1)
-	end
-	if prazdnik.v then
-	setMarker(2, -2416.6096,2327.9485,4.9817)
-	end
-	if prazdnik1.v then
-	setMarker(2, -1980.9331,-976.0734,32.2455)
-	end
-	if prazdnik2.v then
-	setMarker(2, 153.8789,-1928.6691,3.7696)
-	end
-	if prazdnik3.v then
-	setMarker(2, 2292.6370,-1443.5712,23.7721)
-	end
-	if prazdnik4.v then
-	setMarker(2, 2462.6140,-35.1453,26.4844)
-	end
-	if prazdnik5.v then
-	setMarker(2, 2361.9404,1952.9669,10.6798)
-	end
-	if prazdnik6.v then
-	setMarker(2, -167.1510,1223.2247,19.7422)
-	end
-	if robot.v then
-	setMarker(2, -1272.4504,2607.3977,89.0648)
-	end
-	if robot1.v then
-	setMarker(2, -781.6836,2107.2927,60.3828)
-	end
-	if robot2.v then
-	setMarker(2, -761.7206,1152.6692,40.8851)
-	end
-	if robot3.v then
-	setMarker(2, -2679.9753,2094.5701,55.5389)
-	end
-	if robot4.v then
-	setMarker(2, -2752.7510,786.8216,53.8019)
-	end
-	if robot5.v then
-	setMarker(2, -2523.0583,-606.1990,132.5625)
-	end
-	if robot6.v then
-	setMarker(2, -94.9065,-1483.7161,3.0192)
-	end
-	if robot7.v then
-	setMarker(2, 1465.3910,-1730.2164,13.3828)
-	end
-	if robot8.v then
-	setMarker(2, 1799.8401,-1892.2474,13.4039)
-	end
-	if robot9.v then
-	setMarker(2, 1880.2222,-1878.9446,13.4776)
-	end
-	if robot10.v then
-	setMarker(2, 2066.6396,-1467.7086,22.0766)
-	end
-	if robot11.v then
-	setMarker(2, 2213.1907,-1166.6251,25.7266)
-	end
-	if robot12.v then
-	setMarker(2, 1238.0437,-619.6649,103.7500)
-	end
-	if robot13.v then
-	setMarker(2, 1724.0112,873.9470,10.1222)
-	end
-	if robot14.v then
-	setMarker(2, 1371.6138,2155.7012,11.0156)
-	end
-	if bomj.v then
-	setMarker(2, -2385.0435,2219.5029,4.9844)
-	end
-	if bomj1.v then
-	setMarker(2, -1702.8809,963.1707,24.9108)
-	end
-	if bomj2.v then
-	setMarker(2, -2430.2134,-37.2204,35.3203)
-	end
-	if bomj3.v then
-	setMarker(2, 273.8956,-182.8439,1.5781)
-	end
-	if bomj4.v then
-	setMarker(2, 712.7630,-502.9526,16.3359)
-	end
-	if bomj5.v then
-	setMarker(2, 2302.9863,2.8028,26.4844)
-	end
-	if bomj6.v then
-	setMarker(2, 2154.3181,1451.4645,10.8125)
-	end
-	if bomj7.v then
-	setMarker(2, 2375.9749,1643.9750,11.0234)
-	end
-	if bomj8.v then
-	setMarker(2, 1049.2964,1841.7837,10.8203)
-	end
-	if bomj9.v then
-	setMarker(2, -2439.3440,424.9268,35.1641)
-	end
 		wait(0)
 	end
 end
@@ -7928,6 +8038,14 @@ function eating()
 while true do 
 	if eat.v and eatmyso.v then
 		sampSendChat("/meatbag")
+		wait(1800000)
+		end
+	if eat.v and jmeat.v then
+		sampSendChat("/jmeat")
+		wait(1800000)
+		end
+	if eat.v and jfish.v then
+		sampSendChat("/jfish")
 		wait(1800000)
 		end
 	if eat.v and eathouse.v then 
@@ -8628,7 +8746,7 @@ function winprofilemenu()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Имя: '..Namenick)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Фамилия: '..Famnick)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Уровень: '..Lvlnick)
-			imgui.Text('') imgui.SameLine() imgui.Text(u8'Денег на руках: '..Moneynick)
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'Денег на руках: '..number_separator(Moneynick))
 			imgui.Text('')
 			imgui.End()
 			end
@@ -8887,223 +9005,6 @@ function googlewinmenu()
         imgui.End()
 	end
 	
-function updatewinmenu()
-	local tLastKeys = {} -- это у нас для клавиш
-	local input = sampGetInputInfoPtr()
-    local input = getStructElement(input, 0x8, 4)
-    local windowPosX = getStructElement(input, 0x8, 4)
-    local windowPosY = getStructElement(input, 0xC, 4)
-	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8('Аризоне 7 лет! Помощь по обновлению и квестам.'), win_state['updatewin'], imgui.WindowFlags.NoResize)
-		if imgui.CollapsingHeader(u8'Текст обновления') then
-				imgui.BeginChild('##as2dasasdf434345', imgui.ImVec2(930, 465), false)
-				imgui.Columns(2, _, false)
-				imgui.SetColumnWidth(-1, 800)
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"С 22 - 25 Августа и 30 - 31 Августа будет доступен х4 Donate и х4 PayDay!")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"С обновлением добавили:")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"1) Праздничную площадь с 3 НПС(Более 40+ Квестов).")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"2) За все пройденные квесты , вы заработаете 1600+ Az-Coins.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"3) Отдельное Здание Arizona Games.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"4) Почтовое Отделение.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"5) Большого Робота возле ЖДЛС.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"6) Пройдя все ивентовые квесты , вы получите Рулеткой 7-й Годовщины.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"7) Каждый PayDay вы будете получать по 1 Монете 7-й Годовщины.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"8) Добавили новые аксессуары.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"9) На праздничной площади вас будет ждать 3 Мероприятия: Морской Бой, Космические Полёты и Гонки.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"10) Новый остров - Заброшенный Город, там вас будет ждать ларёк новых аксессуаров.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"11) Теперь можно выставлять свой бизнес на Аукцион.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"12) Полностью переделали ТСР (Маппинг , Интерьер)")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"13) Теперь отвозить материалы с ТСР, можно теперь только в другие Армии, а создавать материалы будут - заключённые.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"14) В Гетто добавили нового НПС 'Тёмная Удача'.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"15) Добавили новые закладки для Банд, с которых вам может выпасть машина.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"16) Владельцы 5-ти Домов будут получать каждый день 2 Ларьца Олигарха, для этого вам придется приехать в банк и забрать их.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"17) В Русский Стандарт добавили 3 Новые Машины: Лада Веста SW Cross, УАЗ Патриот и Волга.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"18) Добавили новые 6 Машин, которые будут слетать в LUXE АвтоСалоне.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"19) Добавили ОЧЕНЬ много Скинов.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"20) В Больницах обновили Автопарк.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"21) Для ПД был сделан новый квест, за который вы получите Ламбу или Феру, для этого вам потребуется выполнить 135 Ежедневных Квестов в вашей Фракции.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"22) Для МЗ был сделан новый квест, за который вы получите Dodge (2 Версии) или Ford (2 Версии), для этого вам потребуется выполнить 125 Ежедневных Квестов в вашей Фракции.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"23) Теперь выдавая Мед.Карту или Рецепт, половина будет идти в Банк Фракции, а вторая половина - вам.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"24) Сотрудники полиции теперь смогут пользоваться обновлённым Тайзером.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"25) В ларец премии добавили новые Автомобили.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"26) Добавили новое улучшение для Бизнеса - Музыкальный Центр (23кк), при заходе в ваш бизнес - будет играть рандомная музыка с Бумбокса.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"27) Владельцы Личных Ферм теперь смогут украшать её обьектами для Домов или Бизнесов.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"28) Добавили Солнечные Панели, установив их возле своего дома - вы не будете получать Комуналку.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"29) Убрали ники Владельцев Домов.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"30) Владельцев Домов теперь можно смотреть только через номер 997 и указав номер дома (15+ LvL).")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"31) Узнавать ник владельца можно только 1 раз в 3 Часа.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"32) Были добавлены 2 новых Улучшения: Возможность владеть сразу 2 Фермами и Возможность покупки навыка Дальнобойщика.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"33) В Donate добавили новые скины, стоимость - 1200 Az, старые скины - 500 Az.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"34) Владельцы улучшения 'Планшет' , могут удалять своё обьявление дистанционно.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"35) Были Добавлены 2 Новых Ларька с Едой (Бизнесы): Шахта и Ферма.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"36) На Пляже СМ добавили возможность покупки Энергетических Батончиков.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"37) Теперь можно устанавливать вступительные ранги для семейных Каптов.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"38) Полностью обновили Однорукого Бандита в Казино.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"39) Добавили новый Нарко Притон.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"40) Лидер банды теперь может установить ранг, с которого будут доступны машины или же перевозка денег и ресурсов.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"41) Добавили DM Зону для Банд.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"42) Добавили Поздравления Игрока у которого день рождения, при входе в игру вы попадёте в праздничный интерьер.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"43) В меню GPS были добавлены все Нарко Притоны.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"44) Теперь при закрытии бизнеса будет отображаться игрок который закрыл и причина.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"45) Добавлено отображение Пола и Имущества в Паспорте.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"46) На АБ добавлен пикап, с помощью которого вы сможете посмотреть все цены.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"47) Теперь вы можете одевать абсолютно любой скин , не в зависимости от пола.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"48) Добавили ЗЗ на рынок Лодок.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"49) Исправлен Баг с выдачей АЗ в последнем глобальном достижении.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"50) Увеличены расходы Масла и Двигателя на 15%.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"51) Аренда Билбородов подешевела в 2 раза, а срок аренды увеличен до 200 Часов.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"52) Команда /ticket в ПД снова доступна со 2 Ранга.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"53) Была увеличена зона на Семейных Каптах, в которых учитываются фраги.")
-		imgui.EndChild()
-		end
-		if imgui.CollapsingHeader(u8'Ответы на вопросы от квестовых персонажей') then
-				imgui.BeginChild('##as2dasasdf45454', imgui.ImVec2(950, 90), false)
-				imgui.Columns(2, _, false)
-				imgui.SetColumnWidth(-1, 800)
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Клаус - 21133")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Деймон - 13132")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Стеффан - 31233")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Джереми - 22111")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Мэтта - 12233")
-		imgui.EndChild()
-		end
-		if imgui.CollapsingHeader(u8'Ответы на вопросы Burning Man') then
-				imgui.BeginChild('##as2dasasdf45434', imgui.ImVec2(950, 80), false)
-				imgui.Columns(2, _, false)
-				imgui.SetColumnWidth(-1, 800)
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Вопрос: Правда ли, что на Burning Man можно купить только лед и кофе? Ответ: Да.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Вопрос: Назовите одного из основателей фестиваля Burning Man. Ответ: Ларри Харви.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Вопрос: В каком году начали праздновать Burning Man? Ответ: 1986.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Вопрос: Как переводится Burning Man? Ответ: Горящий человек.")
-		imgui.EndChild()
-		end
-		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог после входа в игру")); imgui.SameLine(); imgui.ToggleButton(u8("Убирать диалог после входа в игру"), dialogupdate) imgui.SameLine() imgui.TextQuestion(u8"Функция закрывает диалог с поздравлением от Аризоны после спавна персонажа.")
-	    imgui.SameLine(320)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать сундук 7-й годовщины', newroulette) imgui.SameLine() imgui.TextQuestion(u8"Функция автоматический крутить рулетку в сундуке 7-й годовщины. Перед активацией функции, сначала откройте рулетку, нажав на сундук. Функция перестанет крутить рулетку, если у вас закончились монеты.")
-		imgui.SameLine(598)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Показать маркеры для прохождения лабиринта ##212', labirint) imgui.SameLine() imgui.TextQuestion(u8"Функция ставит чекпоинты в лабиринте, тем самым показывая вам маршрут для его прохождения.")
-		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Фикс инвентаря")); imgui.SameLine(); imgui.ToggleButton(u8("Фикс инвентаря"), dialogfix) imgui.SameLine() imgui.TextQuestion(u8"Функция через 10 секунд после спавна открывает /mm и закрывает, чтобы разбагать инвентарь. Инвентарь багается из-за 'Убирать диалог после входа в игру'.")
-		imgui.SameLine(328)
-		imgui.Checkbox(u8'ВХ на пропавший предмет, железные обломки, ржавые детали и покорёженый металл', WHupdate) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение. Данные предметы находятся на острове и нужны для выполнения квеста или обмена на аксессуары.")
-		imgui.Separator()
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением достопримечательностей:') imgui.SameLine() imgui.TextQuestion(u8"Функция активирует на радаре метку с местонахождением достопримечательности. Нужно для прохождения квеста.")
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1 ##212', prazdnik) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№2 ##212', prazdnik1) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№3 ##212', prazdnik2) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№4 ##212', prazdnik3) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№5 ##212', prazdnik4) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№6 ##212', prazdnik5) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№7 ##212', prazdnik6) 
-		imgui.SameLine()
-		if imgui.CustomButton(u8'Отображение карты с метками на экране ##1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['prazdnikwin'].v = not win_state['prazdnikwin'].v end
-		if prazdnik.v then prazdnik1.v = false prazdnik2.v = false prazdnik3.v = false prazdnik4.v = false prazdnik5.v = false prazdnik6.v = false end
-		if prazdnik1.v then prazdnik.v = false prazdnik2.v = false prazdnik3.v = false prazdnik4.v = false prazdnik5.v = false prazdnik6.v = false end
-		if prazdnik2.v then prazdnik1.v = false prazdnik.v = false prazdnik3.v = false prazdnik4.v = false prazdnik5.v = false prazdnik6.v = false end
-		if prazdnik3.v then prazdnik1.v = false prazdnik2.v = false prazdnik.v = false prazdnik4.v = false prazdnik5.v = false prazdnik6.v = false end
-		if prazdnik4.v then prazdnik1.v = false prazdnik2.v = false prazdnik3.v = false prazdnik.v = false prazdnik5.v = false prazdnik6.v = false end
-		if prazdnik5.v then prazdnik1.v = false prazdnik2.v = false prazdnik3.v = false prazdnik4.v = false prazdnik.v = false prazdnik6.v = false end
-		if prazdnik6.v then prazdnik1.v = false prazdnik2.v = false prazdnik3.v = false prazdnik4.v = false prazdnik5.v = false prazdnik.v = false end
-		imgui.Separator()
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением роботов:') imgui.SameLine() imgui.TextQuestion(u8"Функция активирует на радаре метку с местонахождением роботов. Нужно для прохождения квеста.")
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1 ##213', robot) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№2 ##213', robot1) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№3 ##213', robot2) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№4 ##213', robot3) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№5 ##213', robot4) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№6 ##213', robot5) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№7 ##213', robot6) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№8 ##213', robot7) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№9 ##213', robot8) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№10 ##213', robot9) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№11 ##213', robot10) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№12 ##213', robot11) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№13 ##213', robot12) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№14 ##213', robot13) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№15 ##213', robot14) 
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Отображение карты с метками на экране ##2', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['robotwin'].v = not win_state['robotwin'].v end
-		if robot.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot1.v then robot.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot2.v then robot1.v = false robot.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot3.v then robot1.v = false robot2.v = false robot.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot4.v then robot1.v = false robot2.v = false robot3.v = false robot.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot5.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot6.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot7.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot8.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot9.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot10.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot.v = false robot11.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot11.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot.v = false robot12.v = false robot13.v = false robot14.v = false end
-		if robot12.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot.v = false robot13.v = false robot14.v = false end
-		if robot13.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot.v = false robot14.v = false end
-		if robot14.v then robot1.v = false robot2.v = false robot3.v = false robot4.v = false robot5.v = false robot6.v = false robot7.v = false robot8.v = false robot9.v = false robot10.v = false robot11.v = false robot12.v = false robot13.v = false robot.v = false end
-		imgui.Separator()
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением бомжей:') imgui.SameLine() imgui.TextQuestion(u8"Функция активирует на радаре метку с местонахождением бомжей. Нужно для прохождения квеста.")
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1 ##214', bomj) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№2 ##214', bomj1) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№3 ##214', bomj2) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№4 ##214', bomj3) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№5 ##214', bomj4) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№6 ##214', bomj5) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№7 ##214', bomj6) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№8 ##214', bomj7) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№9 ##214', bomj8) 
-		imgui.SameLine()
-		imgui.Checkbox(u8'№10 ##214', bomj9) 
-		imgui.SameLine()
-		if imgui.CustomButton(u8'Отображение карты с метками на экране ##3', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['bomjwin'].v = not win_state['bomjwin'].v end
-		if bomj.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj1.v then bomj.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj2.v then bomj1.v = false bomj.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj3.v then bomj1.v = false bomj2.v = false bomj.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj4.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj5.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj6.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj.v = false bomj7.v = false bomj8.v = false bomj9.v = false end
-		if bomj7.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj.v = false bomj8.v = false bomj9.v = false end
-		if bomj8.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj.v = false bomj9.v = false end
-		if bomj9.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj.v = false end
-		imgui.Separator()
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*Спасибо за информацию группе 'Форумник' и пользователю с БХ под ником Anatoly11323.")
-		imgui.End()
-	end
-	
 function messangerwinmenu()
         local sw, sh = getScreenResolution()
         imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.Always, imgui.ImVec2(0.5, 0.5))
@@ -9265,48 +9166,6 @@ function messangerwinmenu()
             imgui.EndChild()   
         imgui.End()
     end
-	
-function prazdnikwinmenu()
-	local tLastKeys = {} -- это у нас для клавиш
-	local input = sampGetInputInfoPtr()
-    local input = getStructElement(input, 0x8, 4)
-    local windowPosX = getStructElement(input, 0x8, 4)
-    local windowPosY = getStructElement(input, 0xC, 4)
-	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8('Коорды достопримечательности'), win_state['prazdnikwin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
-		imgui.Image(winprazdnik, imgui.ImVec2(450, 450), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-		imgui.End()
-		end
-		
-function robotwinmenu()
-	local tLastKeys = {} -- это у нас для клавиш
-	local input = sampGetInputInfoPtr()
-    local input = getStructElement(input, 0x8, 4)
-    local windowPosX = getStructElement(input, 0x8, 4)
-    local windowPosY = getStructElement(input, 0xC, 4)
-	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8('Коорды с роботами'), win_state['robotwin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
-		imgui.Image(winrobot, imgui.ImVec2(450, 450), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-		imgui.End()
-		end
-		
-function bomjwinmenu()
-	local tLastKeys = {} -- это у нас для клавиш
-	local input = sampGetInputInfoPtr()
-    local input = getStructElement(input, 0x8, 4)
-    local windowPosX = getStructElement(input, 0x8, 4)
-    local windowPosY = getStructElement(input, 0xC, 4)
-	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8('Коорды с бомжами'), win_state['bomjwin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
-		imgui.Image(winbomj, imgui.ImVec2(450, 450), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-		imgui.End()
-		end
 	
 function nastroikamenu()
 	local tLastKeys = {} -- это у нас для клавиш
@@ -9652,6 +9511,54 @@ function nastroikamenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"покорёженый металл(предметы с острова); автопрокрутка рулетки из нового сундука.")
 		imgui.EndChild()
 		end	
+		if imgui.CollapsingHeader(u8' 21.09.2021') then
+				imgui.BeginChild('##as2dasasdf3212', imgui.ImVec2(720, 215), false)
+				imgui.Columns(2, _, false)
+				imgui.SetColumnWidth(-1, 800)
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"1. Фикс таблички информера и пинга (пинг иногда отображался неверно)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"2. Фикс 'Piar Menu' (крашил скрипт, если зайти в данное меню при заходе в игру)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"3. Фикс дистилированной воды (не всегда корректно работала функция)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"4. Фикс таймцикла при использовании автобайка (мелькала погода)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"5. Фикс 'Skup Menu' (вместо ларьцов выставлялись точильные амулеты)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"6. Фикс 'Trade Menu' (не работал обмен монет на точильные камни)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"7. Фикс чисел (большие числа по типу 1.000.000 в меню стали читабельными т.е использован money separator)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"8. Фикс 'Майнинг' - 'Улучшение видеокарт' (кикало за флуд функциями)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"9. В 'Майнинг' добавлена возможность выбрать сразу 20 видеокарт на улучшение.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"10. В 'Piar Menu' добавлен сервер 'Show Low'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"11. В 'Piar Menu' добавлен счётчик объявлений на неделю и кнопка для обнуления счётчика.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"12. В 'Piar Menu' теперь если ваше объявление не отредактировали, то скрипт через указанное время удалит")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"старое объявление и через указанное время отправит новое.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"13. В 'Piar Menu' если включена функция отправки обьявлений, то больше у вас на экране не будет диалогов")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"с подачей объявлений.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"14. В 'Piar Menu' добавлена возможность отправки счётчика объявлений в вк.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"15. В 'Параметры' добавлен новый пункт 'Для разработчиков', в котором есть - режим смены работы биндера (Есть")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"2 режима работы биндера. Режим 'Обычный' - биндер не оставляет написанный текст в чате и не работают")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"скриптовые команды через биндер. Режим 'Продвинутый' - оставляет написанный ранее текст в чате, но зато")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"работают команды скрипта через биндер), настройка режима дрона (Есть 2 режима работы дрона. Режим")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убирает ники и прочие надписи")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"на игроках и встроен ВХ, который показывает не все ники в радиусе, а показывает ники игроков только в том")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"случае, если вы дроном подлетели к нему), включение или отключение ID текстдравов и возможность смены ID")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"текстдрава для покупки дистилированной воды.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"16. Обновлены пользователи в меню 'Игроки, которые предлагали идеи и они были осуществлены'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"17. В 'Параметры' - 'Модификации' добавлена анти-ломка. Теперь при ломке не будет качаться камера.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"18. В 'Параметры' - 'Модификации' добавлены функции: Fast Trade (правой кнопкой нажимаете на игрока и")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"назначенную кнопку, чтобы кинуть данному игроку trade), Fast Family Invite (то же самое, что и Fast Trade,")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"только кидает инваит в семью) и Fast Invite (то же самое, что и Fast Trade, только кидает инваит в")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"организацию), отходить от места спавна (персонаж после захода в игру сделает 2 прыжка, тем самым, отойдет от")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"места спавна) и убирать диалог с x4 после входа в игру (убирает данный диалог + пишет /mm и закрывает,")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"чтобы разбагать инвентарь)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"19. В 'Параметры' - 'Модификации' - 'Авто-еда' добавлена 2 новых способа поесть - мясо оленины и жареная рыба.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"20. Добавлен 'Чат' (исходник взял у Котовский)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"21. Авто-еда из мешка с мясом теперь работает через команду, а не инвентарь.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"22. Убран 'Arizona Update' (квесты уже закончились и данный функционал ни к чему)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"23. При улучшений видеокарты в автоматическом режиме, больше не будет появлятся диалог с улучшением.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"24. В 'Skup Menu' добавлена функция 'Удалять игроков в радиусе' от Толкин (теперь вы сможете, например, на ЦР")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"стоять в лавке и удалить игроков, чтобы поднять FPS и уменьшить риск краша)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"25. В меню скрипта добавлена временная реклама.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"26. В некоторых функциях убран шанс ложного срабатывания.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"27. После авто-обновления скрипта открывается окно с текстом обновления.")
+		imgui.EndChild()
+		end	
 		elseif selected3 == 4 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Персонализация")
 			imgui.Separator()
@@ -9671,7 +9578,7 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Основные настройки")
 			imgui.Separator()
 			if imgui.CollapsingHeader(u8'Модификации') then
-				imgui.BeginChild('##as2dasasdf468', imgui.ImVec2(745, 370), false)
+				imgui.BeginChild('##as2dasasdf468', imgui.ImVec2(725, 370), false)
 				imgui.Columns(2, _, false)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("ChatInfo")); imgui.SameLine(); imgui.ToggleButton(u8'ChatInfo', chatInfo)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Чат на клавишу Т")); imgui.SameLine(); imgui.ToggleButton(u8'Чат на клавишу T', keyT)
@@ -9686,33 +9593,45 @@ function nastroikamenu()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Автоеда")); imgui.SameLine(); imgui.ToggleButton(u8'Автоеда', eat) 
 				if eat.v then
-				if eathouse.v then eatmyso.v = false end
-				if eatmyso.v then eathouse.v = false end
+				if eathouse.v then eatmyso.v = false jmeat.v = false jfish.v = false end
+				if eatmyso.v then eathouse.v = false jmeat.v = false jfish.v = false end
+				if jmeat.v then eathouse.v = false eatmyso.v = false jfish.v = false end
+				if jfish.v then eathouse.v = false eatmyso.v = false jmeat.v = false end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Дом")); imgui.SameLine(); imgui.ToggleButton(u8'Дом', eathouse); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 3 часа есть еду с холодильника, стоимостью 300 продуктов. Полезно тем, у кого нет аксессуара на хилл или слетел инвентарь и вы ждете отката."); imgui.SameLine();
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Мешок с мясом")); imgui.SameLine(); imgui.ToggleButton(u8'Мешок с мясом', eatmyso); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 30 минут есть еду из мешка с мясом.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Мясо оленины")); imgui.SameLine(); imgui.ToggleButton(u8'Мясо оленины', jmeat); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 30 минут есть мясо оленины.") imgui.SameLine();
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Жареная рыба")); imgui.SameLine(); imgui.ToggleButton(u8'Жареная рыба', jfish); ; imgui.SameLine(); imgui.TextQuestion(u8"Персонаж будет раз в 30 минут есть жареную рыбу.")
 				end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, сервер запоролен, пишет 'You are banned from this server' и после рестарта.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Фикс adCounter")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс adCounter', adcounter); imgui.SameLine(); imgui.TextQuestion(u8"Фикс для скрипта adCounter, т.к тот скрипт не отправляет объявления из-за новой системы /ad.");
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Фикс MVD Helper")); imgui.SameLine(); imgui.ToggleButton(u8'Фикс MVD Helper', mvdhelp); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после спавна пропишется /mm и закроется. Нужно для того, чтобы разбагать инвентарь(MVD Helper его как то багает)")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Анти-ломка")); imgui.SameLine(); imgui.ToggleButton(u8'Анти-ломка', antilomka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при ломке у вас больше не будет тряски камеры.")
-				
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог c x4 после входа в игру")); imgui.SameLine(); imgui.ToggleButton(u8("Убирать диалог c x4 после входа в игру"), dialogclose) imgui.SameLine() imgui.TextQuestion(u8"Функция закрывает диалог с напоминанием об x4 после спавна персонажа и открывает через 10 секунд /mm и закрывает его, чтобы разбагать инвентарь.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отходить от места спавна")); imgui.SameLine(); imgui.ToggleButton(u8'Отходить от места спавна', antispawn); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж после спавна сделает указанное количество прыжков вперед, чтобы отойти от места спавна. Совершать прыжки персонаж будет только один раз после захода на сервер.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); if antispawn.v then imgui.SliderInt(u8'Кол-во прыжков',zadervkajump,1, 10) end
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch)
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Измененный cars")); imgui.SameLine(); imgui.ToggleButton(u8'Измененный cars', carsis); imgui.SameLine(); imgui.TextQuestion(u8"Редактирование диалога /cars. Можно использовать, например, чтобы подписать местоположение машин, изменить цвет строк в диалоге и тому подобное.");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Trade")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Trade', tradefast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого трейда с помощью прицеливания и кнопки, которую вы выбрали (по умолчанию кнопка R)");
+				if tradefast.v then imgui.InputText(u8'##310', fasttrade) end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Family Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Family Invite', faminvfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в семью с помощью прицеливания и кнопки, которую вы выбрали (по умолчанию кнопка E)");
+				if faminvfast.v then imgui.InputText(u8'##311', fastinvfam) end
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Invite', invfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в организацию с помощью прицеливания и кнопки, которую вы выбрали (по умолчанию кнопка Q)");
+				if invfast.v then imgui.InputText(u8'##312', fastinv) end
 				if carsis.v and imgui.CustomButton(u8'Редактировать cars', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-124, 0)) then carsys() end
 				imgui.Text(u8("Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия или закрытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 					imgui.InputText(u8'##1', autoklava)
 				imgui.Text(u8("Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
 					imgui.InputText(u8'##2', autoklavareload)
 				imgui.Text(u8("Запуск дрона на клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"В полях нужно ввести коды клавиш для запуска дрона. По умолчанию поставлено на С + 1. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
-					imgui.PushItemWidth(111)
+					imgui.PushItemWidth(105)
 					imgui.InputText(u8'##3', autodrone) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'##4', autodronev2)
 					imgui.PopItemWidth()
 				imgui.Text(u8("Закрытие дрона на клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"В полях нужно ввести коды клавиш для запуска дрона. По умолчанию поставлено на С + 2. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
-					imgui.PushItemWidth(111)
+					imgui.PushItemWidth(105)
 					imgui.InputText(u8'##5', autodronev3) imgui.SameLine() imgui.Text(u8("+")) imgui.SameLine() imgui.InputText(u8'##6', autodronev4)
 					imgui.PopItemWidth()
 				imgui.Text(u8("Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
@@ -9962,7 +9881,7 @@ function funksmenu()
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
 		imgui.PushItemWidth(422)
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Дата срабатывания напоминания ##90', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
-		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, улучшение видеокарт и так далее.")
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.PopItemWidth()
 		imgui.EndChild()
 		imgui.End()
@@ -9990,15 +9909,59 @@ function shemainstr()
 	
 function shemaskup()
 	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -1.17))
-	imgui.SetNextWindowSize(imgui.ImVec2(1000, 125), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -1.87))
+	imgui.SetNextWindowSize(imgui.ImVec2(1000, 95), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Инструкция', win_state['skupshema'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-		imgui.BeginChild('##asdasasddf21312122', imgui.ImVec2(1000, 110), false)
+		imgui.BeginChild('##asdasasddf21312122', imgui.ImVec2(1000, 90), false)
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"1) Для начала поставьте галочку на тех товарах, которые хотите скупать. 2) Введите количество товара и цену за штуку в соответствующих полях.")
 		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ НАЖИМАЙТЕ НА КНОПКУ 'РАССЧИТАТЬ ТОВАРЫ', ЕСЛИ ЗАПОЛНИЛИ НЕ ВСЕ ПОЛЯ!")
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"3) Встаньте в лавку, введите название, и нажмите альт, чтобы попасть в начальное меню лавки. Далее откройте меню скрипта - 'Skup Menu' и нажмите на кнопку")
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"'Выставить товары на скуп'.")
+		imgui.EndChild()
+		imgui.End()
+	end
+	
+function shemapiar()
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.401))
+	imgui.SetNextWindowSize(imgui.ImVec2(900, 450), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Piar Shema', win_state['piarshema'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
+		imgui.BeginChild('##asdasasddf212222222', imgui.ImVec2(900, 450), false)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine(270) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Инструкция по настройке отправления объявлений в VK")
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'1) Создайте группу в VK.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'2) Зайдите в "Управление".')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'3) Выберите "Работа с API". В данном пункте нажмите на кнопку "Создать ключ".')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst1, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'4) В открывшемся меню выберите следующие пункты: "Разрешить приложению доступ к управлению сообществом" и "Разрешить приложению')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'доступ к сообщениям сообщества".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'5) Нажмите на кнопку "Создать". Подтверждаете действия, если VK потребует, созданный ключ копируете и вставляете в текстовое поле в')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'скрипте под названием "Токен".')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst2, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'6) Перейдите в "Long Poll API".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'7) Включаем "Long Poll API" и выбираем версию 5.81.')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst3, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'8) Зайдите в "Типы событий" и выберите следующие пункты: "Входящее сообщение" и "Исходящее сообщение".')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst7, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'9) Выберите "Сообщения", включите сообщения сообщества и нажмите кнопку "Сохранить".')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst4, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'10) Выберите "Настройки для бота", включите возможности ботов, выберите пункт "Разрешать добавлять сообщество в беседы" и нажмите кнопку')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'"Сохранить".')
+		imgui.Text('') imgui.SameLine(140) imgui.Image(skupinst5, imgui.ImVec2(600, 350), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'11) Возвращаемся на главную страницу группы и копируем ID группы (ID группы - это цифры после public). Пример: 207209247.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'12) Скопированный ID группы вставляем в текстовое поле в скрипте под названием "ID группы".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'13) Создайте беседу и на главной странице группы нажмите на кнопку "Добавить в беседу" и добавляете бота в вашу созданную беседу.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'14) Выдаёте боту права Администратора и нам осталось найти Peer ID. Peer ID - это ID беседы, который начинается у всех бесед одинаково:')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'200000000. Осталось дописать последнюю цифру, которая обозначает, в какую из всех бесед, в которой состоит бот, отправлять объявление.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Раз мы только создали бота и добавили в первую его беседу, то получается, что это первая беседа и дописываем последнюю цифру: 1.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Полный Peer ID получается следующий: 200000001')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'15) Peer ID вставляем в текстовое поле в скрипте под названием "Peer ID беседы".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'16) Включаете в скрипте отправку объявлений и отправку объявлений в VK и смотрите, после того, как ваше объявление отредактировали,')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'пришло ли объявление в VK. Если нет, то перечитывайте каждый пункт и перепроверяйте настройки.')
+		imgui.Text('') imgui.SameLine(340) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Пример объявления:")
+		imgui.Text('') imgui.SameLine(280) imgui.Image(skupinst6, imgui.ImVec2(300, 91), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 		imgui.EndChild()
 		imgui.End()
 	end
@@ -10064,43 +10027,63 @@ function tupupdate()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(855, 660), imgui.Cond.FirstUseEver)
-	imgui.Begin(u8' Тестовые обновления v3.0', win_state['tup'], imgui.WindowFlags.NoResize)
+	imgui.Begin(u8' Тестовые обновления v3.1', win_state['tup'], imgui.WindowFlags.NoResize)
 			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 630), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс фпс при включений ВХ на острове.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таблички информера и пинга(пинг иногда отображался неверно)")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Piar Menu'(крашил скрипт, если зайти в данное меню при заходе в игру)")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс дистилированной воды.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс таймцикла при использовании автобайка.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Убраны числа в ВХ на предметы после точки.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Майнинг' добавлена возможность выбрать сразу 20 видеокарт на улучшение.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен сервер 'Show Low'.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' добавлен новый пункт 'Для разработчиков', в котором есть - режим смены работы биндера(Есть 2 режима работы биндера.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" Режим 'Обычный' - биндер не оставляет написанный текст в чате и не работают скриптовые команды через биндер. Режим 'Продвинутый' -")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" оставляет написанный ранее текст в чате, но зато работают команды скрипта через биндер), WallHack(позволяет увидеть ник игрока,")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" находясь далеко от него. Также не палится на скриншотах, если скриншот сделан на F8), настройка режима дрона(Есть 2 режима работы")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" дрона. Режим 'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убирает ники и прочие надписи на игроках")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" и встроен ВХ, который показывает не все ники в радиусе, а показывает ники игроков только в том случае, если вы дроном подлетели к нему).")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Arizona Update' добавлена функция 'Фикс Инвентаря'. Из-за функции для убирания диалога при спавне персонажа, багается инвентарь.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" Данная функция откроет /mm и закроет его, тем самым, разбагает инвентарь.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Обновлены пользователи в меню 'Игроки, которые предлагали идеи и они были осуществлены'.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Модификации' добавлена анти-ломка. Теперь при ломке не будет качаться камера.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлены 2 кнопки - 'Включение и отключение ID текстдравов'.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Параметры' - 'Для разработчиков' добавлена возможность изменить ID текстдрава для покупки дестилированной воды.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - В 'Piar Menu' добавлен счётчик объявлений на неделю и кнопка для обнуления счётчика.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлен 'Чат' в тестовом режиме (исходник взял у Котовский)")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлено 'Авто-подключение к чату'. Теперь вам не нужно заходить в меню и подключаться к чату - скрипт сделает всё сам при входе в")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" игру или после перезагрузки скрипта. По умолчанию - включено.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлено 'Выводить сообщения из чата в игровой чат'. Теперь вы сможете общаться друг с другом не заходя в меню скрипта. Если")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" функция включена, то вы будете видеть сообщения других пользователей в обычном чате и сможете отвечать на них.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" По умолчанию - включено.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 1.0, 1.0), u8" [13.09.2021]")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Skup Menu'(вместо ларьцов выставлялись точильные амулеты)")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Фикс 'Trade Menu'(не работал обмен монет на точильные камни)")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Из скрипта убран WallHack(по вашим просьбам)")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Авто-еда из мешка с мясом теперь работает через команду, а не инвентарь.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Добавлено напоминание в чате о том, как сменить ник, выключить сообщения из чата в скрипте в игровой чат и выключить")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" авто-подключению к чату.")
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8" - Теперь настройки чата сохраняются, если вы нажали 'Закрыть настройки'.")
+			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
+			imgui.EndChild()
+			imgui.End()
+		end
+		
+function textupdate()
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(720, 660), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'New Update 3.1!', win_state['updatetext'], imgui.WindowFlags.NoResize)
+			imgui.BeginChild('##asdasasddf531212', imgui.ImVec2(720, 630), false)
+			imgui.Columns(2, _, false)
+			imgui.SetColumnWidth(-1, 800)
+			imgui.Text('') imgui.SameLine() imgui.Text(u8"1. Фикс таблички информера и пинга (пинг иногда отображался неверно)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"2. Фикс 'Piar Menu' (крашил скрипт, если зайти в данное меню при заходе в игру)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"3. Фикс дистилированной воды (не всегда корректно работала функция)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"4. Фикс таймцикла при использовании автобайка (мелькала погода)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"5. Фикс 'Skup Menu' (вместо ларьцов выставлялись точильные амулеты)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"6. Фикс 'Trade Menu' (не работал обмен монет на точильные камни)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"7. Фикс чисел (большие числа по типу 1.000.000 в меню стали читабельными т.е использован money separator)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"8. Фикс 'Майнинг' - 'Улучшение видеокарт' (кикало за флуд функциями)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"9. В 'Майнинг' добавлена возможность выбрать сразу 20 видеокарт на улучшение.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"10. В 'Piar Menu' добавлен сервер 'Show Low'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"11. В 'Piar Menu' добавлен счётчик объявлений на неделю и кнопка для обнуления счётчика.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"12. В 'Piar Menu' теперь если ваше объявление не отредактировали, то скрипт через указанное время удалит")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"старое объявление и через указанное время отправит новое.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"13. В 'Piar Menu' если включена функция отправки обьявлений, то больше у вас на экране не будет диалогов")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"с подачей объявлений.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"14. В 'Piar Menu' добавлена возможность отправки счётчика объявлений в вк.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"15. В 'Параметры' добавлен новый пункт 'Для разработчиков', в котором есть - режим смены работы биндера (Есть")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"2 режима работы биндера. Режим 'Обычный' - биндер не оставляет написанный текст в чате и не работают")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"скриптовые команды через биндер. Режим 'Продвинутый' - оставляет написанный ранее текст в чате, но зато")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"работают команды скрипта через биндер), настройка режима дрона (Есть 2 режима работы дрона. Режим")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убирает ники и прочие надписи")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"на игроках и встроен ВХ, который показывает не все ники в радиусе, а показывает ники игроков только в том")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"случае, если вы дроном подлетели к нему), включение или отключение ID текстдравов и возможность смены ID")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"текстдрава для покупки дистилированной воды.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"16. Обновлены пользователи в меню 'Игроки, которые предлагали идеи и они были осуществлены'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"17. В 'Параметры' - 'Модификации' добавлена анти-ломка. Теперь при ломке не будет качаться камера.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"18. В 'Параметры' - 'Модификации' добавлены функции: Fast Trade (правой кнопкой нажимаете на игрока и")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"назначенную кнопку, чтобы кинуть данному игроку trade), Fast Family Invite (то же самое, что и Fast Trade,")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"только кидает инваит в семью) и Fast Invite (то же самое, что и Fast Trade, только кидает инваит в")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"организацию), отходить от места спавна (персонаж после захода в игру сделает 2 прыжка, тем самым, отойдет от")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"места спавна) и убирать диалог с x4 после входа в игру (убирает данный диалог + пишет /mm и закрывает,")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"чтобы разбагать инвентарь)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"19. В 'Параметры' - 'Модификации' - 'Авто-еда' добавлена 2 новых способа поесть - мясо оленины и жареная рыба.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"20. Добавлен 'Чат' (исходник взял у Котовский)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"21. Авто-еда из мешка с мясом теперь работает через команду, а не инвентарь.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"22. Убран 'Arizona Update' (квесты уже закончились и данный функционал ни к чему)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"23. При улучшений видеокарты в автоматическом режиме, больше не будет появлятся диалог с улучшением.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"24. В 'Skup Menu' добавлена функция 'Удалять игроков в радиусе' от Толкин (теперь вы сможете, например, на ЦР")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"стоять в лавке и удалить игроков, чтобы поднять FPS и уменьшить риск краша)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"25. В меню скрипта добавлена временная реклама.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"26. В некоторых функциях убран шанс ложного срабатывания.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"27. После авто-обновления скрипта открывается окно с текстом обновления.")
 			imgui.EndChild()
 			imgui.End()
 		end
@@ -10121,25 +10104,6 @@ function timeyveddate()
 	end
 	
 function getArizonaName()
-	if sampGetCurrentServerAddress() == "185.169.134.3" then gameServer = "Phoenix"
-	elseif sampGetCurrentServerAddress() == "185.169.134.4" then gameServer = "Tucson"
-	elseif sampGetCurrentServerAddress() == "185.169.134.43" then gameServer = "Scottdale"
-	elseif sampGetCurrentServerAddress() == "185.169.134.44" then gameServer = "Chandler"
-	elseif sampGetCurrentServerAddress() == "185.169.134.45" then gameServer = "Brainburg"
-	elseif sampGetCurrentServerAddress() == "185.169.134.5" then gameServer = "Saint Rose"
-	elseif sampGetCurrentServerAddress() == "185.169.134.59" then gameServer = "Mesa" 
-	elseif sampGetCurrentServerAddress() == "185.169.134.61" then gameServer = "Red Rock"
-	elseif sampGetCurrentServerAddress() == "185.169.134.107" then gameServer = "Yuma" 
-	elseif sampGetCurrentServerAddress() == "185.169.134.109" then gameServer = "Surprise"
-	elseif sampGetCurrentServerAddress() == "185.169.134.166" then gameServer = "Prescott"
-	elseif sampGetCurrentServerAddress() == "185.169.134.171" then gameServer = "Glendale"
-	elseif sampGetCurrentServerAddress() == "185.169.134.172" then gameServer = "Kingman"
-	elseif sampGetCurrentServerAddress() == "185.169.134.173" then gameServer = "Winslow"
-	elseif sampGetCurrentServerAddress() == "185.169.134.174" then gameServer = "Payson"
-	elseif sampGetCurrentServerAddress() == "80.66.82.191" then gameServer = "Gilbert"
-	elseif sampGetCurrentServerAddress() == "80.66.82.190" then gameServer = "Show Low"
-	else gameServer = "Неизвестно" 
-	end
 	imgui.VerticalSeparator() imgui.SameLine(650) imgui.VerticalSeparator()
 	imgui.Separator()
 	imgui.Text(u8('  '..gameServer)) imgui.SameLine() imgui.Text("|") imgui.SameLine() imgui.Text(u8(nickName))
@@ -10185,6 +10149,8 @@ function getArizonaName()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /s', saddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##2000', sadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(u8'Отправить текст в /s сейчас', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then adtravel5() end
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления в VK', addvk) imgui.SameLine(405) 
+	if imgui.CustomButton(u8'Настройка отправки объявлений', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then win_state['vkmessage'].v = not win_state['vkmessage'].v end
 	imgui.PopItemWidth()
 	imgui.PushItemWidth(634)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'##99', adredak)
@@ -10194,23 +10160,45 @@ end
 
 function getArizonaSkup()
 	imgui.PushItemWidth(83)
-	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
+	imgui.VerticalSeparator() imgui.SameLine(707) imgui.VerticalSeparator()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
     imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Счастливая травка', skuptrava) imgui.SameLine(177) imgui.InputText(u8'##100', skuptravacol) imgui.SameLine(281) imgui.InputText(u8'##101', skuptravacena) imgui.SameLine(385) imgui.Text(u8("За "..skuptravacol.v.." шт. товара нужно заплатить "..itogoskuptrava..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронзовая рулетка', skupbronzarul) imgui.SameLine(177) imgui.InputText(u8'##102', skupbronzarulcol) imgui.SameLine(281) imgui.InputText(u8'##103', skupbronzarulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupbronzarulcol.v.." шт. товара нужно заплатить "..itogoskupbronzarul..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебряная рулетка', skupserebrorul) imgui.SameLine(177) imgui.InputText(u8'##104', skupserebrorulcol) imgui.SameLine(281) imgui.InputText(u8'##133', skupserebrorulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupserebrorulcol.v.." шт. товара нужно заплатить "..itogoskupserebrorul..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золотая рулетка', skupgoldrul) imgui.SameLine(177) imgui.InputText(u8'##105', skupgoldrulcol) imgui.SameLine(281) imgui.InputText(u8'##134', skupgoldrulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupgoldrulcol.v.." шт. товара нужно заплатить "..itogoskupgoldrul..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Платиновая рулетка', skupplatinarul) imgui.SameLine(177) imgui.InputText(u8'##106', skupplatinarulcol) imgui.SameLine(281) imgui.InputText(u8'##135', skupplatinarulcena) imgui.SameLine(385) imgui.Text(u8("За "..skupplatinarulcol.v.." шт. товара нужно заплатить "..itogoskupplatinarul..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Камень', skupkamen) imgui.SameLine(177) imgui.InputText(u8'##107', skupkamencol) imgui.SameLine(281) imgui.InputText(u8'##136', skupkamencena) imgui.SameLine(385) imgui.Text(u8("За "..skupkamencol.v.." шт. товара нужно заплатить "..itogoskupkamen..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Металл', skupmetal) imgui.SameLine(177) imgui.InputText(u8'##108', skupmetalcol) imgui.SameLine(281) imgui.InputText(u8'##137', skupmetalcena) imgui.SameLine(385) imgui.Text(u8("За "..skupmetalcol.v.." шт. товара нужно заплатить "..itogoskupmetal..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронза', skupbronza) imgui.SameLine(177) imgui.InputText(u8'##109', skupbronzacol) imgui.SameLine(281) imgui.InputText(u8'##138', skupbronzacena) imgui.SameLine(385) imgui.Text(u8("За "..skupbronzacol.v.." шт. товара нужно заплатить "..itogoskupbronza..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебро', skupserebro) imgui.SameLine(177) imgui.InputText(u8'##110', skupserebrocol) imgui.SameLine(281) imgui.InputText(u8'##139', skupserebrocena) imgui.SameLine(385) imgui.Text(u8("За "..skupserebrocol.v.." шт. товара нужно заплатить "..itogoskupserebro..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золото', skupgold) imgui.SameLine(177) imgui.InputText(u8'##111', skupgoldcol) imgui.SameLine(281) imgui.InputText(u8'##140', skupgoldcena) imgui.SameLine(385) imgui.Text(u8("За "..skupgoldcol.v.." шт. товара нужно заплатить "..itogoskupgold..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Подарки', skuppodarki) imgui.SameLine(177) imgui.InputText(u8'##112', skuppodarkicol) imgui.SameLine(281) imgui.InputText(u8'##141', skuppodarkicena) imgui.SameLine(385) imgui.Text(u8("За "..skuppodarkicol.v.." шт. товара нужно заплатить "..itogoskuppodarki..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Счастливая травка', skuptrava) imgui.SameLine(177) imgui.InputText(u8'##100', skuptravacol) imgui.SameLine(281) imgui.InputText(u8'##101', skuptravacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptravacol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptrava)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронзовая рулетка', skupbronzarul) imgui.SameLine(177) imgui.InputText(u8'##102', skupbronzarulcol) imgui.SameLine(281) imgui.InputText(u8'##103', skupbronzarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupbronzarulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupbronzarul)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебряная рулетка', skupserebrorul) imgui.SameLine(177) imgui.InputText(u8'##104', skupserebrorulcol) imgui.SameLine(281) imgui.InputText(u8'##133', skupserebrorulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupserebrorulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupserebrorul)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золотая рулетка', skupgoldrul) imgui.SameLine(177) imgui.InputText(u8'##105', skupgoldrulcol) imgui.SameLine(281) imgui.InputText(u8'##134', skupgoldrulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupgoldrulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupgoldrul)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Платиновая рулетка', skupplatinarul) imgui.SameLine(177) imgui.InputText(u8'##106', skupplatinarulcol) imgui.SameLine(281) imgui.InputText(u8'##135', skupplatinarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupplatinarulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupplatinarul)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Камень', skupkamen) imgui.SameLine(177) imgui.InputText(u8'##107', skupkamencol) imgui.SameLine(281) imgui.InputText(u8'##136', skupkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupkamencol.v).." шт. товара нужно заплатить "..number_separator(itogoskupkamen)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Металл', skupmetal) imgui.SameLine(177) imgui.InputText(u8'##108', skupmetalcol) imgui.SameLine(281) imgui.InputText(u8'##137', skupmetalcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupmetalcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupmetal)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронза', skupbronza) imgui.SameLine(177) imgui.InputText(u8'##109', skupbronzacol) imgui.SameLine(281) imgui.InputText(u8'##138', skupbronzacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupbronzacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupbronza)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебро', skupserebro) imgui.SameLine(177) imgui.InputText(u8'##110', skupserebrocol) imgui.SameLine(281) imgui.InputText(u8'##139', skupserebrocena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupserebrocol.v).." шт. товара нужно заплатить "..number_separator(itogoskupserebro)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золото', skupgold) imgui.SameLine(177) imgui.InputText(u8'##111', skupgoldcol) imgui.SameLine(281) imgui.InputText(u8'##140', skupgoldcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupgoldcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupgold)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Подарки', skuppodarki) imgui.SameLine(177) imgui.InputText(u8'##112', skuppodarkicol) imgui.SameLine(281) imgui.InputText(u8'##141', skuppodarkicena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuppodarkicol.v).." шт. товара нужно заплатить "..number_separator(itogoskuppodarki)..'$')) 
 	imgui.Separator()
-	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..skuptovaracol.." шт. товара нужно заплатить "..itogoskuptovara..'$')) 
+	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+		delplayer = not delplayer
+			for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..number_separator(skuptovaracol).." шт. товара нужно заплатить "..number_separator(itogoskuptovara)..'$'))
 	imgui.Separator()
 	imgui.Text('')
 	imgui.SameLine(285)
@@ -10231,36 +10219,58 @@ function getArizonaSkup()
 	win_state['skup'].v = false  
 	win_state['skup2'].v = false  
 	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(332, 0)) then skuppoymol() end 
-	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(332, 0)) then load_static() end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(672, 0)) then skuptovarov() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then skuppoymol() end 
+	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(692, 0)) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
 
 function getArizonaSkup2str()
 	imgui.PushItemWidth(83)
-	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
+	imgui.VerticalSeparator() imgui.SameLine(707) imgui.VerticalSeparator()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
     imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Гражданский талон', skuptalon) imgui.SameLine(177) imgui.InputText(u8'##113', skuptaloncol) imgui.SameLine(281) imgui.InputText(u8'##142', skuptaloncena) imgui.SameLine(385) imgui.Text(u8("За "..skuptaloncol.v.." шт. товара нужно заплатить "..itogoskuptalon..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..skupsemtaloncol.v.." шт. товара нужно заплатить "..itogoskupsemtalon..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..skupskidtaloncol.v.." шт. товара нужно заплатить "..itogoskupskidtalon..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..skuptochkamencol.v.." шт. товара нужно заплатить "..itogoskuptochkamen..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Гражданский талон', skuptalon) imgui.SameLine(177) imgui.InputText(u8'##113', skuptaloncol) imgui.SameLine(281) imgui.InputText(u8'##142', skuptaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptaloncol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptalon)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupsemtaloncol.v).." шт. товара нужно заплатить "..number_separator(itogoskupsemtalon)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupskidtaloncol.v).." шт. товара нужно заплатить "..number_separator(itogoskupskidtalon)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptochkamencol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptochkamen)..'$')) 
 	imgui.PushItemWidth(187)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..itogoskuptochamulet..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptochamulet)..'$'))
 	imgui.PopItemWidth()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..skuplareccol.v.." шт. товара нужно заплатить "..itogoskuplarec..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuplareccol.v).." шт. товара нужно заплатить "..number_separator(itogoskuplarec)..'$')) 
 	imgui.PushItemWidth(187)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Твин Турбо', skuptt) imgui.SameLine(177) imgui.InputText(u8'##148', skupttcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..itogoskuptt..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Твин Турбо', skuptt) imgui.SameLine(177) imgui.InputText(u8'##148', skupttcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptt)..'$'))
 	imgui.PopItemWidth()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Зловещая монета', skupmoneta) imgui.SameLine(177) imgui.InputText(u8'##120', skupmonetacol) imgui.SameLine(281) imgui.InputText(u8'##149', skupmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..skupmonetacol.v.." шт. товара нужно заплатить "..itogoskupmoneta..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Лён', skuplen) imgui.SameLine(177) imgui.InputText(u8'##121', skuplencol) imgui.SameLine(281) imgui.InputText(u8'##150', skuplencena) imgui.SameLine(385) imgui.Text(u8("За "..skuplencol.v.." шт. товара нужно заплатить "..itogoskuplen..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлопок', skupxlopok) imgui.SameLine(177) imgui.InputText(u8'##122', skupxlopokcol) imgui.SameLine(281) imgui.InputText(u8'##151', skupxlopokcena) imgui.SameLine(385) imgui.Text(u8("За "..skupxlopokcol.v.." шт. товара нужно заплатить "..itogoskupxlopok..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бандитский респект', skuprespekt) imgui.SameLine(177) imgui.InputText(u8'##123', skuprespektcol) imgui.SameLine(281) imgui.InputText(u8'##152', skuprespektcena) imgui.SameLine(385) imgui.Text(u8("За "..skuprespektcol.v.." шт. товара нужно заплатить "..itogoskuprespekt..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Зловещая монета', skupmoneta) imgui.SameLine(177) imgui.InputText(u8'##120', skupmonetacol) imgui.SameLine(281) imgui.InputText(u8'##149', skupmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupmonetacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupmoneta)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Лён', skuplen) imgui.SameLine(177) imgui.InputText(u8'##121', skuplencol) imgui.SameLine(281) imgui.InputText(u8'##150', skuplencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuplencol.v).." шт. товара нужно заплатить "..number_separator(itogoskuplen)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлопок', skupxlopok) imgui.SameLine(177) imgui.InputText(u8'##122', skupxlopokcol) imgui.SameLine(281) imgui.InputText(u8'##151', skupxlopokcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupxlopokcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupxlopok)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бандитский респект', skuprespekt) imgui.SameLine(177) imgui.InputText(u8'##123', skuprespektcol) imgui.SameLine(281) imgui.InputText(u8'##152', skuprespektcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuprespektcol.v).." шт. товара нужно заплатить "..number_separator(itogoskuprespekt)..'$')) 
 	imgui.Separator()
-	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..skuptovaracol.." шт. товара нужно заплатить "..itogoskuptovara..'$')) 
+	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+		delplayer = not delplayer
+			for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к упадет шанс краша игры.")
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..number_separator(skuptovaracol).." шт. товара нужно заплатить "..number_separator(itogoskuptovara)..'$'))
 	imgui.Separator()
 	imgui.Text('')
 	imgui.SameLine(285)
@@ -10281,26 +10291,26 @@ function getArizonaSkup2str()
 	win_state['skup'].v = false  
 	win_state['skup2'].v = false  
 	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(332, 0)) then skuppoymol() end 
-	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(332, 0)) then load_static() end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(672, 0)) then skuptovarov() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then skuppoymol() end 
+	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(692, 0)) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
 
 function getArizonaSkup3str()
 	imgui.PushItemWidth(83)
-	imgui.VerticalSeparator() imgui.SameLine(687) imgui.VerticalSeparator()
+	imgui.VerticalSeparator() imgui.SameLine(707) imgui.VerticalSeparator()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
     imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Материалы', skupmaterial) imgui.SameLine(177) imgui.InputText(u8'##124', skupmaterialcol) imgui.SameLine(281) imgui.InputText(u8'##153', skupmaterialcena) imgui.SameLine(385) imgui.Text(u8("За "..skupmaterialcol.v.." шт. товара нужно заплатить "..itogoskupmaterial..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Дрова', skupdrova) imgui.SameLine(177) imgui.InputText(u8'##125', skupdrovacol) imgui.SameLine(281) imgui.InputText(u8'##154', skupdrovacena) imgui.SameLine(385) imgui.Text(u8("За "..skupdrovacol.v.." шт. товара нужно заплатить "..itogoskupdrova..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Антибиотики', skupantibiotik) imgui.SameLine(177) imgui.InputText(u8'##126', skupantibiotikcol) imgui.SameLine(281) imgui.InputText(u8'##155', skupantibiotikcena) imgui.SameLine(385) imgui.Text(u8("За "..skupantibiotikcol.v.." шт. товара нужно заплатить "..itogoskupantibiotik..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отмычки от ТСР', skuptsr) imgui.SameLine(177) imgui.InputText(u8'##127', skuptsrcol) imgui.SameLine(281) imgui.InputText(u8'##156', skuptsrcena) imgui.SameLine(385) imgui.Text(u8("За "..skuptsrcol.v.." шт. товара нужно заплатить "..itogoskuptsr..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейные монеты', skupsemmoneta) imgui.SameLine(177) imgui.InputText(u8'##128', skupsemmonetacol) imgui.SameLine(281) imgui.InputText(u8'##157', skupsemmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..skupsemmonetacol.v.." шт. товара нужно заплатить "..itogoskupsemmoneta..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Материалы', skupmaterial) imgui.SameLine(177) imgui.InputText(u8'##124', skupmaterialcol) imgui.SameLine(281) imgui.InputText(u8'##153', skupmaterialcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupmaterialcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupmaterial)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Дрова', skupdrova) imgui.SameLine(177) imgui.InputText(u8'##125', skupdrovacol) imgui.SameLine(281) imgui.InputText(u8'##154', skupdrovacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupdrovacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupdrova)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Антибиотики', skupantibiotik) imgui.SameLine(177) imgui.InputText(u8'##126', skupantibiotikcol) imgui.SameLine(281) imgui.InputText(u8'##155', skupantibiotikcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupantibiotikcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupantibiotik)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отмычки от ТСР', skuptsr) imgui.SameLine(177) imgui.InputText(u8'##127', skuptsrcol) imgui.SameLine(281) imgui.InputText(u8'##156', skuptsrcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptsrcol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptsr)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейные монеты', skupsemmoneta) imgui.SameLine(177) imgui.InputText(u8'##128', skupsemmonetacol) imgui.SameLine(281) imgui.InputText(u8'##157', skupsemmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupsemmonetacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupsemmoneta)..'$')) 
 	imgui.PushItemWidth(187)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Улучшение для авто', skupauto) imgui.SameLine(177) imgui.InputText(u8'##158', skupautocena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..itogoskupauto..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Улучшение для авто', skupauto) imgui.SameLine(177) imgui.InputText(u8'##158', skupautocena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskupauto)..'$'))
 	imgui.PopItemWidth()
 	imgui.Text('')
 	imgui.Text('')
@@ -10310,7 +10320,29 @@ function getArizonaSkup3str()
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Separator()
-	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..skuptovaracol.." шт. товара нужно заплатить "..itogoskuptovara..'$')) 
+	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+		delplayer = not delplayer
+			for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к упадет шанс краша игры.")
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..number_separator(skuptovaracol).." шт. товара нужно заплатить "..number_separator(itogoskuptovara)..'$'))
 	imgui.Separator()
 	imgui.Text('')
 	imgui.SameLine(285)
@@ -10331,9 +10363,9 @@ function getArizonaSkup3str()
 	win_state['skup'].v = false  
 	win_state['skup2'].v = false  
 	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(332, 0)) then skuppoymol() end 
-	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(332, 0)) then load_static() end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(672, 0)) then skuptovarov() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then skuppoymol() end 
+	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(692, 0)) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
@@ -10401,7 +10433,7 @@ function scriptinfo()
 	imgui.SetColumnWidth(-1, 800)
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Автор: {FF0000}Bunya{FF0000}")
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Помогает в тестировании: {008000}Роман{008000}")
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Помогает в тестировании: {008000}Роман и Илья{008000}")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8("Группа в VK, на которую стоит подписаться:")) imgui.SameLine(272) imgui.TextColoredRGB("{0F52BA}click{0F52BA}") imgui.SameLine(272) imgui.Link('https://vk.com/monopolyfam','click')
 	
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промо-код на 09, 11 и 12, за который можно получить 1.000.000$ от Монополистов: {FFA500}#monopoly{FFA500}")
@@ -10412,12 +10444,23 @@ function scriptinfo()
 	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Сообщить о баге или предложить идею', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/page-30000") end
 end
 
+function vkmessagemain()
+	imgui.Columns(2, _,false)
+	imgui.SetColumnWidth(-1, 800)
+	imgui.Text('')
+	imgui.PushItemWidth(470)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Токен', tokenvkBuf)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID группы', groupvkBuf)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Peer ID беседы', idvkBuf)
+	imgui.PopItemWidth()
+	end
+
 function scriptinfopeople()
 	imgui.Columns(2, _,false)
 	imgui.SetColumnWidth(-1, 800)
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777, Graph_Bavles, Илья,{800080}")
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}COSMIK, arabKRYT, TodFox и Владимир.{800080}")
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("{800080}COSMIK, arabKRYT, TodFox, Владимир, ner9xa, Алексей, Дима и Арчи.{800080}")
 end
 
 function imgui.CenterText(text)
@@ -11210,6 +11253,8 @@ lua_thread.create(function()
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15379, 1, 0, -1)
 	wait(100)
 	closeDialog()
 		end)
@@ -11224,6 +11269,8 @@ lua_thread.create(function()
 	sampSendDialogResponse(15346, 1, 2, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15379, 1, 0, -1)
 	wait(100)
 	closeDialog()
 	end)
@@ -11249,7 +11296,8 @@ end
 
 function photo_load()
 	wait(10000)
-	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
+	--winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
+	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img1.png')
     winpusk = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/pusk.png')
     winedge = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
@@ -11278,11 +11326,15 @@ function photo_load()
 	wintools3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/wintools3.0.png')
 	winmonopolynews = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/monopolynews.png')
 	winaforma = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/aforma.png')
-	winarzupdate = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/arzupdate.png')
-	winprazdnik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/prazdnik.png')
-	winrobot = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/robot.png')
-	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bomj.png')
 	winmessage = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
+	skupinst = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst.png')
+	skupinst1 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst1.png')
+	skupinst2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst2.png')
+	skupinst3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst3.png')
+	skupinst4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst4.png')
+	skupinst5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst5.png')
+	skupinst6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst6.png')
+	skupinst7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst7.png')
 	end
 
 function load_static()
@@ -12520,7 +12572,323 @@ function saveJson(data, path)
     f:close()
 end
 
-	
+function threadHandle(runner, url, args, resolve, reject) -- обработка effil потока без блокировок
+	local t = runner(url, args)
+	local r = t:get(0)
+	while not r do
+		r = t:get(0)
+		wait(0)
+	end
+	local status = t:status()
+	if status == 'completed' then
+		local ok, result = r[1], r[2]
+		if ok then resolve(result) else reject(result) end
+	elseif err then
+		reject(err)
+	elseif status == 'canceled' then
+		reject(status)
+	end
+	t:cancel(0)
+end
+
+function requestRunner() -- создание effil потока с функцией https запроса
+	return effil.thread(function(u, a)
+		local https = require 'ssl.https'
+		local ok, result = pcall(https.request, u, a)
+		if ok then
+			return {true, result}
+		else
+			return {false, result}
+		end
+	end)
+end
+
+function async_http_request(url, args, resolve, reject)
+	local runner = requestRunner()
+	if not reject then reject = function() end end
+	lua_thread.create(function()
+		threadHandle(runner, url, args, resolve, reject)
+	end)
+end
+
+local vkerr, vkerrsend
+
+function loop_async_http_request(url, args, reject)
+	local runner = requestRunner()
+	if not reject then reject = function() end end
+	lua_thread.create(function()
+		while true do
+			while not keyvk do wait(0) end
+			url = servervk .. '?act=a_check&key=' .. keyvk .. '&ts=' .. tsvk .. '&wait=25' --меняем url каждый новый запрос потокa, так как server/key/ts могут изменяться
+			threadHandle(runner, url, args, longpollResolve, reject)
+		end
+	end)
+end
+
+function longpollGetKey()
+	async_http_request('https://api.vk.com/method/groups.getLongPollServer?group_id=' .. cfg.main.groupvk .. '&access_token=' .. cfg.main.tokenvk .. '&v=5.81', '', function (result)
+		if result then
+			if not result:sub(1,1) == '{' then
+				vkerr = 'Ошибка!\nПричина: Нет соединения с VK!'
+				return
+			end
+			local t = decodeJson(result)
+			if t.error then
+				vkerr = 'Ошибка!\nКод: ' .. t.error.error_code .. ' Причина: ' .. t.error.error_msg
+				return
+			end
+			servervk = t.response.servervk
+			tsvk = t.response.tsvk
+			keyvk = t.response.keyvk
+			vkerr = nil
+		end
+	end)
+end
+
+function vk_request(msg)
+	msg = msg:gsub('{......}', '')
+	msg = u8(msg)
+	msg = url_encode(msg)
+	if addvk.v and cfg.main.idvk ~= '' then
+		async_http_request('https://api.vk.com/method/messages.send', 'peer_id=' .. cfg.main.idvk .. '&message=' .. msg .. '&access_token=' .. cfg.main.tokenvk .. '&v=5.81',
+		function (result)
+			local t = decodeJson(result)
+			if not t then
+				return
+			end
+			if t.error then
+				vkerrsend = 'Ошибка!\nКод: ' .. t.error.error_code .. ' Причина: ' .. t.error.error_msg
+				return
+			end
+			vkerrsend = nil
+		end)
+	end
+end
+
+function char_to_hex(str)
+  return string.format("%%%02X", string.byte(str))
+end
+
+function url_encode(str)
+  local str = string.gsub(str, "\\", "\\")
+  local str = string.gsub(str, "([^%w])", char_to_hex)
+  return str
+end
+
+function makeStringForCombo(arr)
+	local str = ''
+	for k, v in ipairs(arr) do
+		str = str .. v.name .. '\0'
+	end
+	return u8(str .. '\0')
+end
+
+function sampev.onPlayerStreamIn(playerId, team, model, position, rotation, color, fightingStyle)
+	infnpc[playerId] = { team, model, position, rotation, color, fightingStyle }
+	if delplayer then
+		for _, handle in ipairs(getAllChars()) do
+		  if doesCharExist(handle) then
+			local _, id = sampGetPlayerIdByCharHandle(handle)
+				if id ~= myid then
+					emul_rpc('onPlayerStreamOut', { id })
+				end
+		  end
+		end
+		npc[#npc + 1] = playerId
+	end
+end
+
+function emul_rpc(hook, parameters)
+    local bs_io = require 'samp.events.bitstream_io'
+    local handler = require 'samp.events.handlers'
+    local extra_types = require 'samp.events.extra_types'
+    local hooks = {
+
+        --[[ Outgoing rpcs
+        ['onSendEnterVehicle'] = { 'int16', 'bool8', 26 },
+        ['onSendClickPlayer'] = { 'int16', 'int8', 23 },
+        ['onSendClientJoin'] = { 'int32', 'int8', 'string8', 'int32', 'string8', 'string8', 'int32', 25 },
+        ['onSendEnterEditObject'] = { 'int32', 'int16', 'int32', 'vector3d', 27 },
+        ['onSendCommand'] = { 'string32', 50 },
+        ['onSendSpawn'] = { 52 },
+        ['onSendDeathNotification'] = { 'int8', 'int16', 53 },
+        ['onSendDialogResponse'] = { 'int16', 'int8', 'int16', 'string8', 62 },
+        ['onSendClickTextDraw'] = { 'int16', 83 },
+        ['onSendVehicleTuningNotification'] = { 'int32', 'int32', 'int32', 'int32', 96 },
+        ['onSendChat'] = { 'string8', 101 },
+        ['onSendClientCheckResponse'] = { 'int8', 'int32', 'int8', 103 },
+        ['onSendVehicleDamaged'] = { 'int16', 'int32', 'int32', 'int8', 'int8', 106 },
+        ['onSendEditAttachedObject'] = { 'int32', 'int32', 'int32', 'int32', 'vector3d', 'vector3d', 'vector3d', 'int32', 'int32', 116 },
+        ['onSendEditObject'] = { 'bool', 'int16', 'int32', 'vector3d', 'vector3d', 117 },
+        ['onSendInteriorChangeNotification'] = { 'int8', 118 },
+        ['onSendMapMarker'] = { 'vector3d', 119 },
+        ['onSendRequestClass'] = { 'int32', 128 },
+        ['onSendRequestSpawn'] = { 129 },
+        ['onSendPickedUpPickup'] = { 'int32', 131 },
+        ['onSendMenuSelect'] = { 'int8', 132 },
+        ['onSendVehicleDestroyed'] = { 'int16', 136 },
+        ['onSendQuitMenu'] = { 140 },
+        ['onSendExitVehicle'] = { 'int16', 154 },
+        ['onSendUpdateScoresAndPings'] = { 155 },
+        ['onSendGiveDamage'] = { 'int16', 'float', 'int32', 'int32', 115 },
+        ['onSendTakeDamage'] = { 'int16', 'float', 'int32', 'int32', 115 },]]
+
+        -- Incoming rpcs
+        ['onInitGame'] = { 139 },
+        ['onPlayerJoin'] = { 'int16', 'int32', 'bool8', 'string8', 137 },
+        ['onPlayerQuit'] = { 'int16', 'int8', 138 },
+        ['onRequestClassResponse'] = { 'bool8', 'int8', 'int32', 'int8', 'vector3d', 'float', 'Int32Array3', 'Int32Array3', 128 },
+        ['onRequestSpawnResponse'] = { 'bool8', 129 },
+        ['onSetPlayerName'] = { 'int16', 'string8', 'bool8', 11 },
+        ['onSetPlayerPos'] = { 'vector3d', 12 },
+        ['onSetPlayerPosFindZ'] = { 'vector3d', 13 },
+        ['onSetPlayerHealth'] = { 'float', 14 },
+        ['onTogglePlayerControllable'] = { 'bool8', 15 },
+        ['onPlaySound'] = { 'int32', 'vector3d', 16 },
+        ['onSetWorldBounds'] = { 'float', 'float', 'float', 'float', 17 },
+        ['onGivePlayerMoney'] = { 'int32', 18 },
+        ['onSetPlayerFacingAngle'] = { 'float', 19 },
+        --['onResetPlayerMoney'] = { 20 },
+        --['onResetPlayerWeapons'] = { 21 },
+        ['onGivePlayerWeapon'] = { 'int32', 'int32', 22 },
+        --['onCancelEdit'] = { 28 },
+        ['onSetPlayerTime'] = { 'int8', 'int8', 29 },
+        ['onSetToggleClock'] = { 'bool8', 30 },
+        ['onPlayerStreamIn'] = { 'int16', 'int8', 'int32', 'vector3d', 'float', 'int32', 'int8', 32 },
+        ['onSetShopName'] = { 'string256', 33 },
+        ['onSetPlayerSkillLevel'] = { 'int16', 'int32', 'int16', 34 },
+        ['onSetPlayerDrunk'] = { 'int32', 35 },
+        ['onCreate3DText'] = { 'int16', 'int32', 'vector3d', 'float', 'bool8', 'int16', 'int16', 'encodedString4096', 36 },
+        --['onDisableCheckpoint'] = { 37 },
+        ['onSetRaceCheckpoint'] = { 'int8', 'vector3d', 'vector3d', 'float', 38 },
+        --['onDisableRaceCheckpoint'] = { 39 },
+        --['onGamemodeRestart'] = { 40 },
+        ['onPlayAudioStream'] = { 'string8', 'vector3d', 'float', 'bool8', 41 },
+        --['onStopAudioStream'] = { 42 },
+        ['onRemoveBuilding'] = { 'int32', 'vector3d', 'float', 43 },
+        ['onCreateObject'] = { 44 },
+        ['onSetObjectPosition'] = { 'int16', 'vector3d', 45 },
+        ['onSetObjectRotation'] = { 'int16', 'vector3d', 46 },
+        ['onDestroyObject'] = { 'int16', 47 },
+        ['onPlayerDeathNotification'] = { 'int16', 'int16', 'int8', 55 },
+        ['onSetMapIcon'] = { 'int8', 'vector3d', 'int8', 'int32', 'int8', 56 },
+        ['onRemoveVehicleComponent'] = { 'int16', 'int16', 57 },
+        ['onRemove3DTextLabel'] = { 'int16', 58 },
+        ['onPlayerChatBubble'] = { 'int16', 'int32', 'float', 'int32', 'string8', 59 },
+        ['onUpdateGlobalTimer'] = { 'int32', 60 },
+        ['onShowDialog'] = { 'int16', 'int8', 'string8', 'string8', 'string8', 'encodedString4096', 61 },
+        ['onDestroyPickup'] = { 'int32', 63 },
+        ['onLinkVehicleToInterior'] = { 'int16', 'int8', 65 },
+        ['onSetPlayerArmour'] = { 'float', 66 },
+        ['onSetPlayerArmedWeapon'] = { 'int32', 67 },
+        ['onSetSpawnInfo'] = { 'int8', 'int32', 'int8', 'vector3d', 'float', 'Int32Array3', 'Int32Array3', 68 },
+        ['onSetPlayerTeam'] = { 'int16', 'int8', 69 },
+        ['onPutPlayerInVehicle'] = { 'int16', 'int8', 70 },
+        --['onRemovePlayerFromVehicle'] = { 71 },
+        ['onSetPlayerColor'] = { 'int16', 'int32', 72 },
+        ['onDisplayGameText'] = { 'int32', 'int32', 'string32', 73 },
+        --['onForceClassSelection'] = { 74 },
+        ['onAttachObjectToPlayer'] = { 'int16', 'int16', 'vector3d', 'vector3d', 75 },
+        ['onInitMenu'] = { 76 },
+        ['onShowMenu'] = { 'int8', 77 },
+        ['onHideMenu'] = { 'int8', 78 },
+        ['onCreateExplosion'] = { 'vector3d', 'int32', 'float', 79 },
+        ['onShowPlayerNameTag'] = { 'int16', 'bool8', 80 },
+        ['onAttachCameraToObject'] = { 'int16', 81 },
+        ['onInterpolateCamera'] = { 'bool', 'vector3d', 'vector3d', 'int32', 'int8', 82 },
+        ['onGangZoneStopFlash'] = { 'int16', 85 },
+        ['onApplyPlayerAnimation'] = { 'int16', 'string8', 'string8', 'bool', 'bool', 'bool', 'bool', 'int32', 86 },
+        ['onClearPlayerAnimation'] = { 'int16', 87 },
+        ['onSetPlayerSpecialAction'] = { 'int8', 88 },
+        ['onSetPlayerFightingStyle'] = { 'int16', 'int8', 89 },
+        ['onSetPlayerVelocity'] = { 'vector3d', 90 },
+        ['onSetVehicleVelocity'] = { 'bool8', 'vector3d', 91 },
+        ['onServerMessage'] = { 'int32', 'string32', 93 },
+        ['onSetWorldTime'] = { 'int8', 94 },
+        ['onCreatePickup'] = { 'int32', 'int32', 'int32', 'vector3d', 95 },
+        ['onMoveObject'] = { 'int16', 'vector3d', 'vector3d', 'float', 'vector3d', 99 },
+        ['onEnableStuntBonus'] = { 'bool', 104 },
+        ['onTextDrawSetString'] = { 'int16', 'string16', 105 },
+        ['onSetCheckpoint'] = { 'vector3d', 'float', 107 },
+        ['onCreateGangZone'] = { 'int16', 'vector2d', 'vector2d', 'int32', 108 },
+        ['onPlayCrimeReport'] = { 'int16', 'int32', 'int32', 'int32', 'int32', 'vector3d', 112 },
+        ['onGangZoneDestroy'] = { 'int16', 120 },
+        ['onGangZoneFlash'] = { 'int16', 'int32', 121 },
+        ['onStopObject'] = { 'int16', 122 },
+        ['onSetVehicleNumberPlate'] = { 'int16', 'string8', 123 },
+        ['onTogglePlayerSpectating'] = { 'bool32', 124 },
+        ['onSpectatePlayer'] = { 'int16', 'int8', 126 },
+        ['onSpectateVehicle'] = { 'int16', 'int8', 127 },
+        ['onShowTextDraw'] = { 134 },
+        ['onSetPlayerWantedLevel'] = { 'int8', 133 },
+        ['onTextDrawHide'] = { 'int16', 135 },
+        ['onRemoveMapIcon'] = { 'int8', 144 },
+        ['onSetWeaponAmmo'] = { 'int8', 'int16', 145 },
+        ['onSetGravity'] = { 'float', 146 },
+        ['onSetVehicleHealth'] = { 'int16', 'float', 147 },
+        ['onAttachTrailerToVehicle'] = { 'int16', 'int16', 148 },
+        ['onDetachTrailerFromVehicle'] = { 'int16', 149 },
+        ['onSetWeather'] = { 'int8', 152 },
+        ['onSetPlayerSkin'] = { 'int32', 'int32', 153 },
+        ['onSetInterior'] = { 'int8', 156 },
+        ['onSetCameraPosition'] = { 'vector3d', 157 },
+        ['onSetCameraLookAt'] = { 'vector3d', 'int8', 158 },
+        ['onSetVehiclePosition'] = { 'int16', 'vector3d', 159 },
+        ['onSetVehicleAngle'] = { 'int16', 'float', 160 },
+        ['onSetVehicleParams'] = { 'int16', 'int16', 'bool8', 161 },
+        --['onSetCameraBehind'] = { 162 },
+        ['onChatMessage'] = { 'int16', 'string8', 101 },
+        ['onConnectionRejected'] = { 'int8', 130 },
+        ['onPlayerStreamOut'] = { 'int16', 163 },
+        ['onVehicleStreamIn'] = { 164 },
+        ['onVehicleStreamOut'] = { 'int16', 165 },
+        ['onPlayerDeath'] = { 'int16', 166 },
+        ['onPlayerEnterVehicle'] = { 'int16', 'int16', 'bool8', 26 },
+        ['onUpdateScoresAndPings'] = { 'PlayerScorePingMap', 155 },
+        ['onSetObjectMaterial'] = { 84 },
+        ['onSetObjectMaterialText'] = { 84 },
+        ['onSetVehicleParamsEx'] = { 'int16', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 'int8', 24 },
+        ['onSetPlayerAttachedObject'] = { 'int16', 'int32', 'bool', 'int32', 'int32', 'vector3d', 'vector3d', 'vector3d', 'int32', 'int32', 113 }
+
+    }
+    local handler_hook = {
+        ['onInitGame'] = true,
+        ['onCreateObject'] = true,
+        ['onInitMenu'] = true,
+        ['onShowTextDraw'] = true,
+        ['onVehicleStreamIn'] = true,
+        ['onSetObjectMaterial'] = true,
+        ['onSetObjectMaterialText'] = true
+    }
+    local extra = {
+        ['PlayerScorePingMap'] = true,
+        ['Int32Array3'] = true
+    }
+    local hook_table = hooks[hook]
+    if hook_table then
+        local bs = raknetNewBitStream()
+        if not handler_hook[hook] then
+            local max = #hook_table-1
+            if max > 0 then
+                for i = 1, max do
+                    local p = hook_table[i]
+                    if extra[p] then extra_types[p]['write'](bs, parameters[i])
+                    else bs_io[p]['write'](bs, parameters[i]) end
+                end
+            end
+        else
+            if hook == 'onInitGame' then handler.on_init_game_writer(bs, parameters)
+            elseif hook == 'onCreateObject' then handler.on_create_object_writer(bs, parameters)
+            elseif hook == 'onInitMenu' then handler.on_init_menu_writer(bs, parameters)
+            elseif hook == 'onShowTextDraw' then handler.on_show_textdraw_writer(bs, parameters)
+            elseif hook == 'onVehicleStreamIn' then handler.on_vehicle_stream_in_writer(bs, parameters)
+            elseif hook == 'onSetObjectMaterial' then handler.on_set_object_material_writer(bs, parameters, 1)
+            elseif hook == 'onSetObjectMaterialText' then handler.on_set_object_material_writer(bs, parameters, 2) end
+        end
+        raknetEmulRpcReceiveBitStream(hook_table[#hook_table], bs)
+        raknetDeleteBitStream(bs)
+    end
+end
 
 
 
