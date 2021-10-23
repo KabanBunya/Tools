@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.1')
+script_version('3.1.1')
 
 local use = false
 local close = false
@@ -14,6 +14,9 @@ local close2 = false
 local close3 = false
 local close4 = false
 local close5 = false
+local houserespawn = false
+local samprulstop = true
+local samprulstart = false
 local fontsize = nil
 delplayer = false
 local npc, infnpc = {}, {}
@@ -70,6 +73,33 @@ itogoskupsemmoneta = 0
 itogoskupauto = 0
 skuptovaracol = 0
 itogoskuptovara = 0
+
+itogoskupcoltrava = 0
+itogoskupcolbronzarul = 0
+itogoskupcolserebrorul = 0
+itogoskupcolgoldrul = 0
+itogoskupcolplatinarul = 0
+itogoskupcolkamen = 0
+itogoskupcolmetal = 0
+itogoskupcolbronza = 0
+itogoskupcolserebro = 0
+itogoskupcolgold = 0
+itogoskupcolpodarki = 0
+itogoskupcoltalon = 0
+itogoskupcolsemtalon = 0
+itogoskupcolskidtalon = 0
+itogoskupcoltochkamen = 0
+itogoskupcollarec = 0
+itogoskupcolmoneta = 0
+itogoskupcollen = 0
+itogoskupcolxlopok = 0
+itogoskupcolrespekt = 0
+itogoskupcolmaterial = 0
+itogoskupcoldrova = 0
+itogoskupcolantibiotik = 0
+itogoskupcoltsr = 0
+itogoskupcolsemmoneta = 0
+
 krytim = true
 
 local restore_text = false
@@ -317,6 +347,124 @@ local cfg = inicfg.load({
 local SET = {
  	settings = {
 		autologin = false,
+		rabstol = true,
+		rabstol2 = false,
+		rabstol3 = false,
+		rabstol4 = false,
+		rabstol5 = false,
+		rabstol6 = false,
+		fonewin = false,
+		fonewin2 = false,
+		fonewin3 = true,
+		fonewin4 = false,
+		fonewin5 = false,
+		fonewin6 = false,
+		fonewin7 = false,
+		fonewin8 = false,
+		fonewin9 = false,
+		fonewin10 = false,
+		fonewin11 = false,
+		fonewin12 = false,
+		fonewin13 = false,
+		fonewin14 = false,
+		fonewin15 = false,
+		fonewin16 = false,
+		fonezag = false,
+		fonezag2 = false,
+		fonezag3 = false,
+		fonezag4 = false,
+		fonezag5 = false,
+		fonezag6 = false,
+		fonezag7 = false,
+		fonezag8 = false,
+		fonezag9 = false,
+		fonezag10 = false,
+		fonezag11 = false,
+		fonezag12 = false,
+		fonezag13 = false,
+		fonezag14 = false,
+		fonezag15 = false,
+		fonezag16 = true,
+		fonetext = false,
+		fonetext2 = false,
+		fonetext3 = false,
+		fonetext4 = false,
+		fonetext5 = false,
+		fonetext6 = false,
+		fonetext7 = false,
+		fonetext8 = false,
+		fonetext9 = false,
+		fonetext10 = false,
+		fonetext11 = true,
+		fonetext12 = false,
+		fonetext13 = false,
+		fonetext14 = false,
+		fonetext15 = false,
+		fonetext16 = false,
+		fonevydel = false,
+		fonevydel2 = false,
+		fonevydel3 = false,
+		fonevydel4 = false,
+		fonevydel5 = false,
+		fonevydel6 = false,
+		fonevydel7 = false,
+		fonevydel8 = false,
+		fonevydel9 = false,
+		fonevydel10 = false,
+		fonevydel11 = false,
+		fonevydel12 = false,
+		fonevydel13 = false,
+		fonevydel14 = false,
+		fonevydel15 = false,
+		fonevydel16 = true,
+		fonelin = false,
+		fonelin2 = false,
+		fonelin3 = false,
+		fonelin4 = false,
+		fonelin5 = true,
+		fonelin6 = false,
+		fonelin7 = false,
+		fonelin8 = false,
+		fonelin9 = false,
+		fonelin10 = false,
+		fonelin11 = false,
+		fonelin12 = false,
+		fonelin13 = false,
+		fonelin14 = false,
+		fonelin15 = false,
+		fonelin16 = false,
+		fonepol = true,
+		fonepol2 = false,
+		fonepol3 = false,
+		fonepol4 = false,
+		fonepol5 = false,
+		fonepol6 = false,
+		fonepol7 = false,
+		fonepol8 = false,
+		fonepol9 = false,
+		fonepol10 = false,
+		fonepol11 = false,
+		fonepol12 = false,
+		fonepol13 = false,
+		fonepol14 = false,
+		fonepol15 = false,
+		fonepol16 = false,
+		fonebutton = false,
+		fonebutton2 = false,
+		fonebutton3 = false,
+		fonebutton4 = false,
+		fonebutton5 = false,
+		fonebutton6 = false,
+		fonebutton7 = false,
+		fonebutton8 = false,
+		fonebutton9 = false,
+		fonebutton10 = false,
+		fonebutton11 = false,
+		fonebutton12 = false,
+		fonebutton13 = false,
+		fonebutton14 = false,
+		fonebutton15 = false,
+		fonebutton16 = true,
 		dialogclose = false,
 		autoryda = false,
 		skuptrava = false,
@@ -561,8 +709,6 @@ local SET = {
 		ndr = false,
 		toch = false,
 		autobike = false,
-		styletest = true,
-		styletest1 = false,
 		autochat = false,
 		chatmessage = false,
 		infoX = 0,
@@ -663,7 +809,9 @@ win_state['shahtamenu'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
 win_state['shemafunks'] = imgui.ImBool(false)
+win_state['housenumber'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
+win_state['kartinst'] = imgui.ImBool(false)
 win_state['skupshema'] = imgui.ImBool(false)
 win_state['piarshema'] = imgui.ImBool(false)
 win_state['pravila2048'] = imgui.ImBool(false)
@@ -695,6 +843,7 @@ local water = imgui.ImBool(false)
 local btc = imgui.ImBool(false)
 local liquid = imgui.ImBool(false)
 local pusk = imgui.ImBool(false)
+pusk2 = imgui.ImBool(false)
 local platina = imgui.ImBool(false)
 local moneta = imgui.ImBool(false)
 local tochkamen = imgui.ImBool(false)
@@ -880,71 +1029,6 @@ local function send_player_stream(id, i)
 	end
 end
 
-function apply_custom_style1()
-    imgui.SwitchContext()
-    local style = imgui.GetStyle()
-    local colors = style.Colors
-    local clr = imgui.Col
-    local ImVec4 = imgui.ImVec4
-	local ImVec2 = imgui.ImVec2
-
-	style.WindowPadding = ImVec2(0, 0)
-    style.WindowRounding = 5.0
-	style.FramePadding = ImVec2(5, 5)
-    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
-    style.ChildWindowRounding = 2.0
-    style.FrameRounding = 2.0
-    style.ItemSpacing = imgui.ImVec2(8, 4)
-	style.IndentSpacing = 25.0
-    style.ScrollbarSize = 15.0
-    style.ScrollbarRounding = 9.0
-    style.GrabMinSize = 5.0
-    style.GrabRounding = 3.0
-    colors[clr.FrameBg]                = ImVec4(0.16, 0.29, 0.48, 0.54)
-    colors[clr.FrameBgHovered]         = ImVec4(0.26, 0.59, 0.98, 0.40)
-    colors[clr.FrameBgActive]          = ImVec4(0.26, 0.59, 0.98, 0.67)
-    colors[clr.TitleBg]                = ImVec4(0.06, 0.53, 0.98, 1.00)
-    colors[clr.TitleBgActive]          = ImVec4(0.06, 0.53, 0.98, 1.00)
-    colors[clr.TitleBgCollapsed]       = ImVec4(0.06, 0.53, 0.98, 0.51)
-    colors[clr.CheckMark]              = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.SliderGrab]             = ImVec4(0.24, 0.52, 0.88, 1.00)
-    colors[clr.SliderGrabActive]       = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.Button]                 = ImVec4(0.26, 0.59, 0.98, 0.00)
-    colors[clr.ButtonHovered]          = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.ButtonActive]           = ImVec4(0.06, 0.53, 0.98, 1.00)
-    colors[clr.Header]                 = ImVec4(0.26, 0.59, 0.98, 0.31)
-    colors[clr.HeaderHovered]          = ImVec4(0.26, 0.59, 0.98, 0.80)
-    colors[clr.HeaderActive]           = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.Separator]              = ImVec4(0.43, 0.43, 0.50, 0.90)
-    colors[clr.SeparatorHovered]       = ImVec4(0.26, 0.59, 0.98, 0.78)
-    colors[clr.SeparatorActive]        = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.ResizeGrip]             = ImVec4(0.26, 0.59, 0.98, 0.25)
-    colors[clr.ResizeGripHovered]      = ImVec4(0.26, 0.59, 0.98, 0.67)
-    colors[clr.ResizeGripActive]       = ImVec4(0.26, 0.59, 0.98, 0.95)
-    colors[clr.TextSelectedBg]         = ImVec4(0.26, 0.59, 0.98, 0.35)
-    colors[clr.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
-    colors[clr.TextDisabled]           = ImVec4(0.50, 0.50, 0.50, 1.00)
-    colors[clr.WindowBg]               = ImVec4(0.07, 0.07, 0.09, 1.00)
-    colors[clr.ChildWindowBg]          = ImVec4(0.07, 0.07, 0.09, 0.00)
-    colors[clr.PopupBg]                = ImVec4(0.07, 0.07, 0.09, 0.94)
-    colors[clr.ComboBg]                = colors[clr.PopupBg]
-    colors[clr.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
-    colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
-    colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
-    colors[clr.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
-    colors[clr.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
-    colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
-    colors[clr.ScrollbarGrabActive]    = ImVec4(0.51, 0.51, 0.51, 1.00)
-    colors[clr.CloseButton]            = ImVec4(0.41, 0.41, 0.41, 0.50)
-    colors[clr.CloseButtonHovered]     = ImVec4(0.98, 0.39, 0.36, 1.00)
-    colors[clr.CloseButtonActive]      = ImVec4(0.98, 0.39, 0.36, 1.00)
-    colors[clr.PlotLines]              = ImVec4(0.61, 0.61, 0.61, 1.00)
-    colors[clr.PlotLinesHovered]       = ImVec4(1.00, 0.43, 0.35, 1.00)
-    colors[clr.PlotHistogram]          = ImVec4(0.90, 0.70, 0.00, 1.00)
-    colors[clr.PlotHistogramHovered]   = ImVec4(1.00, 0.60, 0.00, 1.00)
-    colors[clr.ModalWindowDarkening]   = ImVec4(0.80, 0.80, 0.80, 0.35)
-end
-
 function apply_custom_style()
     imgui.SwitchContext()
     local style = imgui.GetStyle()
@@ -966,41 +1050,667 @@ function apply_custom_style()
     style.GrabMinSize = 5.0
     style.GrabRounding = 3.0
 	
-    colors[clr.FrameBg]                = ImVec4(0.16, 0.29, 0.48, 0.54)
-    colors[clr.FrameBgHovered]         = ImVec4(0.26, 0.59, 0.98, 0.40)
     colors[clr.FrameBgActive]          = ImVec4(0.26, 0.59, 0.98, 0.67)
-    colors[clr.TitleBg]                = ImVec4(0.06, 0.53, 0.98, 1.00)
+	
+	if fonezagcolor == true then 
+	colors[clr.TitleBg]                = ImVec4(0.00, 0.49, 1.00, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.00, 0.49, 1.00, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.00, 0.49, 1.00, 0.51)
+	end
+	if fonezagcolor2 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.76, 0.51, 0.66, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.76, 0.51, 0.66, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.76, 0.51, 0.66, 0.51)
+	end
+	if fonezagcolor3 == true then 
+	colors[clr.TitleBg]                = ImVec4(1.00, 1.00, 1.00, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(1.00, 1.00, 1.00, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(1.00, 1.00, 1.00, 0.51)
+	end
+	if fonezagcolor4 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.76, 0.31, 0.00, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.76, 0.31, 0.00, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.76, 0.31, 0.00, 0.51)
+	end
+	if fonezagcolor5 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.46, 0.46, 0.46, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.46, 0.46, 0.46, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.46, 0.46, 0.46, 0.51)
+	end
+	if fonezagcolor6 == true then
+	colors[clr.TitleBg]                = ImVec4(0.232, 0.201, 0.271, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.232, 0.201, 0.271, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.232, 0.201, 0.271, 0.51)
+	end
+	if fonezagcolor7 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.00, 0.69, 0.33, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.00, 0.69, 0.33, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.00, 0.69, 0.33, 0.51)
+	end
+	if fonezagcolor8 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.46, 0.11, 0.29, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.46, 0.11, 0.29, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.46, 0.11, 0.29, 0.51)
+	end
+	if fonezagcolor9 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.41, 0.19, 0.63, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.41, 0.19, 0.63, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.41, 0.19, 0.63, 0.51)
+	end
+	if fonezagcolor10 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.40, 0.57, 0.01, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.40, 0.57, 0.01, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.40, 0.57, 0.01, 0.51)
+	end
+	if fonezagcolor11 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.07, 0.07, 0.09, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.07, 0.07, 0.09, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.07, 0.07, 0.09, 0.51)
+	end
+	if fonezagcolor12 == true then 
+	colors[clr.TitleBg]                = ImVec4(1.00, 0.28, 0.28, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(1.00, 0.28, 0.28, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(1.00, 0.28, 0.28, 0.51)
+	end
+	if fonezagcolor13 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.30, 0.33, 0.95, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.30, 0.33, 0.95, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.30, 0.33, 0.95, 0.51)
+	end
+	if fonezagcolor14 == true then 
+	colors[clr.TitleBg]                = ImVec4(1.0, 0.84, 0.37, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(1.0, 0.84, 0.37, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(1.0, 0.84, 0.37, 0.51)
+	end
+	if fonezagcolor15 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.026, 0.597, 0.000, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.026, 0.597, 0.000, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.026, 0.597, 0.000, 0.51)
+	end
+	if fonezagcolor16 == true then 
+	colors[clr.TitleBg]                = ImVec4(0.06, 0.53, 0.98, 1.00)
     colors[clr.TitleBgActive]          = ImVec4(0.06, 0.53, 0.98, 1.00)
     colors[clr.TitleBgCollapsed]       = ImVec4(0.06, 0.53, 0.98, 0.51)
-    colors[clr.CheckMark]              = ImVec4(0.26, 0.59, 0.98, 1.00)
+	end
+	
     colors[clr.SliderGrab]             = ImVec4(0.24, 0.52, 0.88, 1.00)
     colors[clr.SliderGrabActive]       = ImVec4(0.26, 0.59, 0.98, 1.00)
     colors[clr.Button]                 = ImVec4(0.26, 0.59, 0.98, 0.00)
-    colors[clr.ButtonHovered]          = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.ButtonActive]           = ImVec4(0.06, 0.53, 0.98, 1.00)
-    colors[clr.Header]                 = ImVec4(0.26, 0.59, 0.98, 0.31)
-    colors[clr.HeaderHovered]          = ImVec4(0.26, 0.59, 0.98, 0.80)
-    colors[clr.HeaderActive]           = ImVec4(0.26, 0.59, 0.98, 1.00)
-    colors[clr.Separator]              = ImVec4(0.43, 0.43, 0.50, 0.90)
-    colors[clr.SeparatorHovered]       = ImVec4(0.26, 0.59, 0.98, 0.78)
-    colors[clr.SeparatorActive]        = ImVec4(0.26, 0.59, 0.98, 1.00)
+	
+	if fonevydelcolor == true then 
+	buttonvydel                        = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.00, 0.49, 1.00, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.00, 0.49, 1.00, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.00, 0.49, 1.00, 1.00)
+	end
+	if fonevydelcolor2 == true then 
+	buttonvydel                        = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.76, 0.51, 0.66, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.76, 0.51, 0.66, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.76, 0.51, 0.66, 1.00)
+	end
+	if fonevydelcolor3 == true then 
+	buttonvydel                        = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(1.00, 1.00, 1.00, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(1.00, 1.00, 1.00, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(1.00, 1.00, 1.00, 1.00)
+	end
+	if fonevydelcolor4 == true then 
+	buttonvydel                        = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.76, 0.31, 0.00, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.76, 0.31, 0.00, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.76, 0.31, 0.00, 1.00)
+	end
+	if fonevydelcolor5 == true then 
+	buttonvydel                        = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.46, 0.46, 0.46, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.46, 0.46, 0.46, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.46, 0.46, 0.46, 1.00)
+	end
+	if fonevydelcolor6 == true then
+	buttonvydel                        = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.232, 0.201, 0.271, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.232, 0.201, 0.271, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.232, 0.201, 0.271, 1.00)
+	end
+	if fonevydelcolor7 == true then 
+	buttonvydel                        = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.00, 0.69, 0.33, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.00, 0.69, 0.33, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.00, 0.69, 0.33, 1.00)
+	end
+	if fonevydelcolor8 == true then 
+	buttonvydel                        = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.46, 0.11, 0.29, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.46, 0.11, 0.29, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.46, 0.11, 0.29, 1.00)
+	end
+	if fonevydelcolor9 == true then 
+	buttonvydel                        = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.41, 0.19, 0.63, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.41, 0.19, 0.63, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.19, 0.63, 1.00)
+	end
+	if fonevydelcolor10 == true then 
+	buttonvydel                        = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.40, 0.57, 0.01, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.40, 0.57, 0.01, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.40, 0.57, 0.01, 1.00)
+	end
+	if fonevydelcolor11 == true then 
+	buttonvydel                        = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.07, 0.07, 0.09, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.07, 0.07, 0.09, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.07, 0.07, 0.09, 1.00)
+	end
+	if fonevydelcolor12 == true then 
+	buttonvydel                        = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(1.00, 0.28, 0.28, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(1.00, 0.28, 0.28, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(1.00, 0.28, 0.28, 1.00)
+	end
+	if fonevydelcolor13 == true then 
+	buttonvydel                        = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.30, 0.33, 0.95, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.30, 0.33, 0.95, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.30, 0.33, 0.95, 1.00)
+	end
+	if fonevydelcolor14 == true then 
+	buttonvydel                        = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(1.0, 0.84, 0.37, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(1.0, 0.84, 0.37, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(1.0, 0.84, 0.37, 1.00)
+	end
+	if fonevydelcolor15 == true then 
+	buttonvydel                        = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.026, 0.597, 0.000, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.026, 0.597, 0.000, 0.40) 
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.026, 0.597, 0.000, 1.00)
+	end
+	if fonevydelcolor16 == true then 
+	buttonvydel                        = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.ButtonHovered]          = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.06, 0.53, 0.98, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.06, 0.53, 0.98, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.06, 0.53, 0.98, 1.00)
+	end
+	
+	if fonepolcolor == true then 
+	buttonpol                          = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.00, 0.49, 1.00, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.00, 0.49, 1.00, 1.00)
+	end
+	if fonepolcolor2 == true then 
+	buttonpol                          = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.76, 0.51, 0.66, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.76, 0.51, 0.66, 1.00)
+	end
+	if fonepolcolor3 == true then 
+	buttonpol                          = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.FrameBg]                = ImVec4(1.00, 1.00, 1.00, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(1.00, 1.00, 1.00, 1.00)
+	end
+	if fonepolcolor4 == true then 
+	buttonpol                          = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.76, 0.31, 0.00, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.76, 0.31, 0.00, 1.00)
+	end
+	if fonepolcolor5 == true then 
+	buttonpol                          = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.46, 0.46, 0.46, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.46, 0.46, 0.46, 1.00)
+	end
+	if fonepolcolor6 == true then
+	buttonpol                          = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.232, 0.201, 0.271, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.232, 0.201, 0.271, 1.00)
+	end
+	if fonepolcolor7 == true then 
+	buttonpol                          = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.00, 0.69, 0.33, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.00, 0.69, 0.33, 1.00)
+	end
+	if fonepolcolor8 == true then 
+	buttonpol                          = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.46, 0.11, 0.29, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.46, 0.11, 0.29, 1.00)
+	end
+	if fonepolcolor9 == true then 
+	buttonpol                          = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.41, 0.19, 0.63, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.41, 0.19, 0.63, 1.00)
+	end
+	if fonepolcolor10 == true then 
+	buttonpol                          = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.40, 0.57, 0.01, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.40, 0.57, 0.01, 1.00)
+	end
+	if fonepolcolor11 == true then 
+	buttonpol                          = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.07, 0.07, 0.09, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.07, 0.07, 0.09, 1.00)
+	end
+	if fonepolcolor12 == true then 
+	buttonpol                          = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.FrameBg]                = ImVec4(1.00, 0.28, 0.28, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(1.00, 0.28, 0.28, 1.00)
+	end
+	if fonepolcolor13 == true then
+	buttonpol                          = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.30, 0.33, 0.95, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.30, 0.33, 0.95, 1.00)
+	end
+	if fonepolcolor14 == true then 
+	buttonpol                          = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.FrameBg]                = ImVec4(1.0, 0.84, 0.37, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(1.0, 0.84, 0.37, 1.00)
+	end
+	if fonepolcolor15 == true then 
+	buttonpol                          = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.026, 0.597, 0.000, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.026, 0.597, 0.000, 1.00)
+	end
+	if fonepolcolor16 == true then 
+	buttonpol                          = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.06, 0.53, 0.98, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.06, 0.53, 0.98, 1.00)
+	end
+	
+	if fonebuttoncolor == true then
+	buttonclick                        = ImVec4(0.00, 0.49, 1.00, 0.60)
+	colors[clr.Header]                 = ImVec4(0.00, 0.49, 1.00, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.00, 0.49, 1.00, 1.00)
+	end
+	if fonebuttoncolor2 == true then 
+	buttonclick                        = ImVec4(0.76, 0.51, 0.66, 0.60)
+	colors[clr.Header]                 = ImVec4(0.76, 0.51, 0.66, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.76, 0.51, 0.66, 1.00)
+	end
+	if fonebuttoncolor3 == true then 
+	buttonclick                        = ImVec4(1.00, 1.00, 1.00, 0.60)
+	colors[clr.Header]                 = ImVec4(1.00, 1.00, 1.00, 0.31)
+	colors[clr.CheckMark]              = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(1.00, 1.00, 1.00, 1.00)
+	end
+	if fonebuttoncolor4 == true then 
+	buttonclick                        = ImVec4(0.76, 0.31, 0.00, 0.60)
+	colors[clr.Header]                 = ImVec4(0.76, 0.31, 0.00, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.76, 0.31, 0.00, 1.00)
+	end
+	if fonebuttoncolor5 == true then 
+	buttonclick                        = ImVec4(0.46, 0.46, 0.46, 0.60)
+	colors[clr.Header]                 = ImVec4(0.46, 0.46, 0.46, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.46, 0.46, 0.46, 1.00)
+	end
+	if fonebuttoncolor6 == true then
+	buttonclick                        = ImVec4(0.232, 0.201, 0.271, 0.60)
+	colors[clr.Header]                 = ImVec4(0.232, 0.201, 0.271, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.232, 0.201, 0.271, 1.00)
+	end
+	if fonebuttoncolor7 == true then 
+	buttonclick                        = ImVec4(0.00, 0.69, 0.33, 0.60)
+	colors[clr.Header]                 = ImVec4(0.00, 0.69, 0.33, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.00, 0.69, 0.33, 1.00)
+	end
+	if fonebuttoncolor8 == true then 
+	buttonclick                        = ImVec4(0.46, 0.11, 0.29, 0.60)
+	colors[clr.Header]                 = ImVec4(0.46, 0.11, 0.29, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.46, 0.11, 0.29, 1.00)
+	end
+	if fonebuttoncolor9 == true then 
+	buttonclick                        = ImVec4(0.41, 0.19, 0.63, 0.60)
+	colors[clr.Header]                 = ImVec4(0.41, 0.19, 0.63, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.41, 0.19, 0.63, 1.00)
+	end
+	if fonebuttoncolor10 == true then 
+	buttonclick                        = ImVec4(0.40, 0.57, 0.01, 0.60)
+	colors[clr.Header]                 = ImVec4(0.40, 0.57, 0.01, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.40, 0.57, 0.01, 1.00)
+	end
+	if fonebuttoncolor11 == true then 
+	buttonclick                        = ImVec4(0.07, 0.07, 0.09, 0.60)
+	colors[clr.Header]                 = ImVec4(0.07, 0.07, 0.09, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.07, 0.07, 0.09, 1.00)
+	end
+	if fonebuttoncolor12 == true then 
+	buttonclick                        = ImVec4(1.00, 0.28, 0.28, 0.60)
+	colors[clr.Header]                 = ImVec4(1.00, 0.28, 0.28, 0.31)
+	colors[clr.CheckMark]              = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(1.00, 0.28, 0.28, 1.00)
+	end
+	if fonebuttoncolor13 == true then 
+	buttonclick                        = ImVec4(0.30, 0.33, 0.95, 0.60)
+	colors[clr.Header]                 = ImVec4(0.30, 0.33, 0.95, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.30, 0.33, 0.95, 1.00)
+	end
+	if fonebuttoncolor14 == true then 
+	buttonclick                        = ImVec4(1.0, 0.84, 0.37, 0.60)
+	colors[clr.Header]                 = ImVec4(1.0, 0.84, 0.37, 0.31)
+	colors[clr.CheckMark]              = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(1.0, 0.84, 0.37, 1.00)
+	end
+	if fonebuttoncolor15 == true then 
+	buttonclick                        = ImVec4(0.026, 0.597, 0.000, 0.60)
+	colors[clr.Header]                 = ImVec4(0.026, 0.597, 0.000, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.026, 0.597, 0.000, 1.00)
+	end
+	if fonebuttoncolor16 == true then 
+	buttonclick                        = ImVec4(0.06, 0.53, 0.98, 0.60)
+	colors[clr.Header]                 = ImVec4(0.06, 0.53, 0.98, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.06, 0.53, 0.98, 1.00)
+	end
+	
+	if fonelincolor == true then
+	colors[clr.Border]                 = ImVec4(0.00, 0.49, 1.00, 0.50)
+    colors[clr.Separator]              = ImVec4(0.00, 0.49, 1.00, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.00, 0.49, 1.00, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.00, 0.49, 1.00, 0.53)
+	end
+	if fonelincolor2 == true then 
+	colors[clr.Border]                 = ImVec4(0.76, 0.51, 0.66, 0.50)
+    colors[clr.Separator]              = ImVec4(0.76, 0.51, 0.66, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.76, 0.51, 0.66, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.76, 0.51, 0.66, 0.53)
+	end
+	if fonelincolor3 == true then 
+	colors[clr.Border]                 = ImVec4(1.00, 1.00, 1.00, 0.50)
+    colors[clr.Separator]              = ImVec4(1.00, 1.00, 1.00, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(1.00, 1.00, 1.00, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(1.00, 1.00, 1.00, 0.53)
+	end
+	if fonelincolor4 == true then 
+	colors[clr.Border]                 = ImVec4(0.76, 0.31, 0.00, 0.50)
+    colors[clr.Separator]              = ImVec4(0.76, 0.31, 0.00, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.76, 0.31, 0.00, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.76, 0.31, 0.00, 0.53)
+	end
+	if fonelincolor5 == true then 
+	colors[clr.Border]                 = ImVec4(0.46, 0.46, 0.46, 0.50)
+    colors[clr.Separator]              = ImVec4(0.46, 0.46, 0.46, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.46, 0.46, 0.46, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.46, 0.46, 0.46, 0.53)
+	end
+	if fonelincolor6 == true then
+	colors[clr.Border]                 = ImVec4(0.232, 0.201, 0.271, 0.50)
+    colors[clr.Separator]              = ImVec4(0.232, 0.201, 0.271, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.232, 0.201, 0.271, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.232, 0.201, 0.271, 0.53)
+	end
+	if fonelincolor7 == true then 
+	colors[clr.Border]                 = ImVec4(0.00, 0.69, 0.33, 0.50)
+    colors[clr.Separator]              = ImVec4(0.00, 0.69, 0.33, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.00, 0.69, 0.33, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.00, 0.69, 0.33, 0.53)
+	end
+	if fonelincolor8 == true then 
+	colors[clr.Border]                 = ImVec4(0.46, 0.11, 0.29, 0.50)
+    colors[clr.Separator]              = ImVec4(0.46, 0.11, 0.29, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.46, 0.11, 0.29, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.46, 0.11, 0.29, 0.53)
+	end
+	if fonelincolor9 == true then 
+	colors[clr.Border]                 = ImVec4(0.41, 0.19, 0.63, 0.50)
+    colors[clr.Separator]              = ImVec4(0.41, 0.19, 0.63, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.41, 0.19, 0.63, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.41, 0.19, 0.63, 0.53)
+	end
+	if fonelincolor10 == true then 
+	colors[clr.Border]                 = ImVec4(0.40, 0.57, 0.01, 0.50)
+    colors[clr.Separator]              = ImVec4(0.40, 0.57, 0.01, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.40, 0.57, 0.01, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.40, 0.57, 0.01, 0.53)
+	end
+	if fonelincolor11 == true then 
+	colors[clr.Border]                 = ImVec4(0.07, 0.07, 0.09, 0.50)
+    colors[clr.Separator]              = ImVec4(0.07, 0.07, 0.09, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.07, 0.07, 0.09, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.07, 0.07, 0.09, 0.53)
+	end
+	if fonelincolor12 == true then 
+	colors[clr.Border]                 = ImVec4(1.00, 0.28, 0.28, 0.50)
+    colors[clr.Separator]              = ImVec4(1.00, 0.28, 0.28, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(1.00, 0.28, 0.28, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(1.00, 0.28, 0.28, 0.53)
+	end
+	if fonelincolor13 == true then 
+	colors[clr.Border]                 = ImVec4(0.30, 0.33, 0.95, 0.50)
+    colors[clr.Separator]              = ImVec4(0.30, 0.33, 0.95, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.30, 0.33, 0.95, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.30, 0.33, 0.95, 0.53)
+	end
+	if fonelincolor14 == true then 
+	colors[clr.Border]                 = ImVec4(1.0, 0.84, 0.37, 0.50)
+    colors[clr.Separator]              = ImVec4(1.0, 0.84, 0.37, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(1.0, 0.84, 0.37, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(1.0, 0.84, 0.37, 0.53)
+	end
+	if fonelincolor15 == true then 
+	colors[clr.Border]                 = ImVec4(0.026, 0.597, 0.000, 0.50)
+    colors[clr.Separator]              = ImVec4(0.026, 0.597, 0.000, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.026, 0.597, 0.000, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.026, 0.597, 0.000, 0.53)
+	end
+	if fonelincolor16 == true then 
+	colors[clr.Border]                 = ImVec4(0.06, 0.53, 0.98, 0.50)
+    colors[clr.Separator]              = ImVec4(0.06, 0.53, 0.98, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(0.06, 0.53, 0.98, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(0.06, 0.53, 0.98, 0.53)
+	end
+	
     colors[clr.ResizeGrip]             = ImVec4(0.26, 0.59, 0.98, 0.25)
     colors[clr.ResizeGripHovered]      = ImVec4(0.26, 0.59, 0.98, 0.67)
     colors[clr.ResizeGripActive]       = ImVec4(0.26, 0.59, 0.98, 0.95)
     colors[clr.TextSelectedBg]         = ImVec4(0.26, 0.59, 0.98, 0.35)
-    colors[clr.Text]                   = ImVec4(0.07, 0.07, 0.09, 1.00)
-    colors[clr.TextDisabled]           = ImVec4(0.50, 0.50, 0.50, 1.00)
+	
+	if fonetextcolor == true then 
+	colors[clr.Text]                   = ImVec4(0.00, 0.49, 1.00, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.00, 0.49, 1.00, 1.00)
+	end
+	if fonetextcolor2 == true then 
+	colors[clr.Text]                   = ImVec4(0.76, 0.51, 0.66, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.76, 0.51, 0.66, 1.00)
+	end
+	if fonetextcolor3 == true then 
+	colors[clr.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(1.00, 1.00, 1.00, 1.00)
+	end
+	if fonetextcolor4 == true then 
+	colors[clr.Text]                   = ImVec4(0.76, 0.31, 0.00, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.76, 0.31, 0.00, 1.00)
+	end
+	if fonetextcolor5 == true then 
+	colors[clr.Text]                   = ImVec4(0.46, 0.46, 0.46, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.46, 0.46, 0.46, 1.00)
+	end
+	if fonetextcolor6 == true then 
+	colors[clr.Text]                   = ImVec4(0.232, 0.201, 0.271, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.232, 0.201, 0.271, 1.00)
+	end
+	if fonetextcolor7 == true then 
+	colors[clr.Text]                   = ImVec4(0.00, 0.69, 0.33, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.00, 0.69, 0.33, 1.00)
+	end
+	if fonetextcolor8 == true then 
+	colors[clr.Text]                   = ImVec4(0.46, 0.11, 0.29, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.46, 0.11, 0.29, 1.00)
+	end
+	if fonetextcolor9 == true then 
+	colors[clr.Text]                   = ImVec4(0.41, 0.19, 0.63, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.41, 0.19, 0.63, 1.00)
+	end
+	if fonetextcolor10 == true then 
+	colors[clr.Text]                   = ImVec4(0.40, 0.57, 0.01, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.40, 0.57, 0.01, 1.00)
+	end
+	if fonetextcolor11 == true then 
+	colors[clr.Text]                   = ImVec4(0.07, 0.07, 0.09, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.07, 0.07, 0.09, 1.00)
+	end
+	if fonetextcolor12 == true then 
+	colors[clr.Text]                   = ImVec4(1.00, 0.28, 0.28, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(1.00, 0.28, 0.28, 1.00)
+	end
+	if fonetextcolor13 == true then 
+	colors[clr.Text]                   = ImVec4(0.30, 0.33, 0.95, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.30, 0.33, 0.95, 1.00)
+	end
+	if fonetextcolor14 == true then 
+	colors[clr.Text]                   = ImVec4(1.0, 0.84, 0.37, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(1.0, 0.84, 0.37, 1.00)
+	end
+	if fonetextcolor15 == true then 
+	colors[clr.Text]                   = ImVec4(0.026, 0.597, 0.000, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.026, 0.597, 0.000, 1.00)
+	end
+	if fonetextcolor16 == true then 
+	colors[clr.Text]                   = ImVec4(0.06, 0.53, 0.98, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(0.06, 0.53, 0.98, 1.00)
+	end
+	
+	if fonecolor == true then 
+    colors[clr.WindowBg]               = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.00, 0.49, 1.00, 0.94)
+	end
+	if fonecolor2 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.76, 0.51, 0.66, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.76, 0.51, 0.66, 0.94)
+	end
+	if fonecolor3 == true then 
     colors[clr.WindowBg]               = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.PopupBg]                = ImVec4(1.00, 1.00, 1.00, 0.94)
+	end
+	if fonecolor4 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.76, 0.31, 0.00, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.76, 0.31, 0.00, 0.94)
+	end
+	if fonecolor5 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.46, 0.46, 0.46, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.46, 0.46, 0.46, 0.94)
+	end
+	if fonecolor6 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.232, 0.201, 0.271, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.232, 0.201, 0.271, 0.94)
+	end
+	if fonecolor7 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.00, 0.69, 0.33, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.00, 0.69, 0.33, 0.94)
+	end
+	if fonecolor8 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.46, 0.11, 0.29, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.46, 0.11, 0.29, 0.94)
+	end
+	if fonecolor9 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.41, 0.19, 0.63, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.41, 0.19, 0.63, 0.94)
+	end
+	if fonecolor10 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.40, 0.57, 0.01, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.40, 0.57, 0.01, 0.94)
+	end
+	if fonecolor11 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.07, 0.07, 0.09, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.07, 0.07, 0.09, 0.94)
+	end
+	if fonecolor12 == true then 
+    colors[clr.WindowBg]               = ImVec4(1.00, 0.28, 0.28, 1.00)
+	colors[clr.PopupBg]                = ImVec4(1.00, 0.28, 0.28, 0.94)
+	end
+	if fonecolor13 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.30, 0.33, 0.95, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.30, 0.33, 0.95, 0.94)
+	end
+	if fonecolor14 == true then 
+    colors[clr.WindowBg]               = ImVec4(1.0, 0.84, 0.37, 1.00)
+	colors[clr.PopupBg]                = ImVec4(1.0, 0.84, 0.37, 0.94)
+	end
+	if fonecolor15 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.026, 0.597, 0.000, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.026, 0.597, 0.000, 0.94)
+	end
+	if fonecolor16 == true then 
+    colors[clr.WindowBg]               = ImVec4(0.06, 0.53, 0.98, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.06, 0.53, 0.98, 0.94)
+	end
     colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.00)
-    colors[clr.PopupBg]                = ImVec4(1.00, 1.00, 1.00, 0.94)
     colors[clr.ComboBg]                = colors[clr.PopupBg]
-    colors[clr.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
     colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
-    colors[clr.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
-    colors[clr.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
-    colors[clr.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
-    colors[clr.ScrollbarGrabActive]    = ImVec4(0.51, 0.51, 0.51, 1.00)
     colors[clr.CloseButton]            = ImVec4(0.41, 0.41, 0.41, 0.50)
     colors[clr.CloseButtonHovered]     = ImVec4(0.98, 0.39, 0.36, 1.00)
     colors[clr.CloseButtonActive]      = ImVec4(0.98, 0.39, 0.36, 1.00)
@@ -1015,7 +1725,7 @@ apply_custom_style()
 
 function files_add()
 	if not doesDirectoryExist("moonloader\\config\\Mono\\icons") then createDirectory('moonloader\\config\\Mono\\icons') end
-	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
+	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\White.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Cherry.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Black.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Orange.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Dark-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Red.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Pink.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Magenta.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Purple.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gold.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gray.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Bluev2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
 	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF0000}Ошибка!{FFFFFF} У вас отсутствуют нужные картинки для работы скрипта, начинаю скачивание.", 0x046D63)
 	downloadUrlToFile('https://i.imgur.com/1jMFPBg.png', getWorkingDirectory() .. '/config/Mono/icons/2048.png')
 	downloadUrlToFile('https://i.imgur.com/hMrVjAa.png', getWorkingDirectory() .. '/config/Mono/icons/bitcoin.png')
@@ -1024,7 +1734,27 @@ function files_add()
 	downloadUrlToFile('https://i.imgur.com/J7SIdEY.png', getWorkingDirectory() .. '/config/Mono/icons/edge.png')
 	downloadUrlToFile('https://i.imgur.com/YJRJQZj.png', getWorkingDirectory() .. '/config/Mono/icons/helper.png')
 	downloadUrlToFile('https://i.imgur.com/dgj49cm.png', getWorkingDirectory() .. '/config/Mono/icons/img0.png')
-	downloadUrlToFile('https://i.imgur.com/wM1EGPv.png', getWorkingDirectory() .. '/config/Mono/icons/img1.png')
+	downloadUrlToFile('https://i.imgur.com/So4Zxkh.png', getWorkingDirectory() .. '/config/Mono/icons/img2.png')
+	downloadUrlToFile('https://i.imgur.com/q7mgTsB.png', getWorkingDirectory() .. '/config/Mono/icons/img3.png')
+	downloadUrlToFile('https://i.imgur.com/s4czuV9.png', getWorkingDirectory() .. '/config/Mono/icons/img4.png')
+	downloadUrlToFile('https://i.imgur.com/3lJ9TKv.png', getWorkingDirectory() .. '/config/Mono/icons/img5.png')
+	downloadUrlToFile('https://i.imgur.com/4YpyjOs.png', getWorkingDirectory() .. '/config/Mono/icons/img6.png')
+	downloadUrlToFile('https://i.imgur.com/Pk8G5wg.png', getWorkingDirectory() .. '/config/Mono/icons/Light-Blue.png')
+	downloadUrlToFile('https://i.imgur.com/tKGzzFA.png', getWorkingDirectory() .. '/config/Mono/icons/Pink.png')
+	downloadUrlToFile('https://i.imgur.com/OB8X38U.png', getWorkingDirectory() .. '/config/Mono/icons/White.png')
+	downloadUrlToFile('https://i.imgur.com/TUVbLnM.png', getWorkingDirectory() .. '/config/Mono/icons/Orange.png')
+	downloadUrlToFile('https://i.imgur.com/L7jqcYX.png', getWorkingDirectory() .. '/config/Mono/icons/Gray.png')
+	downloadUrlToFile('https://i.imgur.com/wjHXl1f.png', getWorkingDirectory() .. '/config/Mono/icons/Bluev2.png')
+	downloadUrlToFile('https://i.imgur.com/rfddYbo.png', getWorkingDirectory() .. '/config/Mono/icons/Cherry.png')
+	downloadUrlToFile('https://i.imgur.com/Yodm02C.png', getWorkingDirectory() .. '/config/Mono/icons/Dark-Green.png')
+	downloadUrlToFile('https://i.imgur.com/gIxncO0.png', getWorkingDirectory() .. '/config/Mono/icons/Magenta.png')
+	downloadUrlToFile('https://i.imgur.com/U5qUTcE.png', getWorkingDirectory() .. '/config/Mono/icons/Purple.png')
+	downloadUrlToFile('https://i.imgur.com/qNLzNiY.png', getWorkingDirectory() .. '/config/Mono/icons/Light-Green.png')
+	downloadUrlToFile('https://i.imgur.com/UeRgsqb.png', getWorkingDirectory() .. '/config/Mono/icons/Black.png')
+	downloadUrlToFile('https://i.imgur.com/oGfCRuQ.png', getWorkingDirectory() .. '/config/Mono/icons/Red.png')
+	downloadUrlToFile('https://i.imgur.com/7N7elo6.png', getWorkingDirectory() .. '/config/Mono/icons/Blue.png')
+	downloadUrlToFile('https://i.imgur.com/5Toei3y.png', getWorkingDirectory() .. '/config/Mono/icons/Gold.png')
+	downloadUrlToFile('https://i.imgur.com/zP50wNi.png', getWorkingDirectory() .. '/config/Mono/icons/Green.png')
 	downloadUrlToFile('https://i.imgur.com/FfQIlL5.png', getWorkingDirectory() .. '/config/Mono/icons/info.png')
 	downloadUrlToFile('https://i.imgur.com/s385sfd.png', getWorkingDirectory() .. '/config/Mono/icons/kirka.png')
 	downloadUrlToFile('https://i.imgur.com/0NN5Y08.png', getWorkingDirectory() .. '/config/Mono/icons/left.png')
@@ -1262,10 +1992,14 @@ function mainmenu()
 		end
 		if win_state['shemainst'].v then
 			win_state['shemainst'].v = not win_state['shemainst'].v
+		elseif win_state['kartinst'].v then
+			win_state['kartinst'].v = not win_state['kartinst'].v
 		elseif win_state['shematext'].v then
 			win_state['shematext'].v = not win_state['shematext'].v
 		elseif win_state['shemafunks'].v then
 			win_state['shemafunks'].v = not win_state['shemafunks'].v
+		elseif win_state['housenumber'].v then
+			win_state['housenumber'].v = not win_state['housenumber'].v
 		elseif win_state['redak'].v then
 			win_state['redak'].v = not win_state['redak'].v
 		elseif win_state['games'].v then
@@ -1325,8 +2059,124 @@ function main()
 	else gameServer = "Неизвестно" 
 	end
 	files_add()
-	--winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
-	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img1.png')
+	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
+	winbackground2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img2.png')
+	winbackground3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img3.png')
+	winbackground4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img4.png')
+	winbackground5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img5.png')
+	winbackground6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img6.png')
+	colorwindows = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorwindows2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorwindows3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorwindows4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorwindows5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorwindows6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorwindows7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorwindows8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorwindows9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorwindows10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorwindows11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorwindows12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorwindows13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorwindows14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorwindows15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorwindows16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorzagolovok = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorzagolovok2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorzagolovok3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorzagolovok4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorzagolovok5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorzagolovok6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorzagolovok7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorzagolovok8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorzagolovok9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorzagolovok10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorzagolovok11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorzagolovok12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorzagolovok13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorzagolovok14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorzagolovok15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorzagolovok16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colortext = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colortext2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colortext3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colortext4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colortext5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colortext6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colortext7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colortext8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colortext9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colortext10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colortext11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colortext12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colortext13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colortext14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colortext15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colortext16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorvydel = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorvydel2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorvydel3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorvydel4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorvydel5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorvydel6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorvydel7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorvydel8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorvydel9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorvydel10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorvydel11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorvydel12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorvydel13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorvydel14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorvydel15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorvydel16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorlin = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorlin2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorlin3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorlin4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorlin5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorlin6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorlin7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorlin8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorlin9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorlin10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorlin11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorlin12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorlin13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorlin14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorlin15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorlin16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorbutton = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorbutton2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorbutton3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorbutton4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorbutton5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorbutton6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorbutton7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorbutton8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorbutton9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorbutton10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorbutton11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorbutton12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorbutton13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorbutton14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorbutton15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorbutton16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorpol = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorpol2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorpol3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorpol4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorpol5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorpol6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorpol7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorpol8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorpol9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorpol10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorpol11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorpol12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorpol13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorpol14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorpol15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorpol16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
     winpusk = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/pusk.png')
     winedge = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
@@ -1454,6 +2304,125 @@ function main()
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autoklava.v)) then mainmenu() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(autodronev2.v)) and isKeyJustPressed(u8:decode(autodrone.v)) then drone() end
 		
+		if fonewin.v == true then fonecolor = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin2.v == true then fonecolor2 = true fonecolor = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin3.v == true then fonecolor3 = true fonecolor2 = false fonecolor = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin4.v == true then fonecolor4 = true fonecolor2 = false fonecolor3 = false fonecolor = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin5.v == true then fonecolor5 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin6.v == true then fonecolor6 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin7.v == true then fonecolor7 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin8.v == true then fonecolor8 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin9.v == true then fonecolor9 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin10.v == true then fonecolor10 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin11.v == true then fonecolor11 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin12.v == true then fonecolor12 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin13.v == true then fonecolor13 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin14.v == true then fonecolor14 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
+		if fonewin15.v == true then fonecolor15 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor = false fonecolor16 = false apply_custom_style() end
+		if fonewin16.v == true then fonecolor16 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor = false apply_custom_style() end
+		
+		if fonezag.v == true then fonezagcolor = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag2.v == true then fonezagcolor2 = true fonezagcolor = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag3.v == true then fonezagcolor3 = true fonezagcolor2 = false fonezagcolor = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag4.v == true then fonezagcolor4 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag5.v == true then fonezagcolor5 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag6.v == true then fonezagcolor6 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag7.v == true then fonezagcolor7 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag8.v == true then fonezagcolor8 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag9.v == true then fonezagcolor9 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag10.v == true then fonezagcolor10 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag11.v == true then fonezagcolor11 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag12.v == true then fonezagcolor12 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag13.v == true then fonezagcolor13 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag14.v == true then fonezagcolor14 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
+		if fonezag15.v == true then fonezagcolor15 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor = false ffonezagcolor16 = false apply_custom_style() end
+		if fonezag16.v == true then fonezagcolor16 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor = false apply_custom_style() end
+		
+		if fonetext.v == true then fonetextcolor = true fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext2.v == true then fonetextcolor = false fonetextcolor2 = true fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext3.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = true fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext4.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = true fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext5.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = true fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext6.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = true fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext7.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = true fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext8.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = true fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext9.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = true fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext10.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = true fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext11.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = true fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext12.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = true fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext13.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = true fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext14.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = true fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
+		if fonetext15.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = true fonetextcolor16 = false apply_custom_style() end
+		if fonetext16.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = true apply_custom_style() end
+		
+		if fonevydel.v == true then fonevydelcolor = true fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel2.v == true then fonevydelcolor = false fonevydelcolor2 = true fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel3.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = true fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel4.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = true fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel5.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = true fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel6.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = true fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel7.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = true fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel8.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = true fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel9.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = true fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel10.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = true fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel11.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = true fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel12.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = true fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel13.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = true fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel14.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = true fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel15.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = true fonevydelcolor16 = false apply_custom_style() end
+		if fonevydel16.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = true apply_custom_style() end	
+		
+		if fonepol.v == true then fonepolcolor = true fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol2.v == true then fonepolcolor = false fonepolcolor2 = true fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol3.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = true fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol4.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = true fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol5.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = true fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol6.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = true fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol7.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = true fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol8.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = true fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol9.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = true fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol10.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = true fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol11.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = true fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol12.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = true fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol13.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = true fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol14.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = true fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
+		if fonepol15.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = true fonepolcolor16 = false apply_custom_style() end
+		if fonepol16.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = true apply_custom_style() end	
+		
+		if fonebutton.v == true then fonebuttoncolor = true fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton2.v == true then fonebuttoncolor = false fonebuttoncolor2 = true fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton3.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = true fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton4.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = true fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton5.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = true fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton6.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = true fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton7.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = true fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton8.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = true fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton9.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = true fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton10.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = true fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton11.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = true fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton12.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = true fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton13.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = true fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton14.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = true fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton15.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = true fonebuttoncolor16 = false apply_custom_style() end
+		if fonebutton16.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = true apply_custom_style() end
+		
+		if fonelin.v == true then fonelincolor = true fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin2.v == true then fonelincolor = false fonelincolor2 = true fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin3.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = true fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin4.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = true fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin5.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = true fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin6.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = true fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin7.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = true fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin8.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = true fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin9.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = true fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin10.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = true fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin11.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = true fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin12.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = true fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin13.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = true fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin14.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = true fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
+		if fonelin15.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = true fonelincolor16 = false apply_custom_style() end
+		if fonelin16.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = true apply_custom_style() end
+		
 		local validtest, pedtest = getCharPlayerIsTargeting(PLAYER_HANDLE)
         local resulttest, idtest = sampGetPlayerIdByCharHandle(pedtest)
 		if resulttest then
@@ -1511,7 +2480,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['updatetext'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['updatetext'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -1541,14 +2510,6 @@ function main()
 				end
 			end
 		end
-		
-		if styletest.v then -- стили
-			apply_custom_style()
-			end
-		if styletest1.v then -- стили
-			apply_custom_style1()
-			end
-		
 		if dialogIncoming ~= 0 and dialogs_data[dialogIncoming] and ndr.v then
 		local data = dialogs_data[dialogIncoming]
 		if data[1] and not restore_text then
@@ -1715,8 +2676,6 @@ function saveSettings(args, key)
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
 	ini.settings.autobike = autobike.v
-	ini.settings.styletest = styletest.v
-	ini.settings.styletest1 = styletest1.v
 	ini.settings.timefix = timefix.v
 	ini.settings.zadervkajump = zadervkajump.v
 	ini.settings.enableskin = enableskin.v
@@ -1842,6 +2801,124 @@ function saveSettings(args, key)
 	ini.settings.adredak = u8:decode(adredak.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
+	ini.settings.rabstol = rabstol.v
+	ini.settings.rabstol2 = rabstol2.v
+	ini.settings.rabstol3 = rabstol3.v
+	ini.settings.rabstol4 = rabstol4.v
+	ini.settings.rabstol5 = rabstol5.v
+	ini.settings.rabstol6 = rabstol6.v
+	ini.settings.fonewin = fonewin.v
+	ini.settings.fonewin2 = fonewin2.v
+	ini.settings.fonewin3 = fonewin3.v
+	ini.settings.fonewin4 = fonewin4.v
+	ini.settings.fonewin5 = fonewin5.v
+	ini.settings.fonewin6 = fonewin6.v
+	ini.settings.fonewin7 = fonewin7.v
+	ini.settings.fonewin8 = fonewin8.v
+	ini.settings.fonewin9 = fonewin9.v
+	ini.settings.fonewin10 = fonewin10.v
+	ini.settings.fonewin11 = fonewin11.v
+	ini.settings.fonewin12 = fonewin12.v
+	ini.settings.fonewin13 = fonewin13.v
+	ini.settings.fonewin14 = fonewin14.v
+	ini.settings.fonewin15 = fonewin15.v
+	ini.settings.fonewin16 = fonewin16.v
+	ini.settings.fonezag = fonezag.v
+	ini.settings.fonezag2 = fonezag2.v
+	ini.settings.fonezag3 = fonezag3.v
+	ini.settings.fonezag4 = fonezag4.v
+	ini.settings.fonezag5 = fonezag5.v
+	ini.settings.fonezag6 = fonezag6.v
+	ini.settings.fonezag7 = fonezag7.v
+	ini.settings.fonezag8 = fonezag8.v
+	ini.settings.fonezag9 = fonezag9.v
+	ini.settings.fonezag10 = fonezag10.v
+	ini.settings.fonezag11 = fonezag11.v
+	ini.settings.fonezag12 = fonezag12.v
+	ini.settings.fonezag13 = fonezag13.v
+	ini.settings.fonezag14 = fonezag14.v
+	ini.settings.fonezag15 = fonezag15.v
+	ini.settings.fonezag16 = fonezag16.v
+	ini.settings.fonetext = fonetext.v
+	ini.settings.fonetext2 = fonetext2.v
+	ini.settings.fonetext3 = fonetext3.v
+	ini.settings.fonetext4 = fonetext4.v
+	ini.settings.fonetext5 = fonetext5.v
+	ini.settings.fonetext6 = fonetext6.v
+	ini.settings.fonetext7 = fonetext7.v
+	ini.settings.fonetext8 = fonetext8.v
+	ini.settings.fonetext9 = fonetext9.v
+	ini.settings.fonetext10 = fonetext10.v
+	ini.settings.fonetext11 = fonetext11.v
+	ini.settings.fonetext12 = fonetext12.v
+	ini.settings.fonetext13 = fonetext13.v
+	ini.settings.fonetext14 = fonetext14.v
+	ini.settings.fonetext15 = fonetext15.v
+	ini.settings.fonetext16 = fonetext16.v
+	ini.settings.fonevydel = fonevydel.v
+	ini.settings.fonevydel2 = fonevydel2.v
+	ini.settings.fonevydel3 = fonevydel3.v
+	ini.settings.fonevydel4 = fonevydel4.v
+	ini.settings.fonevydel5 = fonevydel5.v
+	ini.settings.fonevydel6 = fonevydel6.v
+	ini.settings.fonevydel7 = fonevydel7.v
+	ini.settings.fonevydel8 = fonevydel8.v
+	ini.settings.fonevydel9 = fonevydel9.v
+	ini.settings.fonevydel10 = fonevydel10.v
+	ini.settings.fonevydel11 = fonevydel11.v
+	ini.settings.fonevydel12 = fonevydel12.v
+	ini.settings.fonevydel13 = fonevydel13.v
+	ini.settings.fonevydel14 = fonevydel14.v
+	ini.settings.fonevydel15 = fonevydel15.v
+	ini.settings.fonevydel16 = fonevydel16.v
+	ini.settings.fonelin = fonelin.v
+	ini.settings.fonelin2 = fonelin2.v
+	ini.settings.fonelin3 = fonelin3.v
+	ini.settings.fonelin4 = fonelin4.v
+	ini.settings.fonelin5 = fonelin5.v
+	ini.settings.fonelin6 = fonelin6.v
+	ini.settings.fonelin7 = fonelin7.v
+	ini.settings.fonelin8 = fonelin8.v
+	ini.settings.fonelin9 = fonelin9.v
+	ini.settings.fonelin10 = fonelin10.v
+	ini.settings.fonelin11 = fonelin11.v
+	ini.settings.fonelin12 = fonelin12.v
+	ini.settings.fonelin13 = fonelin13.v
+	ini.settings.fonelin14 = fonelin14.v
+	ini.settings.fonelin15 = fonelin15.v
+	ini.settings.fonelin16 = fonelin16.v
+	ini.settings.fonebutton = fonebutton.v
+	ini.settings.fonebutton2 = fonebutton2.v
+	ini.settings.fonebutton3 = fonebutton3.v
+	ini.settings.fonebutton4 = fonebutton4.v
+	ini.settings.fonebutton5 = fonebutton5.v
+	ini.settings.fonebutton6 = fonebutton6.v
+	ini.settings.fonebutton7 = fonebutton7.v
+	ini.settings.fonebutton8 = fonebutton8.v
+	ini.settings.fonebutton9 = fonebutton9.v
+	ini.settings.fonebutton10 = fonebutton10.v
+	ini.settings.fonebutton11 = fonebutton11.v
+	ini.settings.fonebutton12 = fonebutton12.v
+	ini.settings.fonebutton13 = fonebutton13.v
+	ini.settings.fonebutton14 = fonebutton14.v
+	ini.settings.fonebutton15 = fonebutton15.v
+	ini.settings.fonebutton16 = fonebutton16.v
+	ini.settings.fonepol = fonepol.v
+	ini.settings.fonepol2 = fonepol2.v
+	ini.settings.fonepol3 = fonepol3.v
+	ini.settings.fonepol4 = fonepol4.v
+	ini.settings.fonepol5 = fonepol5.v
+	ini.settings.fonepol6 = fonepol6.v
+	ini.settings.fonepol7 = fonepol7.v
+	ini.settings.fonepol8 = fonepol8.v
+	ini.settings.fonepol9 = fonepol9.v
+	ini.settings.fonepol10 = fonepol10.v
+	ini.settings.fonepol11 = fonepol11.v
+	ini.settings.fonepol12 = fonepol12.v
+	ini.settings.fonepol13 = fonepol13.v
+	ini.settings.fonepol14 = fonepol14.v
+	ini.settings.fonepol15 = fonepol15.v
+	ini.settings.fonepol16 = fonepol16.v
 	ini.settings.dialogclose = dialogclose.v
 	ini.settings.autoryda = autoryda.v
 	ini.settings.autopin = autopin.v
@@ -2011,6 +3088,24 @@ end
 		closeDialog()
 		end
 	end
+	if dialogId == 15272 and liquid.v then
+	statuszidkost1 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost3 = tonumber(text:match('Полка №3 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost4 = tonumber(text:match('Полка №4 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	end
+	if dialogId == 15272 and pusk.v then
+	statuspusk = text:find('Полка №1 | {F78181}На паузе')
+	statuspusk2 = text:find('Полка №2 | {F78181}На паузе')
+	statuspusk3 = text:find('Полка №3 | {F78181}На паузе')
+	statuspusk4 = text:find('Полка №4 | {F78181}На паузе')
+	end
+	if dialogId == 15272 and pusk2.v then
+	statuspusk = text:find('Полка №1 | {BEF781}Работает')
+	statuspusk2 = text:find('Полка №2 | {BEF781}Работает')
+	statuspusk3 = text:find('Полка №3 | {BEF781}Работает')
+	statuspusk4 = text:find('Полка №4 | {BEF781}Работает')
+	end
 	if dialogId == 119 and autoopl.v then
 	sendchot5()
 	end
@@ -2051,16 +3146,30 @@ end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
   if dialogId == 15330 and dialogclose.v then return false end
+  if houserespawn == true and dialogId == 1781 then return false end
+  if houserespawn == true and dialogId == 7238 then return false end
   if dialogId == 15281 and video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v then return false end
   if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then
-      if dialogId == 9238 then
+      lua_thread.create(function()
+	  if dialogId == 9238 then
         checked_test.v = false
         checked_test2.v = false
         checked_test3.v = false
         checked_test4.v = false
         krytim = true
         sampAddChatMessage('{FFB140}Рулетки закончились.', 0xFFB140)
+		wait(5000)
+		closeDialog()
+		wait(200)
+		sampSendChat('/mm')
+		wait(200)
+		sampSendDialogResponse(722, 1, 13, _)
+		wait(200)
+		sampSendClickTextdraw(2167)
+		wait(100)
+		closeDialog()
       end
+	end)
   end
   if text:find('Поздравляем с получением') and checked_test.v then
     return false
@@ -2092,6 +3201,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close = false
         active = false
       end
@@ -2116,6 +3226,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close1 = false
         active1 = false
       end
@@ -2140,6 +3251,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close2 = false
         active2 = false
       end
@@ -2190,6 +3302,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close4 = false
         active4 = false
       end
@@ -2214,6 +3327,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close5 = false
         active5 = false
       end
@@ -2238,6 +3352,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close = false
         active = false
       end
@@ -2262,6 +3377,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close1 = false
         active1 = false
       end
@@ -2286,6 +3402,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close2 = false
         active2 = false
       end
@@ -2310,6 +3427,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
+		ruletka()
         close3 = false
         active3 = false
       end
@@ -2330,6 +3448,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active = false
       end
     end)
@@ -2349,6 +3468,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active1 = false
       end
     end)
@@ -2368,6 +3488,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active2 = false
       end
     end)
@@ -2412,6 +3533,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active4 = false
 		end
 	 end)
@@ -2431,6 +3553,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active5 = false
       end
     end)
@@ -2450,6 +3573,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active = false
       end
     end)
@@ -2469,6 +3593,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active1 = false
       end
     end)
@@ -2488,6 +3613,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active2 = false
       end
     end)
@@ -2507,6 +3633,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
 		sampSendClickTextdraw(2135)
+		ruletka()
         active5 = false
       end
     end)
@@ -3332,6 +4459,29 @@ function rul(respond)
   nodial = true
   sampSendChat('/mn')
   sampSendDialogResponse(722, 1, 7, _)
+end
+
+function ruletka()
+	if checked_test.v then 
+		wait(500)
+		krytim = true
+		rul()
+	  end
+	if checked_test2.v then 
+		wait(500)
+		krytim = true
+		rul()
+	  end
+	if checked_test3.v then 
+		wait(500)
+		krytim = true
+		rul()
+	  end
+	if checked_test4.v then 
+		wait(500)
+		krytim = true
+		rul()
+	end
 end
 
 function sendchot6()
@@ -4475,7 +5625,25 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(1000, 652), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Mono Tools', win_state['main'], imgui.WindowFlags.NoResize)
+		if rabstol.v then 
 		imgui.Image(winbackground, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		end
+		if rabstol2.v then 
+		imgui.Image(winbackground2, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		end
+		if rabstol3.v then 
+		imgui.Image(winbackground3, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		end
+		if rabstol4.v then 
+		imgui.Image(winbackground4, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		end
+		if rabstol5.v then 
+		imgui.Image(winbackground5, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		end
+		if rabstol6.v then 
+		imgui.Image(winbackground6, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		end
+		
 	imgui.Text('')
 	imgui.SameLine(335)	
 	if imgui.ImageButton(winpusk, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['windowspusk'].v = not win_state['windowspusk'].v end
@@ -4574,8 +5742,8 @@ function imgui.OnDrawFrame()
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine(120) imgui.Text(u8'ESC - закрывает все окна, кроме основного.')
 				imgui.Text('') imgui.SameLine(90) imgui.Text(u8'F3 или установленная вами клавиша - закрывает все окна.')
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Перейти в группу VK скрипта (информация, помощь, предложения)', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Перейти в группу VK скрипта (информация, помощь, предложения)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
 				imgui.Separator()
 				imgui.Text('')
 				imgui.Text('')
@@ -4659,8 +5827,16 @@ function imgui.OnDrawFrame()
 		shemainstr()
 	end
 	
+	if win_state['kartinst'].v then
+		kartinstr()
+	end
+	
 	if win_state['shemafunks'].v then
 		funksmenu()
+	end
+	
+	if win_state['housenumber'].v then
+		numberhouse()
 	end
 	
 	if win_state['timeyved'].v then
@@ -4708,12 +5884,12 @@ function imgui.OnDrawFrame()
 				imgui.PushFont(fontsize)
 				imgui.Text('') imgui.SameLine() imgui.Text('INVENTORY'); imgui.SameLine(); imgui.Text('       S'); imgui.SameLine(); imgui.Text('  C'); imgui.SameLine(); imgui.Text('  P'); imgui.SameLine(); imgui.Text('  S');
 				imgui.PopFont()
-				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№2', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№3', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№4', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№5', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№6', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40))
-				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№7', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№8', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№9', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№10', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№11', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№12', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40))
-				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№13', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№14', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№15', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№16', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№17', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№18', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40))
-				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№19', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№20', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№21', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№22', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№23', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№24', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40))
-				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№25', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№26', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№27', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№28', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№29', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№30', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40))
-				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№31', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№32', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№33', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№34', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№35', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№34', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(40, 40))
+				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№4', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№5', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№6', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40))
+				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№7', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№8', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№9', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№10', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№11', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№12', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40))
+				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№13', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№14', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№15', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№16', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№17', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№18', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40))
+				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№19', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№20', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№21', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№22', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№23', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№24', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40))
+				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№25', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№26', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№27', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№28', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№29', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№30', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40))
+				imgui.Text('') imgui.SameLine() imgui.CustomButton(u8'№31', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-752, 40)) imgui.SameLine(); imgui.CustomButton(u8'№32', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№33', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№34', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№35', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40)) imgui.SameLine(); imgui.CustomButton(u8'№34', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 40))
 				imgui.Text(u8'                           '); imgui.SameLine(); imgui.RadioButton('', hlam, 2); imgui.SameLine(); imgui.RadioButton('', hlam, 1); imgui.SameLine(); imgui.RadioButton('', hlam, 3)
 				imgui.EndChild()
 		imgui.End()
@@ -4794,40 +5970,28 @@ function imgui.OnDrawFrame()
 	if win_state['informer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX, infoY), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
-		if styletest.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 1.0, 1.0, 0.3)) end
-		if styletest1.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
-		if not styletest.v and not styletest1.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 1.0, 1.0, 0.3)) end
 		if imgui.Begin("Mono Tools3", win_state['informer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			infobar()
 			imgui.End()
 			end
-		imgui.PopStyleColor()
-		end
+	end
 		
 	if win_state['shahtainformer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX3, infoY3), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
-		if styletest.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 1.0, 1.0, 0.3)) end
-		if styletest1.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
-		if not styletest.v and not styletest1.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 1.0, 1.0, 0.3)) end
 		if imgui.Begin("Mono Tools1", win_state['shahtainformer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			infobarshahta()
 			imgui.End()
 			end
-		imgui.PopStyleColor()
 		end
 	
 	if win_state['pismoinformer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX4, infoY4), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
-		if styletest.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 1.0, 1.0, 0.3)) end
-		if styletest1.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
-		if not styletest.v and not styletest1.v then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 1.0, 1.0, 0.3)) end
 		if imgui.Begin("Mono Tools2", win_state['pismoinformer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			infobarpismo()
 			imgui.End()
 			end
-		imgui.PopStyleColor()
 		end
 	end
 	
@@ -4997,7 +6161,9 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
 		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
@@ -5038,7 +6204,9 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
 		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
@@ -5079,7 +6247,9 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
 		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
@@ -5120,7 +6290,9 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
 		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['pravila2048'].v = false
@@ -5406,10 +6578,12 @@ function sampev.onServerMessage(color, text)
 		lastrradiozv, lastrradioID = text:match('%[R%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
 	elseif text:match("^Этот транспорт зарегистрирован на жителя {9ACD32}" ..userNick) and lock.v then
 		sampSendChat('/lock')
-	elseif text:find("Вам был добавлен предмет") then
+	elseif text:find("Вам был добавлен предмет") and samprulstop == true and samprulstart == true then
 		krytim = true
-	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') then
+		samprulstart = false
+	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') and samprulstop == true and samprulstart == true then
 		krytim = true
+		samprulstart = false
 	end
 	local x, y, z = getCharCoordinates(PLAYER_PED)
 	local resultbank, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "Касса")
@@ -5524,6 +6698,8 @@ end
 	if color == -10270721 and text:find("Сработала защита от реконнекта! Попробуйте переподключиться через (%d+) секунд") and recongen.v then
 		recongenmenu()
 	end
+	if text:find("Выберите дом для спавна") and houserespawn == true then return false end
+	if text:find("Вы установили дом местом спавна!") and houserespawn == true then return false end
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
@@ -5713,6 +6889,124 @@ function load_settings() -- загрузка настроек
 	assistant2 = imgui.ImBool(ini.settings.assistant2)
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
+	rabstol = imgui.ImBool(ini.settings.rabstol)
+	rabstol2 = imgui.ImBool(ini.settings.rabstol2)
+	rabstol3 = imgui.ImBool(ini.settings.rabstol3)
+	rabstol4 = imgui.ImBool(ini.settings.rabstol4)
+	rabstol5 = imgui.ImBool(ini.settings.rabstol5)
+	rabstol6 = imgui.ImBool(ini.settings.rabstol6)
+	fonewin = imgui.ImBool(ini.settings.fonewin)
+	fonewin2 = imgui.ImBool(ini.settings.fonewin2)
+	fonewin3 = imgui.ImBool(ini.settings.fonewin3)
+	fonewin4 = imgui.ImBool(ini.settings.fonewin4)
+	fonewin5 = imgui.ImBool(ini.settings.fonewin5)
+	fonewin6 = imgui.ImBool(ini.settings.fonewin6)
+	fonewin7 = imgui.ImBool(ini.settings.fonewin7)
+	fonewin8 = imgui.ImBool(ini.settings.fonewin8)
+	fonewin9 = imgui.ImBool(ini.settings.fonewin9)
+	fonewin10 = imgui.ImBool(ini.settings.fonewin10)
+	fonewin11 = imgui.ImBool(ini.settings.fonewin11)
+	fonewin12 = imgui.ImBool(ini.settings.fonewin12)
+	fonewin13 = imgui.ImBool(ini.settings.fonewin13)
+	fonewin14 = imgui.ImBool(ini.settings.fonewin14)
+	fonewin15 = imgui.ImBool(ini.settings.fonewin15)
+	fonewin16 = imgui.ImBool(ini.settings.fonewin16) 
+	fonezag = imgui.ImBool(ini.settings.fonezag)
+	fonezag2 = imgui.ImBool(ini.settings.fonezag2)
+	fonezag3 = imgui.ImBool(ini.settings.fonezag3)
+	fonezag4 = imgui.ImBool(ini.settings.fonezag4)
+	fonezag5 = imgui.ImBool(ini.settings.fonezag5)
+	fonezag6 = imgui.ImBool(ini.settings.fonezag6)
+	fonezag7 = imgui.ImBool(ini.settings.fonezag7)
+	fonezag8 = imgui.ImBool(ini.settings.fonezag8)
+	fonezag9 = imgui.ImBool(ini.settings.fonezag9)
+	fonezag10 = imgui.ImBool(ini.settings.fonezag10)
+	fonezag11 = imgui.ImBool(ini.settings.fonezag11)
+	fonezag12 = imgui.ImBool(ini.settings.fonezag12)
+	fonezag13 = imgui.ImBool(ini.settings.fonezag13)
+	fonezag14 = imgui.ImBool(ini.settings.fonezag14)
+	fonezag15 = imgui.ImBool(ini.settings.fonezag15)
+	fonezag16 = imgui.ImBool(ini.settings.fonezag16)
+	fonetext = imgui.ImBool(ini.settings.fonetext)
+	fonetext2 = imgui.ImBool(ini.settings.fonetext2)
+	fonetext3 = imgui.ImBool(ini.settings.fonetext3)
+	fonetext4 = imgui.ImBool(ini.settings.fonetext4)
+	fonetext5 = imgui.ImBool(ini.settings.fonetext5)
+	fonetext6 = imgui.ImBool(ini.settings.fonetext6)
+	fonetext7 = imgui.ImBool(ini.settings.fonetext7)
+	fonetext8 = imgui.ImBool(ini.settings.fonetext8)
+	fonetext9 = imgui.ImBool(ini.settings.fonetext9)
+	fonetext10 = imgui.ImBool(ini.settings.fonetext10)
+	fonetext11 = imgui.ImBool(ini.settings.fonetext11)
+	fonetext12 = imgui.ImBool(ini.settings.fonetext12)
+	fonetext13 = imgui.ImBool(ini.settings.fonetext13)
+	fonetext14 = imgui.ImBool(ini.settings.fonetext14)
+	fonetext15 = imgui.ImBool(ini.settings.fonetext15)
+	fonetext16 = imgui.ImBool(ini.settings.fonetext16)
+	fonevydel = imgui.ImBool(ini.settings.fonevydel)
+	fonevydel2 = imgui.ImBool(ini.settings.fonevydel2)
+	fonevydel3 = imgui.ImBool(ini.settings.fonevydel3)
+	fonevydel4 = imgui.ImBool(ini.settings.fonevydel4)
+	fonevydel5 = imgui.ImBool(ini.settings.fonevydel5)
+	fonevydel6 = imgui.ImBool(ini.settings.fonevydel6)
+	fonevydel7 = imgui.ImBool(ini.settings.fonevydel7)
+	fonevydel8 = imgui.ImBool(ini.settings.fonevydel8)
+	fonevydel9 = imgui.ImBool(ini.settings.fonevydel9)
+	fonevydel10 = imgui.ImBool(ini.settings.fonevydel10)
+	fonevydel11 = imgui.ImBool(ini.settings.fonevydel11)
+	fonevydel12 = imgui.ImBool(ini.settings.fonevydel12)
+	fonevydel13 = imgui.ImBool(ini.settings.fonevydel13)
+	fonevydel14 = imgui.ImBool(ini.settings.fonevydel14)
+	fonevydel15 = imgui.ImBool(ini.settings.fonevydel15)
+	fonevydel16 = imgui.ImBool(ini.settings.fonevydel16)
+	fonelin = imgui.ImBool(ini.settings.fonelin)
+	fonelin2 = imgui.ImBool(ini.settings.fonelin2)
+	fonelin3 = imgui.ImBool(ini.settings.fonelin3)
+	fonelin4 = imgui.ImBool(ini.settings.fonelin4)
+	fonelin5 = imgui.ImBool(ini.settings.fonelin5)
+	fonelin6 = imgui.ImBool(ini.settings.fonelin6)
+	fonelin7 = imgui.ImBool(ini.settings.fonelin7)
+	fonelin8 = imgui.ImBool(ini.settings.fonelin8)
+	fonelin9 = imgui.ImBool(ini.settings.fonelin9)
+	fonelin10 = imgui.ImBool(ini.settings.fonelin10)
+	fonelin11 = imgui.ImBool(ini.settings.fonelin11)
+	fonelin12 = imgui.ImBool(ini.settings.fonelin12)
+	fonelin13 = imgui.ImBool(ini.settings.fonelin13)
+	fonelin14 = imgui.ImBool(ini.settings.fonelin14)
+	fonelin15 = imgui.ImBool(ini.settings.fonelin15)
+	fonelin16 = imgui.ImBool(ini.settings.fonelin16)
+	fonebutton = imgui.ImBool(ini.settings.fonebutton)
+	fonebutton2 = imgui.ImBool(ini.settings.fonebutton2)
+	fonebutton3 = imgui.ImBool(ini.settings.fonebutton3)
+	fonebutton4 = imgui.ImBool(ini.settings.fonebutton4)
+	fonebutton5 = imgui.ImBool(ini.settings.fonebutton5)
+	fonebutton6 = imgui.ImBool(ini.settings.fonebutton6)
+	fonebutton7 = imgui.ImBool(ini.settings.fonebutton7)
+	fonebutton8 = imgui.ImBool(ini.settings.fonebutton8)
+	fonebutton9 = imgui.ImBool(ini.settings.fonebutton9)
+	fonebutton10 = imgui.ImBool(ini.settings.fonebutton10)
+	fonebutton11 = imgui.ImBool(ini.settings.fonebutton11)
+	fonebutton12 = imgui.ImBool(ini.settings.fonebutton12)
+	fonebutton13 = imgui.ImBool(ini.settings.fonebutton13)
+	fonebutton14 = imgui.ImBool(ini.settings.fonebutton14)
+	fonebutton15 = imgui.ImBool(ini.settings.fonebutton15)
+	fonebutton16 = imgui.ImBool(ini.settings.fonebutton16)
+	fonepol = imgui.ImBool(ini.settings.fonepol)
+	fonepol2 = imgui.ImBool(ini.settings.fonepol2)
+	fonepol3 = imgui.ImBool(ini.settings.fonepol3)
+	fonepol4 = imgui.ImBool(ini.settings.fonepol4)
+	fonepol5 = imgui.ImBool(ini.settings.fonepol5)
+	fonepol6 = imgui.ImBool(ini.settings.fonepol6)
+	fonepol7 = imgui.ImBool(ini.settings.fonepol7)
+	fonepol8 = imgui.ImBool(ini.settings.fonepol8)
+	fonepol9 = imgui.ImBool(ini.settings.fonepol9)
+	fonepol10 = imgui.ImBool(ini.settings.fonepol10)
+	fonepol11 = imgui.ImBool(ini.settings.fonepol11)
+	fonepol12 = imgui.ImBool(ini.settings.fonepol12)
+	fonepol13 = imgui.ImBool(ini.settings.fonepol13)
+	fonepol14 = imgui.ImBool(ini.settings.fonepol14)
+	fonepol15 = imgui.ImBool(ini.settings.fonepol15)
+	fonepol16 = imgui.ImBool(ini.settings.fonepol16)
 	dialogclose = imgui.ImBool(ini.settings.dialogclose)
 	autoryda = imgui.ImBool(ini.settings.autoryda)
 	autopin = imgui.ImBool(ini.settings.autopin)
@@ -5972,8 +7266,6 @@ function load_settings() -- загрузка настроек
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
 	autobike = imgui.ImBool(ini.settings.autobike)
-	styletest = imgui.ImBool(ini.settings.styletest)
-	styletest1 = imgui.ImBool(ini.settings.styletest1)
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
 	raskladka = imgui.ImBool(ini.settings.raskladka)
 	recongen = imgui.ImBool(ini.settings.recongen)
@@ -6860,61 +8152,61 @@ while true do
 	checked_test2.v = false
 	checked_test3.v = false
 	checked_test4.v = false
-	otkrytie.v = false
-	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
-      wait(222)
+      wait(500)
       sampSendClickTextdraw(2080)
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
+	  wait(15000)
+	  samprulstart = true
     end
     if checked_test2.v and krytim then
 	checked_test.v = false
 	checked_test3.v = false
 	checked_test4.v = false
-	otkrytie.v = false
-	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
-      wait(222)
+      wait(500)
       sampSendClickTextdraw(2085)
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
+	  wait(15000)
+	  samprulstart = true
     end
     if checked_test3.v and krytim then
 	checked_test2.v = false
 	checked_test.v = false
 	checked_test4.v = false
-	otkrytie.v = false
-	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
-      wait(222)
+      wait(500)
       sampSendClickTextdraw(2090)
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
+	  wait(15000)
+	  samprulstart = true
     end
     if checked_test4.v and krytim then
 	checked_test2.v = false
 	checked_test3.v = false
 	checked_test.v = false
-	otkrytie.v = false
-	otkrytie2.v = false
       rul()
 	  wait(111)
 	  closeDialog()
-      wait(222)
+      wait(500)
       sampSendClickTextdraw(2110)
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
+	  wait(15000)
+	  samprulstart = true
 			end
 		wait(0)
 	end
@@ -6925,180 +8217,420 @@ while true do
 	if checked_test5.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0) 
 	  wait(200)
+	if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
     if checked_test6.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
     if checked_test7.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test8.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active3 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test9.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active4 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test10.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if yashik.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik1.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik2.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik3.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
 	end
 	if checked_test5.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
     if checked_test6.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
     if checked_test7.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test8.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active3 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test9.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active4 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if checked_test10.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
 	if yashik.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik1.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik2.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
 	if yashik3.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
 	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
+	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
 		end	
@@ -7158,7 +8690,13 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 1, -1)
@@ -7208,7 +8746,13 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 1, -1)
@@ -7258,7 +8802,13 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 1, -1)
@@ -7308,7 +8858,13 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 1, -1)
@@ -7358,7 +8914,13 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 1, -1)
@@ -7411,10 +8973,20 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuszidkost1 < 51 then 
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7424,9 +8996,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7436,9 +9012,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7448,9 +9028,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7461,10 +9045,20 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuszidkost1 < 51 then 
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7474,9 +9068,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7486,9 +9084,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7498,9 +9100,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7511,10 +9117,20 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuszidkost1 < 51 then 
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7524,9 +9140,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7536,9 +9156,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7548,9 +9172,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7561,10 +9189,20 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuszidkost1 < 51 then 
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7574,9 +9212,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7586,9 +9228,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7598,9 +9244,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7611,10 +9261,20 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuszidkost1 < 51 then 
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7624,9 +9284,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7636,9 +9300,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7648,9 +9316,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 2, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7663,10 +9335,20 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7676,9 +9358,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk2 then
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7688,9 +9374,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk3 then
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7700,23 +9390,37 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk4 then
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7726,9 +9430,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk2 then
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7738,9 +9446,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk3 then
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7750,23 +9462,37 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk4 then
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7776,9 +9502,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk2 then
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7788,9 +9518,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk3 then
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7800,23 +9534,37 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk4 then
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7826,9 +9574,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk2 then
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7838,9 +9590,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk3 then
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7850,23 +9606,37 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk4 then
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить или остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
 	sampSendDialogResponse(15272, 1 , 0, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7876,9 +9646,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk2 then
 	sampSendDialogResponse(15272, 1 , 1, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7888,9 +9662,13 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk3 then
 	sampSendDialogResponse(15272, 1 , 2, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
@@ -7900,16 +9678,382 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
+	if statuspusk4 then
 	sampSendDialogResponse(15272, 1 , 3, -1)
 	wait(200)
 	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
 	wait(1000)
 	closeDialog()
 	wait(1000)
 	closeDialog()
 	wait(100)
-	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно запустили или остановили видеокарты. Функция выключилась автоматический.", 0x046D63)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно запустили видеокарты. Функция выключилась автоматический.", 0x046D63)
 	pusk.v = false
+		end
+	if pusk2.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk2 then
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk3 then
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk4 then
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk2 then
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk3 then
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk4 then
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk2 then
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk3 then
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk4 then
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk2 then
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk3 then
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk4 then
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	if statuspusk then
+	sampSendDialogResponse(15272, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk2 then
+	sampSendDialogResponse(15272, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk3 then
+	sampSendDialogResponse(15272, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	if statuspusk4 then
+	sampSendDialogResponse(15272, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(15273, 1 , 0, -1)
+	else
+	closeDialog()
+	end
+	wait(1000)
+	closeDialog()
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("[Mono Tools]{FFFFFF} Вы успешно остановили видеокарты. Функция выключилась автоматический.", 0x046D63)
+	pusk2.v = false
 		end
 		wait(0)
 	end
@@ -8028,7 +10172,9 @@ while true do
 	local x, y, z = getCharCoordinates(PLAYER_PED)
 	local result, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "{73B461}Для добычи ископаемого")
 	if autoryda.v and result then
-	sendKey(1024)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
 		end
 	wait(0)
 	end
@@ -8062,6 +10208,81 @@ while true do
 		end
 		wait(0)
 	end
+end
+
+function housemenu()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu1()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu2()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu3()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu4()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
 end
 
 function informerperem()
@@ -8657,7 +10878,7 @@ function notesmenu()
 		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8(" Заметки")); imgui.SameLine(); imgui.ToggleButton(u8'Заметки', pismo)
 				if pismo.v then
 					imgui.SameLine()
-					if imgui.CustomButton(u8'Переместить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-97, 0)) then
+					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-97, 0)) then
 						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63) 
 						win_state['main'].v = false
 						win_state['informer'].v = false
@@ -8757,12 +10978,12 @@ function kirkamenu()
 		imgui.SetNextWindowSize(imgui.ImVec2(582, 225), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Шахтёр ', win_state['kirkawin'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Редактировать цены на ресурсы', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Редактировать цены на ресурсы', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Автоальт на руде', autoryda)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить счетчик руд")); imgui.SameLine(); imgui.ToggleButton(u8'Включить счетчик руд', ryda)
 				if ryda.v then
 					imgui.SameLine()
-					if imgui.CustomButton(u8'Переместить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00)) then 
+					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol) then 
 						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63)
 						win_state['main'].v = false
 						win_state['informer'].v = false
@@ -8791,11 +11012,11 @@ function bitkoinoknomenu()
 		imgui.SetNextWindowSize(imgui.ImVec2(375, 305), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Улучшение видеокарт ', win_state['bitkoinwinokno'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Инструкция', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-210, 0)) then win_state['shemainst'].v = not win_state['shemainst'].v end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Инструкция', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-210, 0)) then win_state['shemainst'].v = not win_state['shemainst'].v end
 				imgui.SameLine()
-				if imgui.CustomButton(u8'Редактировать ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['shematext'].v = not win_state['shematext'].v end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выбрать первые 20 видеокарт', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then videotrue() end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Завершить улучшение видеокарт', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then videofailed() end
+				if imgui.CustomButton(u8'Редактировать ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['shematext'].v = not win_state['shematext'].v end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выбрать первые 20 видеокарт', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then videotrue() end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Завершить улучшение видеокарт', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then videofailed() end
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1  ', video); imgui.SameLine(); imgui.Checkbox(u8'№2  ', video1); imgui.SameLine(); imgui.Checkbox(u8'№3  ', video2); imgui.SameLine(); imgui.Checkbox(u8'№4  ', video3) imgui.SameLine(); imgui.Checkbox(u8'№5  ', video4); imgui.SameLine(); imgui.Checkbox(u8'№6', video5)
 			    imgui.Text('') imgui.SameLine()  imgui.Checkbox(u8'№7  ', video6); imgui.SameLine(); imgui.Checkbox(u8'№8  ', video7) imgui.SameLine(); imgui.Checkbox(u8'№9  ', video8); imgui.SameLine(); imgui.Checkbox(u8'№10', video9); imgui.SameLine(); imgui.Checkbox(u8'№11', video10); imgui.SameLine(); imgui.Checkbox(u8'№12', video11)
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№13', video12); imgui.SameLine(); imgui.Checkbox(u8'№14', video13); imgui.SameLine(); imgui.Checkbox(u8'№15', video14); imgui.SameLine(); imgui.Checkbox(u8'№16', video15) imgui.SameLine(); imgui.Checkbox(u8'№17', video16); imgui.SameLine(); imgui.Checkbox(u8'№18', video17)
@@ -8880,9 +11101,9 @@ function shemamenu()
 	imgui.Begin(u8' Редактирование ID Текстдравов', win_state['shematext'], imgui.WindowFlags.NoResize)
 			imgui.BeginChild('##asdasasddf2131', imgui.ImVec2(800, 220), false)
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Включить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-440, 0)) then toggle = true end 
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Включить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-440, 0)) then toggle = true end 
 			imgui.SameLine()
-			if imgui.CustomButton(u8'Выключить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-75, 0)) then toggle = false end
+			if imgui.CustomButton(u8'Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-75, 0)) then toggle = false end
 			imgui.PushItemWidth(80)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'№1 ##49', shematext1); imgui.SameLine(129); imgui.InputText(u8'№2 ##50', shematext2); imgui.SameLine(250); imgui.InputText(u8'№3 ##51', shematext3); imgui.SameLine(371); imgui.InputText(u8'№4 ##52', shematext4); imgui.SameLine(492); imgui.InputText(u8'№5 ##53', shematext5); imgui.SameLine(613); imgui.InputText(u8'№6 ##54', shematext6)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'№7 ##55', shematext7); imgui.SameLine(129); imgui.InputText(u8'№8 ##56', shematext8); imgui.SameLine(250); imgui.InputText(u8'№9 ##57', shematext9); imgui.SameLine(371); imgui.InputText(u8'№10 ##58', shematext10); imgui.SameLine(); imgui.InputText(u8'№11 ##59', shematext11); imgui.SameLine(); imgui.InputText(u8'№12 ##60', shematext12)
@@ -8991,9 +11212,9 @@ function googlewinmenu()
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промо-код на 09, 11 и 12, за который можно получить 1.000.000$ от Монополистов: {FFA500}#monopoly{FFA500}")
 		imgui.Separator()
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Жми и поддержи автора лайком!', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-500, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Жми и поддержи автора лайком!', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-500, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
 		imgui.SameLine()
-		if imgui.CustomButton(u8'Много нас тут? Давайте узнаем! Отпишите в теме и посмотрим сколько нас!', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
+		if imgui.CustomButton(u8'Много нас тут? Давайте узнаем! Отпишите в теме и посмотрим сколько нас!', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Ты сампер? А может любишь мани? Тогда жми и подпишись на группу Монополи!', imgui.ImVec4(1.00, 0.19, 0.19, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-430, 0)) then os.execute("start https://vk.com/monopolyfam") end
 		imgui.SameLine()
 		if imgui.CustomButton(u8'Тыкай и будешь приходить на стримы Маркиза каждый день.', imgui.ImVec4(1.00, 0.19, 0.19, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.youtube.com/channel/UCJaqtq_cvdFZxTzPPGbwNXw/videos") end
@@ -9040,7 +11261,7 @@ function messangerwinmenu()
                     local wWidth = imgui.GetWindowHeight()
                     imgui.SetCursorPosY(wWidth - (connected and 25 or 25))
 					if connected then
-						if imgui.CustomButton(u8'Выключить чат', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-0.1, 0)) then
+						if imgui.CustomButton(u8'Выключить чат', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-0.1, 0)) then
                             serverDisconnect()
                             window_selected = 0
 						end
@@ -9075,7 +11296,7 @@ function messangerwinmenu()
 							imgui.PopItemWidth()	
                             if connected and window_selected ~= 0 and needFocus then imgui.SetKeyboardFocusHere() needFocus = false end
                             imgui.SameLine(310)
-							if imgui.CustomButton(u8'Отправить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(192, 0)) then
+							if imgui.CustomButton(u8'Отправить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(192, 0)) then
                                 sendMessage()
 								stringField.v = ''
                             end
@@ -9090,7 +11311,7 @@ function messangerwinmenu()
                         local tsize = imgui.CalcTextSize(u8"Подключиться")
                         imgui.SetCursorPosX((wsize.x - tsize.x - 10) * 0.5)
                         imgui.SetCursorPosY((wsize.y + tsize.y + 50) * 0.4)
-						if imgui.CustomButton(u8'Подключиться', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(100, 0)) then
+						if imgui.CustomButton(u8'Подключиться', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(100, 0)) then
                             imgui.OpenPopup('##StartConnection')
 							window_selected = 1
                         end
@@ -9129,7 +11350,7 @@ function messangerwinmenu()
                 imgui.BeginChild("##SettingButton", imgui.ImVec2(0, 0), false)
                     imgui.Separator()
                     imgui.CentrText(u8(string.format("Всего в сети: %d", chatonline)))
-					if imgui.CustomButton(u8'Настройки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-0.1, 0)) then
+					if imgui.CustomButton(u8'Настройки', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-0.1, 0)) then
                         imgui.OpenPopup('##SettingsList')
                     end
                     imgui.SetNextWindowSize(imgui.ImVec2(800, 470), imgui.Cond.Always)
@@ -9148,7 +11369,7 @@ function messangerwinmenu()
 						imgui.SetCursorPosX((wsize.x * 0.5) - 150)
                         imgui.Text("")
 						imgui.SetCursorPosX((wsize.x * 0.5) - 150)
-						if imgui.CustomButton(u8'Закрыть настройки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(300, 0)) then
+						if imgui.CustomButton(u8'Закрыть настройки', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(300, 0)) then
                             local tempField = u8:decode(str(changeNickField.v))
                             local tempField = string.gsub(tempField, " ", "")
                             if #tempField ~= 0 then
@@ -9208,10 +11429,12 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Режим работы Дрона:')
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный")); imgui.SameLine(); imgui.ToggleButton(u8'  ', droneoption); imgui.SameLine(); imgui.Text(u8("Продвинутый")) imgui.SameLine() imgui.TextQuestion(u8"Есть 2 режима работы дрона. Режим 'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убираются ники и прочие надписи на игроках и встроен ВХ, который показывает не все ники в радиусе, а показывает ник игрока только в том случае, если вы дроном подлетели к нему.")
 			if droneoption.v then developMode = 1 end
-			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Включить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(250, 0)) then toggle = true end 
-			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выключить отображение ID Текстдравов', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(250, 0)) then toggle = false end
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Включить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(250, 0)) then toggle = true end 
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(250, 0)) then toggle = false end
 			imgui.PushItemWidth(250)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
+			imgui.NextColumn()
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(352, 0)) then skuppoymol() end
 		elseif selected3 == 5 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Обновления")
 			imgui.Separator()
@@ -9562,18 +11785,263 @@ function nastroikamenu()
 		elseif selected3 == 4 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Персонализация")
 			imgui.Separator()
-			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8'Данный пункт находится в разработке, но вы можете выбрать 2 доступных стиля. Белый или тёмный.')
-			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Белый")); imgui.SameLine(); imgui.ToggleButton(u8'Белый', styletest)
-			imgui.SameLine(300)
-			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Тёмный")); imgui.SameLine(); imgui.ToggleButton(u8'Тёмный', styletest1)
-			if styletest.v then -- стили
-			apply_custom_style()
-			end
-			if styletest1.v then -- стили
-			apply_custom_style1()
-			end
-			if styletest.v then styletest1.v = false end
-			if styletest1.v then styletest.v = false end
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Изображения для рабочего стола. Нажми на изображение, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20) 
+			if imgui.ImageButton(winbackground, imgui.ImVec2(100, 80), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then rabstol.v = true rabstol2.v = false rabstol3.v = false rabstol4.v = false rabstol5.v = false rabstol6.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(winbackground2, imgui.ImVec2(100, 80), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then rabstol.v = false rabstol2.v = true rabstol3.v = false rabstol4.v = false rabstol5.v = false rabstol6.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(winbackground3, imgui.ImVec2(100, 80), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then rabstol.v = false rabstol2.v = false rabstol3.v = true rabstol4.v = false rabstol5.v = false rabstol6.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(winbackground4, imgui.ImVec2(100, 80), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then rabstol.v = false rabstol2.v = false rabstol3.v = false rabstol4.v = true rabstol5.v = false rabstol6.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(winbackground5, imgui.ImVec2(100, 80), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then rabstol.v = false rabstol2.v = false rabstol3.v = false rabstol4.v = false rabstol5.v = true rabstol6.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(winbackground6, imgui.ImVec2(100, 80), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then rabstol.v = false rabstol2.v = false rabstol3.v = false rabstol4.v = false rabstol5.v = false rabstol6.v = true end
+			
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Инструкция по установке картинок на рабочий стол', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['kartinst'].v = not win_state['kartinst'].v end
+			
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет окон. Нажмите на цвет, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorwindows, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = true fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = true fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = true fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = true fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = true fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = true fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = true fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = true fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = true fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = true fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = true fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = true fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorwindows13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = true fonewin14.v = false fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = true fonewin15.v = false fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = true fonewin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorwindows16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonewin.v = false fonewin2.v = false fonewin3.v = false fonewin4.v = false fonewin5.v = false fonewin6.v = false fonewin7.v = false fonewin8.v = false fonewin9.v = false fonewin10.v = false fonewin11.v = false fonewin12.v = false fonewin13.v = false fonewin14.v = false fonewin15.v = false fonewin16.v = true end
+			
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет заголовков. Нажмите на цвет, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorzagolovok, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = true fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = true fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = true fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = true fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = true fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = true fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = true fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = true fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = true fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = true fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = true fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = true fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorzagolovok13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = true fonezag14.v = false fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = true fonezag15.v = false fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = true fonezag16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorzagolovok16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonezag.v = false fonezag2.v = false fonezag3.v = false fonezag4.v = false fonezag5.v = false fonezag6.v = false fonezag7.v = false fonezag8.v = false fonezag9.v = false fonezag10.v = false fonezag11.v = false fonezag12.v = false fonezag13.v = false fonezag14.v = false fonezag15.v = false fonezag16.v = true end
+		
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет основного текста. Нажмите на цвет, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colortext, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = true fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = true fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = true fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = true fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = true fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = true fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = true fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = true fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = true fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = true fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = true fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = true fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colortext13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = true fonetext14.v = false fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = true fonetext15.v = false fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = true fonetext16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colortext16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonetext.v = false fonetext2.v = false fonetext3.v = false fonetext4.v = false fonetext5.v = false fonetext6.v = false fonetext7.v = false fonetext8.v = false fonetext9.v = false fonetext10.v = false fonetext11.v = false fonetext12.v = false fonetext13.v = false fonetext14.v = false fonetext15.v = false fonetext16.v = true end
+		
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет выделения иконок, кнопок, переключателей и ползунков. Нажмите на цвет, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorvydel, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = true fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = true fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = true fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = true fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = true fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = true fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = true fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = true fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = true fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = true fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = true fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = true fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorvydel13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = true fonevydel14.v = false fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = true fonevydel15.v = false fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = true fonevydel16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorvydel16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonevydel.v = false fonevydel2.v = false fonevydel3.v = false fonevydel4.v = false fonevydel5.v = false fonevydel6.v = false fonevydel7.v = false fonevydel8.v = false fonevydel9.v = false fonevydel10.v = false fonevydel11.v = false fonevydel12.v = false fonevydel13.v = false fonevydel14.v = false fonevydel15.v = false fonevydel16.v = true end
+			
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет текстовых полей, переключателей и нажатия на иконки, кнопки, переключатели и ползунки. Нажмите на цвет,"))
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorpol, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = true fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = true fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = true fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = true fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = true fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = true fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = true fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = true fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = true fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = true fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = true fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = true fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorpol13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = true fonepol14.v = false fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = true fonepol15.v = false fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = true fonepol16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorpol16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonepol.v = false fonepol2.v = false fonepol3.v = false fonepol4.v = false fonepol5.v = false fonepol6.v = false fonepol7.v = false fonepol8.v = false fonepol9.v = false fonepol10.v = false fonepol11.v = false fonepol12.v = false fonepol13.v = false fonepol14.v = false fonepol15.v = false fonepol16.v = true end
+		
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет кнопок, галочки и ползунков. Нажмите на цвет, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorbutton, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = true fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = true fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = true fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = true fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = true fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = true fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = true fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = true fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = true fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = true fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = true fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = true fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorbutton13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = true fonebutton14.v = false fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = true fonebutton15.v = false fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = true fonebutton16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorbutton16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonebutton.v = false fonebutton2.v = false fonebutton3.v = false fonebutton4.v = false fonebutton5.v = false fonebutton6.v = false fonebutton7.v = false fonebutton8.v = false fonebutton9.v = false fonebutton10.v = false fonebutton11.v = false fonebutton12.v = false fonebutton13.v = false fonebutton14.v = false fonebutton15.v = false fonebutton16.v = true end
+		
+			imgui.Text('') imgui.SameLine() imgui.Text(u8("Цвет линий и обводки. Нажмите на цвет, чтобы установить его."))
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorlin, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = true fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = true fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = true fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = true fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = true fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin6, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = true fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end 
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin7, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = true fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin8, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = true fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin9, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = true fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin10, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = true fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin11, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = true fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin12, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = true fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.Text('') imgui.SameLine(20)
+			if imgui.ImageButton(colorlin13, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = true fonelin14.v = false fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin14, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = true fonelin15.v = false fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin15, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = true fonelin16.v = false end
+			imgui.SameLine()
+			if imgui.ImageButton(colorlin16, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then fonelin.v = false fonelin2.v = false fonelin3.v = false fonelin4.v = false fonelin5.v = false fonelin6.v = false fonelin7.v = false fonelin8.v = false fonelin9.v = false fonelin10.v = false fonelin11.v = false fonelin12.v = false fonelin13.v = false fonelin14.v = false fonelin15.v = false fonelin16.v = true end
+			
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть настройки персонализации по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then vernytfone() end
+		
 		elseif selected3 == 3 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Основные настройки")
 			imgui.Separator()
@@ -9621,7 +12089,7 @@ function nastroikamenu()
 				if faminvfast.v then imgui.InputText(u8'##311', fastinvfam) end
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Invite', invfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в организацию с помощью прицеливания и кнопки, которую вы выбрали (по умолчанию кнопка Q)");
 				if invfast.v then imgui.InputText(u8'##312', fastinv) end
-				if carsis.v and imgui.CustomButton(u8'Редактировать cars', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-124, 0)) then carsys() end
+				if carsis.v and imgui.CustomButton(u8'Редактировать cars', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-124, 0)) then carsys() end
 				imgui.Text(u8("Открытие меню на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для открытия или закрытия скрипта. По умолчанию поставлено на F3. Коды клавиш вы можете посмотреть в помощь - коды клавиш.") 
 					imgui.InputText(u8'##1', autoklava)
 				imgui.Text(u8("Перезагрузка скрипта на клавишу")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести код клавиши для перезагрузки скрипта. По умолчанию поставлено на F4. Коды клавиш вы можете посмотреть в помощь - коды клавиш.")
@@ -9644,7 +12112,7 @@ function nastroikamenu()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones)
 				if zones.v then
 					imgui.SameLine()
-					if imgui.CustomButton(u8'Переместить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(0, 0)) then 
+					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then 
 						sampAddChatMessage("[Mono Tools]{FFFFFF} Выберите позицию и нажмите {00C2BB}Enter{FFFFFF} чтобы сохранить ее.", 0x046D63)
 						win_state['nastroikawin'].v = false
 						win_state['main'].v = false
@@ -9696,7 +12164,7 @@ function nastroikamenu()
 				if enableskin.v then
 					imgui.Text('') imgui.SameLine() imgui.InputInt("##229", localskin, 0, 0)
 					imgui.SameLine()
-					if imgui.CustomButton(u8'Применить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(0, 0)) then
+					if imgui.CustomButton(u8'Применить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then
 						if localskin.v <= 0 or localskin.v == 74 or localskin.v == 53 then
 							localskin.v = 1
 						end
@@ -9730,10 +12198,10 @@ function nastroikamenu()
 					imgui.Text(u8("Команда не назначена"))
 				end
 				imgui.NextColumn()		
-				if imgui.CustomButton(u8("Редактировать бинд ##"..k), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(0, 0)) then imgui.OpenPopup(u8"Установка клавиши ##modal"..k) end
+				if imgui.CustomButton(u8("Редактировать бинд ##"..k), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then imgui.OpenPopup(u8"Установка клавиши ##modal"..k) end
 				if k ~= 0 then
 					imgui.NextColumn()
-					if imgui.CustomButton(u8("Удалить бинд ##"..k), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(0, 0)) then
+					if imgui.CustomButton(u8("Удалить бинд ##"..k), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then
 						if v.cmd ~= "-" then sampUnregisterChatCommand(v.cmd) end
 						if rkeys.isHotKeyDefined(tLastKeys.v) then rkeys.unRegisterHotKey(tLastKeys.v) end
 						table.remove(mass_bind, k)
@@ -9741,10 +12209,10 @@ function nastroikamenu()
 					end
 				end
 				if imgui.BeginPopupModal(u8"Установка клавиши ##modal"..k, _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoMove) then
-					if imgui.CustomButton(u8('Сменить/Назначить команду'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(200, 0)) then
+					if imgui.CustomButton(u8('Сменить/Назначить команду'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(200, 0)) then
 						imgui.OpenPopup(u8"Команда - /"..v.cmd)
 					end		
-					if imgui.CustomButton(u8('Редактировать содержимое'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(200, 0)) then
+					if imgui.CustomButton(u8('Редактировать содержимое'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(200, 0)) then
 						cmd_text.v = u8(v.text):gsub("~", "\n")
 						binddelay.v = v.delay
 						imgui.OpenPopup(u8'Редактор текста ##second'..k)
@@ -9757,7 +12225,7 @@ function nastroikamenu()
 						imgui.Text('') imgui.SameLine() imgui.InputText("##FUCKITTIKCUF_1", cmd_name)
 						imgui.PopItemWidth()
 						
-						imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8('Сохранить'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(244, 0)) then
+						imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8('Сохранить'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(244, 0)) then
 							v.cmd = u8:decode(cmd_name.v)
 
 							if u8:decode(cmd_name.v) ~= "-" then
@@ -9768,7 +12236,7 @@ function nastroikamenu()
 							imgui.CloseCurrentPopup()
 						end
 						imgui.SameLine()
-						if imgui.CustomButton(u8('Закрыть'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(243, 0)) then
+						if imgui.CustomButton(u8('Закрыть'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(243, 0)) then
 							cmd_name.v = ""
 							imgui.CloseCurrentPopup()
 						end
@@ -9813,7 +12281,7 @@ function nastroikamenu()
 						imgui.EndChild()
 						imgui.NewLine()
 						
-						if imgui.CustomButton(u8('Сохранить'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then
+						if imgui.CustomButton(u8('Сохранить'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
 
 							v.text = u8:decode(cmd_text.v):gsub("\n", '~')
 							v.delay = binddelay.v
@@ -9826,14 +12294,14 @@ function nastroikamenu()
 							imgui.CloseCurrentPopup()
 						end
 					
-						if imgui.CustomButton(u8('Закрыть не сохраняя'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then
+						if imgui.CustomButton(u8('Закрыть не сохраняя'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
 							imgui.CloseCurrentPopup()
 						end
 						imgui.EndChild()
 						imgui.EndPopup()
 					end
 
-					if imgui.CustomButton(u8('Закрыть'), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(200, 0)) then
+					if imgui.CustomButton(u8('Закрыть'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(200, 0)) then
 						imgui.CloseCurrentPopup()
 					end
 					imgui.EndPopup()
@@ -9841,7 +12309,7 @@ function nastroikamenu()
 			end
 			imgui.NextColumn()
 			imgui.NewLine()
-			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Добавить бинд"), imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(0, 0)) then mass_bind[#mass_bind + 1] = {delay = "3", v = {}, text = "n/a", cmd = "-"} end	
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Добавить бинд"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then mass_bind[#mass_bind + 1] = {delay = "3", v = {}, text = "n/a", cmd = "-"} end	
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -9867,23 +12335,39 @@ function shahtared()
 function funksmenu()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -0.38))
-	imgui.SetNextWindowSize(imgui.ImVec2(670, 195), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -0.199))
+	imgui.SetNextWindowSize(imgui.ImVec2(670, 225), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Прочие функции', win_state['shemafunks'], imgui.WindowFlags.NoResize)
-		imgui.BeginChild('##asdasasddf2131543', imgui.ImVec2(800, 160), false)
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
 		imgui.SameLine(400)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить/Остановить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает или останавливает видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты', pusk2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты. При активаций функции вы должны стоять у полки с видеокартами.")
+		imgui.Text('') imgui.SameLine()	if imgui.CustomButton(u8("Перезайти в дом"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumber'].v = not win_state['housenumber'].v end
 		imgui.PushItemWidth(422)
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Дата срабатывания напоминания ##90', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.PopItemWidth()
-		imgui.EndChild()
+		imgui.End()
+	end
+	
+function numberhouse()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -0.199))
+	imgui.SetNextWindowSize(imgui.ImVec2(670, 225), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Выберите номер дома', win_state['housenumber'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №1"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №2"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu1() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №3"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu2() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №4"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu3() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №5"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu4() houserespawn = true end
 		imgui.End()
 	end
 	
@@ -9891,9 +12375,9 @@ function shemainstr()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(813, 200), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(813, 220), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Инструкция', win_state['shemainst'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf2131', imgui.ImVec2(800, 165), false)
+			imgui.BeginChild('##asdasasddf2131', imgui.ImVec2(800, 185), false)
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Видеокарты должны быть на второй странице инвентаря и идти по порядку! Т.е в слот №1 ложите видеокарту, следующую ложите в")
 			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"слот №2 и так далее. Чтобы узнать номер слота - смотрите схему. Если вы играете не на Arizona RP Prescott, то зайдите в")
@@ -9903,22 +12387,39 @@ function shemainstr()
 			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"можете, нажав на 'Выключить отображение ID Текстдравов'. Также помните, что ID текстдравов могут измениться из-за телефона,")
 			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"или из-за меню крафта, поэтому, если доставали телефон или открывали меню крафта, то лучше перезайти в игру.")
 			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Чтобы прервать процесс улучшения - нажмите на кнопку 'Завершить улучшение видеокарт'.")
+			imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"P.S Также, чтобы работали все действия с инвентарём(улучшение видеокарт и т.д) - инвентарь должен быть на английском языке!")
 			imgui.EndChild()
+			imgui.End()
+	end
+	
+function kartinstr()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(830, 190), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Инструкция', win_state['kartinst'], imgui.WindowFlags.NoResize)
+			imgui.Text('')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Скачайте картинку, которую хотите установить в скрипт.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Картинка должна быть формата PNG. Если вы скачали картинку другого формата - то откройте изображение в "Paint" или "Photoshop",')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'нажмите "сохранить как" и сохраните изображение в формате PNG.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Перемейнуйте картинку в "img0.png", "img1.png", "img2.png", "img3.png" или "img4.png".')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Выйдите из игры и переместите картинку по пути: "папка с игрой-moonloader-config-Mono-icons" с заменой.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Зайдите в игру, откройте меню скрипта, зайдите в "Параметры" - "Персонализация" и нажмите на вашу картинку, что установить её.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Наслаждайтесь красивой картинкой в скрипте!) Так вы можете установить до 5-ти картинок в скрипт.')
 			imgui.End()
 	end
 	
 function shemaskup()
 	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -1.87))
-	imgui.SetNextWindowSize(imgui.ImVec2(1000, 95), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -1.50))
+	imgui.SetNextWindowSize(imgui.ImVec2(1000, 115), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Инструкция', win_state['skupshema'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-		imgui.BeginChild('##asdasasddf21312122', imgui.ImVec2(1000, 90), false)
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"1) Для начала поставьте галочку на тех товарах, которые хотите скупать. 2) Введите количество товара и цену за штуку в соответствующих полях.")
-		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ НАЖИМАЙТЕ НА КНОПКУ 'РАССЧИТАТЬ ТОВАРЫ', ЕСЛИ ЗАПОЛНИЛИ НЕ ВСЕ ПОЛЯ!")
+		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ НАЖИМАЙТЕ НА КНОПКУ 'РАССЧИТАТЬ ТОВАРЫ', ЕСЛИ ЗАПОЛНИЛИ НЕ ВСЕ ПОЛЯ! И В БУДУЩЕМ, ЕСЛИ ВЫ НЕ МОЖЕТЕ ЗАЙТИ В СКУП МЕНЮ - ЗАЙДИТЕ В")
+		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! 'ПАРАМЕТРЫ' - 'ДЛЯ РАЗРАБОТЧИКОВ' И НАЖМИТЕ КНОПКУ 'ВЕРНУТЬ ЗНАЧЕНИЯ СКУПА ПО УМОЛЧАНИЮ'.")
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"3) Встаньте в лавку, введите название, и нажмите альт, чтобы попасть в начальное меню лавки. Далее откройте меню скрипта - 'Skup Menu' и нажмите на кнопку")
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"'Выставить товары на скуп'.")
-		imgui.EndChild()
 		imgui.End()
 	end
 	
@@ -9986,10 +12487,15 @@ function pravila2048menu()
 	
 function pravilapongmenu()
 	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(-4.3, 1.52))
-	imgui.SetNextWindowSize(imgui.ImVec2(152, 179), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(-4.3, 0.96))
+	imgui.SetNextWindowSize(imgui.ImVec2(152, 290), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Правила Pong', win_state['pravilapong'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-		imgui.BeginChild('##asdasasddf2443645', imgui.ImVec2(1000, 160), false)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine(38) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Инструкция:")
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Чтобы начать играть,')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'нажмите кнопку "New')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Game", затем "Start".')
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine(38) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Управление:")
 		imgui.Text('')
@@ -9999,7 +12505,6 @@ function pravilapongmenu()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Difficulty - сложность')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Pause - пауза')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Start - начать игру')
-		imgui.EndChild()
 		imgui.End()
 	end
 	
@@ -10026,11 +12531,25 @@ function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(855, 660), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(855, 350), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Тестовые обновления v3.1', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf531', imgui.ImVec2(855, 630), false)
-			imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"")
-			imgui.EndChild()
+			imgui.Text('')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "Автоальт" (кикало за флуд функциями).')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Фикс "Skup Menu" (крашил скрипт и функционал скупа, если удалить количество).')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'3. В "Skup Menu" обновлена инструкция.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Теперь можно одновременно крутить рулетки и открывать сундуки.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'5. В инструкцию майнинга добавлено упоминание, что инвентарь должен быть на английском языке.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'6. В "Майнинг" - "Прочие функций" добавлена возможность перезаходить между домами.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'7. В майнинге теперь при заливке жидкости, видеокарты в которых больше 51% жидкости не заправляются.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'8. В "Майнинг" - "Прочие функций" добавлена возможность выключать видеокарты.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'9. В майнинг функции добавлен двойной альт, чтобы прогружался нужный диалог.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'10. В майнинге, если нажать на "Запустить видеокарты", то скрипт больше не останавливает запущенные видеокарты, а ищет именно')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'выключенные. С остановкой видеокарт тоже самое.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'11. В игре "Snake" добавлена возможность выхода из игры на клавишу R.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'12. В игре "Pong" добавлена инструкция по игре.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'13. В "Параметры" - "Для разработчиков" добавлена кнопка "Вернуть значения скупа по умолчанию".')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'14. Доделан функционал "Персонализация". Теперь вы сможете настроить цвета скрипта так, как этого хочется вам и установить любую ')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'картинку на рабочий стол.')
 			imgui.End()
 		end
 		
@@ -10115,7 +12634,7 @@ function getArizonaName()
 	imgui.Text(u8('  Пятница')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh4)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh4))
 	imgui.Text(u8('  Суббота')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh5)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh5))
 	imgui.Text(u8('  Воскресенье')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh6)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh6))
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Обнулить счётчик объявлений', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then 
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Обнулить счётчик объявлений', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
 	cfg.adpred.piarsh = 0 
 	cfg.adpred.vippiarsh = 0 
 	cfg.adpred.piarsh1 = 0 
@@ -10136,21 +12655,21 @@ function getArizonaName()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97', adsec)
 	imgui.SameLine()
-	if imgui.CustomButton(u8'Отправить объявление сейчас', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then adtravel() end
+	if imgui.CustomButton(u8'Отправить объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##98', vipadsec)
 	imgui.SameLine() 
-	if imgui.CustomButton(u8'Отправить VIP объявление сейчас', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then adtravel2() end
+	if imgui.CustomButton(u8'Отправить VIP объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel2() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /fam', famaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##199', famadsec)
 	imgui.SameLine() 
-	if imgui.CustomButton(u8'Отправить текст в /fam сейчас', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then adtravel3() end
+	if imgui.CustomButton(u8'Отправить текст в /fam сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel3() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr', vraddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200', vradsec)
 	imgui.SameLine() 
-	if imgui.CustomButton(u8'Отправить текст в /vr сейчас', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then adtravel4() end
+	if imgui.CustomButton(u8'Отправить текст в /vr сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel4() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /s', saddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##2000', sadsec)
 	imgui.SameLine() 
-	if imgui.CustomButton(u8'Отправить текст в /s сейчас', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then adtravel5() end
+	if imgui.CustomButton(u8'Отправить текст в /s сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel5() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления в VK', addvk) imgui.SameLine(405) 
-	if imgui.CustomButton(u8'Настройка отправки объявлений', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(237, 0)) then win_state['vkmessage'].v = not win_state['vkmessage'].v end
+	if imgui.CustomButton(u8'Настройка отправки объявлений', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then win_state['vkmessage'].v = not win_state['vkmessage'].v end
 	imgui.PopItemWidth()
 	imgui.PushItemWidth(634)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'##99', adredak)
@@ -10164,17 +12683,17 @@ function getArizonaSkup()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
     imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Счастливая травка', skuptrava) imgui.SameLine(177) imgui.InputText(u8'##100', skuptravacol) imgui.SameLine(281) imgui.InputText(u8'##101', skuptravacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptravacol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptrava)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронзовая рулетка', skupbronzarul) imgui.SameLine(177) imgui.InputText(u8'##102', skupbronzarulcol) imgui.SameLine(281) imgui.InputText(u8'##103', skupbronzarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupbronzarulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupbronzarul)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебряная рулетка', skupserebrorul) imgui.SameLine(177) imgui.InputText(u8'##104', skupserebrorulcol) imgui.SameLine(281) imgui.InputText(u8'##133', skupserebrorulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupserebrorulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupserebrorul)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золотая рулетка', skupgoldrul) imgui.SameLine(177) imgui.InputText(u8'##105', skupgoldrulcol) imgui.SameLine(281) imgui.InputText(u8'##134', skupgoldrulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupgoldrulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupgoldrul)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Платиновая рулетка', skupplatinarul) imgui.SameLine(177) imgui.InputText(u8'##106', skupplatinarulcol) imgui.SameLine(281) imgui.InputText(u8'##135', skupplatinarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupplatinarulcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupplatinarul)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Камень', skupkamen) imgui.SameLine(177) imgui.InputText(u8'##107', skupkamencol) imgui.SameLine(281) imgui.InputText(u8'##136', skupkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupkamencol.v).." шт. товара нужно заплатить "..number_separator(itogoskupkamen)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Металл', skupmetal) imgui.SameLine(177) imgui.InputText(u8'##108', skupmetalcol) imgui.SameLine(281) imgui.InputText(u8'##137', skupmetalcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupmetalcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupmetal)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронза', skupbronza) imgui.SameLine(177) imgui.InputText(u8'##109', skupbronzacol) imgui.SameLine(281) imgui.InputText(u8'##138', skupbronzacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupbronzacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupbronza)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебро', skupserebro) imgui.SameLine(177) imgui.InputText(u8'##110', skupserebrocol) imgui.SameLine(281) imgui.InputText(u8'##139', skupserebrocena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupserebrocol.v).." шт. товара нужно заплатить "..number_separator(itogoskupserebro)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золото', skupgold) imgui.SameLine(177) imgui.InputText(u8'##111', skupgoldcol) imgui.SameLine(281) imgui.InputText(u8'##140', skupgoldcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupgoldcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupgold)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Подарки', skuppodarki) imgui.SameLine(177) imgui.InputText(u8'##112', skuppodarkicol) imgui.SameLine(281) imgui.InputText(u8'##141', skuppodarkicena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuppodarkicol.v).." шт. товара нужно заплатить "..number_separator(itogoskuppodarki)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Счастливая травка', skuptrava) imgui.SameLine(177) imgui.InputText(u8'##100', skuptravacol) imgui.SameLine(281) imgui.InputText(u8'##101', skuptravacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltrava).." шт. товара нужно заплатить "..number_separator(itogoskuptrava)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронзовая рулетка', skupbronzarul) imgui.SameLine(177) imgui.InputText(u8'##102', skupbronzarulcol) imgui.SameLine(281) imgui.InputText(u8'##103', skupbronzarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolbronzarul).." шт. товара нужно заплатить "..number_separator(itogoskupbronzarul)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебряная рулетка', skupserebrorul) imgui.SameLine(177) imgui.InputText(u8'##104', skupserebrorulcol) imgui.SameLine(281) imgui.InputText(u8'##133', skupserebrorulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolserebrorul).." шт. товара нужно заплатить "..number_separator(itogoskupserebrorul)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золотая рулетка', skupgoldrul) imgui.SameLine(177) imgui.InputText(u8'##105', skupgoldrulcol) imgui.SameLine(281) imgui.InputText(u8'##134', skupgoldrulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolgoldrul).." шт. товара нужно заплатить "..number_separator(itogoskupgoldrul)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Платиновая рулетка', skupplatinarul) imgui.SameLine(177) imgui.InputText(u8'##106', skupplatinarulcol) imgui.SameLine(281) imgui.InputText(u8'##135', skupplatinarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolplatinarul).." шт. товара нужно заплатить "..number_separator(itogoskupplatinarul)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Камень', skupkamen) imgui.SameLine(177) imgui.InputText(u8'##107', skupkamencol) imgui.SameLine(281) imgui.InputText(u8'##136', skupkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolkamen).." шт. товара нужно заплатить "..number_separator(itogoskupkamen)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Металл', skupmetal) imgui.SameLine(177) imgui.InputText(u8'##108', skupmetalcol) imgui.SameLine(281) imgui.InputText(u8'##137', skupmetalcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolmetal).." шт. товара нужно заплатить "..number_separator(itogoskupmetal)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронза', skupbronza) imgui.SameLine(177) imgui.InputText(u8'##109', skupbronzacol) imgui.SameLine(281) imgui.InputText(u8'##138', skupbronzacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolbronza).." шт. товара нужно заплатить "..number_separator(itogoskupbronza)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебро', skupserebro) imgui.SameLine(177) imgui.InputText(u8'##110', skupserebrocol) imgui.SameLine(281) imgui.InputText(u8'##139', skupserebrocena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolserebro).." шт. товара нужно заплатить "..number_separator(itogoskupserebro)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золото', skupgold) imgui.SameLine(177) imgui.InputText(u8'##111', skupgoldcol) imgui.SameLine(281) imgui.InputText(u8'##140', skupgoldcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolgold).." шт. товара нужно заплатить "..number_separator(itogoskupgold)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Подарки', skuppodarki) imgui.SameLine(177) imgui.InputText(u8'##112', skuppodarkicol) imgui.SameLine(281) imgui.InputText(u8'##141', skuppodarkicena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolpodarki).." шт. товара нужно заплатить "..number_separator(itogoskuppodarki)..'$')) 
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
 		delplayer = not delplayer
@@ -10202,26 +12721,26 @@ function getArizonaSkup()
 	imgui.Separator()
 	imgui.Text('')
 	imgui.SameLine(285)
-	if imgui.CustomButton(u8'1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then
+	if imgui.CustomButton(u8'1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
 	win_state['skup'].v = true
 	win_state['skup2'].v = false 
 	win_state['skup3'].v = false 
 	end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'2', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then 
+	if imgui.CustomButton(u8'2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then 
 	win_state['skup2'].v = true
 	win_state['skup'].v = false 
 	win_state['skup3'].v = false 
 	end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'3', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then
+	if imgui.CustomButton(u8'3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
 	win_state['skup3'].v = true
 	win_state['skup'].v = false  
 	win_state['skup2'].v = false  
 	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then skuppoymol() end 
-	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then load_static() end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(692, 0)) then skuptovarov() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuppoymol() end 
+	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(692, 0)) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
@@ -10232,21 +12751,21 @@ function getArizonaSkup2str()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
     imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Гражданский талон', skuptalon) imgui.SameLine(177) imgui.InputText(u8'##113', skuptaloncol) imgui.SameLine(281) imgui.InputText(u8'##142', skuptaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptaloncol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptalon)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupsemtaloncol.v).." шт. товара нужно заплатить "..number_separator(itogoskupsemtalon)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupskidtaloncol.v).." шт. товара нужно заплатить "..number_separator(itogoskupskidtalon)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptochkamencol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptochkamen)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Гражданский талон', skuptalon) imgui.SameLine(177) imgui.InputText(u8'##113', skuptaloncol) imgui.SameLine(281) imgui.InputText(u8'##142', skuptaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltalon).." шт. товара нужно заплатить "..number_separator(itogoskuptalon)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolsemtalon).." шт. товара нужно заплатить "..number_separator(itogoskupsemtalon)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolskidtalon).." шт. товара нужно заплатить "..number_separator(itogoskupskidtalon)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltochkamen).." шт. товара нужно заплатить "..number_separator(itogoskuptochkamen)..'$')) 
 	imgui.PushItemWidth(187)
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptochamulet)..'$'))
 	imgui.PopItemWidth()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuplareccol.v).." шт. товара нужно заплатить "..number_separator(itogoskuplarec)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcollarec).." шт. товара нужно заплатить "..number_separator(itogoskuplarec)..'$')) 
 	imgui.PushItemWidth(187)
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Твин Турбо', skuptt) imgui.SameLine(177) imgui.InputText(u8'##148', skupttcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptt)..'$'))
 	imgui.PopItemWidth()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Зловещая монета', skupmoneta) imgui.SameLine(177) imgui.InputText(u8'##120', skupmonetacol) imgui.SameLine(281) imgui.InputText(u8'##149', skupmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupmonetacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupmoneta)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Лён', skuplen) imgui.SameLine(177) imgui.InputText(u8'##121', skuplencol) imgui.SameLine(281) imgui.InputText(u8'##150', skuplencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuplencol.v).." шт. товара нужно заплатить "..number_separator(itogoskuplen)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлопок', skupxlopok) imgui.SameLine(177) imgui.InputText(u8'##122', skupxlopokcol) imgui.SameLine(281) imgui.InputText(u8'##151', skupxlopokcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupxlopokcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupxlopok)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бандитский респект', skuprespekt) imgui.SameLine(177) imgui.InputText(u8'##123', skuprespektcol) imgui.SameLine(281) imgui.InputText(u8'##152', skuprespektcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuprespektcol.v).." шт. товара нужно заплатить "..number_separator(itogoskuprespekt)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Зловещая монета', skupmoneta) imgui.SameLine(177) imgui.InputText(u8'##120', skupmonetacol) imgui.SameLine(281) imgui.InputText(u8'##149', skupmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolmoneta).." шт. товара нужно заплатить "..number_separator(itogoskupmoneta)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Лён', skuplen) imgui.SameLine(177) imgui.InputText(u8'##121', skuplencol) imgui.SameLine(281) imgui.InputText(u8'##150', skuplencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcollen).." шт. товара нужно заплатить "..number_separator(itogoskuplen)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлопок', skupxlopok) imgui.SameLine(177) imgui.InputText(u8'##122', skupxlopokcol) imgui.SameLine(281) imgui.InputText(u8'##151', skupxlopokcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolxlopok).." шт. товара нужно заплатить "..number_separator(itogoskupxlopok)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бандитский респект', skuprespekt) imgui.SameLine(177) imgui.InputText(u8'##123', skuprespektcol) imgui.SameLine(281) imgui.InputText(u8'##152', skuprespektcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolrespekt).." шт. товара нужно заплатить "..number_separator(itogoskuprespekt)..'$')) 
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
 		delplayer = not delplayer
@@ -10274,26 +12793,26 @@ function getArizonaSkup2str()
 	imgui.Separator()
 	imgui.Text('')
 	imgui.SameLine(285)
-	if imgui.CustomButton(u8'1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then
+	if imgui.CustomButton(u8'1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
 	win_state['skup'].v = true
 	win_state['skup2'].v = false 
 	win_state['skup3'].v = false 
 	end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'2', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then 
+	if imgui.CustomButton(u8'2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then 
 	win_state['skup2'].v = true
 	win_state['skup'].v = false 
 	win_state['skup3'].v = false 
 	end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'3', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then
+	if imgui.CustomButton(u8'3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
 	win_state['skup3'].v = true
 	win_state['skup'].v = false  
 	win_state['skup2'].v = false  
 	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then skuppoymol() end 
-	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then load_static() end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(692, 0)) then skuptovarov() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuppoymol() end 
+	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(692, 0)) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
@@ -10304,11 +12823,11 @@ function getArizonaSkup3str()
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
     imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Материалы', skupmaterial) imgui.SameLine(177) imgui.InputText(u8'##124', skupmaterialcol) imgui.SameLine(281) imgui.InputText(u8'##153', skupmaterialcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupmaterialcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupmaterial)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Дрова', skupdrova) imgui.SameLine(177) imgui.InputText(u8'##125', skupdrovacol) imgui.SameLine(281) imgui.InputText(u8'##154', skupdrovacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupdrovacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupdrova)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Антибиотики', skupantibiotik) imgui.SameLine(177) imgui.InputText(u8'##126', skupantibiotikcol) imgui.SameLine(281) imgui.InputText(u8'##155', skupantibiotikcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupantibiotikcol.v).." шт. товара нужно заплатить "..number_separator(itogoskupantibiotik)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отмычки от ТСР', skuptsr) imgui.SameLine(177) imgui.InputText(u8'##127', skuptsrcol) imgui.SameLine(281) imgui.InputText(u8'##156', skuptsrcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skuptsrcol.v).." шт. товара нужно заплатить "..number_separator(itogoskuptsr)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейные монеты', skupsemmoneta) imgui.SameLine(177) imgui.InputText(u8'##128', skupsemmonetacol) imgui.SameLine(281) imgui.InputText(u8'##157', skupsemmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(skupsemmonetacol.v).." шт. товара нужно заплатить "..number_separator(itogoskupsemmoneta)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Материалы', skupmaterial) imgui.SameLine(177) imgui.InputText(u8'##124', skupmaterialcol) imgui.SameLine(281) imgui.InputText(u8'##153', skupmaterialcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolmaterial).." шт. товара нужно заплатить "..number_separator(itogoskupmaterial)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Дрова', skupdrova) imgui.SameLine(177) imgui.InputText(u8'##125', skupdrovacol) imgui.SameLine(281) imgui.InputText(u8'##154', skupdrovacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoldrova).." шт. товара нужно заплатить "..number_separator(itogoskupdrova)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Антибиотики', skupantibiotik) imgui.SameLine(177) imgui.InputText(u8'##126', skupantibiotikcol) imgui.SameLine(281) imgui.InputText(u8'##155', skupantibiotikcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolantibiotik).." шт. товара нужно заплатить "..number_separator(itogoskupantibiotik)..'$')) 
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отмычки от ТСР', skuptsr) imgui.SameLine(177) imgui.InputText(u8'##127', skuptsrcol) imgui.SameLine(281) imgui.InputText(u8'##156', skuptsrcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltsr).." шт. товара нужно заплатить "..number_separator(itogoskuptsr)..'$'))
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейные монеты', skupsemmoneta) imgui.SameLine(177) imgui.InputText(u8'##128', skupsemmonetacol) imgui.SameLine(281) imgui.InputText(u8'##157', skupsemmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolsemmoneta).." шт. товара нужно заплатить "..number_separator(itogoskupsemmoneta)..'$')) 
 	imgui.PushItemWidth(187)
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Улучшение для авто', skupauto) imgui.SameLine(177) imgui.InputText(u8'##158', skupautocena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskupauto)..'$'))
 	imgui.PopItemWidth()
@@ -10346,26 +12865,26 @@ function getArizonaSkup3str()
 	imgui.Separator()
 	imgui.Text('')
 	imgui.SameLine(285)
-	if imgui.CustomButton(u8'1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then
+	if imgui.CustomButton(u8'1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
 	win_state['skup'].v = true
 	win_state['skup2'].v = false 
 	win_state['skup3'].v = false 
 	end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'2', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then 
+	if imgui.CustomButton(u8'2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then 
 	win_state['skup2'].v = true
 	win_state['skup'].v = false 
 	win_state['skup3'].v = false 
 	end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'3', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(30, 30)) then
+	if imgui.CustomButton(u8'3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
 	win_state['skup3'].v = true
 	win_state['skup'].v = false  
 	win_state['skup2'].v = false  
 	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then skuppoymol() end 
-	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(342, 0)) then load_static() end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(692, 0)) then skuptovarov() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuppoymol() end 
+	imgui.SameLine() if imgui.CustomButton(u8'Рассчитать товары', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then load_static() end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Выставить товары на скуп', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(692, 0)) then skuptovarov() end
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
@@ -10374,7 +12893,7 @@ function rpguns()
 	imgui.BeginChild('##as2dasasdf433433', imgui.ImVec2(2000, 225), false)
 		imgui.Columns(2, _, false)
 		imgui.Text('') imgui.SameLine(90) imgui.AlignTextToFramePadding(); imgui.Text(u8(" Отыгровка оружия, когда оно у вас в руках")); imgui.SameLine(); imgui.ToggleButton(u8'', otgun); imgui.SameLine(); imgui.Text(u8(" Отыгровка оружия при прицеливании"))
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Редактировать отыгровки', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(730, 0)) then win_state['redak'].v = not win_state['redak'].v end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Редактировать отыгровки', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(730, 0)) then win_state['redak'].v = not win_state['redak'].v end
 		imgui.NextColumn()
 		imgui.NextColumn()
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Desert Eagle', deagle)
@@ -10414,11 +12933,11 @@ function carsax()
             sampShowDialog(INFO[1],INFO[3],u8:decode(buf.v),INFO[4],INFO[5],INFO[2])
             sampSetDialogClientside(false)
 		end	
-		if imgui.CustomButton(u8'Сохранить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(175, 40)) then 
+		if imgui.CustomButton(u8'Сохранить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(175, 40)) then 
 			savedialog()
 		end
 		imgui.SameLine(323)
-		if imgui.CustomButton(u8'Удалить', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(175, 40)) then 
+		if imgui.CustomButton(u8'Удалить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(175, 40)) then 
 			if ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] ~= nil then 
 				ini.DIALOG_EDITOR["DIALOG_" .. INFO[1]] = nil
 				sampShowDialog(INFO[1],INFO[3],INFO[6],INFO[4],INFO[5],INFO[2]) 
@@ -10437,11 +12956,11 @@ function scriptinfo()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8("Группа в VK, на которую стоит подписаться:")) imgui.SameLine(272) imgui.TextColoredRGB("{0F52BA}click{0F52BA}") imgui.SameLine(272) imgui.Link('https://vk.com/monopolyfam','click')
 	
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промо-код на 09, 11 и 12, за который можно получить 1.000.000$ от Монополистов: {FFA500}#monopoly{FFA500}")
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Игроки, которые предлагали идеи и они были осуществлены', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['oscriptepeople'].v = not win_state['oscriptepeople'].v end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Поддержать Автора лайком и оставить отзыв', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-330, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Игроки, которые предлагали идеи и они были осуществлены', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['oscriptepeople'].v = not win_state['oscriptepeople'].v end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Поддержать Автора лайком и оставить отзыв', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-330, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
 	imgui.SameLine()
-	if imgui.CustomButton(u8'Поддержать Автора материально', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Сообщить о баге или предложить идею', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/page-30000") end
+	if imgui.CustomButton(u8'Поддержать Автора материально', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Сообщить о баге или предложить идею', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/page-30000") end
 end
 
 function vkmessagemain()
@@ -10827,6 +13346,11 @@ function updatesnake()
         startGame()
     end
 	
+	if not sampIsChatInputActive() and not isStarted and wasKeyPressed(key.VK_R) then
+        snaketaken = false
+		showCursor(false)
+    end
+	
 	if not sampIsChatInputActive() and isStarted and wasKeyPressed(key.VK_R) then
         snaketaken = false
 		showCursor(false)
@@ -10999,7 +13523,7 @@ function rendersnake()
     renderFontDrawText(fontsnake, text, winX + winSize - paddingsnake - length, winY + paddingsnake, cfg.paramssnake.fontColor)
 
     if not isStarted then
-        text = 'Press E to start'
+        text = 'Press E to start | Press R to exit'
         length = renderGetFontDrawTextLength(fontsnake, text)
         renderFontDrawText(fontsnake, text, winX + (winSize - length) / 2, winY + winSize - fontSizesnake - paddingsnake, cfg.paramssnake.fontColor)
     end
@@ -11296,8 +13820,108 @@ end
 
 function photo_load()
 	wait(10000)
-	--winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
-	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img1.png')
+	winbackground = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img0.png')
+	winbackground2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img2.png')
+	winbackground3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img3.png')
+	winbackground4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img4.png')
+	winbackground5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img5.png')
+	winbackground6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/img6.png')
+	colorwindows = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorwindows2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorwindows3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorwindows4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorwindows5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorwindows6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorwindows7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorwindows8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorwindows9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorwindows10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorwindows11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorwindows12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorwindows13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorwindows14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorwindows15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorwindows16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorzagolovok = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorzagolovok2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorzagolovok3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorzagolovok4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorzagolovok5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorzagolovok6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorzagolovok7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorzagolovok8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorzagolovok9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorzagolovok10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorzagolovok11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorzagolovok12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorzagolovok13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorzagolovok14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorzagolovok15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorzagolovok16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colortext = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colortext2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colortext3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colortext4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colortext5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colortext6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colortext7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colortext8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colortext9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colortext10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colortext11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colortext12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colortext13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colortext14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colortext15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colortext16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorvydel = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorvydel2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorvydel3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorvydel4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorvydel5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorvydel6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorvydel7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorvydel8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorvydel9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorvydel10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorvydel11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorvydel12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorvydel13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorvydel14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorvydel15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorvydel16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorbutton = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorbutton2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorbutton3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorbutton4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorbutton5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorbutton6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorbutton7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorbutton8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorbutton9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorbutton10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorbutton11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorbutton12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorbutton13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorbutton14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorbutton15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorbutton16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
+	colorpol = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Blue.png')
+	colorpol2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Pink.png')
+	colorpol3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/White.png')
+	colorpol4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Orange.png')
+	colorpol5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gray.png')
+	colorpol6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Cherry.png')
+	colorpol7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Dark-Green.png')
+	colorpol8 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Magenta.png')
+	colorpol9 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Purple.png')
+	colorpol10 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Light-Green.png')
+	colorpol11 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Black.png')
+	colorpol12 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Red.png')
+	colorpol13 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Blue.png')
+	colorpol14 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Gold.png')
+	colorpol15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
+	colorpol16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
     winpusk = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/pusk.png')
     winedge = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
@@ -11366,6 +13990,32 @@ function load_static()
 	itogoskuptsr = skuptsrcol.v * skuptsrcena.v
 	itogoskupsemmoneta = skupsemmonetacol.v * skupsemmonetacena.v
 	itogoskupauto = 1 * skupautocena.v
+	
+	itogoskupcoltrava = skuptravacol.v
+	itogoskupcolbronzarul = skupbronzarulcol.v
+	itogoskupcolserebrorul = skupserebrorulcol.v
+	itogoskupcolgoldrul = skupgoldrulcol.v
+	itogoskupcolplatinarul = skupplatinarulcol.v
+	itogoskupcolkamen = skupkamencol.v
+	itogoskupcolmetal = skupmetalcol.v
+	itogoskupcolbronza = skupbronzacol.v
+	itogoskupcolserebro = skupserebrocol.v
+	itogoskupcolgold = skupgoldcol.v
+	itogoskupcolpodarki = skuppodarkicol.v
+	itogoskupcoltalon = skuptaloncol.v
+	itogoskupcolsemtalon = skupsemtaloncol.v
+	itogoskupcolskidtalon = skupskidtaloncol.v
+	itogoskupcoltochkamen = skuptochkamencol.v
+	itogoskupcollarec = skuplareccol.v
+	itogoskupcolmoneta = skupmonetacol.v
+	itogoskupcollen = skuplencol.v
+	itogoskupcolxlopok = skupxlopokcol.v
+	itogoskupcolrespekt = skuprespektcol.v
+	itogoskupcolmaterial = skupmaterialcol.v
+	itogoskupcoldrova = skupdrovacol.v
+	itogoskupcolantibiotik = skupantibiotikcol.v
+	itogoskupcoltsr = skuptsrcol.v
+	itogoskupcolsemmoneta = skupsemmonetacol.v
 	
 	if skuptrava.v then skuptravacool = skuptravacol.v else skuptravacool = 0 end
 	if skupbronzarul.v then skupbronzarulcool = skupbronzarulcol.v else skupbronzarulcool = 0 end
@@ -12889,6 +15539,130 @@ function emul_rpc(hook, parameters)
         raknetDeleteBitStream(bs)
     end
 end
+
+function vernytfone()
+		rabstol.v = true
+		rabstol2.v = false
+		rabstol3.v = false
+		rabstol4.v = false
+		rabstol5.v = false
+		rabstol6.v = false
+		fonewin.v = false
+		fonewin2.v = false
+		fonewin3.v = true
+		fonewin4.v = false
+		fonewin5.v = false
+		fonewin6.v = false
+		fonewin7.v = false
+		fonewin8.v = false
+		fonewin9.v = false
+		fonewin10.v = false
+		fonewin11.v = false
+		fonewin12.v = false
+		fonewin13.v = false
+		fonewin14.v = false
+		fonewin15.v = false
+		fonewin16.v = false
+		fonezag.v = false
+		fonezag2.v = false
+		fonezag3.v = false
+		fonezag4.v = false
+		fonezag5.v = false
+		fonezag6.v = false
+		fonezag7.v = false
+		fonezag8.v = false
+		fonezag9.v = false
+		fonezag10.v = false
+		fonezag11.v = false
+		fonezag12.v = false
+		fonezag13.v = false
+		fonezag14.v = false
+		fonezag15.v = false
+		fonezag16.v = true
+		fonetext.v = false
+		fonetext2.v = false
+		fonetext3.v = false
+		fonetext4.v = false
+		fonetext5.v = false
+		fonetext6.v = false
+		fonetext7.v = false
+		fonetext8.v = false
+		fonetext9.v = false
+		fonetext10.v = false
+		fonetext11.v = true
+		fonetext12.v = false
+		fonetext13.v = false
+		fonetext14.v = false
+		fonetext15.v = false
+		fonetext16.v = false
+		fonevydel.v = false
+		fonevydel2.v = false
+		fonevydel3.v = false
+		fonevydel4.v = false
+		fonevydel5.v = false
+		fonevydel6.v = false
+		fonevydel7.v = false
+		fonevydel8.v = false
+		fonevydel9.v = false
+		fonevydel10.v = false
+		fonevydel11.v = false
+		fonevydel12.v = false
+		fonevydel13.v = false
+		fonevydel14.v = false
+		fonevydel15.v = false
+		fonevydel16.v = true
+		fonelin.v = false
+		fonelin2.v = false
+		fonelin3.v = false
+		fonelin4.v = false
+		fonelin5.v = true
+		fonelin6.v = false
+		fonelin7.v = false
+		fonelin8.v = false
+		fonelin9.v = false
+		fonelin10.v = false
+		fonelin11.v = false
+		fonelin12.v = false
+		fonelin13.v = false
+		fonelin14.v = false
+		fonelin15.v = false
+		fonelin16.v = false
+		fonepol.v = true
+		fonepol2.v = false
+		fonepol3.v = false
+		fonepol4.v = false
+		fonepol5.v = false
+		fonepol6.v = false
+		fonepol7.v = false
+		fonepol8.v = false
+		fonepol9.v = false
+		fonepol10.v = false
+		fonepol11.v = false
+		fonepol12.v = false
+		fonepol13.v = false
+		fonepol14.v = false
+		fonepol15.v = false
+		fonepol16.v = false
+		fonebutton.v = false
+		fonebutton2.v = false
+		fonebutton3.v = false
+		fonebutton4.v = false
+		fonebutton5.v = false
+		fonebutton6.v = false
+		fonebutton7.v = false
+		fonebutton8.v = false
+		fonebutton9.v = false
+		fonebutton10.v = false
+		fonebutton11.v = false
+		fonebutton12.v = false
+		fonebutton13.v = false
+		fonebutton14.v = false
+		fonebutton15.v = false
+		fonebutton16.v = true
+		saveSettings()
+		apply_custom_style()
+		end
+		
 
 
 
