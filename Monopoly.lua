@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.1.3')
+script_version('3.1.4')
 
 local use = false
 local close = false
@@ -864,7 +864,6 @@ local checked_test9 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
 local WHupdate = imgui.ImBool(false)
 WHoskolki = imgui.ImBool(false)
-klad = imgui.ImBool(false)
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
 local video2 = imgui.ImBool(false)
@@ -10396,69 +10395,11 @@ while true do
                         local text = '{CD0000}Осколки ящика\n{ffffff}Дистанция: '..mils..'m.'
                         renderDrawLine(c1,c2,o1,o2,1,-1)
                         renderFontDrawText(font,text,o1,o2,-1)
-						end
-                    end
-				end
-			end
-		end
-		
-		if klad.v then
-				for _, v in pairs(getAllObjects()) do--цикл на поиск объектов вокруг перса
-				local asd
-				if sampGetObjectSampIdByHandle(v) ~= -1 then
-					asd = sampGetObjectSampIdByHandle(v)
-				end
-					local modelid = getObjectModel(v)
-					sizetr = imgui.ImInt(3)--переменная толщины трейсеров
-					sizetext = imgui.ImInt(3)--переменная толщины текста
-					if modelid==16302 or modelid==2680 or modelid==1271 then
-						local _, x, y, z = getObjectCoordinates(v)
-						if isPointOnScreen(x, y, z) then
-							rr = 0--обнуление числа объектов клада (замок, песок и сундук)
-							local x1, y1 = convert3DCoordsToScreen(x,y,z)
-							local x2,y2,z2 = getCharCoordinates(PLAYER_PED)
-							local x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
-							local colo7 = '0xFFFF0000'
-							local distance = string.format("%.1f", getDistanceBetweenCoords3d(x, y, z, x2, y2, z2))
-							if modelid == 2680 then --Если есть песок/сундук/замок - счетчику частей клада прибавляется один. Клад считается цельным, если таких еденичек будет 3 (по 1 от каждого предмета)	
-								rr = rr+1
-								renderFontDrawText(font, "Замок", x1, y1, colo7)
-								renderDrawLine(x10, y10, x1, y1, sizetr.v, colo7)
-							end
-							if rr>0 and modelid == 16302 then 	
-								rr = rr+1
-								renderFontDrawText(font, "Песок", x1, y1-17, colo7)
-							end
-							if modelid == 1271 then 	
-								rr = rr+1
-								renderFontDrawText(font, "Сундук", x1, y1, colo7)								
-							end
-							
-							if rr >2 then--если клад цельный будет выполнен код ниже
-								stt=''
-								
-								if tonumber(distance)<25 then--если дистанция меньше 25 метров (клады самим модом сервера отображаются на расстоянии 20 метров) - будет отображаться как настоящий клад
-									renderFontDrawText(font, "Найден клад!("..distance..'м.) '..stt, x1, y1-34, colo7) 
-								end
-								if tonumber(distance)>25 then--если дистанция больше 25 метров - клад фейк, скрипт оповестит об этом
-									renderFontDrawText(font, rr.."Найден клад("..distance..'м. вероятно фейк)', x1, y1-34, colo7) 
-								end
-								renderDrawLine(x10, y10, x1, y1, sizetr.v, colo7)
-							else
-								if modelid ~= 16302 then 	
-									stt = 'Фейк'
-									if tonumber(distance)<25 then--если дистанция меньше 25 метров (клады самим модом сервера отображаются на расстоянии 20 метров) - будет отображаться как настоящий клад
-										renderFontDrawText(font, "Найден клад!("..distance..'м.) '..stt, x1, y1-34, colo7) 
 									end
-									if tonumber(distance)>25 then--если дистанция больше 25 метров - клад фейк, скрипт оповестит об этом
-										renderFontDrawText(font, "Найден клад("..distance..'м. вероятно фейк)', x1, y1-34, colo7) 
-									end	
-								end	
+								end
 							end
 						end		
-					end				
 				end
-			end
 		wait(0)
 	end
 end
@@ -11723,7 +11664,6 @@ function updatewinmenu()
 			end
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Рендер на призрачную тыкву, странное растение и заколдованное дерево', WHupdate) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Рендер на осколки ящика', WHoskolki) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение.")
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Рендер на клады', klad) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение.")
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Отображение карты с метками хэллоуинских кладов на экране (карту можно передвигать) ##1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['prazdnikwin'].v = not win_state['prazdnikwin'].v end
 		imgui.Text('')
 		imgui.Text('')
@@ -11742,7 +11682,8 @@ function updatewinmenu()
 		imgui.Text('')
 		imgui.Text('')
 		imgui.Text('')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'*Спасибо за помощь тестеру Роману. За информацию спасибо группе Форумник. За рендер кладов спасибо Stenford.')
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'*Спасибо за помощь тестеру Роману. За информацию спасибо группе Форумник.')
 		imgui.End()
 	end
 	
@@ -13093,7 +13034,7 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'18. В "Параметры" - "Модификации" добавлен Vip-resend (отправляет текст в /vr, если тот не отправился) от Cosmo.')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'19. На рабочий стол скрипта добавлена временная реклама бара.')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'20. Добавлен пункт "Halloween", в котором в данный момент есть: текст обновления, ответы на вопросы от квестовых персонажей,')
-			imgui.Text('') imgui.SameLine() imgui.Text(u8'рендер на призрачную тыкву, странное растение, заколдованное дерево, осколки ящика, клады (от Stenford) и карта с метками')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'рендер на призрачную тыкву, странное растение, заколдованное дерево, осколки ящика и карта с метками')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'хэллоуинских кладов.')
 			imgui.End()
 		end
