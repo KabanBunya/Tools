@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.1.4')
+script_version('3.1.5')
 
 local use = false
 local close = false
@@ -788,6 +788,7 @@ win_state['nastroikawin'] = imgui.ImBool(false)
 win_state['googlewin'] = imgui.ImBool(false)
 win_state['updatewin'] = imgui.ImBool(false)
 win_state['prazdnikwin'] = imgui.ImBool(false)
+win_state['prizrakwin'] = imgui.ImBool(false)
 win_state['reklamawin'] = imgui.ImBool(false)
 win_state['messanger'] = imgui.ImBool(false)
 win_state['gamer'] = imgui.ImBool(false)
@@ -836,6 +837,7 @@ win_state['renew'] = imgui.ImBool(false)
 win_state['find'] = imgui.ImBool(false)
 win_state['ass'] = imgui.ImBool(false)
 win_state['leave'] = imgui.ImBool(false)
+win_state['bomjwin'] = imgui.ImBool(false)
 local checked_test = imgui.ImBool(false)
 local checked_test2 = imgui.ImBool(false)
 local checked_test3 = imgui.ImBool(false)
@@ -863,7 +865,34 @@ local checked_test8 = imgui.ImBool(false)
 local checked_test9 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
 local WHupdate = imgui.ImBool(false)
+labirint = imgui.ImBool(false)
 WHoskolki = imgui.ImBool(false)
+klad = imgui.ImBool(false)
+prizrak = imgui.ImBool(false)
+prizrak2 = imgui.ImBool(false)
+prizrak3 = imgui.ImBool(false)
+prizrak4 = imgui.ImBool(false)
+prizrak5 = imgui.ImBool(false)
+prizrak6 = imgui.ImBool(false)
+prizrak7 = imgui.ImBool(false)
+prizrak8 = imgui.ImBool(false)
+prizrak9 = imgui.ImBool(false)
+prizrak10 = imgui.ImBool(false)
+prizrak11 = imgui.ImBool(false)
+prizrak12 = imgui.ImBool(false)
+bomj = imgui.ImBool(false)
+bomj1 = imgui.ImBool(false)
+bomj2 = imgui.ImBool(false)
+bomj3 = imgui.ImBool(false)
+bomj4 = imgui.ImBool(false)
+bomj5 = imgui.ImBool(false)
+bomj6 = imgui.ImBool(false)
+bomj7 = imgui.ImBool(false)
+bomj8 = imgui.ImBool(false)
+bomj9 = imgui.ImBool(false)
+bomj10 = imgui.ImBool(false)
+bomj11 = imgui.ImBool(false)
+
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
 local video2 = imgui.ImBool(false)
@@ -1736,7 +1765,7 @@ apply_custom_style()
 
 function files_add()
 	if not doesDirectoryExist("moonloader\\config\\Mono\\icons") then createDirectory('moonloader\\config\\Mono\\icons') end
-	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\White.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Cherry.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Black.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Orange.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Dark-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Red.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Pink.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Magenta.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Purple.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gold.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gray.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Bluev2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kartahalloween.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arzhalloween.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
+	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\White.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Cherry.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Black.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Orange.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Dark-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Red.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Pink.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Magenta.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Purple.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gold.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gray.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Bluev2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kartahalloween.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kartabomjey.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\prizrakhalloween.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arzhalloween.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
 	sampAddChatMessage("[Mono Tools]{FFFFFF} {FF0000}Ошибка!{FFFFFF} У вас отсутствуют нужные картинки для работы скрипта, начинаю скачивание.", 0x046D63)
 	downloadUrlToFile('https://i.imgur.com/1jMFPBg.png', getWorkingDirectory() .. '/config/Mono/icons/2048.png')
 	downloadUrlToFile('https://i.imgur.com/hMrVjAa.png', getWorkingDirectory() .. '/config/Mono/icons/bitcoin.png')
@@ -1788,6 +1817,8 @@ function files_add()
 	
 	downloadUrlToFile('https://i.imgur.com/QPDDD2Q.png', getWorkingDirectory() .. '/config/Mono/icons/arzhalloween.png')
 	downloadUrlToFile('https://i.imgur.com/n6c4FeL.png', getWorkingDirectory() .. '/config/Mono/icons/kartahalloween.png')
+	downloadUrlToFile('https://i.imgur.com/uQyt4Nz.png', getWorkingDirectory() .. '/config/Mono/icons/prizrakhalloween.png')
+	downloadUrlToFile('https://i.imgur.com/00geaz2.png', getWorkingDirectory() .. '/config/Mono/icons/kartabomjey.png')
 	
 	downloadUrlToFile('https://i.imgur.com/qNLWKys.png', getWorkingDirectory() .. '/config/Mono/icons/monopolynews.png')
 	downloadUrlToFile('https://i.imgur.com/SIvPMIK.png', getWorkingDirectory() .. '/config/Mono/icons/tools3.0.png')
@@ -2197,6 +2228,8 @@ function main()
     winpusk = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/pusk.png')
 	
 	winprazdnikhalloween = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/kartahalloween.png')
+	winprizrakhalloween = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/prizrakhalloween.png')
+	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/kartabomjey.png')
 	
     winedge = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
@@ -2279,6 +2312,7 @@ function main()
 	lua_thread.create(snakegaming)
 	lua_thread.create(calculator)
 	lua_thread.create(obnovlenie)
+	lua_thread.create(prizraki)
 	lua_thread.create(rpgunsin)
 	lua_thread.create(strobe)
 	lua_thread.create(findi)
@@ -2502,7 +2536,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['prazdnikwin'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['prazdnikwin'].v or win_state['prizrakwin'].v or win_state['bomjwin'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -2577,8 +2611,17 @@ end
 function onQuitGame()
 	saveSettings(2)
 	imgui.ReleaseTexture(winbackground)
+	imgui.ReleaseTexture(winbackground2)
+	imgui.ReleaseTexture(winbackground3)
+	imgui.ReleaseTexture(winbackground4)
+	imgui.ReleaseTexture(winbackground5)
+	imgui.ReleaseTexture(winbackground6)
 	imgui.ReleaseTexture(winpusk)
+	
 	imgui.ReleaseTexture(winprazdnikhalloween)
+	imgui.ReleaseTexture(winbomj)
+	imgui.ReleaseTexture(winprizrakhalloween)
+	
 	imgui.ReleaseTexture(winsetting)
 	imgui.ReleaseTexture(winedge)
 	imgui.ReleaseTexture(winyashik)
@@ -2616,6 +2659,118 @@ function onQuitGame()
 	imgui.ReleaseTexture(skupinst5)
 	imgui.ReleaseTexture(skupinst6)
 	imgui.ReleaseTexture(skupinst7)
+	imgui.ReleaseTexture(colorwindows)
+	imgui.ReleaseTexture(colorwindows2)
+	imgui.ReleaseTexture(colorwindows3)
+	imgui.ReleaseTexture(colorwindows4)
+	imgui.ReleaseTexture(colorwindows5)
+	imgui.ReleaseTexture(colorwindows6)
+	imgui.ReleaseTexture(colorwindows7)
+	imgui.ReleaseTexture(colorwindows8)
+	imgui.ReleaseTexture(colorwindows9)
+	imgui.ReleaseTexture(colorwindows10)
+	imgui.ReleaseTexture(colorwindows11)
+	imgui.ReleaseTexture(colorwindows12)
+	imgui.ReleaseTexture(colorwindows13)
+	imgui.ReleaseTexture(colorwindows14)
+	imgui.ReleaseTexture(colorwindows15)
+	imgui.ReleaseTexture(colorwindows16)
+	imgui.ReleaseTexture(colorzagolovok)
+	imgui.ReleaseTexture(colorzagolovok2)
+	imgui.ReleaseTexture(colorzagolovok3)
+	imgui.ReleaseTexture(colorzagolovok4)
+	imgui.ReleaseTexture(colorzagolovok5)
+	imgui.ReleaseTexture(colorzagolovok6)
+	imgui.ReleaseTexture(colorzagolovok7)
+	imgui.ReleaseTexture(colorzagolovok8)
+	imgui.ReleaseTexture(colorzagolovok9)
+	imgui.ReleaseTexture(colorzagolovok10)
+	imgui.ReleaseTexture(colorzagolovok11)
+	imgui.ReleaseTexture(colorzagolovok12)
+	imgui.ReleaseTexture(colorzagolovok13)
+	imgui.ReleaseTexture(colorzagolovok14)
+	imgui.ReleaseTexture(colorzagolovok15)
+	imgui.ReleaseTexture(colorzagolovok16)
+	imgui.ReleaseTexture(colortext)
+	imgui.ReleaseTexture(colortext2)
+	imgui.ReleaseTexture(colortext3)
+	imgui.ReleaseTexture(colortext4)
+	imgui.ReleaseTexture(colortext5)
+	imgui.ReleaseTexture(colortext6)
+	imgui.ReleaseTexture(colortext7)
+	imgui.ReleaseTexture(colortext8)
+	imgui.ReleaseTexture(colortext9)
+	imgui.ReleaseTexture(colortext10)
+	imgui.ReleaseTexture(colortext11)
+	imgui.ReleaseTexture(colortext12)
+	imgui.ReleaseTexture(colortext13)
+	imgui.ReleaseTexture(colortext14)
+	imgui.ReleaseTexture(colortext15)
+	imgui.ReleaseTexture(colortext16)
+	imgui.ReleaseTexture(colorvydel)
+	imgui.ReleaseTexture(colorvydel2)
+	imgui.ReleaseTexture(colorvydel3)
+	imgui.ReleaseTexture(colorvydel4)
+	imgui.ReleaseTexture(colorvydel5)
+	imgui.ReleaseTexture(colorvydel6)
+	imgui.ReleaseTexture(colorvydel7)
+	imgui.ReleaseTexture(colorvydel8)
+	imgui.ReleaseTexture(colorvydel9)
+	imgui.ReleaseTexture(colorvydel10)
+	imgui.ReleaseTexture(colorvydel11)
+	imgui.ReleaseTexture(colorvydel12)
+	imgui.ReleaseTexture(colorvydel13)
+	imgui.ReleaseTexture(colorvydel14)
+	imgui.ReleaseTexture(colorvydel15)
+	imgui.ReleaseTexture(colorvydel16)
+	imgui.ReleaseTexture(colorlin)
+	imgui.ReleaseTexture(colorlin2)
+	imgui.ReleaseTexture(colorlin3)
+	imgui.ReleaseTexture(colorlin4)
+	imgui.ReleaseTexture(colorlin5)
+	imgui.ReleaseTexture(colorlin6)
+	imgui.ReleaseTexture(colorlin7)
+	imgui.ReleaseTexture(colorlin8)
+	imgui.ReleaseTexture(colorlin9)
+	imgui.ReleaseTexture(colorlin10)
+	imgui.ReleaseTexture(colorlin11)
+	imgui.ReleaseTexture(colorlin12)
+	imgui.ReleaseTexture(colorlin13)
+	imgui.ReleaseTexture(colorlin14)
+	imgui.ReleaseTexture(colorlin15)
+	imgui.ReleaseTexture(colorlin16)
+	imgui.ReleaseTexture(colorbutton)
+	imgui.ReleaseTexture(colorbutton2)
+	imgui.ReleaseTexture(colorbutton3)
+	imgui.ReleaseTexture(colorbutton4)
+	imgui.ReleaseTexture(colorbutton5)
+	imgui.ReleaseTexture(colorbutton6)
+	imgui.ReleaseTexture(colorbutton7)
+	imgui.ReleaseTexture(colorbutton8)
+	imgui.ReleaseTexture(colorbutton9)
+	imgui.ReleaseTexture(colorbutton10)
+	imgui.ReleaseTexture(colorbutton11)
+	imgui.ReleaseTexture(colorbutton12)
+	imgui.ReleaseTexture(colorbutton13)
+	imgui.ReleaseTexture(colorbutton14)
+	imgui.ReleaseTexture(colorbutton15)
+	imgui.ReleaseTexture(colorbutton16)
+	imgui.ReleaseTexture(colorpol)
+	imgui.ReleaseTexture(colorpol2)
+	imgui.ReleaseTexture(colorpol3)
+	imgui.ReleaseTexture(colorpol4)
+	imgui.ReleaseTexture(colorpol5)
+	imgui.ReleaseTexture(colorpol6)
+	imgui.ReleaseTexture(colorpol7)
+	imgui.ReleaseTexture(colorpol8)
+	imgui.ReleaseTexture(colorpol9)
+	imgui.ReleaseTexture(colorpol10)
+	imgui.ReleaseTexture(colorpol11)
+	imgui.ReleaseTexture(colorpol12)
+	imgui.ReleaseTexture(colorpol13)
+	imgui.ReleaseTexture(colorpol14)
+	imgui.ReleaseTexture(colorpol15)
+	imgui.ReleaseTexture(colorpol16)
 end
 
 function onScriptTerminate(script, quitGame)
@@ -5608,17 +5763,67 @@ function imgui.OnDrawFrame()
     local windowPosX = getStructElement(input, 0x8, 4)
     local windowPosY = getStructElement(input, 0xC, 4)
 
-	imgui.ShowCursor = not win_state['informer'].v and not win_state['pismoinformer'].v and not win_state['shahtainformer'].v and not win_state['prazdnikwin'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
+	imgui.ShowCursor = not win_state['informer'].v and not win_state['pismoinformer'].v and not win_state['shahtainformer'].v and not win_state['prazdnikwin'].v and not win_state['bomjwin'].v and not win_state['prizrakwin'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
 	
 	if not win_state['main'].v then 
           imgui.Process = false
        end
-	  
+	
+	if not win_state['main'].v then 
+		win_state['reklamawin'].v = false
+	   end
+	   
+	if not win_state['main'].v then 
+		win_state['windowspusk'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['gamer'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
+		win_state['oscripte'].v = false
+		win_state['vkmessage'].v = false
+		win_state['oscriptepeople'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['updatewin'].v = false
+		win_state['reklamawin'].v = false
+		win_state['messanger'].v = false
+	   end
+	   
 	if not win_state['main'].v and win_state['informer'].v then 
           imgui.Process = true
        end
 	   
 	if not win_state['main'].v and win_state['prazdnikwin'].v then 
+          imgui.Process = true
+       end
+	   
+	if not win_state['main'].v and win_state['bomjwin'].v then 
+          imgui.Process = true
+       end
+	   
+	if not win_state['main'].v and win_state['prizrakwin'].v then 
           imgui.Process = true
        end
 	   
@@ -5939,6 +6144,14 @@ function imgui.OnDrawFrame()
 	
 	if win_state['prazdnikwin'].v then
 		prazdnikwinmenu()
+	end
+	
+	if win_state['prizrakwin'].v then
+		prizrakwinmenu()
+	end
+	
+	if win_state['bomjwin'].v then
+		bomjwinmenu()
 	end
 	
 	if win_state['reklamawin'].v then
@@ -10328,6 +10541,116 @@ while true do
 	end
 end
 
+function prizraki()
+while true do
+	if prizrak.v then
+		setMarker(2, 160.1194,-1938.8192,3.7734)
+		end
+		if prizrak2.v then
+		setMarker(2, 1055.7681,-1330.3782,13.3828)
+		end
+		if prizrak3.v then
+		setMarker(2, 1415.4816,-1685.4410,18.5469)
+		end
+		if prizrak4.v then
+		setMarker(2, 1678.2339,-1929.2933,21.9542)
+		end
+		if prizrak5.v then
+		setMarker(2, 2298.2837,-1526.6379,26.8750)
+		end
+		if prizrak6.v then
+		setMarker(2, 1413.9053,-800.4716,80.2165)
+		end
+		if prizrak7.v then
+		setMarker(2, 1201.1642,-629.1480,103.7500)
+		end
+		if prizrak8.v then
+		setMarker(2, 2805.5344,1264.4803,10.7500)
+		end
+		if prizrak9.v then
+		setMarker(2, 1159.3810,1719.7638,10.7588)
+		end
+		if prizrak10.v then
+		setMarker(2, -2706.2188,380.5444,4.9688)
+		end
+		if prizrak11.v then
+		setMarker(2, -1984.4092,137.5139,27.6875)
+		end
+		if prizrak12.v then
+		setMarker(2, -1954.6722,-720.1868,32.1811)
+		end
+		if bomj.v then
+		setMarker(2, 1489.5792,-1286.1453,14.5941)
+		end
+		if bomj1.v then
+		setMarker(2, 2001.4930,-1596.1343,13.5744)
+		end
+		if bomj2.v then
+		setMarker(2, 2289.5981,-1723.3420,13.5469)
+		end
+		if bomj3.v then
+		setMarker(2, 2751.1738,-1463.6868,30.4531)
+		end
+		if bomj4.v then
+		setMarker(2, 2723.1584,-2022.8352,13.5472)
+		end
+		if bomj5.v then
+		setMarker(2, 2906.8916,-2013.4573,3.5868)
+		end
+		if bomj6.v then
+		setMarker(2, 2254.9570,-82.0355,26.5348)
+		end
+		if bomj7.v then
+		setMarker(2, 957.3089,374.0988,20.2451)
+		end
+		if bomj8.v then
+		setMarker(2, 254.5665,-157.1542,1.5703)
+		end
+		if bomj9.v then
+		setMarker(2, -207.7970,1089.8920,19.7422)
+		end
+		if bomj10.v then
+		setMarker(2, -2495.6167,750.5657,35.1719)
+		end
+		if bomj11.v then
+		setMarker(2, -2217.8960,551.0561,35.1719)
+		end
+		if labirint.v then
+		createCheckpoint(2, 395.2568,-2322.2290,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 396.2252,-2328.2874,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 397.9897,-2334.3459,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 401.9423,-2330.1101,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 406.9780,-2321.9292,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 402.3672,-2305.1321,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 394.1537,-2304.9944,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 393.3562,-2294.5225,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 403.1771,-2293.5574,2955.3611, 1, 1, 1, 1)
+		createCheckpoint(2, 408.6164,-2299.2144,2955.3611, 1, 1, 1, 1)
+		createCheckpoint(2, 420.7235,-2293.7163,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 406.0240,-2287.7561,2955.3611, 1, 1, 1, 1)
+		createCheckpoint(2, 426.9990,-2282.2712,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 427.9261,-2297.0198,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 428.1930,-2302.0742,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 431.0230,-2314.2708,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 441.9153,-2316.1863,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 448.6047,-2310.3550,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 449.1311,-2320.7297,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(2, 444.5329,-2341.8708,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 455.6308,-2345.6970,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 455.7156,-2351.1174,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 461.9320,-2356.5610,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 467.8961,-2358.7007,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 468.4935,-2366.9204,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 490.9242,-2367.8870,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 469.6191,-2373.3423,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 468.5304,-2379.2429,2955.3660, 1, 1, 1, 1)
+		createCheckpoint(1, 468.5293,-2403.2117,2955.3611, 1, 1, 1, 1)
+		createCheckpoint(1, 468.6804,-2443.9402,2955.6914, 1, 1, 1, 1)
+	end
+		wait(0)
+	end
+end
+
 function obnovlenie()
 while true do
 	if WHupdate.v then
@@ -10399,7 +10722,65 @@ while true do
 								end
 							end
 						end		
+					end
+					
+			if klad.v then
+				for _, v in pairs(getAllObjects()) do--цикл на поиск объектов вокруг перса
+				local asd
+				if sampGetObjectSampIdByHandle(v) ~= -1 then
+					asd = sampGetObjectSampIdByHandle(v)
 				end
+					local modelid = getObjectModel(v)
+					sizetr = imgui.ImInt(3)--переменная толщины трейсеров
+					sizetext = imgui.ImInt(3)--переменная толщины текста
+					if modelid==16302 or modelid==2680 or modelid==1271 then
+						local _, x, y, z = getObjectCoordinates(v)
+						if isPointOnScreen(x, y, z) then
+							rr = 0--обнуление числа объектов клада (замок, песок и сундук)
+							local x1, y1 = convert3DCoordsToScreen(x,y,z)
+							local x2,y2,z2 = getCharCoordinates(PLAYER_PED)
+							local x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
+							local colo7 = '0xFFFF0000'
+							local distance = string.format("%.1f", getDistanceBetweenCoords3d(x, y, z, x2, y2, z2))
+							if modelid == 2680 then --Если есть песок/сундук/замок - счетчику частей клада прибавляется один. Клад считается цельным, если таких еденичек будет 3 (по 1 от каждого предмета)	
+								rr = rr+1
+								renderFontDrawText(font, "Замок", x1, y1, colo7)
+								renderDrawLine(x10, y10, x1, y1, sizetr.v, colo7)
+							end
+							if rr>0 and modelid == 16302 then 	
+								rr = rr+1
+								renderFontDrawText(font, "Песок", x1, y1-17, colo7)
+							end
+							if modelid == 1271 then 	
+								rr = rr+1
+								renderFontDrawText(font, "Сундук", x1, y1, colo7)								
+							end
+							
+							if rr >2 then--если клад цельный будет выполнен код ниже
+								stt=''
+								
+								if tonumber(distance)<25 then--если дистанция меньше 25 метров (клады самим модом сервера отображаются на расстоянии 20 метров) - будет отображаться как настоящий клад
+									renderFontDrawText(font, "Найден клад!("..distance..'м.) '..stt, x1, y1-34, colo7) 
+								end
+								if tonumber(distance)>25 then--если дистанция больше 25 метров - клад фейк, скрипт оповестит об этом
+									renderFontDrawText(font, rr.."Найден клад("..distance..'м. вероятно фейк)', x1, y1-34, colo7) 
+								end
+								renderDrawLine(x10, y10, x1, y1, sizetr.v, colo7)
+							else
+								if modelid ~= 16302 then 	
+									stt = 'Фейк или Хэллоуинский клад'
+									if tonumber(distance)<25 then--если дистанция меньше 25 метров (клады самим модом сервера отображаются на расстоянии 20 метров) - будет отображаться как настоящий клад
+										renderFontDrawText(font, "Найден клад!("..distance..'м.) '..stt, x1, y1-34, colo7) 
+									end
+									if tonumber(distance)>25 then--если дистанция больше 25 метров - клад фейк, скрипт оповестит об этом
+										renderFontDrawText(font, "Найден клад("..distance..'м. вероятно фейк)', x1, y1-34, colo7) 
+									end	
+								end	
+							end
+						end		
+					end	
+				end
+			end
 		wait(0)
 	end
 end
@@ -11664,26 +12045,95 @@ function updatewinmenu()
 			end
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Рендер на призрачную тыкву, странное растение и заколдованное дерево', WHupdate) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Рендер на осколки ящика', WHoskolki) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение.")
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Отображение карты с метками хэллоуинских кладов на экране (карту можно передвигать) ##1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['prazdnikwin'].v = not win_state['prazdnikwin'].v end
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Рендер на клады', klad) imgui.SameLine() imgui.TextQuestion(u8"Рисует линий на указанные предметы, тем самым показывая вам их местонахождение.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Показать маркеры для прохождения лабиринта ##612', labirint) imgui.SameLine() imgui.TextQuestion(u8"Функция ставит чекпоинты в лабиринте, тем самым показывая вам маршрут для его прохождения.")
+		imgui.Separator()
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением призраков:') imgui.SameLine() imgui.TextQuestion(u8"Функция активирует на радаре метку с местонахождением призраков. Нужно для прохождения квеста.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1 ##413', prizrak) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№2 ##414', prizrak2) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№3 ##415', prizrak3) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№4 ##416', prizrak4) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№5 ##417', prizrak5) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№6 ##418', prizrak6) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№7 ##419', prizrak7) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№8 ##420', prizrak8) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№9 ##421', prizrak9) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№10 ##421', prizrak10) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№11 ##423', prizrak11) 
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№12 ##424', prizrak12) 
+		if prizrak.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak2.v then prizrak.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak3.v then prizrak2.v = false prizrak.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak4.v then prizrak2.v = false prizrak3.v = false prizrak.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak5.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak6.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak7.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak8.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak9.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak.v = false prizrak10.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak10.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak.v = false prizrak11.v = false prizrak12.v = false end
+		if prizrak11.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak.v = false prizrak12.v = false end
+		if prizrak12.v then prizrak2.v = false prizrak3.v = false prizrak4.v = false prizrak5.v = false prizrak6.v = false prizrak7.v = false prizrak8.v = false prizrak9.v = false prizrak10.v = false prizrak11.v = false prizrak.v = false end
+		imgui.Separator()
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением бомжей, которым можно помочь с 5-го ноября (на карте отмечены красным):') imgui.SameLine() imgui.TextQuestion(u8"Функция активирует на радаре метку с местонахождением бомжей. Нужно для прохождения квеста.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1 ##514', bomj) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№2 ##515', bomj1) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№3 ##516', bomj2) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№4 ##517', bomj3) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№5 ##518', bomj4) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№6 ##521', bomj7) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№7 ##523', bomj9) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№8 ##523', bomj10) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№9 ##524', bomj11)
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Отобразить на карте метку с местонахождением бомжей, которым можно помочь уже сейчас (на карте отмечены синим):')
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'№1 ##519', bomj5) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№2 ##520', bomj6) 
+		imgui.SameLine()
+		imgui.Checkbox(u8'№3 ##522', bomj8) 
+		if bomj.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj1.v then bomj.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj2.v then bomj1.v = false bomj.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj3.v then bomj1.v = false bomj2.v = false bomj.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj4.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj5.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj6.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj.v = false bomj7.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj7.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj.v = false bomj8.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj8.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj.v = false bomj9.v = false bomj11.v = false bomj10.v = false end
+		if bomj9.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj.v = false bomj11.v = false bomj10.v = false end
+		if bomj10.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj.v = false bomj11.v = false end
+		if bomj11.v then bomj1.v = false bomj2.v = false bomj3.v = false bomj4.v = false bomj5.v = false bomj6.v = false bomj7.v = false bomj8.v = false bomj.v = false bomj10.v = false end
+		imgui.Separator()
+		
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Отображение карты с метками призраков на экране (карту можно передвигать) ##1', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['prizrakwin'].v = not win_state['prizrakwin'].v end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Отображение карты с метками хэллоуинских кладов на экране (карту можно передвигать) ##2', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['prazdnikwin'].v = not win_state['prazdnikwin'].v end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Отображение карты с метками бомжей на экране (карту можно передвигать) ##3', imgui.ImVec4(0.26, 0.59, 0.98, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then win_state['bomjwin'].v = not win_state['bomjwin'].v end
+		
 		imgui.Text('')
 		imgui.Text('')
 		imgui.Text('')
 		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'*Спасибо за помощь тестеру Роману. За информацию спасибо группе Форумник.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'*Спасибо за помощь тестеру Роману. За информацию спасибо группе "Форумник" и "Arizona RP | Полезные вещи". За клады спасибо Stenford.')
 		imgui.End()
 	end
 	
@@ -11698,6 +12148,34 @@ function prazdnikwinmenu()
 		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8('Коорды хэллоуинских кладов'), win_state['prazdnikwin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
 		imgui.Image(winprazdnikhalloween, imgui.ImVec2(450, 450), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.End()
+		end
+		
+function prizrakwinmenu()
+	local tLastKeys = {} -- это у нас для клавиш
+	local input = sampGetInputInfoPtr()
+    local input = getStructElement(input, 0x8, 4)
+    local windowPosX = getStructElement(input, 0x8, 4)
+    local windowPosY = getStructElement(input, 0xC, 4)
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8('Коорды призраков'), win_state['prizrakwin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
+		imgui.Image(winprizrakhalloween, imgui.ImVec2(450, 450), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
+		imgui.End()
+		end
+		
+function bomjwinmenu()
+	local tLastKeys = {} -- это у нас для клавиш
+	local input = sampGetInputInfoPtr()
+    local input = getStructElement(input, 0x8, 4)
+    local windowPosX = getStructElement(input, 0x8, 4)
+    local windowPosY = getStructElement(input, 0xC, 4)
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8('Коорды с бомжами'), win_state['bomjwin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
+		imgui.Image(winbomj, imgui.ImVec2(450, 450), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 		imgui.End()
 		end
 	
@@ -13036,6 +13514,11 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'20. Добавлен пункт "Halloween", в котором в данный момент есть: текст обновления, ответы на вопросы от квестовых персонажей,')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'рендер на призрачную тыкву, странное растение, заколдованное дерево, осколки ящика и карта с метками')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'хэллоуинских кладов.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[01.11.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'21. В пункт "Halloween" добавлен рендер кладов, добавлены маркеры для прохождения лабиринта, добавлена возможность отобразить на')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'карте метки с местонахождением призраков, добавлена возможность отобразить на карте метки с местонахождением бомжей и')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'добавлены карты с метками на экране призраков и бомжей.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Фикс imgui окон.')
 			imgui.End()
 		end
 	
@@ -14355,7 +14838,11 @@ function photo_load()
 	colorpol15 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Green.png')
 	colorpol16 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/Bluev2.png')
     winpusk = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/pusk.png')
+	
 	winprazdnikhalloween = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/kartahalloween.png')
+	winprizrakhalloween = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/prizrakhalloween.png')
+	winbomj = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/kartabomjey.png')
+	
     winedge = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
 	winyashik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
