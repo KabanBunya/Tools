@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.1.6')
+script_version('3.1.7')
 
 local use = false
 local close = false
@@ -6991,6 +6991,7 @@ end
 	if text:find("Вы установили дом местом спавна!") and houserespawn == true then return false end
 	
 	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and addad.v then 
+	lua_thread.create(function()
 		closeDialog()
 		wait(100)
 		sampSendChat(u8:decode ('/ad '..adredak.v))
@@ -7002,9 +7003,11 @@ end
 		sampSendDialogResponse(15379, 1, 0, -1)
 		wait(100)
 		closeDialog()
-		end
+		end)
+	end
 		
 	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and vipaddad.v then 
+	lua_thread.create(function()
 		closeDialog()
 		wait(100)
 		sampSendChat(u8:decode ('/ad '..adredak2.v))
@@ -7016,7 +7019,8 @@ end
 		sampSendDialogResponse(15379, 1, 0, -1)
 		wait(100)
 		closeDialog()
-		end
+		end)
+	end
 	
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
 		if os.date("%A") == 'Monday' then
