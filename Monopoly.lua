@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.1.5')
+script_version('3.1.6')
 
 local use = false
 local close = false
@@ -347,6 +347,7 @@ local cfg = inicfg.load({
 local SET = {
  	settings = {
 		autologin = false,
+		obkachet = false,
 		rabstol = true,
 		rabstol2 = false,
 		rabstol3 = false,
@@ -535,6 +536,10 @@ local SET = {
 		vradsec = '60',
 		sadsec = '60',
 		adredak = 'В 165 баре много девочек и пива.',
+		adredak2 = 'В 165 баре много девочек и пива.',
+		adredak3 = 'В 165 баре много девочек и пива.',
+		adredak4 = 'В 165 баре много девочек и пива.',
+		adredak5 = 'В 165 баре много девочек и пива.',
 		skuptravacol = '1',
 		skuptravacena = '1000',
 		skupbronzarulcol = '1',
@@ -2304,6 +2309,10 @@ function main()
 	lua_thread.create(rouletteyashik)
 	lua_thread.create(roulette)
 	lua_thread.create(piarad)
+	lua_thread.create(piarad2)
+	lua_thread.create(piarad3)
+	lua_thread.create(piarad4)
+	lua_thread.create(piarad5)
 	lua_thread.create(raznoe)
 	lua_thread.create(shemamain)
 	lua_thread.create(ponggame)
@@ -2978,8 +2987,13 @@ function saveSettings(args, key)
 	ini.settings.vradsec = u8:decode(vradsec.v)
 	ini.settings.sadsec = u8:decode(sadsec.v)
 	ini.settings.adredak = u8:decode(adredak.v)
+	ini.settings.adredak2 = u8:decode(adredak2.v)
+	ini.settings.adredak3 = u8:decode(adredak3.v)
+	ini.settings.adredak4 = u8:decode(adredak4.v)
+	ini.settings.adredak5 = u8:decode(adredak5.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.autologin = autologin.v
+	ini.settings.obkachet = obkachet.v
 	ini.settings.rabstol = rabstol.v
 	ini.settings.rabstol2 = rabstol2.v
 	ini.settings.rabstol3 = rabstol3.v
@@ -6195,12 +6209,10 @@ function imgui.OnDrawFrame()
 	end
 	
 	if win_state['piar'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(651, 405), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.53))
+		imgui.SetNextWindowSize(imgui.ImVec2(651, 544), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Piar Menu ', win_state['piar'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf323452354321', imgui.ImVec2(651, 381), false)
 				getArizonaName()
-				imgui.EndChild()
 		imgui.End()
 	end
 	
@@ -6977,41 +6989,136 @@ end
 	end
 	if text:find("Выберите дом для спавна") and houserespawn == true then return false end
 	if text:find("Вы установили дом местом спавна!") and houserespawn == true then return false end
+	
+	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and addad.v then 
+		closeDialog()
+		wait(100)
+		sampSendChat(u8:decode ('/ad '..adredak.v))
+		wait(300)
+		sampSendDialogResponse(15346, 1, 1, -1)
+		wait(200)
+		sampSendDialogResponse(15347, 1, 0, -1)
+		wait(200)
+		sampSendDialogResponse(15379, 1, 0, -1)
+		wait(100)
+		closeDialog()
+		end
+		
+	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and vipaddad.v then 
+		closeDialog()
+		wait(100)
+		sampSendChat(u8:decode ('/ad '..adredak2.v))
+		wait(300)
+		sampSendDialogResponse(15346, 1, 2, -1)
+		wait(200)
+		sampSendDialogResponse(15347, 1, 0, -1)
+		wait(200)
+		sampSendDialogResponse(15379, 1, 0, -1)
+		wait(100)
+		closeDialog()
+		end
+	
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.piarsh..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Tuesday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh1 = cfg.adpred.piarsh1 + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.piarsh1..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Wednesday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh2 = cfg.adpred.piarsh2 + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.piarsh2..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Thursday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh3 = cfg.adpred.piarsh3 + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.piarsh3..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Friday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh4 = cfg.adpred.piarsh4 + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.piarsh4..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Saturday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh5 = cfg.adpred.piarsh5 + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.piarsh5..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Sunday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh6 = cfg.adpred.piarsh6 + 1
+		if addvk.v then 
 		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.piarsh6..'\n'..yvedadd)
+			end
+		end
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and obkachet.v then
+		if os.date("%A") == 'Monday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.piarsh..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Tuesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh1 = cfg.adpred.piarsh1 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.piarsh1..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Wednesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh2 = cfg.adpred.piarsh2 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.piarsh2..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Thursday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh3 = cfg.adpred.piarsh3 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.piarsh3..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Friday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh4 = cfg.adpred.piarsh4 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.piarsh4..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Saturday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh5 = cfg.adpred.piarsh5 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.piarsh5..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Sunday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh6 = cfg.adpred.piarsh6 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.piarsh6..'\n'..yvedadd)
+			end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
@@ -7019,37 +7126,103 @@ end
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | VIP объявлений отправлено: '..cfg.adpred.vippiarsh..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Tuesday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh1 = cfg.adpred.vippiarsh1 + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh1..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | VIP объявлений отправлено: '..cfg.adpred.vippiarsh1..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Wednesday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh2 = cfg.adpred.vippiarsh2 + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh2..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | VIP объявлений отправлено: '..cfg.adpred.vippiarsh2..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Thursday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh3 = cfg.adpred.vippiarsh3 + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh3..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | VIP объявлений отправлено: '..cfg.adpred.vippiarsh3..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Friday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh4 = cfg.adpred.vippiarsh4 + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh4..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | VIP объявлений отправлено: '..cfg.adpred.vippiarsh4..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Saturday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh5 = cfg.adpred.vippiarsh5 + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh5..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | VIP объявлений отправлено: '..cfg.adpred.vippiarsh5..'\n'..yvedadd)
+			end
 		end
 		if os.date("%A") == 'Sunday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh6 = cfg.adpred.vippiarsh6 + 1
-		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.vippiarsh6..'\n'..yvedadd)
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | VIP объявлений отправлено: '..cfg.adpred.vippiarsh6..'\n'..yvedadd)
+			end
+		end
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") and obkachet.v then
+		if os.date("%A") == 'Monday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | VIP объявлений отправлено: '..cfg.adpred.vippiarsh..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Tuesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh1 = cfg.adpred.vippiarsh1 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | VIP объявлений отправлено: '..cfg.adpred.vippiarsh1..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Wednesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh2 = cfg.adpred.vippiarsh2 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | VIP объявлений отправлено: '..cfg.adpred.vippiarsh2..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Thursday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh3 = cfg.adpred.vippiarsh3 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | VIP объявлений отправлено: '..cfg.adpred.vippiarsh3..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Friday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh4 = cfg.adpred.vippiarsh4 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | VIP объявлений отправлено: '..cfg.adpred.vippiarsh4..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Saturday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh5 = cfg.adpred.vippiarsh5 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | VIP объявлений отправлено: '..cfg.adpred.vippiarsh5..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Sunday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.vippiarsh6 = cfg.adpred.vippiarsh6 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | VIP объявлений отправлено: '..cfg.adpred.vippiarsh6..'\n'..yvedadd)
+			end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
@@ -7165,6 +7338,7 @@ function load_settings() -- загрузка настроек
 	assistant2 = imgui.ImBool(ini.settings.assistant2)
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
+	obkachet = imgui.ImBool(ini.settings.obkachet)
 	rabstol = imgui.ImBool(ini.settings.rabstol)
 	rabstol2 = imgui.ImBool(ini.settings.rabstol2)
 	rabstol3 = imgui.ImBool(ini.settings.rabstol3)
@@ -7364,6 +7538,10 @@ function load_settings() -- загрузка настроек
 	vradsec = imgui.ImBuffer(u8(ini.settings.vradsec), 100)
 	sadsec = imgui.ImBuffer(u8(ini.settings.sadsec), 100)
 	adredak = imgui.ImBuffer(u8(ini.settings.adredak), 1000)
+	adredak2 = imgui.ImBuffer(u8(ini.settings.adredak2), 1000)
+	adredak3 = imgui.ImBuffer(u8(ini.settings.adredak3), 1000)
+	adredak4 = imgui.ImBuffer(u8(ini.settings.adredak4), 1000)
+	adredak5 = imgui.ImBuffer(u8(ini.settings.adredak5), 1000)
 	
 	skuptravacol = imgui.ImBuffer(u8(ini.settings.skuptravacol), 256)
 	skuptravacena = imgui.ImBuffer(u8(ini.settings.skuptravacena), 256)
@@ -10497,11 +10675,17 @@ while true do
 	wait(100)
 	closeDialog()
 	wait(adsec.v*1000)
+		end
+		wait(0)
 	end
+end
+
+function piarad2()
+while true do
 	if vipaddad.v then
 	closeDialog()
 	wait(100)
-	sampSendChat(u8:decode ('/ad '..adredak.v))
+	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
 	sampSendDialogResponse(15346, 1, 2, -1)
 	wait(200)
@@ -10512,19 +10696,37 @@ while true do
 	closeDialog()
 	wait(vipadsec.v*1000)
 	end
+		wait(0)
+	end
+end
+
+function piarad3()
+while true do
 	if famaddad.v then
 	wait(100)
-	sampSendChat(u8:decode ('/fam '..adredak.v))
+	sampSendChat(u8:decode ('/fam '..adredak3.v))
 	wait(famadsec.v*1000)
 	end
+		wait(0)
+	end
+end
+
+function piarad4()
+while true do
 	if vraddad.v then
 	wait(100)
-	sampSendChat(u8:decode ('/vr '..adredak.v))
+	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	wait(vradsec.v*1000)
 	end
+		wait(0)
+	end
+end
+
+function piarad5()
+while true do
 	if saddad.v then
 	wait(100)
-	sampSendChat(u8:decode ('/s '..adredak.v))
+	sampSendChat(u8:decode ('/s '..adredak5.v))
 	wait(sadsec.v*1000)
 		end
 		wait(0)
@@ -13519,6 +13721,12 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'карте метки с местонахождением призраков, добавлена возможность отобразить на карте метки с местонахождением бомжей и')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'добавлены карты с метками на экране призраков и бомжей.')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Фикс imgui окон.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[05.11.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'23. В "Piar Menu" убран режим очереди на отправление текста куда либо.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'24. В "Piar Menu" добавлена функция "Засчитывать объявления без активации Piar Menu функционала".')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'25. В "Piar Menu" добавлена возможность написать разный текст для каждого чата.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'26. В "Piar Menu" теперь если активирован функционал отправки объявлений и если скрипт видит, что предыдущее объявление')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'удалилось, то он отправит его заного сразу же, после удаления данного объявления.')
 			imgui.End()
 		end
 	
@@ -13585,9 +13793,14 @@ function getArizonaName()
 	if imgui.CustomButton(u8'Отправить текст в /s сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel5() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления в VK', addvk) imgui.SameLine(405) 
 	if imgui.CustomButton(u8'Настройка отправки объявлений', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then win_state['vkmessage'].v = not win_state['vkmessage'].v end
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Засчитывать объявления без активации Piar Menu функционала', obkachet)
 	imgui.PopItemWidth()
-	imgui.PushItemWidth(634)
-	imgui.Text('') imgui.SameLine() imgui.InputText(u8'##99', adredak)
+	imgui.PushItemWidth(460)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст обычного объявления', adredak)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст VIP объявления', adredak2)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /fam', adredak3)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr', adredak4)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /s', adredak5)
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
@@ -14703,7 +14916,7 @@ function adtravel2()
 lua_thread.create(function()
 	closeDialog()
 	wait(100)
-	sampSendChat(u8:decode ('/ad '..adredak.v))
+	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
 	sampSendDialogResponse(15346, 1, 2, -1)
 	wait(200)
@@ -14717,19 +14930,19 @@ end
 
 function adtravel3()
 lua_thread.create(function()
-	sampSendChat(u8:decode ('/fam '..adredak.v))
+	sampSendChat(u8:decode ('/fam '..adredak3.v))
 	end)
 end
 
 function adtravel4()
 lua_thread.create(function()
-	sampSendChat(u8:decode ('/vr '..adredak.v))
+	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	end)
 end
 
 function adtravel5()
 lua_thread.create(function()
-	sampSendChat(u8:decode ('/s '..adredak.v))
+	sampSendChat(u8:decode ('/s '..adredak5.v))
 	end)
 end
 
