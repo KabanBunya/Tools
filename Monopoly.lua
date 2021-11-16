@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2')
+script_version('3.2.1')
 
 local use = false
 local close = false
@@ -3651,6 +3651,7 @@ end
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
 		return false
 	end
+	if dialogId == 1000 and workcal then return false end
 	for line in text:gmatch("[^\n]+") do
 	if line:find('PIN-код принят!') and autopin.v then
 		closeDialog()
@@ -8063,6 +8064,10 @@ end
 			sampAddChatMessage('['..nazvanie.v..']{FFFFFF} Начинаю звонить по номеру {00C2BB}'..numbercall, 0x046D63)
 			wait(500)
 			sampSendChat("/phone ") 
+			wait(200)
+			sampSendDialogResponse(1000, 1, 0, -1)
+			wait(200)
+			closeDialog()
 			wait(500)
 			sampSendClickTextdraw(bcal)
 			wait(500)
@@ -15018,7 +15023,8 @@ function tupupdate()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(855, 400), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Тестовые обновления v3.2', win_state['tup'], imgui.WindowFlags.NoResize)
-			imgui.Text('') imgui.SameLine() imgui.Text(u8'')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[16.11.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс /call (не выбирал телефон, если в инвентаре их больше 1)')
 			imgui.End()
 		end
 	
