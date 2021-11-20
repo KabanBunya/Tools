@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.1')
+script_version('3.2.2')
 
 local use = false
 local close = false
@@ -13066,13 +13066,13 @@ function reklamawinmenu()
     local windowPosX = getStructElement(input, 0x8, 4)
     local windowPosY = getStructElement(input, 0xC, 4)
 	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.06, 0.55))
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.14, 0.55))
 		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8('РЕКЛАМА'), win_state['reklamawin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
 		imgui.Text('')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа 'Monopoly Empire' платит 5.000.000$ игровой валюты за идею! Ищи пост в группе,   ")
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"предлагай идею и забирай свои вирты. Быстро перейти в группу можно через пуск или")
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"вписать в браузер https://vk.com/monopolyfam")
+		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools') imgui.SameLine(288) imgui.Text(u8"|") imgui.SameLine(300) imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(435) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(435) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
+		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11, за который можно получить 1.000.000$ от Монополистов: {0F52BA}#monopoly{0F52BA}")
+		imgui.Text("") imgui.SameLine() imgui.Text(u8"Регистрируйся на ник Bunya_Monopoly на 11, достигай 8 lvl, отписывай в любую группу и забирай 2кк.   ")
 		imgui.Text('')
         imgui.End()
 	end
