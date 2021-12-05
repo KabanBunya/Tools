@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.2')
+script_version('3.2.3')
 
 local use = false
 local close = false
@@ -99,6 +99,7 @@ itogoskupcoltalon = 0
 itogoskupcolsemtalon = 0
 itogoskupcolskidtalon = 0
 itogoskupcoltochkamen = 0
+itogoskupcoltochamulet = 0
 itogoskupcollarec = 0
 itogoskupcolsmazka = 0
 itogoskupcolcarbox = 0
@@ -666,6 +667,7 @@ local SET = {
 		skupskidtaloncol = '1',
 		skupskidtaloncena = '2000000',
 		skuptochkamencol = '1',
+		skuptochamuletcol = '1',
 		skuptochkamencena = '80000',
 		skuptochamuletcena = '200000',
 		skuplareccol = '1',
@@ -782,7 +784,6 @@ local SET = {
 		reconkick = true,
 		reconrestart = true,
 		reconsave = true, 
-		reconpassword = true,
 		carsis = false,
 		tradefast = false,
 		faminvfast = false,
@@ -3051,8 +3052,6 @@ end
 function onScriptTerminate(script, quitGame)
 	if script == thisScript() then
 		showCursor(false)
-		saveSettings(1)
-		saveJson(cfg1, jsonDir) 
 			end
 		end
 
@@ -3150,7 +3149,6 @@ function saveSettings(args, key)
 	ini.settings.reconkick = reconkick.v
 	ini.settings.reconrestart = reconrestart.v
 	ini.settings.reconsave = reconsave.v
-	ini.settings.reconpassword = reconpassword.v
 	ini.settings.carsis = carsis.v
 	ini.settings.tradefast = tradefast.v
 	ini.settings.faminvfast = faminvfast.v
@@ -3520,6 +3518,7 @@ function saveSettings(args, key)
 	ini.settings.skupskidtaloncol = u8:decode(skupskidtaloncol.v)
 	ini.settings.skupskidtaloncena = u8:decode(skupskidtaloncena.v)
 	ini.settings.skuptochkamencol = u8:decode(skuptochkamencol.v)
+	ini.settings.skuptochamuletcol = u8:decode(skuptochamuletcol.v)
 	ini.settings.skuptochkamencena = u8:decode(skuptochkamencena.v)
 	ini.settings.skuptochamuletcena = u8:decode(skuptochamuletcena.v)
 	ini.settings.skuplareccol = u8:decode(skuplareccol.v)
@@ -8519,6 +8518,7 @@ function load_settings() -- загрузка настроек
 	skupskidtaloncol = imgui.ImBuffer(u8(ini.settings.skupskidtaloncol), 256)
 	skupskidtaloncena = imgui.ImBuffer(u8(ini.settings.skupskidtaloncena), 256)
 	skuptochkamencol = imgui.ImBuffer(u8(ini.settings.skuptochkamencol), 256)
+	skuptochamuletcol = imgui.ImBuffer(u8(ini.settings.skuptochamuletcol), 256)
 	skuptochkamencena = imgui.ImBuffer(u8(ini.settings.skuptochkamencena), 256)
 	skuptochamuletcena = imgui.ImBuffer(u8(ini.settings.skuptochamuletcena), 256)
 	skuplareccol = imgui.ImBuffer(u8(ini.settings.skuplareccol), 256)
@@ -8691,7 +8691,6 @@ function load_settings() -- загрузка настроек
 	reconkick = imgui.ImBool(ini.settings.reconkick)
 	reconrestart = imgui.ImBool(ini.settings.reconrestart)
 	reconsave = imgui.ImBool(ini.settings.reconsave)
-	reconpassword = imgui.ImBool(ini.settings.reconpassword)
 	carsis = imgui.ImBool(ini.settings.carsis)
 	tradefast = imgui.ImBool(ini.settings.tradefast)
 	faminvfast = imgui.ImBool(ini.settings.faminvfast)
@@ -14266,14 +14265,13 @@ function nastroikamenu()
 				imgui.PopItemWidth()
 				end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, сервер запоролен, пишет 'You are banned from this server' и после рестарта.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, пишет 'You are banned from this server' и после рестарта.")
 				if recongen.v then 
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'Перезаходить, если:')
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("You are banned from this server")); imgui.SameLine(); imgui.ToggleButton(u8'You are banned from this server', reconbanned)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Кикнул Античит")); imgui.SameLine(); imgui.ToggleButton(u8'Кикнул Античит', reconkick)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Произошел рестарт сервера")); imgui.SameLine(); imgui.ToggleButton(u8'Произошел рестарт сервера', reconrestart)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Сработала защита от реконнекта")); imgui.SameLine(); imgui.ToggleButton(u8'Сработала защита от реконнекта', reconsave)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Сервер запоролен")); imgui.SameLine(); imgui.ToggleButton(u8'Сервер запоролен', reconpassword)
 				imgui.PushItemWidth(150)
 				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в секундах) ##1001',zadervkarecon,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после кика античита, команду /recon, защиты от реконнекта, на 'You are banned from this server. По умолчанию установлено - 15 секунд.")
 				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в минутах) ##1002',zadervkareconrestart,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после рестарта. По умолчанию установлено - 10 минут.")
@@ -14562,7 +14560,6 @@ function nastroikamenu()
 				reconkick.v = true
 				reconrestart.v = true
 				reconsave.v = true
-				reconpassword.v = true
 				zadervkarecon.v = '15'
 				zadervkareconrestart.v = '10'
 				zadervkaferma.v = '30'
@@ -15025,6 +15022,11 @@ function tupupdate()
 	imgui.Begin(u8'Тестовые обновления v3.2', win_state['tup'], imgui.WindowFlags.NoResize)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'[16.11.2021]')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс /call (не выбирал телефон, если в инвентаре их больше 1)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[05.12.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Из скрипта вырезана функция в реконнекте - "Перезаходить, если сервер запоролен" (из-за данной функции были проблемы при коннекте')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'на лаунчере (крашил лаунчер) и у многих она не работала корректно)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс в "Skup Menu" - "Точильные амулеты" (добавил возможность выставить кол-во) и "CarBox" (выбирало дистилированную воду)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс сохранений настроек скрипта (сохранения скрипта и биндов иногда сбивались из-за краша сборки/лаунчера)')
 			imgui.End()
 		end
 	
@@ -15224,9 +15226,7 @@ function getArizonaSkup2str()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolsemtalon).." шт. товара нужно заплатить "..number_separator(itogoskupsemtalon)..'$'))
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolskidtalon).." шт. товара нужно заплатить "..number_separator(itogoskupskidtalon)..'$')) 
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltochkamen).." шт. товара нужно заплатить "..number_separator(itogoskuptochkamen)..'$')) 
-	imgui.PushItemWidth(187)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptochamulet)..'$'))
-	imgui.PopItemWidth()
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##1444', skuptochamuletcol) imgui.SameLine(281) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltochamulet).." шт. товара нужно заплатить "..number_separator(itogoskuptochamulet)..'$'))
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcollarec).." шт. товара нужно заплатить "..number_separator(itogoskuplarec)..'$')) 
 	imgui.PushItemWidth(187)
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Твин Турбо', skuptt) imgui.SameLine(177) imgui.InputText(u8'##148', skupttcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptt)..'$'))
@@ -16217,15 +16217,6 @@ function inventory()
 end)
 end
 
-function onReceivePacket(id)
-	if recongen.v and reconpassword.v then
-	    if id == 37 then
-			i, p = sampGetCurrentServerAddress()
-			sampConnectToServer(i, p)
-		end
-	end
-end
-
 function videofailed()
 	video.v = false
 	video1.v = false
@@ -16708,7 +16699,7 @@ function load_static()
 	itogoskupsemtalon = skupsemtaloncol.v * skupsemtaloncena.v
 	itogoskupskidtalon = skupskidtaloncol.v * skupskidtaloncena.v
 	itogoskuptochkamen = skuptochkamencol.v * skuptochkamencena.v
-	itogoskuptochamulet = 1 * skuptochamuletcena.v
+	itogoskuptochamulet = skuptochamuletcol.v * skuptochamuletcena.v
 	itogoskuplarec = skuplareccol.v * skuplareccena.v
 	itogoskupsmazka = skupsmazkacol.v * skupsmazkacena.v
 	itogoskupcarbox = skupcarboxcol.v * skupcarboxcena.v
@@ -16740,6 +16731,7 @@ function load_static()
 	itogoskupcolsemtalon = skupsemtaloncol.v
 	itogoskupcolskidtalon = skupskidtaloncol.v
 	itogoskupcoltochkamen = skuptochkamencol.v
+	itogoskupcoltochamulet = skuptochamuletcol.v
 	itogoskupcollarec = skuplareccol.v
 	itogoskupcolsmazka = skupsmazkacol.v
 	itogoskupcolcarbox = skupcarboxcol.v
@@ -16780,7 +16772,7 @@ function load_static()
 	if skupsemtalon.v then skupsemtaloncool = skupsemtaloncol.v else skupsemtaloncool = 0 end
 	if skupskidtalon.v then skupskidtaloncool = skupskidtaloncol.v else skupskidtaloncool = 0 end
 	if skuptochkamen.v then skuptochkamencool = skuptochkamencol.v else skuptochkamencool = 0 end
-	if skuptochamulet.v then skuptochamuletcool = 1 else skuptochamuletcool = 0 end
+	if skuptochamulet.v then skuptochamuletcool = skuptochamuletcol.v else skuptochamuletcool = 0 end
 	if skuplarec.v then skuplareccool = skuplareccol.v else skuplareccool = 0 end
 	if skupsmazka.v then skupsmazkacool = skupsmazkacol.v else skupsmazkacool = 0 end
 	if skupcarbox.v then skupcarboxcool = skupcarboxcol.v else skupcarboxcool = 0 end
@@ -17169,7 +17161,7 @@ lua_thread.create(function()
 	wait(500)
 	sampSendDialogResponse(3050, 1, 1, -1)
 	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuptochamuletcena.v)
+	sampSendDialogResponse(3060, 1, 1, ''..skuptochamuletcol.v..','..skuptochamuletcena.v)
 	end
 	if skuplarec.v then 
 	sampSendDialogResponse(3040, 1, 0, -1)
@@ -17344,7 +17336,7 @@ lua_thread.create(function()
 	wait(500)
 	sampSendDialogResponse(3050, 1, 20, -1)
 	wait(500)
-	sampSendDialogResponse(3050, 1, 8, -1)
+	sampSendDialogResponse(3050, 1, 9, -1)
 	wait(500)
 	sampSendDialogResponse(3060, 1, 1, ''..skupcarboxcol.v..','..skupcarboxcena.v)
 	end
@@ -17767,6 +17759,7 @@ function skuppoymol()
 		skupskidtaloncol.v = '1'
 		skupskidtaloncena.v = '2000000'
 		skuptochkamencol.v = '1'
+		skuptochamuletcol.v = '1'
 		skuptochkamencena.v = '80000'
 		skuptochamuletcena.v = '200000'
 		skuplareccol.v = '1'
