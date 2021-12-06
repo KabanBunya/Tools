@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.3')
+script_version('3.2.4')
 
 local use = false
 local close = false
@@ -7039,32 +7039,83 @@ function imgui.OnDrawFrame()
 				imgui.EndChild()
 		imgui.End()
 	end
-	
+
 	if win_state['informer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX, infoY), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
+		if fonecolor == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 0.3)) end
+		if fonecolor2 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.51, 0.66, 0.3)) end
+		if fonecolor3 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.3)) end
+		if fonecolor4 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.31, 0.00, 0.3)) end
+		if fonecolor5 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.46, 0.46, 0.3)) end
+		if fonecolor6 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.232, 0.201, 0.271, 0.3)) end
+		if fonecolor7 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.69, 0.33, 0.3)) end
+		if fonecolor8 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.11, 0.29, 0.3)) end
+		if fonecolor9 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.41, 0.19, 0.63, 0.3)) end
+		if fonecolor10 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.40, 0.57, 0.01, 0.3)) end
+		if fonecolor11 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
+		if fonecolor12 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 0.28, 0.28, 0.3)) end
+		if fonecolor13 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.30, 0.33, 0.95, 0.3)) end
+		if fonecolor14 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 0.84, 0.37, 0.3)) end
+		if fonecolor15 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.026, 0.597, 0.000, 0.3)) end
+		if fonecolor16 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.06, 0.53, 0.98, 0.3)) end
 		if imgui.Begin("Mono Tools3", win_state['informer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			infobar()
 			imgui.End()
 			end
+		imgui.PopStyleColor()
 	end
 		
 	if win_state['shahtainformer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX3, infoY3), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
+		if fonecolor == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 0.3)) end
+		if fonecolor2 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.51, 0.66, 0.3)) end
+		if fonecolor3 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.3)) end
+		if fonecolor4 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.31, 0.00, 0.3)) end
+		if fonecolor5 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.46, 0.46, 0.3)) end
+		if fonecolor6 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.232, 0.201, 0.271, 0.3)) end
+		if fonecolor7 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.69, 0.33, 0.3)) end
+		if fonecolor8 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.11, 0.29, 0.3)) end
+		if fonecolor9 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.41, 0.19, 0.63, 0.3)) end
+		if fonecolor10 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.40, 0.57, 0.01, 0.3)) end
+		if fonecolor11 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
+		if fonecolor12 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 0.28, 0.28, 0.3)) end
+		if fonecolor13 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.30, 0.33, 0.95, 0.3)) end
+		if fonecolor14 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 0.84, 0.37, 0.3)) end
+		if fonecolor15 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.026, 0.597, 0.000, 0.3)) end
+		if fonecolor16 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.06, 0.53, 0.98, 0.3)) end
 		if imgui.Begin("Mono Tools1", win_state['shahtainformer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			infobarshahta()
 			imgui.End()
 			end
+		imgui.PopStyleColor()
 		end
 	
 	if win_state['pismoinformer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX4, infoY4), imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
+		if fonecolor == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 0.3)) end
+		if fonecolor2 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.51, 0.66, 0.3)) end
+		if fonecolor3 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.3)) end
+		if fonecolor4 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.31, 0.00, 0.3)) end
+		if fonecolor5 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.46, 0.46, 0.3)) end
+		if fonecolor6 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.232, 0.201, 0.271, 0.3)) end
+		if fonecolor7 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.69, 0.33, 0.3)) end
+		if fonecolor8 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.11, 0.29, 0.3)) end
+		if fonecolor9 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.41, 0.19, 0.63, 0.3)) end
+		if fonecolor10 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.40, 0.57, 0.01, 0.3)) end
+		if fonecolor11 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
+		if fonecolor12 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 0.28, 0.28, 0.3)) end
+		if fonecolor13 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.30, 0.33, 0.95, 0.3)) end
+		if fonecolor14 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 0.84, 0.37, 0.3)) end
+		if fonecolor15 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.026, 0.597, 0.000, 0.3)) end
+		if fonecolor16 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.06, 0.53, 0.98, 0.3)) end
 		if imgui.Begin("Mono Tools2", win_state['pismoinformer'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
 			infobarpismo()
 			imgui.End()
 			end
+		imgui.PopStyleColor()
 		end
 	end
 	
@@ -15027,6 +15078,8 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'на лаунчере (крашил лаунчер) и у многих она не работала корректно)')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс в "Skup Menu" - "Точильные амулеты" (добавил возможность выставить кол-во) и "CarBox" (выбирало дистилированную воду)')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс сохранений настроек скрипта (сохранения скрипта и биндов иногда сбивались из-за краша сборки/лаунчера)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.12.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Возвращен эффект прозрачности информерам и заметкам.')
 			imgui.End()
 		end
 	
