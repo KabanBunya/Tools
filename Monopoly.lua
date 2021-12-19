@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.5')
+script_version('3.2.6')
 
 local use = false
 local close = false
@@ -3753,7 +3753,7 @@ end
 		wait(200)
 		sampSendDialogResponse(722, 1, 13, _)
 		wait(200)
-		sampSendClickTextdraw(2181)
+		sampSendClickTextdraw(2167)
 		wait(100)
 		closeDialog()
       end
@@ -3771,7 +3771,7 @@ end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
 	
-	if id == 2081 and data.text == 'your progress' and autoshar.v and not boolshar then
+	if id == 2067 and data.text == 'your progress' and autoshar.v and not boolshar then
 		boolshar = true
 		lua_thread.create(ballon, id)
 	end
@@ -3875,7 +3875,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -3900,7 +3900,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close1 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -3925,7 +3925,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close2 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -3976,7 +3976,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close4 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4001,7 +4001,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close5 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4026,7 +4026,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4051,7 +4051,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close1 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4076,7 +4076,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close2 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4101,7 +4101,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close3 and otkrytie.v then
         wait(300)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4118,9 +4118,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4138,9 +4138,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4158,9 +4158,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4203,9 +4203,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4223,9 +4223,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4240,12 +4240,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       if data.modelId == 19918 then
         wait(111)
         sampSendClickTextdraw(id)
-       wait(222)
+        wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4263,9 +4263,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4283,9 +4283,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4303,9 +4303,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
-        sampSendClickTextdraw(2124)
+        sampSendClickTextdraw(2110)
 		wait(444)
-		sampSendClickTextdraw(2124)
+		sampSendClickTextdraw(2110)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -5187,7 +5187,7 @@ function sendchot6()
 	wait(100)
 	closeDialog()
 	wait(200)
-	sampSendClickTextdraw(2124)
+	sampSendClickTextdraw(2110)
 	wait(300)
 	sendKey(128)
 	wait(200)
@@ -9056,7 +9056,7 @@ while true do
       active6 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext1.v))
       wait(15000)
@@ -9067,7 +9067,7 @@ while true do
       active7 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext2.v))
       wait(15000)
@@ -9078,7 +9078,7 @@ while true do
       active8 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext3.v))
       wait(15000)
@@ -9089,7 +9089,7 @@ while true do
       active9 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext4.v))
       wait(15000)
@@ -9100,7 +9100,7 @@ while true do
       active10 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext5.v))
       wait(15000)
@@ -9111,7 +9111,7 @@ while true do
       active11 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext6.v))
       wait(15000)
@@ -9122,7 +9122,7 @@ while true do
       active12 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext7.v))
       wait(15000)
@@ -9133,7 +9133,7 @@ while true do
       active13 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext8.v))
       wait(15000)
@@ -9144,7 +9144,7 @@ while true do
       active14 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext9.v))
       wait(15000)
@@ -9155,7 +9155,7 @@ while true do
       active15 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext10.v))
       wait(15000)
@@ -9166,7 +9166,7 @@ while true do
       active16 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext11.v))
       wait(15000)
@@ -9177,7 +9177,7 @@ while true do
       active17 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext12.v))
       wait(15000)
@@ -9188,7 +9188,7 @@ while true do
       active18 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext13.v))
       wait(15000)
@@ -9199,7 +9199,7 @@ while true do
       active19 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext14.v))
       wait(15000)
@@ -9210,7 +9210,7 @@ while true do
       active20 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext15.v))
       wait(15000)
@@ -9221,7 +9221,7 @@ while true do
       active21 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext16.v))
       wait(15000)
@@ -9232,7 +9232,7 @@ while true do
       active22 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext17.v))
       wait(15000)
@@ -9243,7 +9243,7 @@ while true do
       active23 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext18.v))
       wait(15000)
@@ -9254,7 +9254,7 @@ while true do
       active24 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext19.v))
       wait(15000)
@@ -9265,7 +9265,7 @@ while true do
       active25 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext20.v))
       wait(15000)
@@ -9276,7 +9276,7 @@ while true do
       active26 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext21.v))
       wait(15000)
@@ -9287,7 +9287,7 @@ while true do
       active27 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext22.v))
       wait(15000)
@@ -9298,7 +9298,7 @@ while true do
       active28 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext23.v))
       wait(15000)
@@ -9309,7 +9309,7 @@ while true do
       active29 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext24.v))
       wait(15000)
@@ -9320,7 +9320,7 @@ while true do
       active30 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext25.v))
       wait(15000)
@@ -9331,7 +9331,7 @@ while true do
       active31 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext26.v))
       wait(15000)
@@ -9342,7 +9342,7 @@ while true do
       active32 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext27.v))
       wait(15000)
@@ -9353,7 +9353,7 @@ while true do
       active33 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext28.v))
       wait(15000)
@@ -9364,7 +9364,7 @@ while true do
       active34 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext29.v))
       wait(15000)
@@ -9375,7 +9375,7 @@ while true do
       active35 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext30.v))
       wait(15000)
@@ -9386,7 +9386,7 @@ while true do
       active36 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext31.v))
       wait(15000)
@@ -9397,7 +9397,7 @@ while true do
       active37 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext32.v))
       wait(15000)
@@ -9408,7 +9408,7 @@ while true do
       active38 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext33.v))
       wait(15000)
@@ -9419,7 +9419,7 @@ while true do
       active39 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext34.v))
       wait(15000)
@@ -9430,7 +9430,7 @@ while true do
       active40 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext35.v))
       wait(15000)
@@ -9441,7 +9441,7 @@ while true do
       active41 = true
       sampSendChat("/invent")
 	  wait(500)
-	  sampSendClickTextdraw(2122)
+	  sampSendClickTextdraw(2108)
 	  wait(1000)
 	  sampSendClickTextdraw(u8:decode(shematext36.v))
       wait(15000)
@@ -9634,9 +9634,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(500)
-      sampSendClickTextdraw(2094)
+      sampSendClickTextdraw(2080)
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9653,9 +9653,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(500)
-      sampSendClickTextdraw(2099)
+      sampSendClickTextdraw(2085)
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9672,9 +9672,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(500)
-      sampSendClickTextdraw(2104)
+      sampSendClickTextdraw(2090)
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9691,9 +9691,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(500)
-      sampSendClickTextdraw(2124)
+      sampSendClickTextdraw(2110)
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9711,9 +9711,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(1000)
-      sampSendClickTextdraw(2094)
+      sampSendClickTextdraw(2080)
 	  wait(500)
-	  sampSendClickTextdraw(2119)
+	  sampSendClickTextdraw(2105)
 	  wait(1000)
 	  if poiskrul then
 	  wait(200)
@@ -9726,7 +9726,7 @@ while true do
 	  closeDialog()
 	  end
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9744,9 +9744,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(1000)
-      sampSendClickTextdraw(2099)
+      sampSendClickTextdraw(2085)
 	  wait(500)
-	  sampSendClickTextdraw(2119)
+	  sampSendClickTextdraw(2105)
 	  wait(1000)
 	  if poiskrul then
 	  wait(200)
@@ -9759,7 +9759,7 @@ while true do
 	  closeDialog()
 	  end
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9776,9 +9776,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(1000)
-      sampSendClickTextdraw(2104)
+      sampSendClickTextdraw(2090)
 	  wait(500)
-	  sampSendClickTextdraw(2119)
+	  sampSendClickTextdraw(2105)
 	  wait(1000)
 	  if poiskrul then
 	  wait(200)
@@ -9791,7 +9791,7 @@ while true do
 	  closeDialog()
 	  end
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9808,9 +9808,9 @@ while true do
 	  wait(111)
 	  closeDialog()
       wait(1000)
-      sampSendClickTextdraw(2124)
+      sampSendClickTextdraw(2110)
 	  wait(500)
-	  sampSendClickTextdraw(2119)
+	  sampSendClickTextdraw(2105)
 	  wait(1000)
 	  if poiskrul then
 	  wait(200)
@@ -9823,7 +9823,7 @@ while true do
 	  closeDialog()
 	  end
 	  wait(1000)
-      sampSendClickTextdraw(2105)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(15000)
 	  samprulstart = true
@@ -9844,11 +9844,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -9865,11 +9865,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -9886,11 +9886,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -9907,11 +9907,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active3 = true
 	  samprulstop = true
@@ -9928,11 +9928,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active4 = true
 	  samprulstop = true
@@ -9949,11 +9949,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -9970,11 +9970,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -9991,11 +9991,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -10012,11 +10012,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -10033,11 +10033,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -10054,11 +10054,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -10075,11 +10075,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -10096,11 +10096,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -10117,11 +10117,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active3 = true
 	  samprulstop = true
@@ -10138,11 +10138,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active4 = true
 	  samprulstop = true
@@ -10159,11 +10159,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -10180,11 +10180,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -10201,11 +10201,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -10222,11 +10222,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -10243,11 +10243,11 @@ while true do
 	  wait(200)
 	  sampSendDialogResponse(722, 1, 13, _)
 	  wait(200)
-	  sampSendClickTextdraw(2181)
+	  sampSendClickTextdraw(2167)
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2124)
+	  sampSendClickTextdraw(2110)
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -16263,13 +16263,13 @@ end
 
 function inventory()
 		lua_thread.create(function()
-		sampSendClickTextdraw(2106)
+		sampSendClickTextdraw(2092)
 		wait(1500)
-		sampSendClickTextdraw(2107)
+		sampSendClickTextdraw(2093)
 		wait(1500)
-		sampSendClickTextdraw(2108)
+		sampSendClickTextdraw(2094)
 		wait(1000)
-		sampSendClickTextdraw(2091)
+		sampSendClickTextdraw(2077)
 end)
 end
 
