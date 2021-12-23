@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.6')
+script_version('3.2.7')
 
 local use = false
 local close = false
@@ -14,6 +14,7 @@ local close2 = false
 local close3 = false
 local close4 = false
 local close5 = false
+local admmp = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
@@ -77,6 +78,11 @@ itogoskupsemmoneta = 0
 itogoskupauto = 0
 skuptovaracol = 0
 itogoskuptovara = 0
+
+igroklastweapon = 'nill'
+igroklastweapon2 = 'nill'
+igroktelo = 'nill'
+igroktelo2 = 'nill'
 
 Usercall =''
 PhoneColorcall =''
@@ -614,6 +620,8 @@ local SET = {
 		autoopl6 = false,
 		lock = false,
 		autonarko = false,
+		igrokv2 = 'nill',
+		igrokv22 = 'nill',
 		autokamen = '8000',
 		autometal = '4000',
 		autobronza = '40000',
@@ -768,6 +776,16 @@ local SET = {
 		shematext35 = '2206',
 		shematext36 = '2208',
 		watertext = '2128',
+		idigroklastweapon = '0',
+		idigroklastweapon2 = '0',
+		idigrok = '0',
+		idigrok2 = '0',
+		idigrokweapon = '0',
+		idigrokweapon2 = '0',
+		igrokclock = '0',
+		igrokclock2 = '0',
+		idigroktelo = '0',
+		idigroktelo2 = '0',
 		timecout = false,
 		gangzones = false,
 		ryda = false,
@@ -979,6 +997,7 @@ win_state['about'] = imgui.ImBool(false)
 win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
 win_state['base'] = imgui.ImBool(false)
+win_state['dial'] = imgui.ImBool(false)
 win_state['informer'] = imgui.ImBool(false)
 win_state['pismoinformer'] = imgui.ImBool(false)
 win_state['shahtainformer'] = imgui.ImBool(false)
@@ -2548,6 +2567,7 @@ function main()
 	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
 	sampRegisterChatCommand('pmc', pmchat) -- регистрируем команду
 	sampRegisterChatCommand('call', Numbercall)
+	sampRegisterChatCommand("killinfo", show_dial)
 	sampRegisterChatCommand("strobes", function()
 		if isCharInAnyCar(PLAYER_PED) then
 			local car = storeCarCharIsInNoSave(PLAYER_PED)
@@ -2569,7 +2589,8 @@ function main()
 		if sampGetGamestate() == 3 then sessiononline = os.time() - sessionStart end
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
-		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklavareload)) then thisScript():reload() end
+		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklavareload)) then saveSettings() thisScript():reload() end
+		if isKeyJustPressed(82) and isKeyJustPressed(17) then saveSettings() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklava)) then mainmenu() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
@@ -2750,7 +2771,7 @@ function main()
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['informer'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -3116,6 +3137,16 @@ function saveSettings(args, key)
 	ini.settings.antilomka = antilomka.v
 	ini.settings.antispawn = antispawn.v
 	ini.settings.napominalka = napominalka.v
+	ini.settings.idigroklastweapon = idigroklastweapon.v
+	ini.settings.idigroklastweapon2 = idigroklastweapon2.v
+	ini.settings.idigrok = idigrok.v
+	ini.settings.idigrok2 = idigrok2.v
+	ini.settings.idigrokweapon = idigrokweapon.v
+	ini.settings.idigrokweapon2 = idigrokweapon2.v
+	ini.settings.igrokclock = igrokclock.v
+	ini.settings.igrokclock2 = igrokclock2.v
+	ini.settings.idigroktelo = idigroktelo.v
+	ini.settings.idigroktelo2 = idigroktelo2.v
 	ini.settings.chatcalc = chatcalc.v
 	ini.settings.pismo = pismo.v
 	ini.settings.yashik = yashik.v
@@ -3173,7 +3204,8 @@ function saveSettings(args, key)
 	ini.settings.autobronza = u8:decode(autobronza.v)
 	ini.settings.autosilver = u8:decode(autosilver.v)
 	ini.settings.autogold = u8:decode(autogold.v)
-	
+	ini.settings.igrokv2 = u8:decode(igrokv2.v)
+	ini.settings.igrokv22 = u8:decode(igrokv22.v)
 	ini.settings.kdpusk = u8:decode(kdpusk.v)
 	ini.settings.napominalkadata = u8:decode(napominalkadata.v)
 	ini.settings.autopass = u8:decode(autopass.v)
@@ -3771,6 +3803,38 @@ end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
 	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and checked_test5.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and checked_test6.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and checked_test7.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and checked_test10.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and yashik.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and yashik1.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and yashik2.v then
+	admmp = true
+	end
+	
+	if id == 2075 and data.text == 'TELEPORT_EVENT' and yashik3.v then
+	admmp = true
+	end
+	
 	if id == 2067 and data.text == 'your progress' and autoshar.v and not boolshar then
 		boolshar = true
 		lua_thread.create(ballon, id)
@@ -3875,7 +3939,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close and otkrytie.v then
         wait(300)
+		if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -3900,7 +3969,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close1 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -3925,7 +3999,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close2 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -3976,7 +4055,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close4 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4001,7 +4085,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close5 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4026,7 +4115,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4051,7 +4145,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close1 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4076,7 +4175,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close2 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4101,7 +4205,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
       end
       if close3 and otkrytie.v then
         wait(300)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -4118,9 +4227,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4138,9 +4250,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4158,9 +4273,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4203,9 +4321,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4223,9 +4344,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4243,9 +4367,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4263,9 +4390,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4283,9 +4413,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4303,9 +4436,12 @@ function sampev.onShowTextDraw(id, data, textdrawId)
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+        if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
         sampSendClickTextdraw(2110)
-		wait(444)
-		sampSendClickTextdraw(2110)
+		end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -6314,6 +6450,10 @@ function imgui.OnDrawFrame()
 		win_state['messanger'].v = false
 	   end
 	   
+	if not win_state['main'].v and win_state['dial'].v then 
+          imgui.Process = true
+       end
+	   
 	if not win_state['main'].v and win_state['informer'].v then 
           imgui.Process = true
        end
@@ -7039,6 +7179,122 @@ function imgui.OnDrawFrame()
 				imgui.EndChild()
 		imgui.End()
 	end
+	
+	if win_state['dial'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(1050, 110), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8'Kill Info##2121', win_state['dial'], imgui.WindowFlags.NoResize)
+		if idigroklastweapon.v == '0' then igroklastweapon = 'кулаком' end
+		if idigroklastweapon.v == '1' then igroklastweapon = 'кастетом' end
+		if idigroklastweapon.v == '2' then igroklastweapon = 'клюшкой для гольфа' end
+		if idigroklastweapon.v == '3' then igroklastweapon = 'полицейской дубинкой' end
+		if idigroklastweapon.v == '4' then igroklastweapon = 'ножом' end
+		if idigroklastweapon.v == '5' then igroklastweapon = 'бейсбольной битой' end
+		if idigroklastweapon.v == '6' then igroklastweapon = 'лопатой' end
+		if idigroklastweapon.v == '7' then igroklastweapon = 'Кийем' end
+		if idigroklastweapon.v == '8' then igroklastweapon = 'катаной' end
+		if idigroklastweapon.v == '9' then igroklastweapon = 'бензопилой' end
+		if idigroklastweapon.v == '10' then igroklastweapon = 'двухсторонним дилдо' end
+		if idigroklastweapon.v == '11' then igroklastweapon = 'дилдо' end
+		if idigroklastweapon.v == '12' then igroklastweapon = 'вибратором' end
+		if idigroklastweapon.v == '13' then igroklastweapon = 'серебряным вибратором' end
+		if idigroklastweapon.v == '14' then igroklastweapon = 'цветами' end
+		if idigroklastweapon.v == '15' then igroklastweapon = 'тростью' end
+		if idigroklastweapon.v == '16' then igroklastweapon = 'гранатой' end
+		if idigroklastweapon.v == '17' then igroklastweapon = 'слезоточивым газом' end
+		if idigroklastweapon.v == '18' then igroklastweapon = 'коктейлем молотовым' end
+		if idigroklastweapon.v == '22' then igroklastweapon = 'пистолетом "9мм"' end
+		if idigroklastweapon.v == '23' then igroklastweapon = 'пистолетом "9мм" с глушителем' end
+		if idigroklastweapon.v == '24' then igroklastweapon = 'пистолетом "Desert Eagle"' end
+		if idigroklastweapon.v == '25' then igroklastweapon = 'обычным дробовиком' end
+		if idigroklastweapon.v == '26' then igroklastweapon = 'обрезом' end
+		if idigroklastweapon.v == '27' then igroklastweapon = 'скорострельным дробовиком' end
+		if idigroklastweapon.v == '28' then igroklastweapon = 'с "Узи"' end
+		if idigroklastweapon.v == '29' then igroklastweapon = 'с "MP5"' end
+		if idigroklastweapon.v == '30' then igroklastweapon = 'автоматом "Калашникова"' end
+		if idigroklastweapon.v == '31' then igroklastweapon = 'винтовкой "M4"' end
+		if idigroklastweapon.v == '32' then igroklastweapon = 'с "Tec-9"' end
+		if idigroklastweapon.v == '33' then igroklastweapon = 'охотничьем ружьём' end
+		if idigroklastweapon.v == '34' then igroklastweapon = 'снайперской винтовкой' end
+		if idigroklastweapon.v == '35' then igroklastweapon = 'с "РПГ"' end
+		if idigroklastweapon.v == '36' then igroklastweapon = 'самонаводящей ракетой' end
+		if idigroklastweapon.v == '37' then igroklastweapon = 'огнеметом' end
+		if idigroklastweapon.v == '38' then igroklastweapon = 'миниганом' end
+		if idigroklastweapon.v == '39' then igroklastweapon = 'сумкой с тротилом' end
+		if idigroklastweapon.v == '40' then igroklastweapon = 'детонатором к сумке' end
+		if idigroklastweapon.v == '41' then igroklastweapon = 'балончиком с краской' end
+		if idigroklastweapon.v == '42' then igroklastweapon = 'огнетушителем' end
+		if idigroklastweapon.v == '43' then igroklastweapon = 'прибором ночного видения' end
+		if idigroklastweapon.v == '44' then igroklastweapon = 'прибором ночного видения' end
+		if idigroklastweapon.v == '45' then igroklastweapon = 'тупловизором' end
+		if idigroklastweapon.v == '46' then igroklastweapon = 'парашютом' end
+		
+		if idigroklastweapon2.v == '0' then igroklastweapon2 = 'кулаком' end
+		if idigroklastweapon2.v == '1' then igroklastweapon2 = 'кастетом' end
+		if idigroklastweapon2.v == '2' then igroklastweapon2 = 'клюшкой для гольфа' end
+		if idigroklastweapon2.v == '3' then igroklastweapon2 = 'полицейской дубинкой' end
+		if idigroklastweapon2.v == '4' then igroklastweapon2 = 'ножом' end
+		if idigroklastweapon2.v == '5' then igroklastweapon2 = 'бейсбольной битой' end
+		if idigroklastweapon2.v == '6' then igroklastweapon2 = 'лопатой' end
+		if idigroklastweapon2.v == '7' then igroklastweapon2 = 'Кийем' end
+		if idigroklastweapon2.v == '8' then igroklastweapon2 = 'катаной' end
+		if idigroklastweapon2.v == '9' then igroklastweapon2 = 'бензопилой' end
+		if idigroklastweapon2.v == '10' then igroklastweapon2 = 'двухсторонним дилдо' end
+		if idigroklastweapon2.v == '11' then igroklastweapon2 = 'дилдо' end
+		if idigroklastweapon2.v == '12' then igroklastweapon2 = 'вибратором' end
+		if idigroklastweapon2.v == '13' then igroklastweapon2 = 'серебряным вибратором' end
+		if idigroklastweapon2.v == '14' then igroklastweapon2 = 'цветами' end
+		if idigroklastweapon2.v == '15' then igroklastweapon2 = 'тростью' end
+		if idigroklastweapon2.v == '16' then igroklastweapon2 = 'гранатой' end
+		if idigroklastweapon2.v == '17' then igroklastweapon2 = 'слезоточивым газом' end
+		if idigroklastweapon2.v == '18' then igroklastweapon2 = 'коктейлем молотовым' end
+		if idigroklastweapon2.v == '22' then igroklastweapon2 = 'пистолетом "9мм"' end
+		if idigroklastweapon2.v == '23' then igroklastweapon2 = 'пистолетом "9мм" с глушителем' end
+		if idigroklastweapon2.v == '24' then igroklastweapon2 = 'пистолетом "Desert Eagle"' end
+		if idigroklastweapon2.v == '25' then igroklastweapon2 = 'обычным дробовиком' end
+		if idigroklastweapon2.v == '26' then igroklastweapon2 = 'обрезом' end
+		if idigroklastweapon2.v == '27' then igroklastweapon2 = 'скорострельным дробовиком' end
+		if idigroklastweapon2.v == '28' then igroklastweapon2 = 'с "Узи"' end
+		if idigroklastweapon2.v == '29' then igroklastweapon2 = 'с "MP5"' end
+		if idigroklastweapon2.v == '30' then igroklastweapon2 = 'автоматом "Калашникова"' end
+		if idigroklastweapon2.v == '31' then igroklastweapon2 = 'винтовкой "M4"' end
+		if idigroklastweapon2.v == '32' then igroklastweapon2 = 'с "Tec-9"' end
+		if idigroklastweapon2.v == '33' then igroklastweapon2 = 'охотничьем ружьём' end
+		if idigroklastweapon2.v == '34' then igroklastweapon2 = 'снайперской винтовкой' end
+		if idigroklastweapon2.v == '35' then igroklastweapon2 = 'с "РПГ"' end
+		if idigroklastweapon2.v == '36' then igroklastweapon2 = 'самонаводящей ракетой' end
+		if idigroklastweapon2.v == '37' then igroklastweapon2 = 'огнеметом' end
+		if idigroklastweapon2.v == '38' then igroklastweapon2 = 'миниганом' end
+		if idigroklastweapon2.v == '39' then igroklastweapon2 = 'сумкой с тротилом' end
+		if idigroklastweapon2.v == '40' then igroklastweapon2 = 'детонатором к сумке' end
+		if idigroklastweapon2.v == '41' then igroklastweapon2 = 'балончиком с краской' end
+		if idigroklastweapon2.v == '42' then igroklastweapon2 = 'огнетушителем' end
+		if idigroklastweapon2.v == '43' then igroklastweapon2 = 'прибором ночного видения' end
+		if idigroklastweapon2.v == '44' then igroklastweapon2 = 'прибором ночного видения' end
+		if idigroklastweapon2.v == '45' then igroklastweapon2 = 'тупловизором' end
+		if idigroklastweapon2.v == '46' then igroklastweapon2 = 'парашютом' end
+		
+		if idigroktelo.v == '3' then igroktelo = 'туловище' end
+		if idigroktelo.v == '4' then igroktelo = 'пах' end
+		if idigroktelo.v == '5' then igroktelo = 'левую руку' end
+		if idigroktelo.v == '6' then igroktelo = 'правую руку' end
+		if idigroktelo.v == '7' then igroktelo = 'левую ногу' end
+		if idigroktelo.v == '8' then igroktelo = 'правую ногу' end
+		if idigroktelo.v == '9' then igroktelo = 'голову' end
+		
+		if idigroktelo2.v == '3' then igroktelo2 = 'туловище' end
+		if idigroktelo2.v == '4' then igroktelo2 = 'пах' end
+		if idigroktelo2.v == '5' then igroktelo2 = 'левую руку' end
+		if idigroktelo2.v == '6' then igroktelo2 = 'правую руку' end
+		if idigroktelo2.v == '7' then igroktelo2 = 'левую ногу' end
+		if idigroktelo2.v == '8' then igroktelo2 = 'правую ногу' end
+		if idigroktelo2.v == '9' then igroktelo2 = 'голову' end
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('['..igrokclock.v..'] Последний игрок, которому вы нанесли урон: '..igrokv2.v..'['..idigrok.v..']. Урон нанесен '..igroklastweapon..'['..idigrokweapon.v..'] в '..igroktelo..'.')
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('['..igrokclock2.v..'] Последний игрок, который нанес вам урон: '..igrokv22.v..'['..idigrok2.v..']. Урон нанесен '..igroklastweapon2..'['..idigrokweapon2.v..'] в '..igroktelo2..'.')
+		imgui.End()
+	end
 
 	if win_state['informer'].v then -- окно информера
 		imgui.SetNextWindowPos(imgui.ImVec2(infoX, infoY), imgui.ImVec2(0.5, 0.5))
@@ -7479,6 +7735,7 @@ function ARGBtoRGB(color) return bit32 or require'bit'.band(color, 0xFFFFFF) end
 
 function rel() -- перезагрузка скрипта
 	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Скрипт перезагружается.", 0x046D63)
+	saveSettings()
 	reloadScript = true
 	thisScript():reload()
 end
@@ -8513,7 +8770,8 @@ function load_settings() -- загрузка настроек
 	autobronza = imgui.ImBuffer(u8(ini.settings.autobronza), 256)
 	autosilver = imgui.ImBuffer(u8(ini.settings.autosilver), 256)
 	autogold = imgui.ImBuffer(u8(ini.settings.autogold), 256)
-	
+	igrokv2 = imgui.ImBuffer(u8(ini.settings.igrokv2), 2560)
+	igrokv22 = imgui.ImBuffer(u8(ini.settings.igrokv22), 2560)
 	kdpusk = imgui.ImBuffer(u8(ini.settings.kdpusk), 256)
 	napominalkadata = imgui.ImBuffer(u8(ini.settings.napominalkadata), 256)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
@@ -8665,6 +8923,16 @@ function load_settings() -- загрузка настроек
 	rifletwo = imgui.ImBuffer(u8(ini.settings.rifletwo), 256)
 	knifeone = imgui.ImBuffer(u8(ini.settings.knifeone), 256)
 	knifetwo = imgui.ImBuffer(u8(ini.settings.knifetwo), 256)
+	idigroklastweapon = imgui.ImBuffer(u8(ini.settings.idigroklastweapon), 2560)
+	idigroklastweapon2 = imgui.ImBuffer(u8(ini.settings.idigroklastweapon2), 2560)
+	idigrok = imgui.ImBuffer(u8(ini.settings.idigrok), 2560)
+	idigrok2 = imgui.ImBuffer(u8(ini.settings.idigrok2), 2560)
+	idigrokweapon = imgui.ImBuffer(u8(ini.settings.idigrokweapon), 2560)
+	idigrokweapon2 = imgui.ImBuffer(u8(ini.settings.idigrokweapon2), 2560)
+	igrokclock = imgui.ImBuffer(u8(ini.settings.igrokclock), 2560)
+	igrokclock2 = imgui.ImBuffer(u8(ini.settings.igrokclock2), 2560)
+	idigroktelo = imgui.ImBuffer(u8(ini.settings.idigroktelo), 2560)
+	idigroktelo2 = imgui.ImBuffer(u8(ini.settings.idigroktelo2), 2560)
 	timefix = imgui.ImInt(ini.settings.timefix)
 	zadervkajump = imgui.ImInt(ini.settings.zadervkajump)
 	zadervkanarko = imgui.ImInt(ini.settings.zadervkanarko)
@@ -9848,7 +10116,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -9869,7 +10142,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -9890,7 +10168,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -9911,7 +10194,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active3 = true
 	  samprulstop = true
@@ -9932,7 +10220,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active4 = true
 	  samprulstop = true
@@ -9953,7 +10246,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -9974,7 +10272,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -9995,7 +10298,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -10016,7 +10324,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -10037,7 +10350,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -10058,7 +10376,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -10079,7 +10402,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -10100,7 +10428,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -10121,7 +10454,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active3 = true
 	  samprulstop = true
@@ -10142,7 +10480,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active4 = true
 	  samprulstop = true
@@ -10163,7 +10506,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -10184,7 +10532,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
@@ -10205,7 +10558,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
@@ -10226,7 +10584,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
@@ -10247,7 +10610,12 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(2110)
+	  if admmp == true then
+		sampSendClickTextdraw(2124)
+		admmp = false
+		else
+        sampSendClickTextdraw(2110)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
@@ -12800,8 +13168,8 @@ function offpcmenu()
 			imgui.SetNextWindowSize(imgui.ImVec2(180, 88), imgui.Cond.FirstUseEver)
 			imgui.Begin(u8' Off Menu ', win_state['pcoff'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() imgui.Image(winoffpc, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Завершение работы', btn_size) then thisScript():unload() end
-			imgui.Text('') imgui.SameLine() imgui.Image(winreload, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Перезагрузка', btn_size) then thisScript():reload() end
+			imgui.Text('') imgui.SameLine() imgui.Image(winoffpc, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Завершение работы', btn_size) then saveSettings() thisScript():unload() end
+			imgui.Text('') imgui.SameLine() imgui.Image(winreload, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Перезагрузка', btn_size) then saveSettings() thisScript():reload() end
 				imgui.End()
 			end
 			
@@ -13004,18 +13372,18 @@ function shemamenu()
 function helpmenu()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 270), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(950, 300), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8('Помощь'), win_state['help'], imgui.WindowFlags.NoResize)
 		imgui.Text('')
 		imgui.BeginGroup()
-		imgui.Text('') imgui.SameLine() imgui.BeginChild('left pane', imgui.ImVec2(180, 210), true)
+		imgui.Text('') imgui.SameLine() imgui.BeginChild('left pane', imgui.ImVec2(180, 240), true)
 		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Команды скрипта") then selected2 = 2 end
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Коды клавиш") then selected2 = 3 end		
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
-		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 210), true)
+		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 240), true)
 		if selected2 == 0 then selected2 = 1
 		elseif selected2 == 3 then
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"Коды клавиш")
@@ -13046,6 +13414,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/strobes - включение/отключение стробоскопов.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call [id] - позвонить на указанный ID.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call last - позвонить на номер, на который вы звонили в последний раз.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/killinfo - посмотреть информацию, какому игроку вы нанесли в последний раз урон или какой игрок нанес урон вам.")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -15083,6 +15452,11 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'[18.12.2021]')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Фикс работы открытия сундуков, рулеток, авто-сбора шара, авто-точилки и так далее (из-за обновления на Аризоне, данные функции')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'перестали работать)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.12.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Добавлена команда /killinfo - позволяет посмотреть информацию о том, кто нанем вас урон или кому вы нанесли урон последний раз.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Добавлено сохранение скрипта после перезагрузки скрипта на команду, клавишу, через меню, при завершении работы и если скрипт')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'перезагружен на клавишу CTRL + R.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Фикс открытия сундуков (открывалось меню семьи, вместо закрытия инвентаря, если на сервере проводилось МП от админов)')
 			imgui.End()
 		end
 	
@@ -18800,3 +19174,125 @@ function ballon(id)
 	end
 	boolshar = false
 end
+	
+function sampev.onSendGiveDamage(igrokid, damage, igrokweapon, igrokbodypart)
+	igrokv2.v = sampGetPlayerNickname(igrokid)
+	if igrokbodypart == 3 then idigroktelo.v = '3' end
+	if igrokbodypart == 4 then idigroktelo.v = '4' end
+	if igrokbodypart == 5 then idigroktelo.v = '5' end
+	if igrokbodypart == 6 then idigroktelo.v = '6' end
+	if igrokbodypart == 7 then idigroktelo.v = '7' end
+	if igrokbodypart == 8 then idigroktelo.v = '8' end
+	if igrokbodypart == 9 then idigroktelo.v = '9' end
+	if igrokweapon == 0 then idigroklastweapon.v = '0' end
+	if igrokweapon == 1 then idigroklastweapon.v = '1' end
+	if igrokweapon == 2 then idigroklastweapon.v = '2' end
+	if igrokweapon == 3 then idigroklastweapon.v = '3' end
+	if igrokweapon == 4 then idigroklastweapon.v = '4' end
+	if igrokweapon == 5 then idigroklastweapon.v = '5' end
+	if igrokweapon == 6 then idigroklastweapon.v = '6' end
+	if igrokweapon == 7 then idigroklastweapon.v = '7' end
+	if igrokweapon == 8 then idigroklastweapon.v = '8' end
+	if igrokweapon == 9 then idigroklastweapon.v = '9' end
+	if igrokweapon == 10 then idigroklastweapon.v = '10' end
+	if igrokweapon == 11 then idigroklastweapon.v = '11' end
+	if igrokweapon == 12 then idigroklastweapon.v = '12' end
+	if igrokweapon == 13 then idigroklastweapon.v = '13' end
+	if igrokweapon == 14 then idigroklastweapon.v = '14' end
+	if igrokweapon == 15 then idigroklastweapon.v = '15' end
+	if igrokweapon == 16 then idigroklastweapon.v = '16' end
+	if igrokweapon == 17 then idigroklastweapon.v = '17' end
+	if igrokweapon == 18 then idigroklastweapon.v = '18' end
+	if igrokweapon == 22 then idigroklastweapon.v = '22' end
+	if igrokweapon == 23 then idigroklastweapon.v = '23' end
+	if igrokweapon == 24 then idigroklastweapon.v = '24' end
+	if igrokweapon == 25 then idigroklastweapon.v = '25' end
+	if igrokweapon == 26 then idigroklastweapon.v = '26' end
+	if igrokweapon == 27 then idigroklastweapon.v = '27' end
+	if igrokweapon == 28 then idigroklastweapon.v = '28' end
+	if igrokweapon == 29 then idigroklastweapon.v = '29' end
+	if igrokweapon == 30 then idigroklastweapon.v = '30' end
+	if igrokweapon == 31 then idigroklastweapon.v = '31' end
+	if igrokweapon == 32 then idigroklastweapon.v = '32' end
+	if igrokweapon == 33 then idigroklastweapon.v = '33' end
+	if igrokweapon == 34 then idigroklastweapon.v = '34' end
+	if igrokweapon == 35 then idigroklastweapon.v = '35' end
+	if igrokweapon == 36 then idigroklastweapon.v = '36' end
+	if igrokweapon == 37 then idigroklastweapon.v = '37' end
+	if igrokweapon == 38 then idigroklastweapon.v = '38' end
+	if igrokweapon == 39 then idigroklastweapon.v = '39' end
+	if igrokweapon == 40 then idigroklastweapon.v = '40' end
+	if igrokweapon == 41 then idigroklastweapon.v = '41' end
+	if igrokweapon == 42 then idigroklastweapon.v = '42' end
+	if igrokweapon == 43 then idigroklastweapon.v = '43' end
+	if igrokweapon == 44 then idigroklastweapon.v = '44' end
+	if igrokweapon == 45 then idigroklastweapon.v = '45' end
+	if igrokweapon == 46 then idigroklastweapon.v = '46' end
+	idigrok.v = ''..igrokid
+	idigrokweapon.v = ''..igrokweapon
+	igrokclock.v = ''..os.date('%d.%m.%y %H:%M')
+	saveSettings()
+	end
+	
+function sampev.onSendTakeDamage(igrokid2, damage2, igrokweapon2, igrokbodypart2)
+	igrokv22.v = sampGetPlayerNickname(igrokid2)
+	if igrokbodypart2 == 3 then idigroktelo2.v = '3' end
+	if igrokbodypart2 == 4 then idigroktelo2.v = '4' end
+	if igrokbodypart2 == 5 then idigroktelo2.v = '5' end
+	if igrokbodypart2 == 6 then idigroktelo2.v = '6' end
+	if igrokbodypart2 == 7 then idigroktelo2.v = '7' end
+	if igrokbodypart2 == 8 then idigroktelo2.v = '8' end
+	if igrokbodypart2 == 9 then idigroktelo2.v = '9' end
+	if igrokweapon2 == 0 then idigroklastweapon2.v = '0' end
+	if igrokweapon2 == 1 then idigroklastweapon2.v = '1' end
+	if igrokweapon2 == 2 then idigroklastweapon2.v = '2' end
+	if igrokweapon2 == 3 then idigroklastweapon2.v = '3' end
+	if igrokweapon2 == 4 then idigroklastweapon2.v = '4' end
+	if igrokweapon2 == 5 then idigroklastweapon2.v = '5' end
+	if igrokweapon2 == 6 then idigroklastweapon2.v = '6' end
+	if igrokweapon2 == 7 then idigroklastweapon2.v = '7' end
+	if igrokweapon2 == 8 then idigroklastweapon2.v = '8' end
+	if igrokweapon2 == 9 then idigroklastweapon2.v = '9' end
+	if igrokweapon2 == 10 then idigroklastweapon2.v = '10' end
+	if igrokweapon2 == 11 then idigroklastweapon2.v = '11' end
+	if igrokweapon2 == 12 then idigroklastweapon2.v = '12' end
+	if igrokweapon2 == 13 then idigroklastweapon2.v = '13' end
+	if igrokweapon2 == 14 then idigroklastweapon2.v = '14' end
+	if igrokweapon2 == 15 then idigroklastweapon2.v = '15' end
+	if igrokweapon2 == 16 then idigroklastweapon2.v = '16' end
+	if igrokweapon2 == 17 then idigroklastweapon2.v = '17' end
+	if igrokweapon2 == 18 then idigroklastweapon2.v = '18' end
+	if igrokweapon2 == 22 then idigroklastweapon2.v = '22' end
+	if igrokweapon2 == 23 then idigroklastweapon2.v = '23' end
+	if igrokweapon2 == 24 then idigroklastweapon2.v = '24' end
+	if igrokweapon2 == 25 then idigroklastweapon2.v = '25' end
+	if igrokweapon2 == 26 then idigroklastweapon2.v = '26' end
+	if igrokweapon2 == 27 then idigroklastweapon2.v = '27' end
+	if igrokweapon2 == 28 then idigroklastweapon2.v = '28' end
+	if igrokweapon2 == 29 then idigroklastweapon2.v = '29' end
+	if igrokweapon2 == 30 then idigroklastweapon2.v = '30' end
+	if igrokweapon2 == 31 then idigroklastweapon2.v = '31' end
+	if igrokweapon2 == 32 then idigroklastweapon2.v = '32' end
+	if igrokweapon2 == 33 then idigroklastweapon2.v = '33' end
+	if igrokweapon2 == 34 then idigroklastweapon2.v = '34' end
+	if igrokweapon2 == 35 then idigroklastweapon2.v = '35' end
+	if igrokweapon2 == 36 then idigroklastweapon2.v = '36' end
+	if igrokweapon2 == 37 then idigroklastweapon2.v = '37' end
+	if igrokweapon2 == 38 then idigroklastweapon2.v = '38' end
+	if igrokweapon2 == 39 then idigroklastweapon2.v = '39' end
+	if igrokweapon2 == 40 then idigroklastweapon2.v = '40' end
+	if igrokweapon2 == 41 then idigroklastweapon2.v = '41' end
+	if igrokweapon2 == 42 then idigroklastweapon2.v = '42' end
+	if igrokweapon2 == 43 then idigroklastweapon2.v = '43' end
+	if igrokweapon2 == 44 then idigroklastweapon2.v = '44' end
+	if igrokweapon2 == 45 then idigroklastweapon2.v = '45' end
+	if igrokweapon2 == 46 then idigroklastweapon2.v = '46' end
+	idigrok2.v = ''..igrokid2
+	idigrokweapon2.v = ''..igrokweapon2
+	igrokclock2.v = ''..os.date('%d.%m.%y %H:%M')
+	saveSettings()
+	end
+	
+function show_dial()
+	win_state['dial'].v = not win_state['dial'].v
+	end
