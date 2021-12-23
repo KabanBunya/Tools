@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.7')
+script_version('3.2.8')
 
 local use = false
 local close = false
@@ -15457,6 +15457,7 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Добавлено сохранение скрипта после перезагрузки скрипта на команду, клавишу, через меню, при завершении работы и если скрипт')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'перезагружен на клавишу CTRL + R.')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Фикс открытия сундуков (открывалось меню семьи, вместо закрытия инвентаря, если на сервере проводилось МП от админов)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'10. Фикс /killinfo (из-за функционала при получении урона не от игрока - игра зависала)')
 			imgui.End()
 		end
 	
@@ -19176,6 +19177,7 @@ function ballon(id)
 end
 	
 function sampev.onSendGiveDamage(igrokid, damage, igrokweapon, igrokbodypart)
+	if igrokid ~= 65535 then
 	igrokv2.v = sampGetPlayerNickname(igrokid)
 	if igrokbodypart == 3 then idigroktelo.v = '3' end
 	if igrokbodypart == 4 then idigroktelo.v = '4' end
@@ -19232,9 +19234,11 @@ function sampev.onSendGiveDamage(igrokid, damage, igrokweapon, igrokbodypart)
 	idigrokweapon.v = ''..igrokweapon
 	igrokclock.v = ''..os.date('%d.%m.%y %H:%M')
 	saveSettings()
+		end
 	end
 	
 function sampev.onSendTakeDamage(igrokid2, damage2, igrokweapon2, igrokbodypart2)
+	if igrokid2 ~= 65535 then
 	igrokv22.v = sampGetPlayerNickname(igrokid2)
 	if igrokbodypart2 == 3 then idigroktelo2.v = '3' end
 	if igrokbodypart2 == 4 then idigroktelo2.v = '4' end
@@ -19291,6 +19295,7 @@ function sampev.onSendTakeDamage(igrokid2, damage2, igrokweapon2, igrokbodypart2
 	idigrokweapon2.v = ''..igrokweapon2
 	igrokclock2.v = ''..os.date('%d.%m.%y %H:%M')
 	saveSettings()
+		end
 	end
 	
 function show_dial()
