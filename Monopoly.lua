@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.9')
+script_version('3.2.10')
 
 local use = false
 local close = false
@@ -1047,8 +1047,6 @@ tradept = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
-local checked_test8 = imgui.ImBool(false)
-local checked_test9 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
@@ -4016,57 +4014,6 @@ end
       end
     end)
   end
-    if checked_test8.v and active3 and otkrytie.v then
-    lua_thread.create(function()
-      if data.modelId == 1240 then
-        wait(1000)
-        sampSendClickTextdraw(id)
-        use3 = true
-      end
-      if data.text == 'USE' or data.text == '≈CÃO«“»OÀAœ“' and use3 and otkrytie.v then 
-        clickID = id + 1
-		wait(500)
-        sampSendClickTextdraw(clickID)
-		wait(1000)
-		sampSendClickTextdraw(2048)
-		use3 = false
-		close3 = true
-	  end
-      if close3 and otkrytie.v then
-        wait(300)
-        setVirtualKeyDown(VK_ESCAPE, true)
-		wait(111)
-		setVirtualKeyDown(VK_ESCAPE, false)
-		close3 = false
-        active3 = false
-	   end
-    end)
-  end
-  if checked_test9.v and active4 and otkrytie.v then
-    lua_thread.create(function()
-      if data.modelId == 1240 then
-        wait(1000)
-        sampSendClickTextdraw(id)
-        use4 = true
-      end
-      if data.text == 'USE' or data.text == '≈CÃO«“»OÀAœ“' and use4 and otkrytie.v then
-        clickID = id + 1
-		wait(500)
-        sampSendClickTextdraw(clickID)
-        use4 = false
-        close4 = true
-      end
-      if close4 and otkrytie.v then
-        wait(300)
-		sampSendClickTextdraw(admmp)
-		wait(111)
-		sampCloseCurrentDialogWithButton(1)
-		ruletka()
-        close4 = false
-        active4 = false
-      end
-    end)
-  end
 	if checked_test10.v and active5 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
@@ -4201,6 +4148,8 @@ end
 		sampSendClickTextdraw(2302)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4218,6 +4167,8 @@ end
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4237,6 +4188,8 @@ end
 		sampSendClickTextdraw(2302)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4246,49 +4199,6 @@ end
       end
     end)
   end
-    if checked_test8.v and active3 and otkrytie2.v then
-    lua_thread.create(function()
-      if data.modelId == 1240 then
-        wait(111)
-        sampSendClickTextdraw(id)
-        use3 = true
-      end
-      if data.text == 'USE' or data.text == '≈CÃO«“»OÀAœ“' and use3 then 
-        clickID = id + 1
-        sampSendClickTextdraw(clickID)
-		wait(1000)
-		sampSendClickTextdraw(2048)
-		use3 = false
-		close3 = true
-	  end
-      if close3 then
-        wait(111)
-        setVirtualKeyDown(VK_ESCAPE, true)
-		wait(111)
-		setVirtualKeyDown(VK_ESCAPE, false)
-		close3 = false
-        active3 = false
-	   end
-    end)
-  end
-  if checked_test9.v and active4 and otkrytie2.v then
-    lua_thread.create(function()
-      if data.modelId == 1240 then
-        wait(111)
-        sampSendClickTextdraw(id)
-        wait(222)
-		sampSendClickTextdraw(2302)
-        wait(333)
-		sampSendClickTextdraw(admmp)
-		wait(111)
-		sampCloseCurrentDialogWithButton(1)
-		wait(111)
-		sampSendClickTextdraw(2135)
-		ruletka()
-        active4 = false
-		end
-	 end)
-	end
 	if checked_test10.v and active5 and otkrytie2.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
@@ -4297,6 +4207,8 @@ end
         wait(222)
 		sampSendClickTextdraw(2302)
 		wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4316,6 +4228,8 @@ end
 		sampSendClickTextdraw(2302)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4333,6 +4247,8 @@ end
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4352,6 +4268,8 @@ end
 		sampSendClickTextdraw(2302)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4369,6 +4287,8 @@ end
         wait(222)
 		sampSendClickTextdraw(2302)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4389,6 +4309,8 @@ end
 		sampSendClickTextdraw(idtext1.v)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4407,6 +4329,8 @@ end
 		sampSendClickTextdraw(idtext3.v)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4416,14 +4340,16 @@ end
 		end
     end)
   end
-  if checked_test9.v and active4 and otkrytie3.v then
+  if checked_test7.v and active4 and otkrytie3.v then
     lua_thread.create(function()
-		if data.modelId == 1240 then
+		if data.modelId == 1353 then
 		wait(111)
         sampSendClickTextdraw(idtext4.v)
 		wait(222)
 		sampSendClickTextdraw(idtext5.v)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4443,6 +4369,8 @@ end
 		sampSendClickTextdraw(idtext7.v)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4460,6 +4388,8 @@ end
 		wait(222)
 		sampSendClickTextdraw(idtext1.v)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4479,6 +4409,8 @@ end
 		sampSendClickTextdraw(idtext3.v)
         wait(333)
 		sampSendClickTextdraw(admmp)
+		wait(444)
+		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
@@ -4490,12 +4422,14 @@ end
   end
   if yashik2.v and active2 and otkrytie3.v then
     lua_thread.create(function()
-		if data.modelId == 1240 then
+		if data.modelId == 1353 then
 		wait(111)
 		sampSendClickTextdraw(idtext4.v)
 		wait(222)
 		sampSendClickTextdraw(idtext5.v)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -4514,6 +4448,8 @@ end
 		wait(222)
 		sampSendClickTextdraw(idtext7.v)
         wait(333)
+		sampSendClickTextdraw(admmp)
+		wait(444)
 		sampSendClickTextdraw(admmp)
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
@@ -10317,48 +10253,6 @@ while true do
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if checked_test8.v and otkrytie.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  sampSendClickTextdraw(admmp)
-	  wait(500)
-      active3 = true
-	  samprulstop = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
-	if checked_test9.v and otkrytie.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  sampSendClickTextdraw(admmp)
-	  wait(500)
-      active4 = true
-	  samprulstop = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
 	if checked_test10.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
@@ -10527,48 +10421,6 @@ while true do
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
-	if checked_test8.v and otkrytie2.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  sampSendClickTextdraw(admmp)
-	  wait(500)
-      active3 = true
-	  samprulstop = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
-	if checked_test9.v and otkrytie2.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  sampSendClickTextdraw(admmp)
-	  wait(500)
-      active4 = true
-	  samprulstop = true
-      sampSendChat("/invent")
-      wait(zadervka.v*60000)
-	end
 	if checked_test10.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
@@ -10717,7 +10569,7 @@ while true do
       sampSendChat("/invent")
       wait(zadervka.v*60000)
     end
-	if checked_test9.v and otkrytie3.v then
+	if checked_test7.v and otkrytie3.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
 	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
@@ -17036,19 +16888,45 @@ end
 
 function sampev.onDisplayGameText(style, tm, text)
 
-	if eat.v and eatmyso.v and eathungry.v and text:find('You are hungry!') or text:find('You are very hungry!') then
+	if eat.v and eatmyso.v and eathungry.v and text:find('You are hungry!') then
 	sampSendChat("/meatbag")
 	end
 	
-	if eat.v and jmeat.v and eathungry.v and text:find('You are hungry!') or text:find('You are very hungry!') then
+	if eat.v and jmeat.v and eathungry.v and text:find('You are hungry!') then
 	sampSendChat("/jmeat")
 	end
 	
-	if eat.v and jfish.v and eathungry.v and text:find('You are hungry!') or text:find('You are very hungry!') then
+	if eat.v and jfish.v and eathungry.v and text:find('You are hungry!') then
 	sampSendChat("/jfish")
 	end
 	
-	if eat.v and eathouse.v and eathungry.v and text:find('You are hungry!') or text:find('You are very hungry!') then
+	if eat.v and eathouse.v and eathungry.v and text:find('You are hungry!') then
+		lua_thread.create(function()
+		sampSendChat("/house")
+		wait(100)
+		sampSendDialogResponse(174, 1 , 1, -1)
+		wait(100)
+		sampSendDialogResponse(2431, 1 , 2, -1)
+		wait(100)
+		sampSendDialogResponse(185, 1 , 6, -1)
+		wait(100)
+		closeDialog()
+	end)
+end
+
+	if eat.v and eatmyso.v and eathungry.v and text:find('You are very hungry!') then
+	sampSendChat("/meatbag")
+	end
+	
+	if eat.v and jmeat.v and eathungry.v and text:find('You are very hungry!') then
+	sampSendChat("/jmeat")
+	end
+	
+	if eat.v and jfish.v and eathungry.v and text:find('You are very hungry!') then
+	sampSendChat("/jfish")
+	end
+	
+	if eat.v and eathouse.v and eathungry.v and text:find('You are very hungry!') then
 		lua_thread.create(function()
 		sampSendChat("/house")
 		wait(100)
