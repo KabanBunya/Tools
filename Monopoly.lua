@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.10')
+script_version('3.2.11')
 
 local use = false
 local close = false
@@ -820,6 +820,7 @@ local SET = {
 		invfast = false,
 		fastkey = false,
 		fastlock = false,
+		fastklad = false,
 		autoshar = false,
 		keyT = false,
 		launcher = false,
@@ -1044,6 +1045,9 @@ local platina = imgui.ImBool(false)
 local moneta = imgui.ImBool(false)
 local tochkamen = imgui.ImBool(false)
 tradept = imgui.ImBool(false)
+local klad№1 = imgui.ImBool(false)
+local klad№2 = imgui.ImBool(false)
+local klad№3 = imgui.ImBool(false)
 local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
@@ -2557,6 +2561,7 @@ function main()
 	lua_thread.create(informerperemshahta)
 	lua_thread.create(informerperempismo)
 	lua_thread.create(rouletteyashik)
+	lua_thread.create(kladik)
 	lua_thread.create(roulette)
 	lua_thread.create(piarad)
 	lua_thread.create(piarad2)
@@ -2619,6 +2624,9 @@ function main()
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklavareload)) then saveSettings() thisScript():reload() end
 		if isKeyJustPressed(82) and isKeyJustPressed(17) then saveSettings() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklava)) then mainmenu() end
+		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(49) and isKeyJustPressed(18) then activeklad() end
+		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(50) and isKeyJustPressed(18) then activeklad2() end
+		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(51) and isKeyJustPressed(18) then activeklad3() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
 		
@@ -3218,6 +3226,7 @@ function saveSettings(args, key)
 	ini.settings.fastkey = fastkey.v
 	ini.settings.invfast = invfast.v
 	ini.settings.fastlock = fastlock.v
+	ini.settings.fastklad = fastklad.v
 	ini.settings.autoshar = autoshar.v
 	ini.settings.infoX = infoX
 	ini.settings.infoY = infoY
@@ -3802,6 +3811,9 @@ end
   if dialogId == 15330 and dialogclose.v then return false end
   if houserespawn == true and dialogId == 1781 then return false end
   if houserespawn == true and dialogId == 7238 then return false end
+  if klad№1.v and dialogId == 15550 then return false end
+  if klad№2.v and dialogId == 15550 then return false end
+  if klad№3.v and dialogId == 15550 then return false end
   if dialogId == 15281 and video.v or video1.v or video2.v or video3.v or video4.v or video5.v or video6.v or video7.v or video8.v or video9.v or video10.v or video11.v or video12.v or video13.v or video14.v or video15.v or video16.v or video17.v or video18.v or video19.v or video20.v or video21.v or video22.v or video23.v or video24.v or video25.v or video26.v or video27.v or video28.v or video29.v or video30.v or video31.v or video32.v or video33.v or video34.v or video35.v then return false end
   if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then
       lua_thread.create(function()
@@ -3938,6 +3950,70 @@ end
 	if checked_test12.v and slotruletka2 == true and ostanovka2.v then
 	checked_test12.v = false
 	end	
+	
+	if klad№1.v then
+		lua_thread.create(function()
+		if data.modelId == 19168 then
+		wait(500)
+        sampSendClickTextdraw(id)
+		use333 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use333 then
+        clickID = id + 1
+		wait(100)
+        sampSendClickTextdraw(clickID)
+        use333 = false
+        wait(100)
+		sampSendDialogResponse(15550, 1 , 0, -1)
+		wait(100)
+		sampSendClickTextdraw(admmp)
+		wait(100)
+		sampCloseCurrentDialogWithButton(1)
+		end
+	end)
+end
+	if klad№2.v then
+		lua_thread.create(function()
+		if data.modelId == 19168 then
+		wait(500)
+        sampSendClickTextdraw(id)
+		use444 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use444 then
+        clickID = id + 1
+		wait(100)
+        sampSendClickTextdraw(clickID)
+        use444 = false
+        wait(100)
+		sampSendDialogResponse(15550, 1 , 1, -1)
+		wait(100)
+		sampSendClickTextdraw(admmp)
+		wait(100)
+		sampCloseCurrentDialogWithButton(1)
+		end
+	end)
+end
+	if klad№3.v then
+		lua_thread.create(function()
+		if data.modelId == 19168 then
+		wait(500)
+        sampSendClickTextdraw(id)
+		use555 = true
+		end
+		if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use555 then
+        clickID = id + 1
+		wait(100)
+        sampSendClickTextdraw(clickID)
+        use555 = false
+        wait(100)
+		sampSendDialogResponse(15550, 1 , 2, -1)
+		wait(100)
+		sampSendClickTextdraw(admmp)
+		wait(100)
+		sampCloseCurrentDialogWithButton(1)
+		end
+	end)
+end
 
   if checked_test5.v and active and otkrytie.v then
     lua_thread.create(function()
@@ -4299,6 +4375,8 @@ end
       end
     end)
   end
+  
+  
   
   if checked_test5.v and active and otkrytie3.v then
     lua_thread.create(function()
@@ -9104,6 +9182,7 @@ function load_settings() -- загрузка настроек
 	invfast = imgui.ImBool(ini.settings.invfast)
 	fastkey = imgui.ImBool(ini.settings.fastkey)
 	fastlock = imgui.ImBool(ini.settings.fastlock)
+	fastklad = imgui.ImBool(ini.settings.fastklad)
 	autoshar = imgui.ImBool(ini.settings.autoshar)
 	timecout = imgui.ImBool(ini.settings.timecout)
 	rtag = imgui.ImBuffer(u8(ini.settings.tag), 256)
@@ -10184,6 +10263,27 @@ while true do
 	  wait(15000)
 	  samprulstart = true
 			end
+		wait(0)
+	end
+end
+
+function kladik()
+	while true do 
+	if klad№1.v then
+      sampSendChat("/invent")
+	  wait(2000)
+	  klad№1.v = false
+	end
+	if klad№2.v then
+      sampSendChat("/invent")
+	  wait(2000)
+	  klad№2.v = false
+	end
+	if klad№3.v then
+      sampSendChat("/invent")
+	  wait(2000)
+	  klad№3.v = false
+	end
 		wait(0)
 	end
 end
@@ -14841,6 +14941,8 @@ function nastroikamenu()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Invite', invfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в организацию с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка Q)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Key")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Key', fastkey); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то после того, как вы заглушите транспортное средство - вы автоматический вытащите из него ключи. Также если вы попробуете завести транспорт,а в нём не будет ключей - скрипт пропишет /key и заведет транспортное средство.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Lock")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Lock', fastlock); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность открытия или закрытия личного транспорта на кнопку, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка L)");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Установить метку кладов по нажатию клавиш")); imgui.SameLine(); imgui.ToggleButton(u8'Установить метку кладов по нажатию клавиш', fastklad); imgui.SameLine(); imgui.TextQuestion(u8"Для работы функции нужно иметь карту кладов из /donate и она должна лежать у вас на первой странице инвентаря. Поставить метку первого клада можно на нажатие клавиш Alt + 1, вторую метку клада на Alt + 2 и третью метку клада на Alt + 3. Менять клавиши временно нельзя.");
+				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-сбор шара, велосипеда и дельтаплана")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-сбор шара, велосипеда и дельтаплана', autoshar); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то вам больше не нужно будет нажимать кнопки для сборки указанного транспорта.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-изменение заданий на ферме")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-изменение заданий на ферме', autoferma); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то через указанное время, скрипт будет проверять количество заданий у первых 5-ти заданий и если, заданий будет меньше 190, то скрипт в автоматическом режиме поменяет на количество - 200. Чтобы функция работала - вы должны стоять на метке на ферме. Работает в свернутом режиме, если установлен Анти-афк.");
 				imgui.PushItemWidth(150)
@@ -15587,6 +15689,8 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'15. В "Модификации" - "Авто-Еда" добавлена возможность менять режимы употребления пищи. 1 режим - употреблять еду через') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'указанное время. 2 режим - употреблять еду при надписи "You are hungry".') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'16. Выделил некоторые функции в "Модификации", иначе все настройки некоторых функций сливались с другими функциями.') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[31.12.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Параметры" - "Модификации" добавлена возможность отметить метки кладов из карты в /donate по нажатию клавиш.') 
 			imgui.End()
 		end
 	
@@ -19482,4 +19586,14 @@ function sampev.onSendTakeDamage(igrokid2, damage2, igrokweapon2, igrokbodypart2
 	
 function show_dial()
 	win_state['dial'].v = not win_state['dial'].v
+	end
+	
+function activeklad()
+	klad№1.v = true
+	end
+function activeklad2()
+	klad№2.v = true
+	end
+function activeklad3()
+	klad№3.v = true
 	end
