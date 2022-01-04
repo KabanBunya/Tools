@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.11')
+script_version('3.2.12')
 
 local use = false
 local close = false
@@ -810,7 +810,9 @@ local SET = {
 		chatInfo = false,
 		raskladka = false,
 		recongen = false,
+		reconclosed = false,
 		reconbanned = true,
+		reconpassword = true,
 		reconkick = true,
 		reconrestart = true,
 		reconsave = true, 
@@ -878,6 +880,7 @@ local SET = {
 		zadervkanarko = 30,
 		zadervkaeat = 30,
 		zadervkarecon = 15,
+		zadervkareconv2 = 15,
 		zadervkareconrestart = 10,
 		zadervkaferma = 30,
 		zadervka = 3,
@@ -2774,6 +2777,18 @@ function main()
             sampSetGamestate(1)
 		end
 		
+		if chatstring == "Wrong server password." and recongen.v and reconpassword.v then
+        sampDisconnectWithReason(false)
+            wait(zadervkareconrestart.v * 60000) -- задержка
+            sampSetGamestate(1)
+		end
+		
+		if chatstring == "Server closed the connection." or chatstring == "You are banned from this server." or chatstring == "Wrong server password." and reconclosed.v then
+        sampDisconnectWithReason(false)
+            wait(zadervkareconv2.v * 1000) -- задержка
+            sampSetGamestate(1)
+		end
+		
 		-- получение названия района на инглише(работает только при включенном английском в настройках игры, иначе иероглифы)
 		local zX, zY, zZ = getCharCoordinates(playerPed)
 		ZoneInGame = getGxtText(getNameOfZone(zX, zY, zZ))
@@ -3203,6 +3218,7 @@ function saveSettings(args, key)
 	ini.settings.zadervkanarko = zadervkanarko.v
 	ini.settings.zadervkaeat = zadervkaeat.v
 	ini.settings.zadervkarecon = zadervkarecon.v
+	ini.settings.zadervkareconv2 = zadervkareconv2.v
 	ini.settings.zadervkareconrestart = zadervkareconrestart.v
 	ini.settings.zadervkaferma = zadervkaferma.v
 	ini.settings.zadervka = zadervka.v
@@ -3216,7 +3232,9 @@ function saveSettings(args, key)
 	ini.settings.chatInfo = chatInfo.v
 	ini.settings.raskladka = raskladka.v
 	ini.settings.recongen = recongen.v
+	ini.settings.reconclosed = reconclosed.v
 	ini.settings.reconbanned = reconbanned.v
+	ini.settings.reconpassword = reconpassword.v
 	ini.settings.reconkick = reconkick.v
 	ini.settings.reconrestart = reconrestart.v
 	ini.settings.reconsave = reconsave.v
@@ -9101,6 +9119,7 @@ function load_settings() -- загрузка настроек
 	zadervkanarko = imgui.ImInt(ini.settings.zadervkanarko)
 	zadervkaeat = imgui.ImInt(ini.settings.zadervkaeat)
 	zadervkarecon = imgui.ImInt(ini.settings.zadervkarecon)
+	zadervkareconv2 = imgui.ImInt(ini.settings.zadervkareconv2)
 	zadervkareconrestart = imgui.ImInt(ini.settings.zadervkareconrestart)
 	zadervkaferma = imgui.ImInt(ini.settings.zadervkaferma)
 	zadervka = imgui.ImInt(ini.settings.zadervka)
@@ -9172,7 +9191,9 @@ function load_settings() -- загрузка настроек
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
 	raskladka = imgui.ImBool(ini.settings.raskladka)
 	recongen = imgui.ImBool(ini.settings.recongen)
+	reconclosed = imgui.ImBool(ini.settings.reconclosed)
 	reconbanned = imgui.ImBool(ini.settings.reconbanned)
+	reconpassword = imgui.ImBool(ini.settings.reconpassword)
 	reconkick = imgui.ImBool(ini.settings.reconkick)
 	reconrestart = imgui.ImBool(ini.settings.reconrestart)
 	reconsave = imgui.ImBool(ini.settings.reconsave)
@@ -13699,13 +13720,9 @@ function reklamawinmenu()
 		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8('РЕКЛАМА'), win_state['reklamawin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
 		imgui.Text('')
-		--[[imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools') imgui.SameLine(288) imgui.Text(u8"|") imgui.SameLine(300) imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(435) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(435) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
-		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11, за который можно получить 1.000.000$ от Монополистов: {0F52BA}#monopoly{0F52BA}")
-		imgui.Text("") imgui.SameLine() imgui.Text(u8"Регистрируйся на ник Bunya_Monopoly на 11, достигай 8 lvl, отписывай в любую группу и забирай 2кк.   ")]]
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"Всех с Наступающим Новым Годом! Желаем, чтобы в следующем году") 
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"сбылись все ваши мечты. И в честь праздника, Монополисты дарят        ") 
-		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("всем подарки! Подробнее: {0F52BA}https://vk.cc/c97o8b") imgui.SameLine(169) imgui.Link('https://vk.cc/c97o8b','https://vk.cc/c97o8b')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(140) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(140) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
+		imgui.Text("") imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11, за который можно получить вирты от Монополистов: {0F52BA}#monopoly{0F52BA}   ")
 		imgui.Text('')
         imgui.End()
 	end
@@ -14907,17 +14924,28 @@ function nastroikamenu()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Обычный реконнект', reconclosed); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру при любом вылете.")
+				if reconclosed.v then
+				imgui.Text('-----------------------------------------------------------------------------')
+				imgui.PushItemWidth(150)
+				imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (в секундах) ##10001',zadervkareconv2,1, 600)
+				imgui.PopItemWidth()
+				imgui.Text('-----------------------------------------------------------------------------')
+				end
+				if reconclosed.v then recongen.v = false reconbanned.v = false reconkick.v = false reconrestart.v = false reconsave.v = false reconpassword.v = false end
+				if recongen.v then reconclosed.v = false end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, пишет 'You are banned from this server' и после рестарта.")
 				if recongen.v then 
 				imgui.Text('-----------------------------------------------------------------------------')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'Перезаходить, если:')
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("You are banned from this server")); imgui.SameLine(); imgui.ToggleButton(u8'You are banned from this server', reconbanned)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Wrong server password")); imgui.SameLine(); imgui.ToggleButton(u8'Wrong server password', reconpassword)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Кикнул Античит")); imgui.SameLine(); imgui.ToggleButton(u8'Кикнул Античит', reconkick)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Произошел рестарт сервера")); imgui.SameLine(); imgui.ToggleButton(u8'Произошел рестарт сервера', reconrestart)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Сработала защита от реконнекта")); imgui.SameLine(); imgui.ToggleButton(u8'Сработала защита от реконнекта', reconsave)
 				imgui.PushItemWidth(150)
 				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в секундах) ##1001',zadervkarecon,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после кика античита, команду /recon, защиты от реконнекта, на 'You are banned from this server. По умолчанию установлено - 15 секунд.")
-				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в минутах) ##1002',zadervkareconrestart,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после рестарта. По умолчанию установлено - 10 минут.")
+				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в минутах) ##1002',zadervkareconrestart,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после рестарта и перезаход при Wrong server password. По умолчанию установлено - 10 минут.")
 				imgui.PopItemWidth()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
@@ -15203,6 +15231,7 @@ function nastroikamenu()
 				raskladka.v = false
 				recongen.v = false
 				reconbanned.v = true
+				reconpassword.v = true
 				reconkick.v = true
 				reconrestart.v = true
 				reconsave.v = true
@@ -15691,6 +15720,9 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'16. Выделил некоторые функции в "Модификации", иначе все настройки некоторых функций сливались с другими функциями.') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'[31.12.2021]')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Параметры" - "Модификации" добавлена возможность отметить метки кладов из карты в /donate по нажатию клавиш.') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.01.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'18. В "Параметры" - "Модификации" добавлен "Обычный реконнект" - переподключается к серверу при любом вылете.') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'19. В "Параметры" - "Модификации" - "Умный реконнект" добавлен перезаход после "Wrong server password".') 
 			imgui.End()
 		end
 	
