@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.12')
+script_version('3.2.13')
 
 local use = false
 local close = false
@@ -2783,7 +2783,19 @@ function main()
             sampSetGamestate(1)
 		end
 		
-		if chatstring == "Server closed the connection." or chatstring == "You are banned from this server." or chatstring == "Wrong server password." and reconclosed.v then
+		if chatstring == "Server closed the connection." and reconclosed.v then
+        sampDisconnectWithReason(false)
+            wait(zadervkareconv2.v * 1000) -- задержка
+            sampSetGamestate(1)
+		end
+		
+		if chatstring == "You are banned from this server." and reconclosed.v then
+        sampDisconnectWithReason(false)
+            wait(zadervkareconv2.v * 1000) -- задержка
+            sampSetGamestate(1)
+		end
+		
+		if chatstring == "Wrong server password." and reconclosed.v then
         sampDisconnectWithReason(false)
             wait(zadervkareconv2.v * 1000) -- задержка
             sampSetGamestate(1)
