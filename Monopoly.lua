@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.14')
+script_version('3.2.15')
 
 local use = false
 local close = false
@@ -10410,7 +10410,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
     end
     if checked_test2.v and krytim then
@@ -10429,7 +10429,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
     end
     if checked_test3.v and krytim then
@@ -10448,7 +10448,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
     end
     if checked_test4.v and krytim then
@@ -10467,7 +10467,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
 	end
 	if checked_test11.v and krytim then
@@ -10500,7 +10500,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
 	end
 	if checked_test12.v and krytim then
@@ -10533,7 +10533,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
 	end
 	if checked_test13.v and krytim then
@@ -10565,7 +10565,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
 	end
 	if checked_test14.v and krytim then
@@ -10597,7 +10597,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(8000)
+	  wait(7000)
 	  samprulstart = true
 			end
 		wait(0)
