@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.13')
+script_version('3.2.14')
 
 local use = false
 local close = false
@@ -19,6 +19,7 @@ local houserespawn = false
 local samprulstop = true
 local samprulstart = false
 local fontsize = nil
+fontsizev2 = nil
 local fa_font = nil
 delplayer = false
 local npc, infnpc = {}, {}
@@ -79,7 +80,6 @@ itogoskupsemmoneta = 0
 itogoskupauto = 0
 skuptovaracol = 0
 itogoskuptovara = 0
-
 igroklastweapon = 'nill'
 igroklastweapon2 = 'nill'
 igroktelo = 'nill'
@@ -376,6 +376,7 @@ local SET = {
  	settings = {
 		autologin = false,
 		obkachet = false,
+		windowsstyle = true,
 		panel = false,
 		panel2 = false,
 		panel3 = false,
@@ -971,6 +972,7 @@ win_state['leaders'] = imgui.ImBool(false)
 win_state['help'] = imgui.ImBool(false)
 win_state['nastroikawin'] = imgui.ImBool(false)
 win_state['googlewin'] = imgui.ImBool(false)
+win_state['support'] = imgui.ImBool(false)
 win_state['reklamawin'] = imgui.ImBool(false)
 win_state['messanger'] = imgui.ImBool(false)
 win_state['gamer'] = imgui.ImBool(false)
@@ -1110,6 +1112,8 @@ local sessionStart = os.time()
 local sessiononline = 0
 local buf = imgui.ImBuffer(2056)
 local stringField = imgui.ImBuffer(130)
+stringField22 = imgui.ImBuffer(4096)
+stringField33 = imgui.ImBuffer(300)
 local changeNickField = imgui.ImBuffer(19)
 local chats = cfg1.message.channels
 local messages = {}
@@ -1921,17 +1925,101 @@ function apply_custom_style()
     colors[clr.ModalWindowDarkening]   = ImVec4(0.80, 0.80, 0.80, 0.35)
 end
 
+function apply_custom_style2()
+    imgui.SwitchContext()
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    local clr = imgui.Col
+    local ImVec4 = imgui.ImVec4
+	local ImVec2 = imgui.ImVec2
+
+	style.WindowPadding = ImVec2(0, 0)
+    style.WindowRounding = 5.0
+	style.FramePadding = ImVec2(5, 5)
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ChildWindowRounding = 8.0
+    style.FrameRounding = 2.0
+    style.ItemSpacing = imgui.ImVec2(8, 4)
+	style.IndentSpacing = 25.0
+    style.ScrollbarSize = 15.0
+    style.ScrollbarRounding = 9.0
+    style.GrabMinSize = 5.0
+    style.GrabRounding = 3.0
+	
+    colors[clr.FrameBgActive]          = ImVec4(0.26, 0.59, 0.98, 0.67)
+	
+	colors[clr.TitleBg]                = ImVec4(0.11, 0.10, 0.11, 1.00)
+    colors[clr.TitleBgActive]          = ImVec4(0.11, 0.10, 0.11, 1.00)
+    colors[clr.TitleBgCollapsed]       = ImVec4(0.11, 0.10, 0.11, 0.51)
+	
+    colors[clr.SliderGrab]             = ImVec4(0.24, 0.52, 0.88, 1.00)
+    colors[clr.SliderGrabActive]       = ImVec4(0.26, 0.59, 0.98, 1.00)
+    colors[clr.Button]                 = ImVec4(0.26, 0.59, 0.98, 0.00)
+	
+	
+	buttonvydel                        = ImVec4(0.00, 0.49, 1.00, 0.80)
+	colors[clr.ButtonHovered]          = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.HeaderHovered]          = ImVec4(0.00, 0.49, 1.00, 0.80)
+	colors[clr.FrameBgHovered]         = ImVec4(0.00, 0.49, 1.00, 0.40)
+	colors[clr.ScrollbarGrabHovered]   = ImVec4(0.00, 0.49, 1.00, 1.00)
+	
+	buttonpol                          = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ButtonActive]           = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.FrameBg]                = ImVec4(0.00, 0.49, 1.00, 0.54)
+	colors[clr.HeaderActive]           = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ScrollbarGrabActive]    = ImVec4(0.00, 0.49, 1.00, 1.00)
+	
+	buttonclick                        = ImVec4(0.00, 0.49, 1.00, 0.60)
+	colors[clr.Header]                 = ImVec4(0.00, 0.49, 1.00, 0.31)
+	colors[clr.CheckMark]              = ImVec4(0.00, 0.49, 1.00, 1.00)
+	colors[clr.ScrollbarGrab]          = ImVec4(0.00, 0.49, 1.00, 1.00)
+	
+	
+	colors[clr.Border]                 = ImVec4(1.00, 1.00, 1.00, 0.50)
+    colors[clr.Separator]              = ImVec4(1.00, 1.00, 1.00, 0.90)
+    colors[clr.SeparatorHovered]       = ImVec4(1.00, 1.00, 1.00, 0.78)
+    colors[clr.SeparatorActive]        = ImVec4(1.00, 1.00, 1.00, 1.00)
+	colors[clr.ScrollbarBg]            = ImVec4(1.00, 1.00, 1.00, 0.53)
+	
+    colors[clr.ResizeGrip]             = ImVec4(0.26, 0.59, 0.98, 0.25)
+    colors[clr.ResizeGripHovered]      = ImVec4(0.26, 0.59, 0.98, 0.67)
+    colors[clr.ResizeGripActive]       = ImVec4(0.26, 0.59, 0.98, 0.95)
+    colors[clr.TextSelectedBg]         = ImVec4(0.26, 0.59, 0.98, 0.35)
+	
+	
+	colors[clr.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
+    colors[clr.TextDisabled]           = ImVec4(1.00, 1.00, 1.00, 1.00)
+	
+	colors[clr.WindowBg]               = ImVec4(0.11, 0.10, 0.11, 1.00)
+	colors[clr.PopupBg]                = ImVec4(0.11, 0.10, 0.11, 0.94)
+	
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.15)
+    colors[clr.ComboBg]                = colors[clr.PopupBg]
+    colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
+    colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
+    colors[clr.CloseButton]            = ImVec4(0.41, 0.41, 0.41, 0.50)
+    colors[clr.CloseButtonHovered]     = ImVec4(0.98, 0.39, 0.36, 1.00)
+    colors[clr.CloseButtonActive]      = ImVec4(0.98, 0.39, 0.36, 1.00)
+    colors[clr.PlotLines]              = ImVec4(0.61, 0.61, 0.61, 1.00)
+    colors[clr.PlotLinesHovered]       = ImVec4(1.00, 0.43, 0.35, 1.00)
+    colors[clr.PlotHistogram]          = ImVec4(0.90, 0.70, 0.00, 1.00)
+    colors[clr.PlotHistogramHovered]   = ImVec4(1.00, 0.60, 0.00, 1.00)
+    colors[clr.ModalWindowDarkening]   = ImVec4(0.80, 0.80, 0.80, 0.35)
+end
+
 apply_custom_style()
 
 function files_add()
 	if not doesDirectoryExist("moonloader\\config\\Mono\\icons") then createDirectory('moonloader\\config\\Mono\\icons') end
-	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\primerkl.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\primerkl2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img7.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img8.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img9.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img10.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img11.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img12.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\White.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Cherry.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Black.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Orange.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Dark-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Red.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Pink.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Magenta.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Purple.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gold.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gray.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Bluev2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
+	if not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\2048.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\bitcoin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\support.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\dollar.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\primerkl.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\primerkl2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\down.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\edge.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\safari.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\helper.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img7.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img8.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img9.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img10.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img11.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\img12.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\White.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Cherry.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Black.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Orange.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Dark-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Red.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Pink.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Magenta.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Blue.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Purple.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gold.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Gray.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Bluev2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Light-Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\Green.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\info.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\kirka.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\left.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notes.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\notesipad.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\offpc.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phone.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\phoneipad.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pingpong.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\pusk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\reload.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\right.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingwin.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\settingsipad.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\snakegame.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\sunduk.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\telega.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tochkamen.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\trade.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\up.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\user.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\arizonanews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\tools3.0.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\monopolynews.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\aforma.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messanger.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\messangeripad.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst1.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst2.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst3.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst4.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst5.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst6.png') or not doesFileExist(getGameDirectory() .. '\\moonloader\\config\\Mono\\icons\\inst7.png') then
 	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} {FF0000}Ошибка!{FFFFFF} У вас отсутствуют нужные картинки для работы скрипта, начинаю скачивание.", 0x046D63)
 	downloadUrlToFile('https://i.imgur.com/1jMFPBg.png', getWorkingDirectory() .. '/config/Mono/icons/2048.png')
+	downloadUrlToFile('https://i.imgur.com/yH2Egcg.png', getWorkingDirectory() .. '/config/Mono/icons/support.png')
 	downloadUrlToFile('https://i.imgur.com/hMrVjAa.png', getWorkingDirectory() .. '/config/Mono/icons/bitcoin.png')
 	downloadUrlToFile('https://i.imgur.com/QA52B5Z.png', getWorkingDirectory() .. '/config/Mono/icons/dollar.png')
 	downloadUrlToFile('https://i.imgur.com/YcBJsLV.png', getWorkingDirectory() .. '/config/Mono/icons/down.png')
 	downloadUrlToFile('https://i.imgur.com/J7SIdEY.png', getWorkingDirectory() .. '/config/Mono/icons/edge.png')
+	downloadUrlToFile('https://i.imgur.com/EVipWgx.png', getWorkingDirectory() .. '/config/Mono/icons/safari.png')
 	downloadUrlToFile('https://i.imgur.com/YJRJQZj.png', getWorkingDirectory() .. '/config/Mono/icons/helper.png')
 	--[[downloadUrlToFile('https://i.imgur.com/dgj49cm.png', getWorkingDirectory() .. '/config/Mono/icons/img0.png')
 	downloadUrlToFile('https://i.imgur.com/So4Zxkh.png', getWorkingDirectory() .. '/config/Mono/icons/img2.png')
@@ -1969,13 +2057,16 @@ function files_add()
 	downloadUrlToFile('https://i.imgur.com/s385sfd.png', getWorkingDirectory() .. '/config/Mono/icons/kirka.png')
 	downloadUrlToFile('https://i.imgur.com/0NN5Y08.png', getWorkingDirectory() .. '/config/Mono/icons/left.png')
 	downloadUrlToFile('https://i.imgur.com/scjVjUk.png', getWorkingDirectory() .. '/config/Mono/icons/notes.png')
+	downloadUrlToFile('https://i.imgur.com/q3Ckjni.png', getWorkingDirectory() .. '/config/Mono/icons/notesipad.png')
 	downloadUrlToFile('https://i.imgur.com/2AKdbzW.png', getWorkingDirectory() .. '/config/Mono/icons/offpc.png')
 	downloadUrlToFile('https://i.imgur.com/1tqlkqP.png', getWorkingDirectory() .. '/config/Mono/icons/phone.png')
+	downloadUrlToFile('https://i.imgur.com/dHESYFL.png', getWorkingDirectory() .. '/config/Mono/icons/phoneipad.png')
 	downloadUrlToFile('https://i.imgur.com/7bisQix.png', getWorkingDirectory() .. '/config/Mono/icons/pingpong.png')
 	downloadUrlToFile('https://i.imgur.com/R6noq6c.png', getWorkingDirectory() .. '/config/Mono/icons/pusk.png')
 	downloadUrlToFile('https://i.imgur.com/yOAN5gD.png', getWorkingDirectory() .. '/config/Mono/icons/reload.png')
 	downloadUrlToFile('https://i.imgur.com/yua5Kat.png', getWorkingDirectory() .. '/config/Mono/icons/right.png')
 	downloadUrlToFile('https://i.imgur.com/wbv41vM.png', getWorkingDirectory() .. '/config/Mono/icons/settingwin.png')
+	downloadUrlToFile('https://i.imgur.com/LTSL5Cv.png', getWorkingDirectory() .. '/config/Mono/icons/settingsipad.png')
 	downloadUrlToFile('https://i.imgur.com/OFd7FlA.png', getWorkingDirectory() .. '/config/Mono/icons/snakegame.png')
 	downloadUrlToFile('https://i.imgur.com/3xAR1s4.png', getWorkingDirectory() .. '/config/Mono/icons/sunduk.png')
 	downloadUrlToFile('https://i.imgur.com/9Gbtjyx.png', getWorkingDirectory() .. '/config/Mono/icons/telega.png')
@@ -1988,6 +2079,7 @@ function files_add()
 	downloadUrlToFile('https://i.imgur.com/SIvPMIK.png', getWorkingDirectory() .. '/config/Mono/icons/tools3.0.png')
 	downloadUrlToFile('https://i.imgur.com/boLIlH5.png', getWorkingDirectory() .. '/config/Mono/icons/arizonanews.png')
 	downloadUrlToFile('https://i.imgur.com/jvLuHc6.png', getWorkingDirectory() .. '/config/Mono/icons/messanger.png')
+	downloadUrlToFile('https://i.imgur.com/tFJLdHW.png', getWorkingDirectory() .. '/config/Mono/icons/messangeripad.png')
 	downloadUrlToFile('https://i.imgur.com/wIka9G8.png', getWorkingDirectory() .. '/config/Mono/icons/inst.png')
 	downloadUrlToFile('https://i.imgur.com/TmPI3PC.png', getWorkingDirectory() .. '/config/Mono/icons/inst1.png')
 	downloadUrlToFile('https://i.imgur.com/K8fjjWn.png', getWorkingDirectory() .. '/config/Mono/icons/inst2.png')
@@ -2147,6 +2239,8 @@ function mainmenu()
 			win_state['nastroikawin'].v = not win_state['nastroikawin'].v
 		elseif win_state['googlewin'].v then
 			win_state['googlewin'].v = not win_state['googlewin'].v
+		elseif win_state['support'].v then
+			win_state['support'].v = not win_state['support'].v
 		elseif win_state['reklamawin'].v then
 			win_state['reklamawin'].v = not win_state['reklamawin'].v
 		elseif win_state['messanger'].v then
@@ -2407,11 +2501,13 @@ function main()
 	winedge3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
 	winedge4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
 	winedge5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
+	winedgesafari = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/safari.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
 	winsetting2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
 	winsetting3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
 	winsetting4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
 	winsetting5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
+	winsettingipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingsipad.png')
 	winyashik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
 	winyashik2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
 	winyashik3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
@@ -2422,6 +2518,7 @@ function main()
 	windollar3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/dollar.png')
 	windollar4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/dollar.png')
 	windollar5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/dollar.png')
+	winphoneipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phoneipad.png')
 	winphone = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phone.png')
 	winphone2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phone.png')
 	winphone3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phone.png')
@@ -2432,6 +2529,7 @@ function main()
 	wintelega3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/telega.png')
 	wintelega4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/telega.png')
 	wintelega5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/telega.png')
+	winsupport = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/support.png')
 	win2048 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/2048.png')
 	win20482 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/2048.png')
 	win20483 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/2048.png')
@@ -2452,6 +2550,7 @@ function main()
 	winnotes3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notes.png')
 	winnotes4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notes.png')
 	winnotes5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notes.png')
+	winnotesipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notesipad.png')
 	winbitkoin = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bitcoin.png')
 	winbitkoin2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bitcoin.png')
 	winbitkoin3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bitcoin.png')
@@ -2482,6 +2581,8 @@ function main()
 	winmessage3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	winmessage4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	winmessage5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
+	winmessageipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messangeripad.png')
+	
 	wintrade = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/trade.png')
 	wintrade2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/trade.png')
 	wintrade3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/trade.png')
@@ -2633,124 +2734,127 @@ function main()
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
 		
-		if fonewin.v == true then fonecolor = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin2.v == true then fonecolor2 = true fonecolor = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin3.v == true then fonecolor3 = true fonecolor2 = false fonecolor = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin4.v == true then fonecolor4 = true fonecolor2 = false fonecolor3 = false fonecolor = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin5.v == true then fonecolor5 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin6.v == true then fonecolor6 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin7.v == true then fonecolor7 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin8.v == true then fonecolor8 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin9.v == true then fonecolor9 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin10.v == true then fonecolor10 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin11.v == true then fonecolor11 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin12.v == true then fonecolor12 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin13.v == true then fonecolor13 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor = false fonecolor14 = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin14.v == true then fonecolor14 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor = false fonecolor15 = false fonecolor16 = false apply_custom_style() end
-		if fonewin15.v == true then fonecolor15 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor = false fonecolor16 = false apply_custom_style() end
-		if fonewin16.v == true then fonecolor16 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor = false apply_custom_style() end
+		if windowsstyle.v == false then apply_custom_style2() end
+		if windowsstyle.v then apply_custom_style() end
 		
-		if fonezag.v == true then fonezagcolor = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag2.v == true then fonezagcolor2 = true fonezagcolor = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag3.v == true then fonezagcolor3 = true fonezagcolor2 = false fonezagcolor = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag4.v == true then fonezagcolor4 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag5.v == true then fonezagcolor5 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag6.v == true then fonezagcolor6 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag7.v == true then fonezagcolor7 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag8.v == true then fonezagcolor8 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag9.v == true then fonezagcolor9 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag10.v == true then fonezagcolor10 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag11.v == true then fonezagcolor11 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag12.v == true then fonezagcolor12 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag13.v == true then fonezagcolor13 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag14.v == true then fonezagcolor14 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor = false fonezagcolor15 = false fonezagcolor16 = false apply_custom_style() end
-		if fonezag15.v == true then fonezagcolor15 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor = false ffonezagcolor16 = false apply_custom_style() end
-		if fonezag16.v == true then fonezagcolor16 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor = false apply_custom_style() end
+		if fonewin.v == true then fonecolor = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin2.v == true then fonecolor2 = true fonecolor = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin3.v == true then fonecolor3 = true fonecolor2 = false fonecolor = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin4.v == true then fonecolor4 = true fonecolor2 = false fonecolor3 = false fonecolor = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin5.v == true then fonecolor5 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin6.v == true then fonecolor6 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin7.v == true then fonecolor7 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin8.v == true then fonecolor8 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin9.v == true then fonecolor9 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin10.v == true then fonecolor10 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin11.v == true then fonecolor11 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin12.v == true then fonecolor12 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin13.v == true then fonecolor13 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor = false fonecolor14 = false fonecolor15 = false fonecolor16 = false end
+		if fonewin14.v == true then fonecolor14 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor = false fonecolor15 = false fonecolor16 = false end
+		if fonewin15.v == true then fonecolor15 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor = false fonecolor16 = false end
+		if fonewin16.v == true then fonecolor16 = true fonecolor2 = false fonecolor3 = false fonecolor4 = false fonecolor5 = false fonecolor6 = false fonecolor7 = false fonecolor8 = false fonecolor9 = false fonecolor10 = false fonecolor11 = false fonecolor12 = false fonecolor13 = false fonecolor14 = false fonecolor15 = false fonecolor = false end
 		
-		if fonetext.v == true then fonetextcolor = true fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext2.v == true then fonetextcolor = false fonetextcolor2 = true fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext3.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = true fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext4.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = true fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext5.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = true fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext6.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = true fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext7.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = true fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext8.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = true fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext9.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = true fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext10.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = true fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext11.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = true fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext12.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = true fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext13.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = true fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext14.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = true fonetextcolor15 = false fonetextcolor16 = false apply_custom_style() end
-		if fonetext15.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = true fonetextcolor16 = false apply_custom_style() end
-		if fonetext16.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = true apply_custom_style() end
+		if fonezag.v == true then fonezagcolor = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag2.v == true then fonezagcolor2 = true fonezagcolor = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag3.v == true then fonezagcolor3 = true fonezagcolor2 = false fonezagcolor = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag4.v == true then fonezagcolor4 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag5.v == true then fonezagcolor5 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag6.v == true then fonezagcolor6 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag7.v == true then fonezagcolor7 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag8.v == true then fonezagcolor8 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag9.v == true then fonezagcolor9 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag10.v == true then fonezagcolor10 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag11.v == true then fonezagcolor11 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag12.v == true then fonezagcolor12 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag13.v == true then fonezagcolor13 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag14.v == true then fonezagcolor14 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor = false fonezagcolor15 = false fonezagcolor16 = false end
+		if fonezag15.v == true then fonezagcolor15 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor = false ffonezagcolor16 = false end
+		if fonezag16.v == true then fonezagcolor16 = true fonezagcolor2 = false fonezagcolor3 = false fonezagcolor4 = false fonezagcolor5 = false fonezagcolor6 = false fonezagcolor7 = false fonezagcolor8 = false fonezagcolor9 = false fonezagcolor10 = false fonezagcolor11 = false fonezagcolor12 = false fonezagcolor13 = false fonezagcolor14 = false fonezagcolor15 = false fonezagcolor = false end
 		
-		if fonevydel.v == true then fonevydelcolor = true fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel2.v == true then fonevydelcolor = false fonevydelcolor2 = true fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel3.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = true fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel4.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = true fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel5.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = true fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel6.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = true fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel7.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = true fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel8.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = true fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel9.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = true fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel10.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = true fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel11.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = true fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel12.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = true fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel13.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = true fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel14.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = true fonevydelcolor15 = false fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel15.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = true fonevydelcolor16 = false apply_custom_style() end
-		if fonevydel16.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = true apply_custom_style() end	
+		if fonetext.v == true then fonetextcolor = true fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext2.v == true then fonetextcolor = false fonetextcolor2 = true fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext3.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = true fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext4.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = true fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext5.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = true fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext6.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = true fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext7.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = true fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext8.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = true fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext9.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = true fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext10.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = true fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext11.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = true fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext12.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = true fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext13.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = true fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext14.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = true fonetextcolor15 = false fonetextcolor16 = false end
+		if fonetext15.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = true fonetextcolor16 = false end
+		if fonetext16.v == true then fonetextcolor = false fonetextcolor2 = false fonetextcolor3 = false fonetextcolor4 = false fonetextcolor5 = false fonetextcolor6 = false fonetextcolor7 = false fonetextcolor8 = false fonetextcolor9 = false fonetextcolor10 = false fonetextcolor11 = false fonetextcolor12 = false fonetextcolor13 = false fonetextcolor14 = false fonetextcolor15 = false fonetextcolor16 = true end
 		
-		if fonepol.v == true then fonepolcolor = true fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol2.v == true then fonepolcolor = false fonepolcolor2 = true fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol3.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = true fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol4.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = true fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol5.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = true fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol6.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = true fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol7.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = true fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol8.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = true fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol9.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = true fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol10.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = true fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol11.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = true fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol12.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = true fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol13.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = true fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol14.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = true fonepolcolor15 = false fonepolcolor16 = false apply_custom_style() end
-		if fonepol15.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = true fonepolcolor16 = false apply_custom_style() end
-		if fonepol16.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = true apply_custom_style() end	
+		if fonevydel.v == true then fonevydelcolor = true fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel2.v == true then fonevydelcolor = false fonevydelcolor2 = true fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel3.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = true fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel4.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = true fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel5.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = true fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel6.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = true fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel7.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = true fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel8.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = true fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel9.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = true fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel10.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = true fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel11.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = true fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel12.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = true fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel13.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = true fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel14.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = true fonevydelcolor15 = false fonevydelcolor16 = false end
+		if fonevydel15.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = true fonevydelcolor16 = false end
+		if fonevydel16.v == true then fonevydelcolor = false fonevydelcolor2 = false fonevydelcolor3 = false fonevydelcolor4 = false fonevydelcolor5 = false fonevydelcolor6 = false fonevydelcolor7 = false fonevydelcolor8 = false fonevydelcolor9 = false fonevydelcolor10 = false fonevydelcolor11 = false fonevydelcolor12 = false fonevydelcolor13 = false fonevydelcolor14 = false fonevydelcolor15 = false fonevydelcolor16 = true end	
 		
-		if fonebutton.v == true then fonebuttoncolor = true fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton2.v == true then fonebuttoncolor = false fonebuttoncolor2 = true fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton3.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = true fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton4.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = true fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton5.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = true fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton6.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = true fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton7.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = true fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton8.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = true fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton9.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = true fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton10.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = true fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton11.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = true fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton12.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = true fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton13.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = true fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton14.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = true fonebuttoncolor15 = false fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton15.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = true fonebuttoncolor16 = false apply_custom_style() end
-		if fonebutton16.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = true apply_custom_style() end
+		if fonepol.v == true then fonepolcolor = true fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol2.v == true then fonepolcolor = false fonepolcolor2 = true fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol3.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = true fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol4.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = true fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol5.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = true fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol6.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = true fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol7.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = true fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol8.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = true fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol9.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = true fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol10.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = true fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol11.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = true fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol12.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = true fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol13.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = true fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol14.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = true fonepolcolor15 = false fonepolcolor16 = false end
+		if fonepol15.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = true fonepolcolor16 = false end
+		if fonepol16.v == true then fonepolcolor = false fonepolcolor2 = false fonepolcolor3 = false fonepolcolor4 = false fonepolcolor5 = false fonepolcolor6 = false fonepolcolor7 = false fonepolcolor8 = false fonepolcolor9 = false fonepolcolor10 = false fonepolcolor11 = false fonepolcolor12 = false fonepolcolor13 = false fonepolcolor14 = false fonepolcolor15 = false fonepolcolor16 = true end	
 		
-		if fonelin.v == true then fonelincolor = true fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin2.v == true then fonelincolor = false fonelincolor2 = true fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin3.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = true fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin4.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = true fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin5.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = true fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin6.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = true fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin7.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = true fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin8.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = true fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin9.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = true fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin10.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = true fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin11.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = true fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin12.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = true fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin13.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = true fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin14.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = true fonelincolor15 = false fonelincolor16 = false apply_custom_style() end
-		if fonelin15.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = true fonelincolor16 = false apply_custom_style() end
-		if fonelin16.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = true apply_custom_style() end
+		if fonebutton.v == true then fonebuttoncolor = true fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton2.v == true then fonebuttoncolor = false fonebuttoncolor2 = true fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton3.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = true fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton4.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = true fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton5.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = true fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton6.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = true fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton7.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = true fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton8.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = true fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton9.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = true fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton10.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = true fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton11.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = true fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton12.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = true fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton13.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = true fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton14.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = true fonebuttoncolor15 = false fonebuttoncolor16 = false end
+		if fonebutton15.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = true fonebuttoncolor16 = false end
+		if fonebutton16.v == true then fonebuttoncolor = false fonebuttoncolor2 = false fonebuttoncolor3 = false fonebuttoncolor4 = false fonebuttoncolor5 = false fonebuttoncolor6 = false fonebuttoncolor7 = false fonebuttoncolor8 = false fonebuttoncolor9 = false fonebuttoncolor10 = false fonebuttoncolor11 = false fonebuttoncolor12 = false fonebuttoncolor13 = false fonebuttoncolor14 = false fonebuttoncolor15 = false fonebuttoncolor16 = true end
+		
+		if fonelin.v == true then fonelincolor = true fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin2.v == true then fonelincolor = false fonelincolor2 = true fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin3.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = true fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin4.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = true fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin5.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = true fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin6.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = true fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin7.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = true fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin8.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = true fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin9.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = true fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin10.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = true fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin11.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = true fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin12.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = true fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin13.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = true fonelincolor14 = false fonelincolor15 = false fonelincolor16 = false end
+		if fonelin14.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = true fonelincolor15 = false fonelincolor16 = false end
+		if fonelin15.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = true fonelincolor16 = false end
+		if fonelin16.v == true then fonelincolor = false fonelincolor2 = false fonelincolor3 = false fonelincolor4 = false fonelincolor5 = false fonelincolor6 = false fonelincolor7 = false fonelincolor8 = false fonelincolor9 = false fonelincolor10 = false fonelincolor11 = false fonelincolor12 = false fonelincolor13 = false fonelincolor14 = false fonelincolor15 = false fonelincolor16 = true end
 		
 		local validtest, pedtest = getCharPlayerIsTargeting(PLAYER_HANDLE)
         local resulttest, idtest = sampGetPlayerIdByCharHandle(pedtest)
@@ -2926,6 +3030,7 @@ function onQuitGame()
 	imgui.ReleaseTexture(windollar3)
 	imgui.ReleaseTexture(windollar4)
 	imgui.ReleaseTexture(windollar5)
+	imgui.ReleaseTexture(winphoneipad)
 	imgui.ReleaseTexture(winphone)
 	imgui.ReleaseTexture(winphone2)
 	imgui.ReleaseTexture(winphone3)
@@ -2936,6 +3041,7 @@ function onQuitGame()
 	imgui.ReleaseTexture(wintelega3)
 	imgui.ReleaseTexture(wintelega4)
 	imgui.ReleaseTexture(wintelega5)
+	imgui.ReleaseTexture(winsupport)
 	imgui.ReleaseTexture(win2048)
 	imgui.ReleaseTexture(win20482)
 	imgui.ReleaseTexture(win20483)
@@ -2956,6 +3062,7 @@ function onQuitGame()
 	imgui.ReleaseTexture(winnotes3)
 	imgui.ReleaseTexture(winnotes4)
 	imgui.ReleaseTexture(winnotes5)
+	imgui.ReleaseTexture(winnotesipad)
 	imgui.ReleaseTexture(winbitkoin)
 	imgui.ReleaseTexture(winbitkoin2)
 	imgui.ReleaseTexture(winbitkoin3)
@@ -2991,16 +3098,19 @@ function onQuitGame()
 	imgui.ReleaseTexture(winsetting3)
 	imgui.ReleaseTexture(winsetting4)
 	imgui.ReleaseTexture(winsetting5)
+	imgui.ReleaseTexture(winsettingipad)
 	imgui.ReleaseTexture(winedge)
 	imgui.ReleaseTexture(winedge2)
 	imgui.ReleaseTexture(winedge3)
 	imgui.ReleaseTexture(winedge4)
 	imgui.ReleaseTexture(winedge5)
+	imgui.ReleaseTexture(winedgesafari)
 	imgui.ReleaseTexture(winmessage)
 	imgui.ReleaseTexture(winmessage2)
 	imgui.ReleaseTexture(winmessage3)
 	imgui.ReleaseTexture(winmessage4)
 	imgui.ReleaseTexture(winmessage5)
+	imgui.ReleaseTexture(winmessageipad)
 	imgui.ReleaseTexture(winuser)
 	imgui.ReleaseTexture(winoffpc)
 	imgui.ReleaseTexture(winreload)
@@ -3376,6 +3486,7 @@ function saveSettings(args, key)
 	ini.settings.nazvanietext = u8:decode(nazvanietext.v)
 	ini.settings.autologin = autologin.v
 	ini.settings.obkachet = obkachet.v
+	ini.settings.windowsstyle = windowsstyle.v
 	
 	ini.settings.panel = panel.v
 	ini.settings.panel2 = panel2.v
@@ -6485,6 +6596,9 @@ function imgui.BeforeDrawFrame()
 	if fontsize == nil then
         fontsize = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 25.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
     end
+	if fontsizev2 == nil then
+        fontsizev2 = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 40.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
+    end
 end
 
 function imgui.CentrTextv2(text, disabled)
@@ -6571,6 +6685,7 @@ function imgui.OnDrawFrame()
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
+		win_state['support'].v = false
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 	   end
@@ -6653,11 +6768,63 @@ function imgui.OnDrawFrame()
   составляет 23 процента от числа 100.]])
             imgui.End()
         end
-	   
+	
 	if win_state['main'].v then -- основное окошко
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(1000, 652), imgui.Cond.FirstUseEver)
+		if windowsstyle.v == false then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.31, 0.00, 1.0))
+		else
+		if fonecolor == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 1.00))
+		end
+		if fonecolor2 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.51, 0.66, 1.00))
+		end
+		if fonecolor3 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 1.00))
+		end
+		if fonecolor4 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.31, 0.00, 1.00))
+		end
+		if fonecolor5 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.46, 0.46, 1.00))
+		end
+		if fonecolor6 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.232, 0.201, 0.271, 1.00))
+		end
+		if fonecolor7 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.69, 0.33, 1.00))
+		end
+		if fonecolor8 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.11, 0.29, 1.00))
+		end
+		if fonecolor9 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.41, 0.19, 0.63, 1.00))
+		end
+		if fonecolor10 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.40, 0.57, 0.01, 1.00))
+		end
+		if fonecolor11 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 1.00))
+		end
+		if fonecolor12 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 0.28, 0.28, 1.00))
+		end
+		if fonecolor13 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.30, 0.33, 0.95, 1.00))
+		end
+		if fonecolor14 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 0.84, 0.37, 1.00))
+		end
+		if fonecolor15 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.026, 0.597, 0.000, 1.00))
+		end
+		if fonecolor16 == true then 
+		imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.06, 0.53, 0.98, 1.00))
+			end
+		end
 		imgui.Begin(fa.ICON_TREE..u8' '..nazvanie.v..' '..fa.ICON_TREE, win_state['main'], imgui.WindowFlags.NoResize)
+		if windowsstyle.v then
 		if rabstol.v then 
 		imgui.Image(winbackground, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 		end
@@ -6959,6 +7126,133 @@ function imgui.OnDrawFrame()
 	imgui.End()
 	end
 	
+	if windowsstyle.v == false then
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.PushFont(fontsizev2)
+	imgui.Text('') imgui.SameLine(50) imgui.Text(os.date("%H:%M")) 
+	imgui.PopFont()
+	imgui.PushFont(fontsize)
+	imgui.Text('') imgui.SameLine(50) imgui.Text(os.date("%A")..', '..os.date("%B")..' '..os.date("%d"))
+	imgui.PopFont()
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462', imgui.ImVec2(313, 56), false)
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(140) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(140) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
+	imgui.Text("") imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11 - {0F52BA}#monopoly{0F52BA}")
+	imgui.EndChild()
+	
+	imgui.SameLine(490)
+	if imgui.ImageButton(winyashik, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['yashiki'].v = not win_state['yashiki'].v end
+	imgui.SameLine(580)
+	if imgui.ImageButton(windollar, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['bank'].v = not win_state['bank'].v end
+	imgui.SameLine(660)
+	if imgui.ImageButton(winphoneipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
+	imgui.SameLine(740)
+	if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	imgui.SameLine(820)
+	if imgui.ImageButton(win2048, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['games'].v = not win_state['games'].v end
+	imgui.SameLine(900)
+	if imgui.ImageButton(winpingpong, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then pong = not pong win_state['main'].v = false win_state['pravilapong'].v = true end
+	
+	imgui.Text('') imgui.SameLine(479) 
+	imgui.Text(u8"Roulette Tools")
+	imgui.SameLine(580) 
+	imgui.Text(u8"Bank Menu")
+	imgui.SameLine(661) 
+	imgui.Text(u8"Piar Menu")
+	imgui.SameLine(740) 
+	imgui.Text(u8"Skup Menu")
+	imgui.SameLine(835) 
+	imgui.Text(u8"2048")
+	imgui.SameLine(915) 
+	imgui.Text(u8"Pong")
+	
+	imgui.Text('') 
+	imgui.Text('') 
+	imgui.SameLine(490)
+	if imgui.ImageButton(winsnakegame, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then snaketaken = not snaketaken win_state['main'].v = false win_state['pravilasnake'].v = true end
+	imgui.SameLine(580) 
+	if imgui.ImageButton(winsettingipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['nastroikawin'].v = not win_state['nastroikawin'].v end
+	imgui.SameLine(660)
+	if imgui.ImageButton(winnotesipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['noteswin'].v = not win_state['noteswin'].v end
+	imgui.SameLine(740)
+	if imgui.ImageButton(winbitkoin, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['bitkoinwinokno'].v = not win_state['bitkoinwinokno'].v win_state['shema'].v = not win_state['shema'].v  win_state['shemafunks'].v = not win_state['shemafunks'].v end
+	imgui.SameLine(820)
+	if imgui.ImageButton(winkirka, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['kirkawin'].v = not win_state['kirkawin'].v end
+	imgui.SameLine(900)
+	if imgui.ImageButton(wintochkamen, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['tochilki'].v = not win_state['tochilki'].v end
+				
+	imgui.Text('') imgui.SameLine(503) 
+	imgui.Text(u8"Snake")
+	imgui.SameLine(577) 
+	imgui.Text(u8"Параметры")
+	imgui.SameLine(666) 
+	imgui.Text(u8"Заметки")
+	imgui.SameLine(745) 
+	imgui.Text(u8"Майнинг")
+	imgui.SameLine(828) 
+	imgui.Text(u8"Шахтёр")
+	imgui.SameLine(899) 
+	imgui.Text(u8"Toch Menu")
+	
+	imgui.Text('') 
+	imgui.Text('')
+	imgui.SameLine(490)
+	if imgui.ImageButton(wintrade, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['obmentrade'].v = not win_state['obmentrade'].v end
+	imgui.SameLine(580) 
+	if imgui.ImageButton(wininfo, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['oscripte'].v = not win_state['oscripte'].v end
+	imgui.SameLine(660) 
+	if imgui.ImageButton(winhelper, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['help'].v = not win_state['help'].v end
+	imgui.SameLine(740) 
+	if imgui.ImageButton(winedgesafari, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['googlewin'].v = not win_state['googlewin'].v end
+	imgui.SameLine(820)
+	if imgui.ImageButton(winmessageipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
+	imgui.SameLine(900)
+	if imgui.ImageButton(winsupport, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['support'].v = not win_state['support'].v end
+	
+	imgui.Text('') imgui.SameLine(487) 
+	imgui.Text(u8"Trade Menu")
+	imgui.SameLine(580) 
+	imgui.Text(u8"О скрипте")
+	imgui.SameLine(667) 
+	imgui.Text(u8"Помощь")
+	imgui.SameLine(746) 
+	imgui.Text(u8"Браузер")
+	imgui.SameLine(840) 
+	imgui.Text(u8"Чат")
+	imgui.SameLine(908) 
+	imgui.Text(u8"Support")
+	
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine(250) imgui.BeginChild('##asdasasddf31211312', imgui.ImVec2(485, 96), false)
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine() 
+	if imgui.ImageButton(winphoneipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winedgesafari, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['googlewin'].v = not win_state['googlewin'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winmessageipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winsettingipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['nastroikawin'].v = not win_state['nastroikawin'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winyashik, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['yashiki'].v = not win_state['yashiki'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winbitkoin, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['bitkoinwinokno'].v = not win_state['bitkoinwinokno'].v win_state['shema'].v = not win_state['shema'].v  win_state['shemafunks'].v = not win_state['shemafunks'].v end
+	imgui.SameLine()
+	if imgui.ImageButton(winnotesipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['noteswin'].v = not win_state['noteswin'].v end
+	imgui.Text('')
+	win_state['reklamawin'].v = false
+	imgui.EndChild()
+	imgui.End()
+	end
+	imgui.PopStyleColor()
+end
+	
 	if win_state['windowspusk'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(515, 520), imgui.Cond.FirstUseEver)
@@ -7026,6 +7320,8 @@ function imgui.OnDrawFrame()
 				if imgui.ImageButton(winedge, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['googlewin'].v = not win_state['googlewin'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(355)
 				if imgui.ImageButton(winmessage, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v win_state['windowspusk'].v = false end
+				imgui.SameLine(440)
+				if imgui.ImageButton(winsupport, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['support'].v = not win_state['support'].v end
 				
 				imgui.Text('') imgui.SameLine(12) imgui.Text(u8"Trade Menu")
 				imgui.SameLine(100) 
@@ -7036,6 +7332,9 @@ function imgui.OnDrawFrame()
 				imgui.Text('') imgui.SameLine(277) imgui.Text(u8"Браузер")
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(375) imgui.Text(u8"Чат")
+				imgui.SameLine(100) 
+				imgui.Text('') imgui.SameLine(448) imgui.Text(u8"Support")
+				
 				
 				imgui.Text('')
 				imgui.Text('')
@@ -7159,6 +7458,10 @@ function imgui.OnDrawFrame()
 		googlewinmenu()
 	end
 	
+	if win_state['support'].v then
+		supportwinmenu()
+	end
+	
 	if win_state['reklamawin'].v then
 		reklamawinmenu()
 	end
@@ -7183,7 +7486,7 @@ function imgui.OnDrawFrame()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(-0.69, 0.867))
 		imgui.SetNextWindowSize(imgui.ImVec2(296, 375), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Схема', win_state['shema'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf461', imgui.ImVec2(800, 340), false)
+				imgui.BeginChild('##asdasasddf461', imgui.ImVec2(800, 350), false)
 				imgui.Text('')
 				imgui.PushFont(fontsize)
 				imgui.Text('') imgui.SameLine() imgui.Text('INVENTORY'); imgui.SameLine(); imgui.Text('       S'); imgui.SameLine(); imgui.Text('  C'); imgui.SameLine(); imgui.Text('  P'); imgui.SameLine(); imgui.Text('  S');
@@ -7201,7 +7504,7 @@ function imgui.OnDrawFrame()
 	
 	if win_state['piar'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.544))
-		imgui.SetNextWindowSize(imgui.ImVec2(651, 600), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(651, 601), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_NEWSPAPER_O..u8' Piar Menu ', win_state['piar'], imgui.WindowFlags.NoResize)
 				getArizonaName()
 		imgui.End()
@@ -7243,9 +7546,7 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(655, 235), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_INFO_CIRCLE..u8' О скрипте ', win_state['oscripte'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf4346', imgui.ImVec2(660, 210), false)
 				scriptinfo()
-				imgui.EndChild()
 		imgui.End()
 	end
 	
@@ -7303,9 +7604,7 @@ function imgui.OnDrawFrame()
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(617, 110), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8' Спасибо всем, а в частности тем, кто перечислен ниже, за их участие в развитий скрипта! ', win_state['oscriptepeople'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf434665', imgui.ImVec2(651, 70), false)
 				scriptinfopeople()
-				imgui.EndChild()
 		imgui.End()
 	end
 	
@@ -7700,6 +7999,7 @@ function onWindowMessage(m, p)
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
+		win_state['support'].v = false
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
@@ -7750,6 +8050,7 @@ function onWindowMessage(m, p)
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
+		win_state['support'].v = false
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
@@ -7800,6 +8101,7 @@ function onWindowMessage(m, p)
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
+		win_state['support'].v = false
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
@@ -7850,6 +8152,7 @@ function onWindowMessage(m, p)
 		win_state['help'].v = false
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
+		win_state['support'].v = false
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
@@ -8694,6 +8997,7 @@ function load_settings() -- загрузка настроек
 	
 	autologin = imgui.ImBool(ini.settings.autologin)
 	obkachet = imgui.ImBool(ini.settings.obkachet)
+	windowsstyle = imgui.ImBool(ini.settings.windowsstyle)
 	
 	panel = imgui.ImBool(ini.settings.panel)
 	panel2 = imgui.ImBool(ini.settings.panel2)
@@ -10106,7 +10410,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
     end
     if checked_test2.v and krytim then
@@ -10125,7 +10429,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
     end
     if checked_test3.v and krytim then
@@ -10144,7 +10448,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
     end
     if checked_test4.v and krytim then
@@ -10163,7 +10467,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
 	end
 	if checked_test11.v and krytim then
@@ -10196,7 +10500,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
 	end
 	if checked_test12.v and krytim then
@@ -10229,7 +10533,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
 	end
 	if checked_test13.v and krytim then
@@ -10261,7 +10565,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
 	end
 	if checked_test14.v and krytim then
@@ -10293,7 +10597,7 @@ while true do
 	  wait(1000)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(15000)
+	  wait(8000)
 	  samprulstart = true
 			end
 		wait(0)
@@ -13515,7 +13819,6 @@ function bankmenu()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(805, 250), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_MONEY..u8' Bank Menu ', win_state['bank'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf323452354', imgui.ImVec2(800, 220), false)
 				imgui.Columns(2, _, false)
 				imgui.Text('')
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Оплата налогов за авто, коммуналку, дом и бизнес")); imgui.SameLine(); imgui.ToggleButton(u8("Оплата налогов за авто, коммуналку, дом и бизнес"), autoopl); imgui.SameLine(); imgui.TextQuestion(u8"Чтобы начать авто-оплату, зайдите в меню Банка на N и нажмите 'Пополнить счёт SIM'.");
@@ -13586,7 +13889,6 @@ function bankmenu()
 			autoopl5.v = false
 			autoopl6.v = false
 			sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) saveSettings() end
-				imgui.EndChild()
 		imgui.End()
 		end
 	
@@ -13595,11 +13897,10 @@ function shemamenu()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(733, 252), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_PENCIL_SQUARE_O..u8' Редактирование ID Текстдравов', win_state['shematext'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf2131', imgui.ImVec2(800, 220), false)
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_ON..u8' Включить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-440, 0)) then toggle = true end 
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_ON..u8' Включить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(340, 0)) then toggle = true end 
 			imgui.SameLine()
-			if imgui.CustomButton(fa.ICON_TOGGLE_OFF..u8' Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-75, 0)) then toggle = false end
+			if imgui.CustomButton(fa.ICON_TOGGLE_OFF..u8' Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then toggle = false end
 			imgui.PushItemWidth(80)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'№1 ##49', shematext1); imgui.SameLine(129); imgui.InputText(u8'№2 ##50', shematext2); imgui.SameLine(250); imgui.InputText(u8'№3 ##51', shematext3); imgui.SameLine(371); imgui.InputText(u8'№4 ##52', shematext4); imgui.SameLine(492); imgui.InputText(u8'№5 ##53', shematext5); imgui.SameLine(613); imgui.InputText(u8'№6 ##54', shematext6)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'№7 ##55', shematext7); imgui.SameLine(129); imgui.InputText(u8'№8 ##56', shematext8); imgui.SameLine(250); imgui.InputText(u8'№9 ##57', shematext9); imgui.SameLine(371); imgui.InputText(u8'№10 ##58', shematext10); imgui.SameLine(); imgui.InputText(u8'№11 ##59', shematext11); imgui.SameLine(); imgui.InputText(u8'№12 ##60', shematext12)
@@ -13608,7 +13909,6 @@ function shemamenu()
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'№25 ##73', shematext25); imgui.SameLine(); imgui.InputText(u8'№26 ##74', shematext26); imgui.SameLine(); imgui.InputText(u8'№27 ##75', shematext27); imgui.SameLine(); imgui.InputText(u8'№28 ##76', shematext28); imgui.SameLine(); imgui.InputText(u8'№29 ##77', shematext29); imgui.SameLine(); imgui.InputText(u8'№30 ##78', shematext30)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'№31 ##79', shematext31); imgui.SameLine(); imgui.InputText(u8'№32 ##80', shematext32); imgui.SameLine(); imgui.InputText(u8'№33 ##81', shematext33); imgui.SameLine(); imgui.InputText(u8'№34 ##82', shematext34); imgui.SameLine(); imgui.InputText(u8'№35 ##83', shematext35); imgui.SameLine(); imgui.InputText(u8'№36 ##84', shematext36)
 			imgui.PopItemWidth()
-			imgui.EndChild()
 			imgui.End()
 	end
 	
@@ -13718,6 +14018,39 @@ function googlewinmenu()
 		if imgui.CustomButton(u8'Кстати ты можешь стать спонсором скрипта, пожертвовав копеечку на развитие', imgui.ImVec4(0.41, 0.19, 0.63, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
 		imgui.EndChild()
         imgui.EndGroup()
+        imgui.End()
+	end
+	
+function supportwinmenu()
+	local tLastKeys = {} -- это у нас для клавиш
+	local input = sampGetInputInfoPtr()
+    local input = getStructElement(input, 0x8, 4)
+    local windowPosX = getStructElement(input, 0x8, 4)
+    local windowPosY = getStructElement(input, 0xC, 4)
+	local sw, sh = getScreenResolution()
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(700, 520), imgui.Cond.FirstUseEver)
+		imgui.Begin(fa.ICON_USERS..u8(' Support'), win_state['support'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Добро пожаловать в Тех.Поддержку скрипта. Напишите в текстовое поле найденный вами баг, идею по улучшению')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'скрипта или отзыв и нажмите на кнопку "Отправить". Ваше обращение получит создатель скрипта напрямую.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Прошу не баловаться и не флудить просто так, иначе данный функционал будет закрыт.')
+		imgui.Text('')
+		imgui.PushItemWidth(685)
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Ваше имя или nick:')
+		imgui.Text('') imgui.SameLine() if imgui.InputText(u8'##InputMessage33', stringField33) then
+		imgui.PopItemWidth()
+		end
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Напишите найденный баг, ваше предложение или отзыв:')
+		imgui.Text('') imgui.SameLine() if imgui.InputTextMultiline('##InputMessage22', stringField22, imgui.ImVec2(685, 300)) then
+		
+		end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HAND_O_RIGHT..u8' Отправить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
+		vk_requestsupport('Имя или nick юзера: '..u8:decode(stringField33.v)..'\n Баг, предложение или отзыв: '..u8:decode(stringField22.v))
+		stringField22.v = ''
+		stringField33.v = ''
+		end
+		
         imgui.End()
 	end
 	
@@ -13949,6 +14282,7 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
 			imgui.NextColumn()
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(352, 0)) then skuppoymol() end
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Ipad Style (Beta)")); imgui.SameLine(); imgui.ToggleButton(u8'', windowsstyle) imgui.SameLine() imgui.Text(u8("Windows Style"))
 		elseif selected3 == 5 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Обновления")
 			imgui.Separator()
@@ -15493,13 +15827,11 @@ function shahtared()
 	imgui.SetNextWindowSize(imgui.ImVec2(723, 195), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_PENCIL_SQUARE_O..u8' Редактирование цен на ресурсы', win_state['shahtamenu'], imgui.WindowFlags.NoResize)
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() imgui.BeginChild('##asdasasddf4324', imgui.ImVec2(800, 150), false)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость камня ##85', autokamen)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость металла ##86', autometal)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость бронзы ##87', autobronza)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость серебра ##88', autosilver)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость золота ##89', autogold)
-			imgui.EndChild()
 			imgui.End()
 	end
 	
@@ -15548,7 +15880,6 @@ function shemainstr()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(813, 220), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_INFO_CIRCLE..u8' Инструкция', win_state['shemainst'], imgui.WindowFlags.NoResize)
-			imgui.BeginChild('##asdasasddf2131', imgui.ImVec2(800, 185), false)
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Видеокарты должны быть на второй странице инвентаря и идти по порядку! Т.е в слот №1 ложите видеокарту, следующую ложите в")
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"слот №2 и так далее. Чтобы узнать номер слота - смотрите схему. Если вы играете не на Arizona RP Prescott, то зайдите в")
@@ -15559,7 +15890,6 @@ function shemainstr()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"или из-за меню крафта, поэтому, если доставали телефон или открывали меню крафта, то лучше перезайти в игру.")
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Чтобы прервать процесс улучшения - нажмите на кнопку 'Завершить улучшение видеокарт'.")
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"P.S Также, чтобы работали все действия с инвентарём(улучшение видеокарт и т.д) - инвентарь должен быть на английском языке!")
-			imgui.EndChild()
 			imgui.End()
 	end
 	
@@ -15628,7 +15958,7 @@ function shemapiar()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'14) Выдаёте боту права Администратора и нам осталось найти Peer ID. Peer ID - это ID беседы, который начинается у всех бесед одинаково:')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'200000000. Осталось дописать последнюю цифру, которая обозначает, в какую из всех бесед, в которой состоит бот, отправлять объявление.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Раз мы только создали бота и добавили в первую его беседу, то получается, что это первая беседа и дописываем последнюю цифру: 1.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Полный Peer ID получается следующий: 200000001')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Полный Peer ID получается следующий: 2000000001')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'15) Peer ID вставляем в текстовое поле в скрипте под названием "Peer ID беседы".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'16) Включаете в скрипте отправку объявлений и отправку объявлений в VK и смотрите, после того, как ваше объявление отредактировали,')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'пришло ли объявление в VK. Если нет, то перечитывайте каждый пункт и перепроверяйте настройки.')
@@ -15643,7 +15973,7 @@ function pravila2048menu()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(-2, 1.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(140, 165), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Правила 2048', win_state['pravila2048'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-		imgui.BeginChild('##asdasasddf21234', imgui.ImVec2(1000, 150), false)
+		imgui.BeginChild('##asdasasddf21234', imgui.ImVec2(1000, 165), false)
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine(30) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Управление:")
 		imgui.Text('')
@@ -15661,6 +15991,7 @@ function pravilapongmenu()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(-4.3, 0.96))
 	imgui.SetNextWindowSize(imgui.ImVec2(152, 290), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Правила Pong', win_state['pravilapong'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
+		imgui.BeginChild('##asdasasddf21234', imgui.ImVec2(1000, 290), false)
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine(38) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Инструкция:")
 		imgui.Text('')
@@ -15676,6 +16007,7 @@ function pravilapongmenu()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Difficulty - сложность')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Pause - пауза')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Start - начать игру')
+		imgui.EndChild()
 		imgui.End()
 	end
 	
@@ -15684,7 +16016,7 @@ function pravilasnakemenu()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(-2.3, 1.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(137, 179), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Правила Snake', win_state['pravilasnake'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-		imgui.BeginChild('##asdasasddf2443645545', imgui.ImVec2(1000, 160), false)
+		imgui.BeginChild('##asdasasddf2443645545', imgui.ImVec2(1000, 179), false)
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine(30) imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"Управление:")
 		imgui.Text('')
@@ -15732,9 +16064,14 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'16. Выделил некоторые функции в "Модификации", иначе все настройки некоторых функций сливались с другими функциями.') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'[31.12.2021]')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Параметры" - "Модификации" добавлена возможность отметить метки кладов из карты в /donate по нажатию клавиш.') 
-			imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.01.2021]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.01.2022]')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'18. В "Параметры" - "Модификации" добавлен "Обычный реконнект" - переподключается к серверу при любом вылете.') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'19. В "Параметры" - "Модификации" - "Умный реконнект" добавлен перезаход после "Wrong server password".') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[07.01.2022]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'20. Добавлен в тестовом режиме новый стиль интерфеиса под названием "Ipad Style". Сменить стиль вы сможете в "Параметры" -') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'"Для разработчиков".') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'21. Фикс открытия рулеток (из-за обновления на сервере скрипт перестал крутить рулетки)') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Добавлена Тех.Поддержка. Теперь предложить идею, сообщить о баге или оставить отзыв вы сможете прямо в скрипте.') 
 			imgui.End()
 		end
 	
@@ -16380,7 +16717,7 @@ function gamelist()
     imgui.SetNextWindowSize(imgui.ImVec2(415, 500), imgui.Cond.FirstUseEver)
     imgui.SetNextWindowPos(imgui.ImVec2(X / 2, Y / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.Begin(fa.ICON_GAMEPAD..u8' 2048', win_state['games'], imgui.WindowFlags.NoResize)
-    imgui.BeginChild("Score", imgui.ImVec2(105, 60))
+    imgui.Text('') imgui.SameLine(12) imgui.BeginChild("Score", imgui.ImVec2(105, 60))
         imgui.SetCursorPosX((105-imgui.CalcTextSize('Score: '..score).x)/2)
         imgui.SetCursorPosY((60-imgui.CalcTextSize('Score: '..score).y)/2)
         imgui.Text('Score: '..score)
@@ -17347,7 +17684,9 @@ function photo_load()
 	winedge3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
 	winedge4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
 	winedge5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/edge.png')
+	winedgesafari = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/safari.png')
     winsetting = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingwin.png')
+	winsettingipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/settingsipad.png')
 	winyashik = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
 	winyashik2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
 	winyashik3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/sunduk.png')
@@ -17358,6 +17697,7 @@ function photo_load()
 	windollar3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/dollar.png')
 	windollar4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/dollar.png')
 	windollar5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/dollar.png')
+	winphoneipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phoneipad.png')
 	winphone = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phone.png')
 	winphone2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phone.png')
 	winphone3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/phone.png')
@@ -17368,6 +17708,7 @@ function photo_load()
 	wintelega3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/telega.png')
 	wintelega4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/telega.png')
 	wintelega5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/telega.png')
+	winsupport = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/support.png')
 	win2048 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/2048.png')
 	win20482 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/2048.png')
 	win20483 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/2048.png')
@@ -17388,6 +17729,7 @@ function photo_load()
 	winnotes3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notes.png')
 	winnotes4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notes.png')
 	winnotes5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notes.png')
+	winnotesipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/notesipad.png')
 	winbitkoin = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bitcoin.png')
 	winbitkoin2 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bitcoin.png')
 	winbitkoin3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/bitcoin.png')
@@ -17423,6 +17765,7 @@ function photo_load()
 	winmessage3 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	winmessage4 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
 	winmessage5 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messanger.png')
+	winmessageipad = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/messangeripad.png')
 	winuser = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/user.png')
 	winoffpc = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/offpc.png')
 	winreload = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/reload.png')
@@ -18993,6 +19336,44 @@ function vk_request(msg)
 		end)
 	end
 end
+
+function longpollGetKeysupport()
+	async_http_request('https://api.vk.com/method/groups.getLongPollServer?group_id=209985697&access_token=dd442181ac1fec6ac58bb21a64af3b01e5dd14e8f5964681e0d8e0fa704c02f6f6441895df3bbba47d602&v=5.81', '', function (result)
+		if result then
+			if not result:sub(1,1) == '{' then
+				vkerr = 'Ошибка!\nПричина: Нет соединения с VK!'
+				return
+			end
+			local t = decodeJson(result)
+			if t.error then
+				vkerr = 'Ошибка!\nКод: ' .. t.error.error_code .. ' Причина: ' .. t.error.error_msg
+				return
+			end
+			servervk = t.response.servervk
+			tsvk = t.response.tsvk
+			keyvk = t.response.keyvk
+			vkerr = nil
+		end
+	end)
+end
+
+function vk_requestsupport(msg)
+	msg = msg:gsub('{......}', '')
+	msg = u8(msg)
+	msg = url_encode(msg)
+		async_http_request('https://api.vk.com/method/messages.send', 'peer_id=2000000001&message=' .. msg .. '&access_token=dd442181ac1fec6ac58bb21a64af3b01e5dd14e8f5964681e0d8e0fa704c02f6f6441895df3bbba47d602&v=5.81',
+		function (result)
+			local t = decodeJson(result)
+			if not t then
+				return
+			end
+			if t.error then
+				vkerrsend = 'Ошибка!\nКод: ' .. t.error.error_code .. ' Причина: ' .. t.error.error_msg
+				return
+			end
+			vkerrsend = nil
+		end)
+	end
 
 function char_to_hex(str)
   return string.format("%%%02X", string.byte(str))
