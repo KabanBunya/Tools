@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.2.15')
+script_version('3.2.16')
 
 local use = false
 local close = false
@@ -25,23 +25,36 @@ delplayer = false
 local npc, infnpc = {}, {}
 local admmp = 2110
 kamensession = 0
+lensession = 0
+chlopoksession = 0
 metalsession = 0
 bronzasession = 0
 silversession = 0
 goldsession = 0
 sborsession = 0
+sborsessionferma = 0
 zpsession = 0
+zpsessionferma = 0
 kamenitog = 0
+lenitog = 0
+chlopokitog = 0
 metalitog = 0
 bronzaitog = 0
 silveritog = 0
 golditog = 0
+
 azpodarki = 0
 moneypodarki = 0
 serebropodarki = 0
+motopodarki = 0
+mainpodarki = 0
+bronzapodarki = 0
+jentpodarki = 0
+resgoldpodarki = 0
 serebrorulpodarki = 0
 zolotopodarki = 0
 chemodanpodarki = 0
+
 itogopodarkov = 0
 itogobtc = 0
 local font = renderCreateFont('Arial', 10, 5)
@@ -338,12 +351,16 @@ local cfg = inicfg.load({
     },
 	shahta = {
 		kamentime = 0,
+		lentime = 0,
+		chlopoktime = 0,
 		metaltime = 0,
 		bronzatime = 0,
 		silvertime = 0,
 		goldtime = 0,
 		zptime = 0,
-		sbortime = 0
+		zptimeferma = 0,
+		sbortime = 0,
+		sbortimeferma = 0
 	},
 	adpred = {
 		piarsh = 0,
@@ -583,6 +600,7 @@ local SET = {
 		dialogclose = false,
 		vipresend = false,
 		autoryda = false,
+		autolen = false,
 		skuptrava = false,
 		skupbronzarul = false,
 		skupserebrorul = false,
@@ -625,9 +643,13 @@ local SET = {
 		autoopl6 = false,
 		lock = false,
 		autonarko = false,
+		autobuffer = false,
+		autobufferyved = false,
 		igrokv2 = 'nill',
 		igrokv22 = 'nill',
 		autokamen = '8000',
+		autolenf = '8000',
+		autocotton = '4000',
 		autometal = '4000',
 		autobronza = '40000',
 		autosilver = '100000',
@@ -924,7 +946,11 @@ local SET = {
 		silver = true,
 		gold = true,
 		zp = true,
-		sbor = true
+		zpferma = true,
+		sbor = true,
+		sborferma = true,
+		lenz = true,
+		chlopokz = true
 	},
 	pismoinformer = {
 		
@@ -2678,12 +2704,14 @@ function main()
 	lua_thread.create(ponggame)
 	lua_thread.create(eating)
 	lua_thread.create(shahta)
+	lua_thread.create(fermas)
 	lua_thread.create(snakegaming)
 	lua_thread.create(calculator)
 	lua_thread.create(rpgunsin)
 	lua_thread.create(strobe)
 	lua_thread.create(findi)
 	lua_thread.create(autobmx)
+	lua_thread.create(bufferram)
 	lua_thread.create(connectarz)
 	if raskladka.v then
 	lua_thread.create(inputChat)
@@ -2703,7 +2731,10 @@ function main()
 	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
 	sampRegisterChatCommand('pmc', pmchat) -- регистрируем команду
 	sampRegisterChatCommand('call', Numbercall)
+	sampRegisterChatCommand('bufram', BufRam)
+	sampRegisterChatCommand('clearram', ClearRam)
 	sampRegisterChatCommand("killinfo", show_dial)
+	
 	sampRegisterChatCommand("strobes", function()
 		if isCharInAnyCar(PLAYER_PED) then
 			local car = storeCarCharIsInNoSave(PLAYER_PED)
@@ -2725,6 +2756,7 @@ function main()
 		if sampGetGamestate() == 3 then sessiononline = os.time() - sessionStart end
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
+		
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklavareload)) then saveSettings() thisScript():reload() end
 		if isKeyJustPressed(82) and isKeyJustPressed(17) then saveSettings() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklava)) then mainmenu() end
@@ -3273,12 +3305,16 @@ function saveSettings(args, key)
 	ini.informer.hpcar = infhpcar.v
 	
 	ini.shahtainformer.kamen = infkamen.v
+	ini.shahtainformer.lenz = inflen.v
+	ini.shahtainformer.chlopokz = infchlopok.v
 	ini.shahtainformer.metal = infmetal.v
 	ini.shahtainformer.bronza = infbronza.v
 	ini.shahtainformer.silver = infsilver.v
 	ini.shahtainformer.gold = infgold.v
 	ini.shahtainformer.zp = infzp.v
+	ini.shahtainformer.zpferma = infzpferma.v
 	ini.shahtainformer.sbor = infsbor.v
+	ini.shahtainformer.sborferma = infsborferma.v
 	
 	ini.settings.assistant = assistant.v
 	ini.settings.assistant1 = assistant1.v
@@ -3381,6 +3417,8 @@ function saveSettings(args, key)
 	ini.settings.tag = u8:decode(rtag.v)
 	
 	ini.settings.autokamen = u8:decode(autokamen.v)
+	ini.settings.autolenf = u8:decode(autolenf.v)
+	ini.settings.autocotton = u8:decode(autocotton.v)
 	ini.settings.autometal = u8:decode(autometal.v)
 	ini.settings.autobronza = u8:decode(autobronza.v)
 	ini.settings.autosilver = u8:decode(autosilver.v)
@@ -3699,6 +3737,7 @@ function saveSettings(args, key)
 	ini.settings.dialogclose = dialogclose.v
 	ini.settings.vipresend = vipresend.v
 	ini.settings.autoryda = autoryda.v
+	ini.settings.autolen = autolen.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autoopl = autoopl.v
 	ini.settings.autoopl1 = autoopl1.v
@@ -3710,6 +3749,8 @@ function saveSettings(args, key)
 	ini.settings.autopay = autopay.v
 	ini.settings.lock = lock.v
 	ini.settings.autonarko = autonarko.v
+	ini.settings.autobuffer = autobuffer.v
+	ini.settings.autobufferyved = autobufferyved.v
 	
 	ini.settings.skuptravacol = u8:decode(skuptravacol.v)
 	ini.settings.skuptravacena = u8:decode(skuptravacena.v)
@@ -7193,8 +7234,8 @@ function imgui.OnDrawFrame()
 	imgui.Text(u8"Заметки")
 	imgui.SameLine(745) 
 	imgui.Text(u8"Майнинг")
-	imgui.SameLine(828) 
-	imgui.Text(u8"Шахтёр")
+	imgui.SameLine(825) 
+	imgui.Text(u8"Statistics")
 	imgui.SameLine(899) 
 	imgui.Text(u8"Toch Menu")
 	
@@ -7306,7 +7347,7 @@ end
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(275) imgui.Text(u8"Майнинг")
 				imgui.SameLine(100) 
-				imgui.Text('') imgui.SameLine(365) imgui.Text(u8"Шахтёр")
+				imgui.Text('') imgui.SameLine(360) imgui.Text(u8"Statistics")
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(440) imgui.Text(u8"Toch Menu")
 				
@@ -7822,14 +7863,22 @@ function infobar()
 		end
 		
 function infobarshahta()
-		if infkamen.v or infmetal.v or infbronza.v or infsilver.v or infgold.v or infzp.v or infsbor.v then imgui.SameLine(140) imgui.VerticalSeparator() imgui.Text(u8"  За сессию") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"  За всё время") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"       Доход       ") end
-		if infkamen.v then imgui.Separator() imgui.Text(u8(" • Собрано камня: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..kamensession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.kamentime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..kamenitog))) end
+		if infkamen.v or inflen.v or infchlopok.v or infmetal.v or infbronza.v or infsilver.v or infgold.v or infzp.v or infzpferma.v or infsbor.v or infsborferma.v then imgui.SameLine(140) imgui.VerticalSeparator() imgui.Text(u8"  За сессию") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"  За всё время") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"       Доход       ") end
+		imgui.Separator()
+		if infkamen.v then imgui.Text(u8(" • Собрано камня: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..kamensession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.kamentime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..kamenitog))) end
 		if infmetal.v then imgui.Text(u8(" • Собрано металла: "))imgui.SameLine(145)  imgui.Text(u8(number_separator(""..metalsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.metaltime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..metalitog))) end
 		if infbronza.v then imgui.Text(u8(" • Собрано бронзы: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..bronzasession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.bronzatime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..bronzaitog))) end
 		if infsilver.v then imgui.Text(u8(" • Собрано серебра: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..silversession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.silvertime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..silveritog))) end
 		if infgold.v then imgui.Text(u8(" • Собрано золота: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..goldsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.goldtime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..golditog))) end
-		if infsbor.v then imgui.Separator() imgui.Text(u8(" • Собрано ресурсов: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortime)))) end
-		if infzp.v then imgui.Separator() imgui.Text(u8(" • Заработано: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(""..cfg.shahta.zptime))) end
+		if inflen.v then imgui.Text(u8(" • Собрано льна: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..lensession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.lentime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..lenitog))) end
+		if infchlopok.v then imgui.Text(u8(" • Собрано хлопка: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..chlopoksession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.chlopoktime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..chlopokitog))) end
+		imgui.Separator()
+		if infsbor.v then imgui.Text(u8(" • Собрано на шахте: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortime)))) end
+		if infsborferma.v then imgui.Text(u8(" • Собрано на ферме: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsessionferma))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortimeferma)))) end
+		imgui.Separator()
+		if infzp.v then imgui.Text(u8(" • Заработано (шахта): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(""..cfg.shahta.zptime))) end
+		if infzpferma.v then imgui.Text(u8(" • Заработано (ферма): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsessionferma))) imgui.SameLine(218) imgui.Text(u8(number_separator(""..cfg.shahta.zptimeferma))) end
+	
 	end
 	
 function infobarpismo()
@@ -8479,12 +8528,19 @@ function sampev.onServerMessage(color, text)
 	end
 	if text:match("Дружище, я обменяю тебе шкатулку, только если ты принесешь 20 подарков!") and podarki.v then
 		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Вы успешно обменяли {00C2BB}"..number_separator(itogopodarkov).."{FFFFFF} подарков! Вам выпало:", 0x046D63)
-		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Деньги: {00C2BB}"..number_separator(moneypodarki).."{FFFFFF}$ | AZ коины: {00C2BB}"..number_separator(azpodarki).."{FFFFFF} AZ | Серебро: {00C2BB}"..number_separator(serebropodarki).."{FFFFFF} шт", 0x046D63)
-		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Серебряная рулетка: {00C2BB}"..number_separator(serebrorulpodarki).."{FFFFFF} шт | Золотая рулетка: {00C2BB}"..number_separator(zolotopodarki).."{FFFFFF} шт | Чемодан: {00C2BB}"..number_separator(chemodanpodarki).."{FFFFFF} шт", 0x046D63)
+		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Деньги: {00C2BB}"..number_separator(moneypodarki).."{FFFFFF}$ | AZ коины: {00C2BB}"..number_separator(azpodarki).."{FFFFFF} AZ | Бронза: {00C2BB}"..number_separator(bronzapodarki).."{FFFFFF} шт", 0x046D63)
+		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Серебро: {00C2BB}"..number_separator(serebropodarki).."{FFFFFF} шт | Золото: {00C2BB}"..number_separator(resgoldpodarki).."{FFFFFF} шт | Серебряная рулетка: {00C2BB}"..number_separator(serebrorulpodarki).."{FFFFFF} шт", 0x046D63)
+		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Золотая рулетка: {00C2BB}"..number_separator(zolotopodarki).."{FFFFFF} шт | Ящик 'Джентельменов': {00C2BB}"..number_separator(jentpodarki).."{FFFFFF} раз", 0x046D63)
+		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Ящик 'Майнкрафт': {00C2BB}"..number_separator(mainpodarki).."{FFFFFF} раз | Супер мото-ящик: {00C2BB}"..number_separator(motopodarki).."{FFFFFF} раз | Чемодан: {00C2BB}"..number_separator(chemodanpodarki).."{FFFFFF} шт", 0x046D63)
 		podarki.v = false
 		azpodarki = 0
 		moneypodarki = 0
 		serebropodarki = 0
+		motopodarki = 0
+		mainpodarki = 0
+		bronzapodarki = 0
+		jentpodarki = 0
+		resgoldpodarki = 0
 		serebrorulpodarki = 0
 		zolotopodarki = 0
 		chemodanpodarki = 0
@@ -8887,16 +8943,38 @@ end
 	if text:find("Не может быть! Тут целых 5 кусков серебра!") and podarki.v then
 		serebropodarki = serebropodarki + 5
 		itogopodarkov = itogopodarkov + 20
-	elseif text:find("Вам был добавлен предмет 'Серебряная рулетка'.") and podarki.v then
+	end
+	if text:find("Вам был добавлен предмет 'Серебряная рулетка'.") and podarki.v then
 		serebrorulpodarki = serebrorulpodarki + 1
 		itogopodarkov = itogopodarkov + 20
-	elseif text:find("Вам был добавлен предмет 'Золотая рулетка'.") and podarki.v then
+	end
+	if text:find("Вам был добавлен предмет 'Золотая рулетка'.") and podarki.v then
 		zolotopodarki = zolotopodarki + 1
 		itogopodarkov = itogopodarkov + 20
-	elseif text:find("Вам был добавлен предмет 'Чемодан") and podarki.v then
+	end
+	if text:find("Вам был добавлен предмет 'Чемодан") and podarki.v then
 		chemodanpodarki = chemodanpodarki + 1
 		itogopodarkov = itogopodarkov + 20
 	end
+	if text:find("Дополнительно за обмен вы получаете: бронзу") and podarki.v then
+		bronzapodarki = bronzapodarki + 3
+	end
+	if text:find("Дополнительно за обмен вы получаете: боксы джентельменов") and podarki.v then
+		jentpodarki = jentpodarki + 1
+	end
+	if text:find("Дополнительно за обмен вы получаете: золото") and podarki.v then
+		resgoldpodarki = resgoldpodarki + 3
+	end
+	if text:find("Дополнительно за обмен вы получаете: серебро") and podarki.v then
+		serebropodarki = serebropodarki + 3
+	end
+	if text:find("Дополнительно за обмен вы получаете: боксы майнкрафта") and podarki.v then
+		mainpodarki = mainpodarki + 1
+	end
+	if text:find("Дополнительно за обмен вы получаете: супер-мото боксы") and podarki.v then
+		motopodarki = motopodarki + 1
+	end
+	
 	if text:match("Вы вывели {ffffff}(%d+) BTC{ffff00}, осталось на счету видеокарты:") and btc.v then
 		lua_thread.create(function()
 		wait(10)
@@ -9210,6 +9288,7 @@ function load_settings() -- загрузка настроек
 	dialogclose = imgui.ImBool(ini.settings.dialogclose)
 	vipresend = imgui.ImBool(ini.settings.vipresend)
 	autoryda = imgui.ImBool(ini.settings.autoryda)
+	autolen = imgui.ImBool(ini.settings.autolen)
 	autopin = imgui.ImBool(ini.settings.autopin)
 	autoopl = imgui.ImBool(ini.settings.autoopl)
 	autoopl1 = imgui.ImBool(ini.settings.autoopl1)
@@ -9221,6 +9300,8 @@ function load_settings() -- загрузка настроек
 	autopay = imgui.ImBool(ini.settings.autopay)
 	lock = imgui.ImBool(ini.settings.lock)
 	autonarko = imgui.ImBool(ini.settings.autonarko)
+	autobuffer = imgui.ImBool(ini.settings.autobuffer)
+	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
 	
 	skuptrava = imgui.ImBool(ini.settings.skuptrava)
 	skupbronzarul = imgui.ImBool(ini.settings.skupbronzarul)
@@ -9255,6 +9336,8 @@ function load_settings() -- загрузка настроек
 	skupauto = imgui.ImBool(ini.settings.skupauto)
 
 	autokamen = imgui.ImBuffer(u8(ini.settings.autokamen), 256)
+	autolenf = imgui.ImBuffer(u8(ini.settings.autolenf), 256)
+	autocotton = imgui.ImBuffer(u8(ini.settings.autocotton), 256)
 	autometal = imgui.ImBuffer(u8(ini.settings.autometal), 256)
 	autobronza = imgui.ImBuffer(u8(ini.settings.autobronza), 256)
 	autosilver = imgui.ImBuffer(u8(ini.settings.autosilver), 256)
@@ -9463,7 +9546,11 @@ function load_settings() -- загрузка настроек
 	infsilver = imgui.ImBool(ini.shahtainformer.silver)
 	infgold = imgui.ImBool(ini.shahtainformer.gold)
 	infzp = imgui.ImBool(ini.shahtainformer.zp)
+	infzpferma = imgui.ImBool(ini.shahtainformer.zpferma)
 	infsbor = imgui.ImBool(ini.shahtainformer.sbor)
+	infsborferma = imgui.ImBool(ini.shahtainformer.sborferma)
+	inflen = imgui.ImBool(ini.shahtainformer.lenz)
+	infchlopok = imgui.ImBool(ini.shahtainformer.chlopokz)
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
@@ -10381,6 +10468,15 @@ while true do
 			setGameKeyState(1, 0)
 			end
 			end
+		wait(0)
+	end
+end
+
+function bufferram()
+while true do 
+		if autobuffer.v and memory.read(0x8E4CB4, 4, true) > 419430400 then
+			cleanStreamMemoryBuffer()
+		end
 		wait(0)
 	end
 end
@@ -12811,6 +12907,19 @@ while true do
 	wait(0)
 	end
 end
+
+function fermas()
+while true do 
+	local x, y, z = getCharCoordinates(PLAYER_PED)
+	local resultv2, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "{73B461}Для сбора урожая")
+	if autolen.v and resultv2 then
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+		end
+	wait(0)
+	end
+end
 		
 function eating()
 while true do 
@@ -13741,12 +13850,12 @@ function winprofilemenu()
 function kirkamenu()
 	local sw, sh = getScreenResolution() 
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(582, 280), imgui.Cond.FirstUseEver)
-		imgui.Begin(fa.ICON_USER..u8' Шахтёр ', win_state['kirkawin'], imgui.WindowFlags.NoResize)
+		imgui.SetNextWindowSize(imgui.ImVec2(675, 360), imgui.Cond.FirstUseEver)
+		imgui.Begin(fa.ICON_USER..u8' Statistics ', win_state['kirkawin'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_PENCIL..u8' Редактировать цены на ресурсы', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
-				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Автоальт на руде', autoryda)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить счетчик руд")); imgui.SameLine(); imgui.ToggleButton(u8'Включить счетчик руд', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика собранной руды на шахте и вашего заработка. Также можно менять цены на каждую руду.");
+				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Автоальт на руде', autoryda) imgui.SameLine(525) imgui.Checkbox(u8'Автоальт на ферме', autolen)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить статистику на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить статистику на экране', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика выбранных предметов и вашего заработка. Также можно менять цены на каждый предмет.");
 				if ryda.v then
 					imgui.SameLine()
 					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol) then 
@@ -13758,35 +13867,60 @@ function kirkamenu()
 						mouseCoord5 = true 
 					end
 				end
-				imgui.SameLine(380)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение камня")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение камня', infkamen)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение металла")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение металла', infmetal)
-				imgui.SameLine(380)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение бронзы")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение бронзы', infbronza)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение серебра")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение серебра', infsilver)
 				imgui.SameLine(380)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение золота")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение золота', infgold)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение собранной руды")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение собранной руды', infsbor)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение металла")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение металла', infmetal)
 				imgui.SameLine(380)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение заработка")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение денег', infzp)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение льна")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение льна', inflen)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение бронзы")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение бронзы', infbronza)
+				imgui.SameLine(380)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение хлопка")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение хлопка', infchlopok)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение серебра")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение серебра', infsilver)
+				imgui.SameLine(380)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение собранной руды")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение собранной руды', infsbor)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение заработка c руды")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение заработка c руды', infzp)
+				imgui.SameLine(380)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение собранного льна и хлопка")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение собранного льна и хлопка', infsborferma)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение заработка c фермы")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение заработка c фермы', infzpferma)
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
 				autoryda.v = false
+				autolen.v = false
 				ryda.v = false
 				infkamen.v = true
+				inflen.v = true
+				infchlopok.v = true
 				infmetal.v = true
 				infbronza.v = true
 				infsilver.v = true
 				infgold.v = true
 				infsbor.v = true
+				infsborferma.v = true
 				infzp.v = true
+				infzpferma.v = true
+				cfg.shahta.kamentime = 0
+				cfg.shahta.metaltime = 0
+				cfg.shahta.bronzatime = 0
+				cfg.shahta.silvertime = 0
+				cfg.shahta.goldtime = 0
+				cfg.shahta.lentime = 0
+				cfg.shahta.chlopoktime = 0
+				cfg.shahta.sbortime = 0
+				cfg.shahta.sbortimeferma = 0
+				cfg.shahta.zptime = 0
+				cfg.shahta.zptimeferma = 0
 				autokamen.v = '8000'
+				autolenf.v = '8000'
+				autocotton.v = '4000'
 				autometal.v = '4000'
 				autobronza.v = '40000'
 				autosilver.v = '100000'
 				autogold.v = '80000'
+				
 				sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) 
 				saveSettings()
+				inicfg.save(cfg, 'Mono\\mini-games.ini')
 			end
 				imgui.End()
 		end
@@ -13915,18 +14049,18 @@ function shemamenu()
 function helpmenu()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 300), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(950, 330), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_QUESTION_CIRCLE_O..u8(' Помощь'), win_state['help'], imgui.WindowFlags.NoResize)
 		imgui.Text('')
 		imgui.BeginGroup()
-		imgui.Text('') imgui.SameLine() imgui.BeginChild('left pane', imgui.ImVec2(180, 240), true)
+		imgui.Text('') imgui.SameLine() imgui.BeginChild('left pane', imgui.ImVec2(180, 270), true)
 		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Команды скрипта") then selected2 = 2 end
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() if imgui.Selectable(u8"Коды клавиш") then selected2 = 3 end		
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
-		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 240), true)
+		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 270), true)
 		if selected2 == 0 then selected2 = 1
 		elseif selected2 == 3 then
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"Коды клавиш")
@@ -13958,6 +14092,8 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call [id] - позвонить на указанный ID.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call last - позвонить на номер, на который вы звонили в последний раз.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/killinfo - посмотреть информацию, какому игроку вы нанесли в последний раз урон или какой игрок нанес урон вам.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bufram - узнать сколько мегабаит составляет память стрима.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/clearram - очистить память стрима.")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -15306,6 +15442,10 @@ function nastroikamenu()
 				imgui.PushItemWidth(150)
 				imgui.Text('') imgui.SameLine() if autonarko.v then imgui.SliderInt(u8'Задержка на нарко (в секундах) ##1010',zadervkanarko,1, 120) end
 				imgui.PopItemWidth()
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-очистка памяти стрима")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-очистка памяти стрима', autobuffer) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то когда память стрима заполняется до 400 мегабаит, скрипт очистит память стрима. Для чего это нужно? При засорении памяти стрима, игра начинает лагать и в итоге крашит. Функция будет чистить память стрима и уменьшится шанс краша игры.")
+				if autobuffer.v then 
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Уведомлять в чате об очистке стрима")); imgui.SameLine(); imgui.ToggleButton(u8'Уведомлять в чате об очистке стрима', autobufferyved)
+				end
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после того, как вы сели в автомобиль, скрипт закроет ваш автомобиль командой /lock.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в диалогах у вас будут стоять в числах точки.")
@@ -15824,7 +15964,7 @@ function nastroikamenu()
 function shahtared()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(723, 195), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(723, 250), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_PENCIL_SQUARE_O..u8' Редактирование цен на ресурсы', win_state['shahtamenu'], imgui.WindowFlags.NoResize)
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость камня ##85', autokamen)
@@ -15832,6 +15972,8 @@ function shahtared()
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость бронзы ##87', autobronza)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость серебра ##88', autosilver)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость золота ##89', autogold)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость льна ##90', autolenf)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите стоймость хлопка ##91', autocotton)
 			imgui.End()
 	end
 	
@@ -16072,6 +16214,13 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'"Для разработчиков".') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'21. Фикс открытия рулеток (из-за обновления на сервере скрипт перестал крутить рулетки)') 
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Добавлена Тех.Поддержка. Теперь предложить идею, сообщить о баге или оставить отзыв вы сможете прямо в скрипте.') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'[11.01.2022]')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Шахтёр перемейнован в "Statistics". В пункт добавлен авто-альт на ферме и добавлено в статистику на экране лен и хлопок.') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'24. В статистику после открытия подарков добавлены новые предметы.') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'25. В "Параметры" - "Модификации" добавлена функция "Авто-очистка памяти стрима" (когда память стрима заполняется до 400 мегабаит,') 
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'скрипт очистит память стрима. Для чего это нужно? При засорении памяти стрима, игра начинает лагать и в итоге крашит. Функция будет')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'чистить память стрима и уменьшится шанс краша игры.) от Azller.')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлены 2 новые команды. /bufram - узнать сколько мегабаит составляет память стрима. /clearram - очистить память стрима.')
 			imgui.End()
 		end
 	
@@ -16502,7 +16651,7 @@ function zadachinfo()
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Майнинг', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = true  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winkirka, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Шахтёр', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = true  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Statistics', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = true  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintochkamen, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Touch Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = true panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintrade, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -16540,7 +16689,7 @@ function zadachinfov2()
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Майнинг', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = true  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winkirka2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Шахтёр', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = true  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Statistics', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = true  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintochkamen2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Touch Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = true panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintrade2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -16578,7 +16727,7 @@ function zadachinfov3()
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Майнинг', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = true  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winkirka3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Шахтёр', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = true  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Statistics', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = true  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintochkamen3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Touch Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = true panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintrade3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -16616,7 +16765,7 @@ function zadachinfov4()
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Майнинг', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = true  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winkirka4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Шахтёр', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = true  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Statistics', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = true  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintochkamen4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Touch Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = true panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintrade4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -16654,7 +16803,7 @@ function zadachinfov5()
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Майнинг', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = true  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winkirka5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Шахтёр', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = true  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Statistics', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = true  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintochkamen5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Touch Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = true panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintrade5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -17435,7 +17584,47 @@ end
 		kamenitog = kamensession * autokamen.v
 		cfg.shahta.kamentime = cfg.shahta.kamentime + 2
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "stone + 3" then
+		kamensession = kamensession + 3
+		kamenitog = kamensession * autokamen.v
+		cfg.shahta.kamentime = cfg.shahta.kamentime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
+	
+	if text == "linen + 1" then
+		lensession = lensession + 1
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "linen + 2" then
+		lensession = lensession + 2
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "linen + 3" then
+		lensession = lensession + 3
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	
+	if text == "cotton + 1" then
+		chlopoksession = chlopoksession + 1
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "cotton + 2" then
+		chlopoksession = chlopoksession + 2
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "cotton + 3" then
+		chlopoksession = chlopoksession + 3
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	
 	if text == "metal + 1" then
 		metalsession = metalsession + 1
 		metalitog = metalsession * autometal.v
@@ -17445,6 +17634,11 @@ end
 		metalsession = metalsession + 2
 		metalitog = metalsession * autometal.v
 		cfg.shahta.metaltime = cfg.shahta.metaltime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "metal + 3" then
+		metalsession = metalsession + 3
+		metalitog = metalsession * autometal.v
+		cfg.shahta.metaltime = cfg.shahta.metaltime + 3
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	if text == "bronze + 1" then
@@ -17457,6 +17651,11 @@ end
 		bronzaitog = bronzasession * autobronza.v
 		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 2
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "bronze + 3" then
+		bronzasession = bronzasession + 3
+		bronzaitog = bronzasession * autobronza.v
+		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	if text == "silver + 1" then
 		silversession = silversession + 1
@@ -17468,6 +17667,11 @@ end
 		silveritog = silversession * autosilver.v
 		cfg.shahta.silvertime = cfg.shahta.silvertime + 2
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "silver + 3" then
+		silversession = silversession + 3
+		silveritog = silversession * autosilver.v
+		cfg.shahta.silvertime = cfg.shahta.silvertime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	if text == "gold + 1" then
 		goldsession = goldsession + 1
@@ -17478,6 +17682,11 @@ end
 		goldsession = goldsession + 2
 		golditog = goldsession * autogold.v
 		cfg.shahta.goldtime = cfg.shahta.goldtime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "gold + 3" then
+		goldsession = goldsession + 3
+		golditog = goldsession * autogold.v
+		cfg.shahta.goldtime = cfg.shahta.goldtime + 3
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end	
 	if text:find('+20 AZ') and podarki.v then 
@@ -17507,9 +17716,18 @@ end
 		itogopodarkov = itogopodarkov + 20
 	end
 	sborsession = kamensession + metalsession + bronzasession + silversession + goldsession
+	
+	sborsessionferma = lensession + chlopoksession
+	
 	zpsession = kamenitog + metalitog + bronzaitog + silveritog + golditog
+	zpsessionferma = lenitog + chlopokitog
 	cfg.shahta.zptime = (cfg.shahta.kamentime*autokamen.v) + (cfg.shahta.metaltime*autometal.v) + (cfg.shahta.bronzatime*autobronza.v) + (cfg.shahta.silvertime*autosilver.v) + (cfg.shahta.goldtime*autogold.v)
 	cfg.shahta.sbortime = cfg.shahta.kamentime + cfg.shahta.metaltime + cfg.shahta.bronzatime + cfg.shahta.silvertime + cfg.shahta.goldtime
+	
+	cfg.shahta.zptimeferma = (cfg.shahta.lentime*autolenf.v) + (cfg.shahta.chlopoktime*autocotton.v)
+	
+	cfg.shahta.sbortimeferma = cfg.shahta.lentime + cfg.shahta.chlopoktime
+	
 	inicfg.save(cfg, 'Mono\\mini-games.ini')
 end
 
@@ -20022,3 +20240,42 @@ function activeklad2()
 function activeklad3()
 	klad№3.v = true
 	end
+	
+function cleanStreamMemoryBuffer()
+argpam = memory.read(0x8E4CB4, 4, true)
+argpam2 = argpam / 1024
+argpam3 = math.floor(argpam2 / 1024)
+local bufferclear = callFunction(0x53C500, 2, 2, true, true)
+local bufferclear1 = callFunction(0x53C810, 1, 1, true)
+local bufferclear2 = callFunction(0x40CF80, 0, 0)
+local bufferclear3 = callFunction(0x4090A0, 0, 0)
+local bufferclear4 = callFunction(0x5A18B0, 0, 0)
+local bufferclear5 = callFunction(0x707770, 0, 0)
+local pX, pY, pZ = getCharCoordinates(PLAYER_PED)
+requestCollision(pX, pY)
+loadScene(pX, pY, pZ)
+if autobufferyved.v then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Память стрима составила "..argpam3.." мегабаит(а) и была успешно очищена.", 0x046D63) end
+end
+
+function BufRam()
+inforam = memory.read(0x8E4CB4, 4, true)
+inforam2 = inforam / 1024
+inforam3 = math.floor(inforam2 / 1024)
+sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Память стрима составляет "..inforam3.." мегабаит(а).", 0x046D63)
+end
+
+function ClearRam()
+argram = memory.read(0x8E4CB4, 4, true)
+argram2 = argram / 1024
+argram3 = math.floor(argram2 / 1024)
+local bufferclear = callFunction(0x53C500, 2, 2, true, true)
+local bufferclear1 = callFunction(0x53C810, 1, 1, true)
+local bufferclear2 = callFunction(0x40CF80, 0, 0)
+local bufferclear3 = callFunction(0x4090A0, 0, 0)
+local bufferclear4 = callFunction(0x5A18B0, 0, 0)
+local bufferclear5 = callFunction(0x707770, 0, 0)
+local pX, pY, pZ = getCharCoordinates(PLAYER_PED)
+requestCollision(pX, pY)
+loadScene(pX, pY, pZ)
+sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Вы успешно очистили память стрима. Память стрима составляла: "..argram3.." мегабаит(а).", 0x046D63)
+end
