@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3')
+script_version('3.3.1')
 
 local use = false
 local close = false
@@ -987,6 +987,7 @@ local SET = {
 		zadervkav2 = 3,
 		zadervkatree = 10,
 		razmer = 40,
+		delayintv2 = 500,
 		vsevorul = 0,
 		vsevorulpodarok = 0,
 		vsevorulexp = 0,
@@ -3681,6 +3682,7 @@ function saveSettings(args, key)
 	ini.settings.zadervkav2 = zadervkav2.v
 	ini.settings.zadervkatree = zadervkatree.v
 	ini.settings.razmer = razmer.v
+	ini.settings.delayintv2 = delayintv2.v
 	ini.settings.vsevorul = vsevorul.v
 	ini.settings.vsevorulpodarok = vsevorulpodarok.v
 	ini.settings.vsevorulexp = vsevorulexp.v
@@ -8693,8 +8695,13 @@ end
 					end
 				end
 			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить напишите '/cst'. Затем нажмите в лавке 'Выставить товар\nна покупку'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку товаров составляет: ")
+				imgui.PushItemWidth(200)
+				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
+				imgui.PopItemWidth()
+					imgui.Text('')
 					imgui.SetCursorPosX(300)
-					if imgui.CustomButton(u8'Ок, понял', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then win_state['skupv2'].v = false end
+					if imgui.CustomButton(u8'Ок, понял', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then saveSettings() win_state['skupv2'].v = false end
 			end
 		imgui.End()
 	end
@@ -10983,6 +10990,7 @@ function load_settings() -- загрузка настроек
 	zadervkav2 = imgui.ImInt(ini.settings.zadervkav2)
 	zadervkatree = imgui.ImInt(ini.settings.zadervkatree)
 	razmer = imgui.ImInt(ini.settings.razmer)
+	delayintv2 = imgui.ImInt(ini.settings.delayintv2)
 	vsevorul = imgui.ImInt(ini.settings.vsevorul)
 	vsevorulpodarok = imgui.ImInt(ini.settings.vsevorulpodarok)
 	vsevorulexp = imgui.ImInt(ini.settings.vsevorulexp)
@@ -18315,6 +18323,9 @@ function tupupdate()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(855, 400), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Тестовые обновления v3.3', win_state['tup'], imgui.WindowFlags.NoResize)
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.01.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс кика при проверке товаров в новом скуп меню (сделана задержка по умолчанию на 500 мс, сменить можно в "Skup Menu v2" до')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'загрузки товаров.)')
 			imgui.End()
 		end
 	
@@ -22697,7 +22708,7 @@ function pageWrite(menu)
 			end
 			if not isFounded then table.insert(itemsskup, {itemskup, 0, 0, false, false}) end
 		end
-		if t[i]:find(">>>") then sampSendDialogResponse(3050, 1, i - 2) isNext = true end
+		if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNext = true end
 	end
 	if not isNext then isEn = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", 0x046D63) inicfg.save(itemsskup, _nameini) sampSendDialogResponse(3050, 0) isBuyProcess = false end
 end
