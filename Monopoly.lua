@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.1')
+script_version('3.3.2')
 
 local use = false
 local close = false
@@ -8199,7 +8199,7 @@ function imgui.OnDrawFrame()
 	
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"копеечкой: *Место свободно*")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"копеечкой: | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	end
 	
@@ -16132,7 +16132,7 @@ function reklamawinmenu()
 	
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта   ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"копеечкой: *Место свободно*")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"копеечкой: | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	end
 
@@ -18326,6 +18326,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.01.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс кика при проверке товаров в новом скуп меню (сделана задержка по умолчанию на 500 мс, сменить можно в "Skup Menu v2" до')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'загрузки товаров.)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.01.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Обновление списка донатеров.')
 			imgui.End()
 		end
 	
