@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.2')
+script_version('3.3.3')
 
 local use = false
 local close = false
@@ -8192,15 +8192,16 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"AnUbiSa, Marquis, Рафи, vanyaghdh, rassaro,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Комаров, No8i4Ok, Панов, Цой, Иван, Максим,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"AngeloMoreno, Kristian, Михаил, exxc1ted, Густов,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов.")
 	end
 	
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"копеечкой: | Соул (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | #Pharaoh (11 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -8460,11 +8461,12 @@ end
 				imgui.Text('') imgui.SameLine(90) imgui.Text(u8'F3 или установленная вами клавиша - закрывает все окна.')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK скрипта (информация, помощь, предложения)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Benito (100 рублей))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
+				
 				imgui.Separator()
 				imgui.Text('')
 				imgui.Text('')
 				imgui.Separator()
-				imgui.Text('')
 				imgui.Text('')
 				imgui.SameLine(15) if imgui.ImageButton(winuser, imgui.ImVec2(30, 30), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['winprofile'].v = not win_state['winprofile'].v end
 				imgui.SameLine(455) if imgui.ImageButton(winoffpc, imgui.ImVec2(30, 30), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['pcoff'].v = not win_state['pcoff'].v end
@@ -9953,7 +9955,7 @@ function sampev.onServerMessage(color, text)
 	end
 	
 	if text:match("%[Подсказка%] {FFFFFF}Вы запустили серебряную рулетку.") and checked_test12.v then
-	vsevorul.v = vsevorul.v + 1
+	vsevorulv2.v = vsevorulv2.v + 1
 	saveSettings()
 	end
 	if text:match("%[Подсказка%] {FFFFFF}Вы получили +(.+)%$!") and checked_test12.v then
@@ -9993,9 +9995,6 @@ function sampev.onServerMessage(color, text)
 	end
 	if text:match("У вас недостаточно материалов!") and tradept.v then
 		tradept.v = false
-	end
-	if text:match("Вам был добавлен предмет 'Сертификат") or text:match("Вам был добавлен предмет 'Золото'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") or text:match("Вам был добавлен предмет 'Серебро'. Чтобы открыть инвентарь используйте клавишу 'Y' или /invent") and checked_test.v then
-		checked_test.v = false
 	end
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box.v then
 		checktochilki = true
@@ -12260,6 +12259,8 @@ while true do
 	  end
 	  wait(1000)
       sampSendClickTextdraw(2091)
+	  wait(500)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(7000)
 	  samprulstart = true
@@ -12293,6 +12294,8 @@ while true do
 	  end
 	  wait(1000)
       sampSendClickTextdraw(2091)
+	  wait(500)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(7000)
 	  samprulstart = true
@@ -12325,6 +12328,8 @@ while true do
 	  end
 	  wait(1000)
       sampSendClickTextdraw(2091)
+	  wait(500)
+      sampSendClickTextdraw(2091)
       krytim = false
 	  wait(7000)
 	  samprulstart = true
@@ -12356,6 +12361,8 @@ while true do
 	  closeDialog()
 	  end
 	  wait(1000)
+      sampSendClickTextdraw(2091)
+	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
 	  wait(7000)
@@ -16125,15 +16132,16 @@ function reklamawinmenu()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"AnUbiSa, Marquis, Рафи, vanyaghdh, rassaro,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Комаров, No8i4Ok, Панов, Цой, Иван, Максим,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"AngeloMoreno, Kristian, Михаил, exxc1ted, Густов,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов.")
 	end
 	
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта   ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"копеечкой: | Соул (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:   ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | #Pharaoh (11 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
 	end
 
 	imgui.Text('')
@@ -18328,6 +18336,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'загрузки товаров.)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.01.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Обновление списка донатеров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[31.01.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс функционала "Открывать рулетки с обновлением слота" (из-за новой системы после 10 прокруток, скрипт переставал крутить')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'рулетки)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс счётчика серебряных рулеток (в /statarul)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Исправлены некоторые ошибки в текстовой части скрипта.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. В бронзовых рулетках убрана остановка прокрутки, если вам выпал автомобиль, золото или серебро.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Обновлен список донатеров.')
 			imgui.End()
 		end
 	
@@ -18982,10 +18997,10 @@ function scriptinfopeople()
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Роман, Июнь, Саня, Алексей, kriper2009, Islamov, Эмиль, mizert, rodriguez_7777, Graph_Bavles, Илья,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"COSMIK, arabKRYT, TodFox, Владимир, ner9xa, Дима, Арчи, Имран, UPuser, Павленко, Никита, Тревоp,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Jonathan Of, Игорь, Клави, Егорик, vulya_1706, David, Элла, Petrosyan, Майк, AnUbiSa, Marquis, Рафи")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"vanyaghdh, rassaro, Комаров, No8i4Ok, Панов, Цой, Иван, AngeloMoreno, Максим, Kristian, Михаил")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"exxc1ted, Botik228, Ambassador, ArchiYT, Fbianchi.exe, kxnrsxny, Владислав, Марьян, Patrik, Milly")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Bayerbach, Alex, Густов")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Jonathan Of, Игорь, Клави, Егорик, vulya_1706, David, Элла, Petrosyan, Майк, AnUbiSa, Marquis, Рафи,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"vanyaghdh, rassaro, Комаров, No8i4Ok, Панов, Цой, Иван, AngeloMoreno, Максим, Kristian, Михаил,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"exxc1ted, Botik228, Ambassador, ArchiYT, Fbianchi.exe, kxnrsxny, Владислав, Марьян, Patrik, Milly,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Bayerbach, Alex, Густов.")
 end
 
 function imgui.CenterText(text)
