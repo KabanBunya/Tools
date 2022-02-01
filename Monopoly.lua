@@ -8697,7 +8697,7 @@ end
 					end
 				end
 			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить напишите '/cst'. Затем нажмите в лавке 'Выставить товар\nна покупку'.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку товаров составляет: ")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров составляет: ")
 				imgui.PushItemWidth(200)
 				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
 				imgui.PopItemWidth()
@@ -18343,6 +18343,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Исправлены некоторые ошибки в текстовой части скрипта.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. В бронзовых рулетках убрана остановка прокрутки, если вам выпал автомобиль, золото или серебро.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Обновлен список донатеров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[01.02.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Фикс кика в "Skup menu v2" при выставлении товаров (теперь задержка перед загрузкой товара влияет на поиск товара)')
 			imgui.End()
 		end
 	
@@ -22705,7 +22707,7 @@ function checkPage(menu)
 			for n=1, #inputsskup do
 				if t[i]:find(itemsskup[inputsskup[n][3]][1], 0, true) and inputsskup[n][4] == false then sampSendDialogResponse(3050, 1, i - 2) isFounded = true wait(delayInt.v) buyProcess(n) break end
 			end
-			if t[i]:find(">>>") then sampSendDialogResponse(3050, 1, i - 2) haveExit = true end
+			if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) haveExit = true end
 			if isFounded then break end
 		end
 end
