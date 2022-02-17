@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.5')
+script_version('3.3.6')
 
 local use = false
 local close = false
@@ -8201,8 +8201,9 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) | #Pharaoh (11 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -16115,14 +16116,16 @@ function reklamawinmenu()
 		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8('РЕКЛАМА'), win_state['reklamawin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
 		
-		imgui.Text('')
 		if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
+		imgui.BeginChild('reklama##12342345345433', imgui.ImVec2(525, 56), true)
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(140) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(140) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
 		imgui.Text("") imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11, за который можно получить вирты от Монополистов: {0F52BA}#monopoly{0F52BA}   ")
+		imgui.EndChild()
 		end
 	
 	if os.date("%d") == '02' or os.date("%d") == '05' or os.date("%d") == '08' or os.date("%d") == '11' or os.date("%d") == '14' or os.date("%d") == '17' or os.date("%d") == '20' or os.date("%d") == '23' or os.date("%d") == '26' or os.date("%d") == '29' then
+	imgui.BeginChild('reklama##12342345345432', imgui.ImVec2(318, 56), true)
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Спасибо всем, а в частности тем, кто перечислен   ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"ниже, за их участие в развитий скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Роман, Июнь, Саня, Алексей, kriper2009, Islamov,")
@@ -16137,17 +16140,19 @@ function reklamawinmenu()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach,")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов.")
+	imgui.EndChild()
 	end
 	
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
+	imgui.BeginChild('reklama##12342345345431', imgui.ImVec2(305, 56), true)
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:   ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) | #Pharaoh (11 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
+	imgui.EndChild()
 	end
-
-	imgui.Text('')
 	   imgui.End()
 	end
 	
@@ -18348,6 +18353,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Обновлен список донатеров.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[01.02.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Фикс кика в "Skup menu v2" при выставлении товаров (теперь задержка перед загрузкой товара влияет на поиск товара)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[17.02.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Были уменьшены окна с рекламой и информацией в главном меню и обновлён список донатеров.')
 			imgui.End()
 		end
 	
