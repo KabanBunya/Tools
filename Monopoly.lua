@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.6')
+script_version('3.3.7')
 
 local use = false
 local close = false
@@ -17,7 +17,6 @@ local close5 = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
-local samprulstart = false
 local fontsize = nil
 fontsizev2 = nil
 fontsizev3 = nil
@@ -42,6 +41,9 @@ car_analysis = false -- —татус готовности проверки цен
 car_last_text = nil -- ѕоследний текст в диалоговом окне
 car_cooldown = 250 -- ¬рем¤ (в мс.) задержки перед пролистыванием диалога
 car_prices = {} -- ћассив всех цен на транспорт
+
+banditses = 0
+banditsesv2 = 0
 
 kamensession = 0
 lensession = 0
@@ -860,6 +862,8 @@ local SET = {
 		idtext5 = '2302',
 		idtext6 = '2143',
 		idtext7 = '2302',
+		idtext8 = '2144',
+		idtext9 = '2302',
 		idigroklastweapon = '0',
 		idigroklastweapon2 = '0',
 		idigrok = '0',
@@ -890,6 +894,7 @@ local SET = {
 		reconkick = true,
 		reconrestart = true,
 		reconsave = true, 
+		reconname = true, 
 		carsis = false,
 		tradefast = false,
 		faminvfast = false,
@@ -932,6 +937,7 @@ local SET = {
 		yashik = false,
 		yashik1 = false,
 		yashik2 = false,
+		yashik4 = false,
 		yashik3 = false,
 		otkrytie = true,
 		otkrytie2 = false,
@@ -975,6 +981,7 @@ local SET = {
 		zadervkasetrou15 = 111,
 		zadervkasetrou16 = 111,
 		zadervkaclick = 200,
+		zadervkalovly = 100,
 		zadervkabtc = 200,
 		zadervkanarko = 30,
 		zadervkaeat = 30,
@@ -1183,6 +1190,8 @@ win_state['update'] = imgui.ImBool(false)
 win_state['player'] = imgui.ImBool(false)
 win_state['base'] = imgui.ImBool(false)
 win_state['dial'] = imgui.ImBool(false)
+win_state['bandit'] = imgui.ImBool(false)
+win_state['lovec'] = imgui.ImBool(false)
 win_state['rulstat'] = imgui.ImBool(false)
 win_state['informer'] = imgui.ImBool(false)
 win_state['informervrem'] = imgui.ImBool(false)
@@ -1239,6 +1248,7 @@ local checked_test5 = imgui.ImBool(false)
 local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
+checked_test100 = imgui.ImBool(false)
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
 local video2 = imgui.ImBool(false)
@@ -1280,6 +1290,11 @@ local addad = imgui.ImBool(false)
 local vipaddad = imgui.ImBool(false)
 local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
+lovlylarec = imgui.ImBool(false)
+lovlyvideo = imgui.ImBool(false)
+lovlyohlad = imgui.ImBool(false)
+banditactive = imgui.ImBool(false)
+banditactivev2 = imgui.ImBool(false)
 aladdad = imgui.ImBool(false)
 jaddad = imgui.ImBool(false)
 local saddad = imgui.ImBool(false)
@@ -2916,6 +2931,7 @@ function main()
 	lua_thread.create(connectarz)
 	lua_thread.create(jumpbeg)
 	lua_thread.create(coinclicker)
+	lua_thread.create(lovecpremium)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -2937,6 +2953,8 @@ function main()
 	sampRegisterChatCommand('bufram', BufRam)
 	sampRegisterChatCommand('clearram', ClearRam)
 	sampRegisterChatCommand("killinfo", show_dial)
+	sampRegisterChatCommand("bandit", show_dialv3)
+	sampRegisterChatCommand("lovec", show_dialv4)
 	sampRegisterChatCommand("statarul", show_rulstat)
 	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера запущен.", 0x046D63) else isEn = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", 0x046D63) end end)
 	if pricecr.v then sampRegisterChatCommand('price', get_price) end
@@ -3187,6 +3205,12 @@ end
             sampSetGamestate(1)
 		end
 		
+		if chatstring == "Use /quit to exit or press ESC and select Quit Game" and recongen.v and reconname.v then
+        sampDisconnectWithReason(false)
+            wait(zadervkarecon.v * 1000)
+            sampSetGamestate(1)
+		end
+		
 		if chatstring == "Server closed the connection." and reconclosed.v then
         sampDisconnectWithReason(false)
             wait(zadervkareconv2.v * 1000) -- задержка
@@ -3194,6 +3218,12 @@ end
 		end
 		
 		if chatstring == "You are banned from this server." and reconclosed.v then
+        sampDisconnectWithReason(false)
+            wait(zadervkareconv2.v * 1000) -- задержка
+            sampSetGamestate(1)
+		end
+		
+		if chatstring == "Use /quit to exit or press ESC and select Quit Game" and reconclosed.v then
         sampDisconnectWithReason(false)
             wait(zadervkareconv2.v * 1000) -- задержка
             sampSetGamestate(1)
@@ -3237,7 +3267,7 @@ end
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -3640,6 +3670,7 @@ function saveSettings(args, key)
 	ini.settings.yashik = yashik.v
 	ini.settings.yashik1 = yashik1.v
 	ini.settings.yashik2 = yashik2.v
+	ini.settings.yashik4 = yashik4.v
 	ini.settings.yashik3 = yashik3.v
 	ini.settings.otkrytie = otkrytie.v
 	ini.settings.otkrytie2 = otkrytie2.v
@@ -3653,6 +3684,7 @@ function saveSettings(args, key)
 	ini.settings.autobeg = autobeg.v
 	ini.settings.timefix = timefix.v
 	ini.settings.zadervkajump = zadervkajump.v
+	ini.settings.zadervkalovly = zadervkalovly.v
 	ini.settings.zadervkaclick = zadervkaclick.v
 	ini.settings.zadervkasetrou1 = zadervkasetrou1.v
 	ini.settings.zadervkasetrou2 = zadervkasetrou2.v
@@ -3720,6 +3752,7 @@ function saveSettings(args, key)
 	ini.settings.reconkick = reconkick.v
 	ini.settings.reconrestart = reconrestart.v
 	ini.settings.reconsave = reconsave.v
+	ini.settings.reconname = reconname.v
 	ini.settings.carsis = carsis.v
 	ini.settings.tradefast = tradefast.v
 	ini.settings.faminvfast = faminvfast.v
@@ -3816,6 +3849,8 @@ function saveSettings(args, key)
 	ini.settings.idtext5 = u8:decode(idtext5.v)
 	ini.settings.idtext6 = u8:decode(idtext6.v)
 	ini.settings.idtext7 = u8:decode(idtext7.v)
+	ini.settings.idtext8 = u8:decode(idtext8.v)
+	ini.settings.idtext9 = u8:decode(idtext9.v) 
 	ini.settings.deagleone = u8:decode(deagleone.v)
 	ini.settings.deagletwo = u8:decode(deagletwo.v)
 	ini.settings.awpone = u8:decode(awpone.v)
@@ -4909,6 +4944,13 @@ end
 	checked_test12.v = false
 	end	
 	
+	if banditactive.v then 
+	lua_thread.create(function()
+	sampSendClickTextdraw(2144)
+	wait(5000)
+	end)
+end
+	
 	if klad№1.v then
 		lua_thread.create(function()
 		if data.modelId == 19168 then
@@ -5075,6 +5117,31 @@ end
       end
     end)
   end
+	if checked_test100.v and active25 and otkrytie.v then
+    lua_thread.create(function()
+      if data.modelId == 2887 then
+        wait(zadervkasetrou1.v)
+        sampSendClickTextdraw(id)
+        use25 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use25 and otkrytie.v then
+        clickID = id + 1
+		wait(zadervkasetrou2.v)
+        sampSendClickTextdraw(clickID)
+        use25 = false
+        close25 = true
+      end
+      if close25 and otkrytie.v then
+        wait(zadervkasetrou3.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou4.v)
+		sampCloseCurrentDialogWithButton(1)
+		ruletka()
+        close25 = false
+        active25 = false
+      end
+    end)
+  end
 	if checked_test10.v and active5 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
@@ -5172,6 +5239,31 @@ end
 		ruletka()
         close2 = false
         active2 = false
+      end
+    end)
+  end
+  if yashik4.v and active25 and otkrytie.v then
+    lua_thread.create(function()
+      if data.modelId == 2887 then
+        wait(zadervkasetrou1.v)
+        sampSendClickTextdraw(id)
+        use25 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use25 and otkrytie.v then
+        clickID = id + 1
+		wait(zadervkasetrou2.v)
+        sampSendClickTextdraw(clickID)
+        use25 = false
+        close25 = true
+      end
+      if close25 and otkrytie.v then
+        wait(zadervkasetrou3.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou4.v)
+		sampCloseCurrentDialogWithButton(1)
+		ruletka()
+        close25 = false
+        active25 = false
       end
     end)
   end
@@ -5283,6 +5375,26 @@ end
       end
     end)
   end
+  if checked_test100.v and active25 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 2887 then
+        wait(zadervkasetrou5.v)
+        sampSendClickTextdraw(id)
+        wait(zadervkasetrou6.v)
+		sampSendClickTextdraw(2302)
+        wait(zadervkasetrou7.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou8.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou9.v)
+		sampCloseCurrentDialogWithButton(1)
+		wait(zadervkasetrou10.v)
+		sampSendClickTextdraw(2135)
+		ruletka()
+        active25 = false
+      end
+    end)
+  end
 	if checked_test10.v and active5 and otkrytie2.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
@@ -5360,6 +5472,26 @@ end
 		sampSendClickTextdraw(2135)
 		ruletka()
         active2 = false
+      end
+    end)
+  end
+	if yashik4.v and active25 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 2887 then
+        wait(zadervkasetrou5.v)
+        sampSendClickTextdraw(id)
+        wait(zadervkasetrou6.v)
+		sampSendClickTextdraw(2302)
+        wait(zadervkasetrou7.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou8.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou9.v)
+		sampCloseCurrentDialogWithButton(1)
+		wait(zadervkasetrou10.v)
+		sampSendClickTextdraw(2135)
+		ruletka()
+        active25 = false
       end
     end)
   end
@@ -5466,6 +5598,26 @@ end
 		end
 	 end)
 	end
+  if checked_test100.v and active25 and otkrytie3.v then
+    lua_thread.create(function()
+		if data.modelId == 2887 then
+		wait(zadervkasetrou11.v)
+        sampSendClickTextdraw(idtext8.v)
+		wait(zadervkasetrou12.v)
+		sampSendClickTextdraw(idtext9.v)
+        wait(zadervkasetrou13.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou14.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou15.v)
+		sampCloseCurrentDialogWithButton(1)
+		wait(zadervkasetrou16.v)
+		sampSendClickTextdraw(2135)
+		ruletka()
+        active25 = false
+		end
+	 end)
+	end
 	if checked_test10.v and active5 and otkrytie3.v then
     lua_thread.create(function()
 		if data.modelId == 1733 then
@@ -5543,6 +5695,26 @@ end
 		sampSendClickTextdraw(2135)
 		ruletka()
         active2 = false
+		end
+    end)
+  end
+   if yashik4.v and active25 and otkrytie3.v then
+    lua_thread.create(function()
+		if data.modelId == 2887 then
+		wait(zadervkasetrou11.v)
+		sampSendClickTextdraw(idtext8.v)
+		wait(zadervkasetrou12.v)
+		sampSendClickTextdraw(idtext9.v)
+        wait(zadervkasetrou13.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou14.v)
+		sampSendClickTextdraw(admmp)
+		wait(zadervkasetrou15.v)
+		sampCloseCurrentDialogWithButton(1)
+		wait(zadervkasetrou16.v)
+		sampSendClickTextdraw(2135)
+		ruletka()
+        active25 = false
 		end
     end)
   end
@@ -7684,6 +7856,16 @@ function imgui.OnDrawFrame()
 		  imgui.ShowCursor = true
        end
 	   
+	if not win_state['main'].v and win_state['bandit'].v then 
+          imgui.Process = true
+		  imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['lovec'].v then 
+          imgui.Process = true
+		  imgui.ShowCursor = true
+       end
+	   
 	if not win_state['main'].v and win_state['rulstat'].v then 
           imgui.Process = true
 		  imgui.ShowCursor = true
@@ -8963,6 +9145,30 @@ end
 		imgui.End()
 	end
 	
+	if win_state['bandit'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(595, 110), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8'Однорукий Бандит (бар)##2121341', win_state['bandit'], imgui.WindowFlags.NoResize)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать однорукого бандита', banditactive) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет автоматический крутить 'Однорукого Бандита' в баре. Активируйте функционал и для работы прокрутите бандита один раз вручную. Функционал настроен только для ставок в 15.000$")
+		imgui.SameLine() imgui.Checkbox(u8'Учитывать, что вы крутите бандита в своём баре', banditactivev2)
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Проиграно: '..number_separator(banditses))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Выиграно: '..number_separator(banditsesv2))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Итого заработок составил: '..number_separator(banditses + banditsesv2))
+		imgui.End()
+	end
+	
+	if win_state['lovec'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 140), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxory"', lovlylarec)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (мс)##432545745643',zadervkalovly,10, 2000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на клики в диалогах и их открытие. Поставьте значение выше, если кикает за флуд диалогами. По умолчанию задержка установлена на 100 мс.");  
+		imgui.End()
+	end
+	
 	if win_state['rulstat'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(585, 290), imgui.Cond.FirstUseEver)
@@ -9346,6 +9552,8 @@ function onWindowMessage(m, p)
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
 		win_state['rulstat'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['tup'].v then
@@ -9402,6 +9610,8 @@ function onWindowMessage(m, p)
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
 		win_state['rulstat'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['timeyved'].v then
@@ -9458,6 +9668,8 @@ function onWindowMessage(m, p)
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
 		win_state['rulstat'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['dial'].v then
@@ -9514,6 +9726,122 @@ function onWindowMessage(m, p)
 		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['bandit'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['oscriptepeople'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['reklamawin'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['lovec'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['skupshema'].v = false
+		win_state['piarshema'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['skup3'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['oscriptepeople'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['reklamawin'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
     end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['rulstat'].v then
         consumeWindowMessage()
@@ -9570,6 +9898,8 @@ function onWindowMessage(m, p)
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
     end
 end
 
@@ -9687,6 +10017,7 @@ function fixpricecopia()
 		sampCloseCurrentDialogWithButton(1)
 		wait(200)
 		sampCloseCurrentDialogWithButton(1)
+		wait(100)
 		end)
 	end
 	
@@ -9862,12 +10193,10 @@ function sampev.onServerMessage(color, text)
 		lastrradiozv, lastrradioID = text:match('%[R%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
 	elseif text:match("^Этот транспорт зарегистрирован на жителя {9ACD32}" ..userNick) and lock.v then
 		sampSendChat('/lock')
-	elseif text:find("Вам был добавлен предмет") and samprulstop == true and samprulstart == true then
+	elseif text:find("Вам был добавлен предмет") and samprulstop == true then
 		krytim = true
-		samprulstart = false
-	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') and samprulstop == true and samprulstart == true then
+	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') and samprulstop == true then
 		krytim = true
-		samprulstart = false
 	end
 	local x, y, z = getCharCoordinates(PLAYER_PED)
 	local resultbank, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "Касса")
@@ -9886,6 +10215,9 @@ function sampev.onServerMessage(color, text)
 		fixprice()
 	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik3.v then
+		fixprice()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik4.v then
 		fixprice()
 	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and dialogclose.v then
@@ -10922,6 +11254,8 @@ function load_settings() -- загрузка настроек
 	idtext5 = imgui.ImBuffer(u8(ini.settings.idtext5), 256)
 	idtext6 = imgui.ImBuffer(u8(ini.settings.idtext6), 256)
 	idtext7 = imgui.ImBuffer(u8(ini.settings.idtext7), 256)
+	idtext8 = imgui.ImBuffer(u8(ini.settings.idtext8), 256)
+	idtext9 = imgui.ImBuffer(u8(ini.settings.idtext9), 256)
 	activator = imgui.ImBuffer(u8(ini.settings.activator), 256)
 	activcall = imgui.ImBuffer(u8(ini.settings.activcall), 256)
 	nazvanie = imgui.ImBuffer(u8(ini.settings.nazvanie), 256)
@@ -10962,6 +11296,7 @@ function load_settings() -- загрузка настроек
 	idigroktelo2 = imgui.ImBuffer(u8(ini.settings.idigroktelo2), 2560)
 	timefix = imgui.ImInt(ini.settings.timefix)
 	zadervkajump = imgui.ImInt(ini.settings.zadervkajump)
+	zadervkalovly = imgui.ImInt(ini.settings.zadervkalovly)
 	zadervkaclick = imgui.ImInt(ini.settings.zadervkaclick)
 	zadervkasetrou1 = imgui.ImInt(ini.settings.zadervkasetrou1)
 	zadervkasetrou2 = imgui.ImInt(ini.settings.zadervkasetrou2)
@@ -11075,6 +11410,7 @@ function load_settings() -- загрузка настроек
 	yashik = imgui.ImBool(ini.settings.yashik)
 	yashik1 = imgui.ImBool(ini.settings.yashik1)
 	yashik2 = imgui.ImBool(ini.settings.yashik2)
+	yashik4 = imgui.ImBool(ini.settings.yashik4)
 	yashik3 = imgui.ImBool(ini.settings.yashik3)
 	otkrytie = imgui.ImBool(ini.settings.otkrytie)
 	otkrytie2 = imgui.ImBool(ini.settings.otkrytie2)
@@ -11095,6 +11431,7 @@ function load_settings() -- загрузка настроек
 	reconkick = imgui.ImBool(ini.settings.reconkick)
 	reconrestart = imgui.ImBool(ini.settings.reconrestart)
 	reconsave = imgui.ImBool(ini.settings.reconsave)
+	reconname = imgui.ImBool(ini.settings.reconname)
 	carsis = imgui.ImBool(ini.settings.carsis)
 	tradefast = imgui.ImBool(ini.settings.tradefast)
 	faminvfast = imgui.ImBool(ini.settings.faminvfast)
@@ -12128,6 +12465,31 @@ function coinclicker()
 	end
 end
 
+function lovecpremium()
+	while true do
+	if lovlylarec.v then 
+	sendKey(1024)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(25191 , 1 , 1, -1)
+	end
+	if lovlyvideo.v then 
+	sendKey(1024)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(15529 , 1 , 0, -1)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(15270 , 1 , 0, -1)
+	end
+	if lovlyohlad.v then 
+	sendKey(1024)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(15529 , 1 , 1, -1)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(15530 , 1 , 0, -1)
+	end
+	wait(0)
+	end
+end
+
 function jumpbeg()
 while true do 
 if isKeyJustPressed(49) and isKeyJustPressed(87) and autobeg.v then begauto = true end
@@ -12166,8 +12528,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
     end
     if checked_test2.v and krytim then
 	checked_test.v = false
@@ -12187,8 +12547,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
     end
     if checked_test3.v and krytim then
 	checked_test2.v = false
@@ -12208,8 +12566,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
     end
     if checked_test4.v and krytim then
 	checked_test2.v = false
@@ -12229,8 +12585,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
 	end
 	if checked_test11.v and krytim then
 	checked_test2.v = false
@@ -12264,8 +12618,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
 	end
 	if checked_test12.v and krytim then
 	checked_test2.v = false
@@ -12299,8 +12651,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
 	end
 	if checked_test13.v and krytim then
 	checked_test2.v = false
@@ -12333,8 +12683,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
 	end
 	if checked_test14.v and krytim then
 	checked_test2.v = false
@@ -12367,8 +12715,6 @@ while true do
 	  wait(500)
       sampSendClickTextdraw(2091)
       krytim = false
-	  wait(7000)
-	  samprulstart = true
 			end
 		wait(0)
 	end
@@ -12456,6 +12802,27 @@ while true do
 	  sampSendClickTextdraw(admmp)
 	  wait(500)
       active2 = true
+	  samprulstop = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
+	if checked_test100.v and otkrytie.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      active25 = true
 	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervka.v*60000)
@@ -12548,6 +12915,27 @@ while true do
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
     end
+	if yashik4.v and otkrytie.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      active25 = true
+	  samprulstop = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
 	if yashik3.v and otkrytie.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
@@ -12636,6 +13024,27 @@ while true do
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
+	 if checked_test100.v and otkrytie2.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      active25 = true
+	  samprulstop = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
 	if checked_test10.v and otkrytie2.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
@@ -12720,6 +13129,27 @@ while true do
 	  sampSendClickTextdraw(admmp)
 	  wait(500)
       active2 = true
+	  samprulstop = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik4.v and otkrytie2.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      active25 = true
 	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
@@ -12813,6 +13243,27 @@ while true do
       sampSendChat("/invent")
       wait(zadervka.v*60000)
 	end
+	if checked_test100.v and otkrytie3.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      active25 = true
+	  samprulstop = true
+      sampSendChat("/invent")
+      wait(zadervka.v*60000)
+	end
 	if checked_test10.v and otkrytie3.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
@@ -12897,6 +13348,27 @@ while true do
 	  sampSendClickTextdraw(admmp)
 	  wait(500)
       active2 = true
+	  samprulstop = true
+      sampSendChat("/invent")
+      wait(zadervkav2.v*60000)
+    end
+	if yashik4.v and otkrytie3.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      active25 = true
 	  samprulstop = true
       sampSendChat("/invent")
       wait(zadervkav2.v*60000)
@@ -15303,7 +15775,7 @@ function rpredak()
 function yashikisroulette()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(997, 448), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(997, 483), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_DROPBOX..u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize)
 			imgui.Columns(2, _, false)
 			imgui.Text('')
@@ -15400,6 +15872,7 @@ function yashikisroulette()
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать платиновый сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать платиновый сундук', yashik2) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
+			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Тайник Лос-Сантоса'")); imgui.SameLine(); imgui.ToggleButton(u8"Всегда открывать сундук 'Тайник Лос-Сантоса'", yashik4) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать сундук 'Илона Маска'")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать сундук "Илона Маска"', yashik3) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (в минутах) ##48',zadervkav2,1, 60) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на открытие сундуков. Если выбрано несколько сундуков, то сундуки начинают открываться по очереди. Например: Вы активировали функции - 'Всегда открывать обычный сундук' и 'Всегда открывать платиновый сундук'. Сначала пройдет проверка обычного сундука, через указанное вами время пройдет проверка платиного сундука и потом снова через указанное вами время пройдет проверка обычного сундука. По умолчанию - 3 минуты.")
 			imgui.NextColumn()
@@ -15417,13 +15890,14 @@ function yashikisroulette()
 			elseif otkrytie2.v then otkrytie.v = false otkrytie3.v = false 
 			elseif otkrytie3.v then otkrytie.v = false otkrytie2.v = false 
 			end
-			imgui.AlignTextToFramePadding(); imgui.Text(u8("Вторая задержка")); imgui.SameLine(); imgui.ToggleButton(u8'Вторая задержка', zadervkatwo) imgui.SameLine(); imgui.TextQuestion(u8"Суть функции в том, что если у вас есть все 4 сундука, то вторая задержка позволяет сделать проверку сундуков эффективнее. Т.е если включена 'вторая задержка', то 4 сундука проверяются по вашему кд, например, 1 минута и после проверки 4-х сундуков, активируется задержка, например, в 10 минут на то, чтобы осуществить опять проверку сундуков.")
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Вторая задержка")); imgui.SameLine(); imgui.ToggleButton(u8'Вторая задержка', zadervkatwo) imgui.SameLine(); imgui.TextQuestion(u8"Суть функции в том, что если у вас есть сундук 'Илона Маска', то вторая задержка позволяет сделать проверку сундуков эффективнее. Т.е если включена 'вторая задержка', то сундуки перед 'Илоном Маском' проверяются по вашему кд, например, 1 минута и после проверки 'Илона Маска', активируется задержка, например, в 10 минут на то, чтобы осуществить опять проверку сундуков.")
 			if zadervkatwo.v then 
 			imgui.SliderInt(u8'в минутах ##477',zadervkatree,1, 60)
 			end
 			imgui.Checkbox(u8'Открывать обычный сундук', checked_test5) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Checkbox(u8'Открывать донатный сундук', checked_test6) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
+			imgui.Checkbox(u8'Открывать сундук "Тайник Лос-Сантоса"', checked_test100) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			
 			--imgui.PushItemWidth(150)
@@ -15444,6 +15918,7 @@ function yashikisroulette()
 			yashik1.v = false
 			yashik2.v = false
 			yashik3.v = false
+			yashik4.v = false
 			otkrytie.v = true
 			otkrytie2.v = false
 			otkrytie3.v = false
@@ -15457,6 +15932,7 @@ function yashikisroulette()
 			checked_test6.v = false
 			checked_test7.v = false
 			checked_test10.v = false
+			checked_test100.v = false
 			sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) saveSettings() end
 			imgui.End()
 			end
@@ -15484,7 +15960,7 @@ function obmenmenu()
 function setroulmenu()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(997, 530), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(997, 560), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_CHECK..u8' Настройка открытия сундуков №3', win_state['roulset'], imgui.WindowFlags.NoResize)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Раз ты решил использовать третий вариант открытия, то у тебя не работает способы №1 и №2. Читай внимательно инструкцию по настройке и в теорий, все должно')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'работать отлично. Начнем с того, что нужно включить просмотр ID текстдрав. Для этого нажми на кнопку "Включить отображение ID Текстдравов".')
@@ -15502,9 +15978,10 @@ function setroulmenu()
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID кнопки обычного сундука', idtext1)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'И по примеру "обычного сундука", заполните остальные текстовые поля с сундуками, если данные сундуки у вас есть. Если у вас нет данных сундуков - то просто')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'не меняйте их значения.')
-			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки донатного сундука', idtext2) imgui.SameLine(310) imgui.InputText(u8'ID кнопки донатного сундука', idtext3)
-			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки платинового сундука', idtext4) imgui.SameLine(310) imgui.InputText(u8'ID кнопки платинового сундука', idtext5)
-			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки сундука "Илона Маска"', idtext6) imgui.SameLine(310) imgui.InputText(u8'ID кнопки сундука "Илона Маска"', idtext7)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки донатного сундука', idtext2) imgui.SameLine(360) imgui.InputText(u8'ID кнопки донатного сундука', idtext3)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки платинового сундука', idtext4) imgui.SameLine(360) imgui.InputText(u8'ID кнопки платинового сундука', idtext5)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки сундука "Тайник Лос-Сантоса"', idtext8) imgui.SameLine(360) imgui.InputText(u8'ID кнопки сундука "Тайник Лос-Сантоса"', idtext9)
+			imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID клетки сундука "Илона Маска"', idtext6) imgui.SameLine(360) imgui.InputText(u8'ID кнопки сундука "Илона Маска"', idtext7)
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Вот вы и закончили заполнять текстовые поля. Проверьте правильность ввода. Если всё заполнили верно, то нажмите на кнопку "Выключить отображение ID')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Текстдравов".')
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_OFF..u8' Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then toggle = false end
@@ -15695,7 +16172,7 @@ function kirkamenu()
 				imgui.Text('')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_PENCIL..u8' Редактировать цены на ресурсы', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Автоальт на руде', autoryda) imgui.SameLine(525) imgui.Checkbox(u8'Автоальт на ферме', autolen)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить статистику на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить статистику на экране', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика выбранных предметов и вашего заработка. Также можно менять цены на каждый предмет.");
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить статистику на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить статистику на экране', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика выбранных предметов и вашего заработка. Также можно менять цены на каждый предмет. Цвет зависит от цвета окна. Сменить можно в 'Параметры' - 'Персонализация'.");
 				if ryda.v then
 					imgui.SameLine()
 					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol) then 
@@ -16009,6 +16486,8 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carprice - узнать среднюю цену на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carab - обновить средние цены на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/checkvip [id] - проверить, есть ли у игрока Titan или Premium VIP.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bandit - открыть меню 'Однорукий Бандит'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/lovec - открыть меню 'Авто-ловля'.")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -17483,7 +17962,7 @@ function nastroikamenu()
 				imgui.PopItemWidth()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
-				if reconclosed.v then recongen.v = false reconbanned.v = false reconkick.v = false reconrestart.v = false reconsave.v = false reconpassword.v = false end
+				if reconclosed.v then recongen.v = false reconbanned.v = false reconkick.v = false reconrestart.v = false reconsave.v = false reconname.v = false reconpassword.v = false end
 				if recongen.v then reconclosed.v = false end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Умный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Умный реконнект', recongen); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру, если вас кикнул античит, сработала защита от реконнекта, пишет 'You are banned from this server' и после рестарта.")
 				if recongen.v then 
@@ -17494,8 +17973,9 @@ function nastroikamenu()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Кикнул Античит")); imgui.SameLine(); imgui.ToggleButton(u8'Кикнул Античит', reconkick)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Произошел рестарт сервера")); imgui.SameLine(); imgui.ToggleButton(u8'Произошел рестарт сервера', reconrestart)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Сработала защита от реконнекта")); imgui.SameLine(); imgui.ToggleButton(u8'Сработала защита от реконнекта', reconsave)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Unacceptable NickName")); imgui.SameLine(); imgui.ToggleButton(u8'Unacceptable NickName', reconname)
 				imgui.PushItemWidth(150)
-				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в секундах) ##1001',zadervkarecon,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после кика античита, команду /recon, защиты от реконнекта, на 'You are banned from this server. По умолчанию установлено - 15 секунд.")
+				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в секундах) ##1001',zadervkarecon,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после кика античита, команду /recon, защиты от реконнекта, на 'You are banned from this server' и на 'Use /quit to exit or press ESC and select Quit Game'. По умолчанию установлено - 15 секунд.")
 				imgui.Text('') imgui.SameLine() if recongen.v then imgui.SliderInt(u8'Задержка (в минутах) ##1002',zadervkareconrestart,1, 60) end imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на перезаход после рестарта и перезаход при Wrong server password. По умолчанию установлено - 10 минут.")
 				imgui.PopItemWidth()
 				imgui.Text('-----------------------------------------------------------------------------')
@@ -17538,7 +18018,7 @@ function nastroikamenu()
 				imgui.SliderInt(u8'Задержка (в минутах) ##1007',zadervkaferma,1, 120) imgui.SameLine(); imgui.TextQuestion(u8"Задержка для 'Авто-изменение заданий на ферме'. По умолчанию установлено - 30 минут."); 
 				imgui.PopItemWidth()
 				
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить время на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить время на экране', screentime) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет время, которое можно передвигать и изменять размер.") 
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить время на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить время на экране', screentime) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет время, которое можно передвигать и изменять размер. Цвет времени зависит от цвета текста. Сменить можно в 'Параметры' - 'Персонализация'.") 
 				if screentime.v then
 					imgui.SameLine()
 					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then 
@@ -17702,7 +18182,7 @@ function nastroikamenu()
 			if imgui.CollapsingHeader(u8'Информер') then
 				imgui.BeginChild('##25252', imgui.ImVec2(745, 170), false)
 				imgui.Columns(2, _, false)
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет таблица с нужными вам параметрами. Включить или выключить нужные пункты вы сможете ниже.") 
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить информер")); imgui.SameLine(); imgui.ToggleButton(u8'Включить информер', zones) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет таблица с нужными вам параметрами. Включить или выключить нужные пункты вы сможете ниже. Цвет зависит от цвета окна. Сменить можно в 'Параметры' - 'Персонализация'.") 
 				if zones.v then
 					imgui.SameLine()
 					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then 
@@ -17827,6 +18307,7 @@ function nastroikamenu()
 				reconkick.v = true
 				reconrestart.v = true
 				reconsave.v = true
+				reconname.v = true
 				zadervkarecon.v = '15'
 				zadervkareconv2.v = '15'
 				bufozy.v = '400'
@@ -18355,6 +18836,15 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Фикс кика в "Skup menu v2" при выставлении товаров (теперь задержка перед загрузкой товара влияет на поиск товара)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[17.02.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Были уменьшены окна с рекламой и информацией в главном меню и обновлён список донатеров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.02.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'10. В "Roulette Tools" добавлен сундук "Тайник Лос-Сантоса".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'11. Адаптация прокруток рулеток под рулеточный компас.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'12. Добавлена команда /bandit, которая открывает меню "Однорукий Бандит", где вы сможете включить авто-прокрутку бандита в баре и')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'увидеть подсчёт проигранных/выигранных денег.')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'13. В реконнекты добавлен перезаход после "Use /quit to exit or press ESC and select Quit Game".')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'14. Добавлена команда /lovec, которая открывает меню "Авто-ловля", где вы сможете включить ловлю нового ларца "Concept Car Luxery",')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'видеокарт и охлаждение для видеокарт. (не уверен в стабильной работе и что это хоть как то поможет словить данные предметы,')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'тестируйте)')
 			imgui.End()
 		end
 	
@@ -19756,6 +20246,36 @@ end
 		closeDialog()
 	end)
 end
+
+	if text:find("You lose") and banditactive.v then
+	if banditactivev2.v then 
+	banditses = banditses - 11000
+	else 
+	banditses = banditses - 15000
+		end
+	end
+	
+	if text:match("+15000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 15000 / 2
+	end
+	if text:match("+45000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 45000 / 2
+	end
+	if text:match("+75000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 75000 / 2
+	end
+	if text:match("+150000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 150000 / 2
+	end
+	if text:match("+1500000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 1500000 / 2
+	end
+	if text:match("+15000000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 15000000 / 2
+	end
+	if text:match("+150000000") and banditactive.v then
+	banditsesv2 = banditsesv2 + 150000000 / 2
+	end
 
 	if text == "stone + 1" then
 		kamensession = kamensession + 1
@@ -22444,6 +22964,14 @@ function sampev.onSendTakeDamage(igrokid2, damage2, igrokweapon2, igrokbodypart2
 	
 function show_dial()
 	win_state['dial'].v = not win_state['dial'].v
+	end
+	
+function show_dialv3()
+	win_state['bandit'].v = not win_state['bandit'].v
+	end
+	
+function show_dialv4()
+	win_state['lovec'].v = not win_state['lovec'].v
 	end
 	
 function show_rulstat()
