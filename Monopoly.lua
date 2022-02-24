@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.7')
+script_version('3.3.8')
 
 local use = false
 local close = false
@@ -183,7 +183,7 @@ local dif_colors = {
 	0xFF03fcfc, 0xFF02f563, 0xFFFFFF00, 0xFFFF0000
 }
 
-bike = {[481] = true, [509] = true, [510] = true}
+bike = {[481] = true, [509] = true, [510] = true, [14914] = true, [14915] = true, [14916] = true, [14917] = true}
 moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true, [3197] = true, [3194] = true, [3195] = true, [3196] = true, [3198] = true}
 
 local res = pcall(require, "lib.moonloader")
@@ -1291,6 +1291,10 @@ local vipaddad = imgui.ImBool(false)
 local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
 lovlylarec = imgui.ImBool(false)
+lovlymonet = imgui.ImBool(false)
+activateplus = false
+activateminus = false
+activateminusv2 = false
 lovlyvideo = imgui.ImBool(false)
 lovlyohlad = imgui.ImBool(false)
 banditactive = imgui.ImBool(false)
@@ -3051,6 +3055,9 @@ end
 		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(51) and isKeyJustPressed(18) then activeklad3() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
+		if not sampIsChatInputActive() and activateplus == true and lovlymonet.v and isKeyJustPressed(49) then activateminusv2 = false activateminus = true end
+		if not sampIsChatInputActive() and activateplus == true and lovlymonet.v and isKeyJustPressed(50) then activateminus = false activateminusv2 = true end
+		if not sampIsChatInputActive() and activateplus == true and lovlymonet.v and isKeyJustPressed(51) then lovlymonet.v = false end
 		
 		if windowsstyle.v == false then apply_custom_style2() end
 		if windowsstyle.v then apply_custom_style() end
@@ -4592,6 +4599,10 @@ end
             recongenmenu()
         end
 	end
+	
+	if title:find('Concept Car Luxury') and lovlylarec.v then return false end
+	if dialogId == 25191 and lovlylarec.v then sampSendDialogResponse(25191, 1 , 0, -1) end
+	
     if dialogId == 722 and nodial then
     nodial = false
     return false
@@ -9160,9 +9171,12 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 140), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 170), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxory"', lovlylarec)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю праздничных монет', lovlymonet) imgui.SameLine() imgui.TextQuestion(u8"Ловля монет на праздничном квесте. После активации функционала, нажав на кнопку '1' - будет флуд клавишей ALT. Если нажать на кнопку '2' - прекратится флуд ALT и начнется флуд пробелом. Если нажать на кнопку '3' - функционал будет отключен. Чем больше фпс - тем быстрее нажимаются клавиши. Задержка влияет на нажатие на пробел, если не кикает, ставьте минимальную задержку.")
+		if lovlymonet.v then activateplus = true else activateplus = false end
+		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (мс)##432545745643',zadervkalovly,10, 2000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на клики в диалогах и их открытие. Поставьте значение выше, если кикает за флуд диалогами. По умолчанию задержка установлена на 100 мс.");  
@@ -12470,7 +12484,7 @@ function lovecpremium()
 	if lovlylarec.v then 
 	sendKey(1024)
 	wait(zadervkalovly.v)
-	sampSendDialogResponse(25191 , 1 , 1, -1)
+	sampSendDialogResponse(25191, 1 , 0, -1)
 	end
 	if lovlyvideo.v then 
 	sendKey(1024)
@@ -12485,6 +12499,15 @@ function lovecpremium()
 	sampSendDialogResponse(15529 , 1 , 1, -1)
 	wait(zadervkalovly.v)
 	sampSendDialogResponse(15530 , 1 , 0, -1)
+	end
+	if activateminus == true and lovlymonet.v then
+	wait(zadervkalovly.v)
+	sendKey(1024)
+	end
+	if activateminusv2 == true and lovlymonet.v then
+	setVirtualKeyDown(key.VK_SPACE, true)
+    wait(zadervkalovly.v)
+    setVirtualKeyDown(key.VK_SPACE, false)
 	end
 	wait(0)
 	end
@@ -18845,6 +18868,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'14. Добавлена команда /lovec, которая открывает меню "Авто-ловля", где вы сможете включить ловлю нового ларца "Concept Car Luxery",')	
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'видеокарт и охлаждение для видеокарт. (не уверен в стабильной работе и что это хоть как то поможет словить данные предметы,')	
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'тестируйте)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[24.02.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'15. В "Авто-ловля" немного подредактировал функционал. Каждый PD забираю новый ларец, главное следуйте по инструкции.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'16. В "Авто-ловля" добавлен функционал "Ловля праздничных монет". Данный функционал поможет вам пройти 7-й квест или половить')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'монеты.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Авто-байк" добавлены новые велосипеды.')
 			imgui.End()
 		end
 	
