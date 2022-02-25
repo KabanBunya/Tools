@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.8')
+script_version('3.3.9')
 
 local use = false
 local close = false
@@ -344,8 +344,6 @@ edit_size_y						= imgui.ImInt(-1)
 russian_characters				= { [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
 
-inicfg.load(itemsskup, _nameini)
-
 local cfg1 = {
     message = {
         nick = "User",
@@ -670,6 +668,7 @@ local SET = {
 		skupauto = false,
 		autopin = false,
 		autopay = false,
+		autopaybtc = false,
 		autoopl = false,
 		autoopl1 = false,
 		autoopl2 = false,
@@ -782,6 +781,7 @@ local SET = {
 		autopassopl2 = '16',
 		autopassopl3 = '17',
 		autopasspay = '5000000',
+		autopasspaybtc = '600',
 		autoeuros = '10000',
 		autoeurosraz = '1',
 		autoselleuros = '10000',
@@ -1365,6 +1365,8 @@ inputsskup = {}
 _nameini = "Mono\\CentralBuy"
 colorskup = "{7cfc00}"
 isEn = 0
+
+inicfg.load(itemsskup, _nameini)
 
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
@@ -3795,6 +3797,7 @@ function saveSettings(args, key)
 	ini.settings.napominalkadata = u8:decode(napominalkadata.v)
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autopasspay = u8:decode(autopasspay.v)
+	ini.settings.autopasspaybtc = u8:decode(autopasspaybtc.v)
 	ini.settings.autoeuros = u8:decode(autoeuros.v)
 	ini.settings.autoeurosraz = u8:decode(autoeurosraz.v)
 	ini.settings.autoselleuros = u8:decode(autoselleuros.v)
@@ -4141,6 +4144,7 @@ function saveSettings(args, key)
 	ini.settings.autoopl5 = autoopl5.v
 	ini.settings.autoopl6 = autoopl6.v
 	ini.settings.autopay = autopay.v
+	ini.settings.autopaybtc = autopaybtc.v
 	ini.settings.lock = lock.v
 	ini.settings.autonarko = autonarko.v
 	ini.settings.autobuffer = autobuffer.v
@@ -6708,6 +6712,22 @@ function sellbitauto()
 	end)
 end
 
+function sendchot60()
+	lua_thread.create(function() -- начало потока
+	sendKey(128)
+	wait(zadervkabtc.v)
+	sendKey(128)
+	wait(zadervkabtc.v)
+	sampSendDialogResponse(15276, 1 , 0, -1)
+	wait(zadervkabtc.v)
+	sampSendDialogResponse(15277, 1, 0, u8:decode(autopasspaybtc.v))
+	wait(zadervkabtc.v)
+	sampSendDialogResponse(15278, 1, 0, -1)
+	wait(zadervkabtc.v)
+	closeDialog()
+	end)
+end
+
 function sendchot6()
 	lua_thread.create(function() -- начало потока
 	closeDialog()
@@ -8834,7 +8854,7 @@ end
 	
 	if win_state['skupv2'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(735, 560), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'[New] Skup Menu ', win_state['skupv2'], imgui.WindowFlags.NoResize)
 		
 		if #itemsskup ~= 0 then
@@ -8874,12 +8894,12 @@ end
 				imgui.EndChild()
 				imgui.SameLine()
 
-				imgui.BeginChild("##2", imgui.ImVec2(210, 450))
+				imgui.BeginChild("##2", imgui.ImVec2(360, 450))
 				imgui.SetCursorPosX(65)
-				if imgui.CustomButton(u8"Очистить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(75, 25)) then for i=1, #itemsskup do itemsskup[i][4] = false end inicfg.save(itemsskup, _nameini) end
+				if imgui.CustomButton(u8"Очистить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(225, 25)) then for i=1, #itemsskup do itemsskup[i][4] = false end inicfg.save(itemsskup, _nameini) end
 					for i=1, #itemsskup do
 						if itemsskup[i][4] then
-							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then itemsskup[i][4] = false inicfg.save(itemsskup, _nameini) end
+							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then itemsskup[i][4] = false inicfg.save(itemsskup, _nameini) end
 							imgui.SameLine()
 							imgui.Text(u8(" "..itemsskup[i][1]))
 						end
@@ -9171,7 +9191,7 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 170), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 192), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю праздничных монет', lovlymonet) imgui.SameLine() imgui.TextQuestion(u8"Ловля монет на праздничном квесте. После активации функционала, нажав на кнопку '1' - будет флуд клавишей ALT. Если нажать на кнопку '2' - прекратится флуд ALT и начнется флуд пробелом. Если нажать на кнопку '3' - функционал будет отключен. Чем больше фпс - тем быстрее нажимаются клавиши. Задержка влияет на нажатие на пробел, если не кикает, ставьте минимальную задержку.")
@@ -9179,6 +9199,28 @@ end
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
+		imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+		delplayer = not delplayer
+			for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
+	
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (мс)##432545745643',zadervkalovly,10, 2000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на клики в диалогах и их открытие. Поставьте значение выше, если кикает за флуд диалогами. По умолчанию задержка установлена на 100 мс.");  
 		imgui.End()
 	end
@@ -10219,6 +10261,15 @@ function sampev.onServerMessage(color, text)
 	elseif text:match("Для получения PayDay вы должны отыграть минимум 20 минут.") and resultbank and autopay.v then
 		sendchot6()
 	end
+	
+	local x, y, z = getCharCoordinates(PLAYER_PED)
+	local resultbankbtc, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "Сейчас в банке:")
+	if text:match("Банковский чек") and resultbankbtc and autopaybtc.v then
+		sendchot60()
+	elseif text:match("Для получения PayDay вы должны отыграть минимум 20 минут.") and resultbankbtc and autopaybtc.v then
+		sendchot60()
+	end
+	
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik.v then
 		fixprice()
 	end
@@ -11076,6 +11127,7 @@ function load_settings() -- загрузка настроек
 	autoopl5 = imgui.ImBool(ini.settings.autoopl5)
 	autoopl6 = imgui.ImBool(ini.settings.autoopl6)
 	autopay = imgui.ImBool(ini.settings.autopay)
+	autopaybtc = imgui.ImBool(ini.settings.autopaybtc)
 	lock = imgui.ImBool(ini.settings.lock)
 	autonarko = imgui.ImBool(ini.settings.autonarko)
 	autobuffer = imgui.ImBool(ini.settings.autobuffer)
@@ -11126,6 +11178,7 @@ function load_settings() -- загрузка настроек
 	napominalkadata = imgui.ImBuffer(u8(ini.settings.napominalkadata), 256)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autopasspay = imgui.ImBuffer(u8(ini.settings.autopasspay), 256)
+	autopasspaybtc = imgui.ImBuffer(u8(ini.settings.autopasspaybtc), 256)
 	autoeuros = imgui.ImBuffer(u8(ini.settings.autoeuros), 256)
 	autoeurosraz = imgui.ImBuffer(u8(ini.settings.autoeurosraz), 256)
 	autoselleuros = imgui.ImBuffer(u8(ini.settings.autoselleuros), 256)
@@ -15798,7 +15851,7 @@ function rpredak()
 function yashikisroulette()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(997, 483), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(997, 503), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_DROPBOX..u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize)
 			imgui.Columns(2, _, false)
 			imgui.Text('')
@@ -15926,7 +15979,7 @@ function yashikisroulette()
 			--imgui.PushItemWidth(150)
 			imgui.SliderInt(u8'Задержка (в минутах) ##47',zadervka,1, 60) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на открытие сундуков. Если выбрано несколько сундуков, то сундуки начинают открываться по очереди. Например: Вы активировали функции - 'Открывать обычный сундук' и 'Открывать платиновый сундук'. Сначала пройдет проверка обычного сундука, через указанное вами время пройдет проверка платиного сундука и потом снова через указанное вами время пройдет проверка обычного сундука. По умолчанию - 3 минуты.")
 				--imgui.PopItemWidth()
-			
+			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(485, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test10.v = true end
 			if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(485, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
 			if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(485, 0)) then
 			checked_test.v = false
@@ -16381,13 +16434,20 @@ function bankmenu()
 					imgui.Text('') imgui.SameLine() imgui.InputText(u8'Номер строки ##24', autopasspaypin); imgui.SameLine(); imgui.TextQuestion(u8"Обязательно нужно указать номер строки в диалоге банковского меню цифрой. Например: первая строка 'Состояние основного счета' имеет номер строки 0, следующая строка будет иметь номер строки 1 и так далее. Таким методом отсчитываете до 'Пополнения Депозита' и вписываете получившиеся номер строки. По умолчанию стоит 8 строка.")
 					imgui.Text('') imgui.SameLine() imgui.InputText(u8'Сумма ##25', autopasspay); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать сумму пополнения. По умолчанию стоит 5.000.000$")
 				end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
+				
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Продавать BTC каждый PD")); imgui.SameLine(); imgui.ToggleButton(u8("Продавать BTC каждый PD"), autopaybtc); imgui.SameLine(); imgui.TextQuestion(u8"Продаёт указанное количество биткоинов, когда скрипт видит в чате 'Банковский чек'. Также вы должны в этот момент стоять у кассы в Банке, иначе биткоин не будет продан. Также задержка справа влияет на скорость продажи и если вас кикает за флуд функциями, то поставьте задержку выше, но чем ниже задержка, тем быстрее продадите ваши биткоины.");
+				if autopaybtc.v then
+					imgui.Text('') imgui.SameLine() imgui.InputText(u8'Кол-во ##2521354', autopasspaybtc); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать количество биткоинов (до 600)")
+				end
+				
+			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
 			autopassopl.v = '6'
 			autopassopl1.v = '15'
 			autopassopl2.v = '16'
 			autopassopl3.v = '17'
 			autopasspay.v = '5000000'
+			autopasspaybtc.v = '600'
 			autoeuros.v = '10000'
 			autoeurosraz.v = '1'
 			autoselleuros.v = '10000'
@@ -16401,6 +16461,7 @@ function bankmenu()
 			autoeurobuy.v = '11'
 			zadervkabtc.v = '200'
 			autopay.v = false
+			autopaybtc.v = false
 			autoopl.v = false
 			autoopl1.v = false
 			autoopl2.v = false
@@ -16432,7 +16493,7 @@ function bankmenu()
 				imgui.SameLine() imgui.InputText(u8'раз(а) ##158214', autosellbitraz)
 				if imgui.CustomButton(fa.ICON_CHECK..u8(' Начать продажу Биткоинов'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sellbitauto() end
 				imgui.PopItemWidth()
-				imgui.SliderInt(u8'Задержка (мс)',zadervkabtc,100, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на покупку/продажу евро и биткоинов. Поставьте значение выше, если кикает за флуд диалогами или не срабатывает. По умолчанию задержка установлена на 200 мс.");  
+				imgui.SliderInt(u8'Задержка (мс)',zadervkabtc,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на покупку/продажу евро и биткоинов. Поставьте значение выше, если кикает за флуд диалогами или не срабатывает. По умолчанию задержка установлена на 200 мс.");  
 		imgui.End()
 		end
 	
@@ -16866,6 +16927,10 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_OFF..u8' Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(280, 0)) then toggle = false end
 			imgui.PushItemWidth(280)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
+			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Skup Menu v2':")
+			imgui.PushItemWidth(200)
+			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
+			imgui.PopItemWidth()
 			imgui.NextColumn()
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(352, 0)) then skuppoymol() end
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Ipad Style (Beta)")); imgui.SameLine(); imgui.ToggleButton(u8'', windowsstyle) imgui.SameLine() imgui.Text(u8("Windows Style"))
@@ -18873,6 +18938,12 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'16. В "Авто-ловля" добавлен функционал "Ловля праздничных монет". Данный функционал поможет вам пройти 7-й квест или половить')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'монеты.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Авто-байк" добавлены новые велосипеды.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[25.02.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'18. Сделано сохранение для "Skup Menu v2", подправлена менюшка и задержку на поиск и загрузку товара теперь можно изменить в')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'"Параметры" - "Для разработчиков".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'19. В "Roulette Tools" добавлена кнопка "Выбрать все сундуки для открытия".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'20. В /lovec добавлено удаление игроков.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. В "Bank Menu" добавлена возможность продажи BTC каждый PD.')
 			imgui.End()
 		end
 	
