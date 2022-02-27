@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.0')
+script_version('1.0.1')
 
 local use = false
 local close = false
@@ -164,52 +164,52 @@ bike = {[481] = true, [509] = true, [510] = true}
 moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true, [1823] = true, [1913] = true, [1947] = true, [1948] = true, [1949] = true, [1950] = true, [1951] = true, [2006] = true}
 
 local res = pcall(require, "lib.moonloader")
-assert(res, 'Library "lib.moonloader" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "lib.moonloader" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, ffi = pcall(require, 'ffi')
-assert(res, 'Library "ffi" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "ffi" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res = pcall(require, 'lib.sampfuncs')
-assert(res, 'Library "lib.sampfuncs" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "lib.sampfuncs" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, sampev = pcall(require, 'lib.samp.events')
-assert(res, 'Library "SAMP Events" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "SAMP Events" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, key = pcall(require, "vkeys")
-assert(res, 'Library "vkeys" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "vkeys" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, imgui = pcall(require, "imgui")
-assert(res, 'Library "imgui" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "imgui" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, encoding = pcall(require, "encoding")
-assert(res, 'Library "encoding" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "encoding" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, inicfg = pcall(require, "inicfg")
-assert(res, 'Library "inicfg" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "inicfg" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, memory = pcall(require, "memory")
-assert(res, 'Library "memory" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "memory" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, rkeys = pcall(require, "rkeys")
-assert(res, 'Library "rkeys" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "rkeys" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ---------------------------------------------------------------
 local res, hk = pcall(require, 'lib.imcustom.hotkey')
-assert(res, 'Library "imcustom" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "imcustom" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ------------------------------------------------------------------
 local res, notf = pcall(import, "imgui_notf.lua")
-assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "imgui_notf.lua" должна быть в папке lib и moonloader. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ------------------------------------------------------------------
 local res, wm = pcall(require, "lib.windows.message")
-assert(res, 'Library "WIN MESSAGE" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "WIN MESSAGE" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ------------------------------------------------------------------
 local res = pcall(require, "luairc")
-assert(res, 'Library "luairc" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "luairc" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ------------------------------------------------------------------
 local res, effil = pcall(require, "effil")
-assert(res, 'Library "effil" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "effil" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ------------------------------------------------------------------
 local res, fa = pcall(require, "faIcons")
-assert(res, 'Library "faIcons" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+assert(res, 'Library "faIcons" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/123161/')
 ------------------------------------------------------------------
 
 -----------------------------------------------
@@ -324,8 +324,6 @@ edit_size_x						= imgui.ImInt(-1)
 edit_size_y						= imgui.ImInt(-1)
 russian_characters				= { [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я' }
 magicChar						= { '\\', '/', ':', '*', '?', '"', '>', '<', '|' }
-
-inicfg.load(itemsskup, _nameini)
 
 local cfg1 = {
     message = {
@@ -1236,6 +1234,8 @@ inputsskup = {}
 _nameini = "Mono\\CentralBuy"
 colorskup = "{7cfc00}"
 isEn = 0
+
+inicfg.load(itemsskup, _nameini)
 
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
@@ -6897,6 +6897,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| rozov scam top1 cr reseller (33 рубля) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	end
@@ -13268,9 +13269,9 @@ function googlewinmenu()
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промо-код на 09, 11 и 12, за который можно получить 1.000.000$ от Монополистов: {FFA500}#monopoly{FFA500}")
 		imgui.Separator()
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Жми и поддержи автора лайком!', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-500, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Жми и поддержи автора лайком!', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-500, 0)) then os.execute("start https://www.blast.hk/threads/123161/") end
 		imgui.SameLine()
-		if imgui.CustomButton(u8'Много нас тут? Давайте узнаем! Отпишите в теме и посмотрим сколько нас!', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
+		if imgui.CustomButton(u8'Много нас тут? Давайте узнаем! Отпишите в теме и посмотрим сколько нас!', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/123161/") end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Ты сампер? А может любишь мани? Тогда жми и подпишись на группу Монополи!', imgui.ImVec4(1.00, 0.19, 0.19, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-430, 0)) then os.execute("start https://vk.com/monopolyfam") end
 		imgui.SameLine()
 		if imgui.CustomButton(u8'Тыкай и будешь приходить на стримы Маркиза каждый день.', imgui.ImVec4(1.00, 0.19, 0.19, 0.60), imgui.ImVec4(0.26, 0.59, 0.98, 1.00), imgui.ImVec4(0.06, 0.53, 0.98, 1.00), imgui.ImVec2(-8, 0)) then os.execute("start https://www.youtube.com/channel/UCJaqtq_cvdFZxTzPPGbwNXw/videos") end
@@ -13359,6 +13360,7 @@ function reklamawinmenu()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| rozov scam top1 cr reseller (33 рубля) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	imgui.EndChild()
@@ -14221,7 +14223,7 @@ function nastroikamenu()
 				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-сбор шара, велосипеда и дельтаплана")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-сбор шара, велосипеда и дельтаплана', autoshar); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то вам больше не нужно будет нажимать кнопки для сборки указанного транспорта.");
 				
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить время на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить время на экране', screentime) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет время, которое можно передвигать и изменять размер.") 
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить время на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить время на экране', screentime) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет время, которое можно передвигать и изменять размер. Цвет времени зависит от цвета текста. Изменить можно в 'Параметры' - 'Персонализация'.") 
 				if screentime.v then
 					imgui.SameLine()
 					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(0, 0)) then 
@@ -15005,7 +15007,8 @@ function tupupdate()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(855, 400), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8'Тестовые обновления v1.0', win_state['tup'], imgui.WindowFlags.NoResize)
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Добавлено сохранение в "Skup menu v2".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Обновлён список донатеров.')
 			imgui.End()
 		end
 	
@@ -15423,10 +15426,10 @@ function scriptinfo()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8("Группа в VK скрипта:")) imgui.SameLine(135) imgui.TextColoredRGB("{0F52BA}click{0F52BA}") imgui.SameLine(135) imgui.Link('https://vk.com/mono_tools','click')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Промо-код на 09, 11 и 12, за который можно получить 1.000.000$ от Монополистов: {FFA500}#monopoly{FFA500}")
 	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Игроки, которые предлагали идеи и они были осуществлены', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['oscriptepeople'].v = not win_state['oscriptepeople'].v end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Поддержать Автора лайком и оставить отзыв', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-330, 0)) then os.execute("start https://www.blast.hk/threads/89343/") end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Поддержать Автора лайком и оставить отзыв', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-330, 0)) then os.execute("start https://www.blast.hk/threads/123161/") end
 	imgui.SameLine()
 	if imgui.CustomButton(u8'Поддержать Автора материально', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Сообщить о баге или предложить идею', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/89343/page-30000") end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Сообщить о баге или предложить идею', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then os.execute("start https://www.blast.hk/threads/123161/page-30000") end
 end
 
 function zadachinfo()
