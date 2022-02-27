@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.9')
+script_version('3.3.10')
 
 local use = false
 local close = false
@@ -1291,6 +1291,7 @@ local vipaddad = imgui.ImBool(false)
 local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
 lovlylarec = imgui.ImBool(false)
+lovlybtc = imgui.ImBool(false)
 lovlymonet = imgui.ImBool(false)
 activateplus = false
 activateminus = false
@@ -4342,19 +4343,19 @@ end
 		closeDialog()
 		end
 	end
-	if dialogId == 15272 and liquid.v then
+	if dialogId == 25243 and liquid.v then
 	statuszidkost1 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost3 = tonumber(text:match('Полка №3 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost4 = tonumber(text:match('Полка №4 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	end
-	if dialogId == 15272 and pusk.v then
+	if dialogId == 25243 and pusk.v then
 	statuspusk = text:find('Полка №1 | {F78181}На паузе')
 	statuspusk2 = text:find('Полка №2 | {F78181}На паузе')
 	statuspusk3 = text:find('Полка №3 | {F78181}На паузе')
 	statuspusk4 = text:find('Полка №4 | {F78181}На паузе')
 	end
-	if dialogId == 15272 and pusk2.v then
+	if dialogId == 25243 and pusk2.v then
 	statuspusk = text:find('Полка №1 | {BEF781}Работает')
 	statuspusk2 = text:find('Полка №2 | {BEF781}Работает')
 	statuspusk3 = text:find('Полка №3 | {BEF781}Работает')
@@ -4606,6 +4607,13 @@ end
 	
 	if title:find('Concept Car Luxury') and lovlylarec.v then return false end
 	if dialogId == 25191 and lovlylarec.v then sampSendDialogResponse(25191, 1 , 0, -1) end
+	
+	if dialogId == 25247 and lovlybtc.v then return false end
+	if dialogId == 25248 and lovlybtc.v then return false end
+	if dialogId == 25249 and lovlybtc.v then return false end
+	if dialogId == 25247 and lovlybtc.v then sampSendDialogResponse(25247, 1 , 0, -1) end
+	if dialogId == 25248 and lovlybtc.v then sampSendDialogResponse(25248, 1, 0, u8:decode(autopasspaybtc.v)) end
+	if dialogId == 25249 and lovlybtc.v then sampSendDialogResponse(25249, 1, 0, -1) end
 	
     if dialogId == 722 and nodial then
     nodial = false
@@ -6675,11 +6683,11 @@ function bitauto()
 	 wait(zadervkabtc.v)
 	 sendKey(128)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(15276, 1 , 1, -1)
+	 sampSendDialogResponse(25247, 1 , 1, -1)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(15279, 1, 0, u8:decode(autobit.v))
+	 sampSendDialogResponse(25250, 1, 0, u8:decode(autobit.v))
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(15280, 1 , 0, -1)
+	 sampSendDialogResponse(25251, 1 , 0, -1)
 	 wait(zadervkabtc.v)
 	 closeDialog()
 	 wait(zadervkabtc.v)
@@ -6699,11 +6707,11 @@ function sellbitauto()
 	 wait(zadervkabtc.v)
 	 sendKey(128)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(15276, 1 , 0, -1)
+	 sampSendDialogResponse(25247, 1 , 0, -1)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(15277, 1, 0, u8:decode(autosellbit.v))
+	 sampSendDialogResponse(25248, 1, 0, u8:decode(autosellbit.v))
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(15278, 1 , 0, -1)
+	 sampSendDialogResponse(25249, 1 , 0, -1)
 	 wait(zadervkabtc.v)
 	 closeDialog()
 	 wait(zadervkabtc.v)
@@ -6716,13 +6724,11 @@ function sendchot60()
 	lua_thread.create(function() -- начало потока
 	sendKey(128)
 	wait(zadervkabtc.v)
-	sendKey(128)
+	sampSendDialogResponse(25247, 1 , 0, -1)
 	wait(zadervkabtc.v)
-	sampSendDialogResponse(15276, 1 , 0, -1)
+	sampSendDialogResponse(25248, 1, 0, u8:decode(autopasspaybtc.v))
 	wait(zadervkabtc.v)
-	sampSendDialogResponse(15277, 1, 0, u8:decode(autopasspaybtc.v))
-	wait(zadervkabtc.v)
-	sampSendDialogResponse(15278, 1, 0, -1)
+	sampSendDialogResponse(25249, 1, 0, -1)
 	wait(zadervkabtc.v)
 	closeDialog()
 	end)
@@ -9191,7 +9197,7 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 192), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 250), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю праздничных монет', lovlymonet) imgui.SameLine() imgui.TextQuestion(u8"Ловля монет на праздничном квесте. После активации функционала, нажав на кнопку '1' - будет флуд клавишей ALT. Если нажать на кнопку '2' - прекратится флуд ALT и начнется флуд пробелом. Если нажать на кнопку '3' - функционал будет отключен. Чем больше фпс - тем быстрее нажимаются клавиши. Задержка влияет на нажатие на пробел, если не кикает, ставьте минимальную задержку.")
@@ -9199,6 +9205,7 @@ end
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю BTC', lovlybtc) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально продать биткоин. Просто включите функционал перед PD и нажимайте N еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
 		delplayer = not delplayer
 			for _, handle in ipairs(getAllChars()) do
@@ -9222,6 +9229,8 @@ end
 	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
 	
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (мс)##432545745643',zadervkalovly,10, 2000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на клики в диалогах и их открытие. Поставьте значение выше, если кикает за флуд диалогами. По умолчанию задержка установлена на 100 мс.");  
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Кол-во BTC ##2521354', autopasspaybtc); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать количество биткоинов (до 600)")
+		
 		imgui.End()
 	end
 	
@@ -12539,6 +12548,17 @@ function lovecpremium()
 	wait(zadervkalovly.v)
 	sampSendDialogResponse(25191, 1 , 0, -1)
 	end
+	if lovlybtc.v then
+	sendKey(128)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(25247, 1 , 0, -1)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(25248, 1, 0, u8:decode(autopasspaybtc.v))
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(25249, 1, 0, -1)
+	wait(zadervkalovly.v)
+	closeDialog()
+	end
 	if lovlyvideo.v then 
 	sendKey(1024)
 	wait(zadervkalovly.v)
@@ -13658,11 +13678,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13670,11 +13690,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13682,11 +13702,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13694,67 +13714,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(100)
-	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
-	wait(kdpusk.v*1000)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(500)
-	closeDialog()
-	wait(500)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(500)
-	sampSendDialogResponse(15272, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(15272, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(15272, 1 , 2, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(15272, 1 , 3, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(100)
@@ -13770,11 +13734,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13782,11 +13746,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13794,11 +13758,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13806,67 +13770,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(100)
-	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
-	wait(kdpusk.v*1000)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(500)
-	closeDialog()
-	wait(500)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(500)
-	sampSendDialogResponse(15272, 1 , 0, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(15272, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(15272, 1 , 2, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
-	wait(1000)
-	closeDialog()
-	wait(200)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(15272, 1 , 3, -1)
-	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
-	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(100)
@@ -13882,11 +13790,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13894,11 +13802,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13906,11 +13814,11 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(200)
@@ -13918,11 +13826,123 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 1, -1)
+	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15274, 1 , 1, -1)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(100)
+	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..kdpusk.v.." секунд(а/ы).", 0x046D63)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	closeDialog()
+	wait(500)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(500)
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(1000)
+	closeDialog()
+	wait(200)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(200)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(200)
+	sampSendDialogResponse(25245, 1 , 1, -1)
 	wait(1000)
 	closeDialog()
 	wait(100)
@@ -13942,9 +13962,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuszidkost1 < 51 then 
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -13958,9 +13978,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost2 < 51 then 
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -13974,9 +13994,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost3 < 51 then 
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -13990,9 +14010,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost4 < 51 then 
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14014,9 +14034,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuszidkost1 < 51 then 
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14030,9 +14050,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost2 < 51 then 
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14046,9 +14066,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost3 < 51 then 
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14062,9 +14082,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost4 < 51 then 
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14086,9 +14106,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuszidkost1 < 51 then 
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14102,9 +14122,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost2 < 51 then 
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14118,9 +14138,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost3 < 51 then 
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14134,9 +14154,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost4 < 51 then 
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14158,9 +14178,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuszidkost1 < 51 then 
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14174,9 +14194,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost2 < 51 then 
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14190,9 +14210,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost3 < 51 then 
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14206,9 +14226,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost4 < 51 then 
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14230,9 +14250,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuszidkost1 < 51 then 
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14246,9 +14266,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost2 < 51 then 
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14262,9 +14282,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost3 < 51 then 
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14278,9 +14298,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuszidkost4 < 51 then 
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 2, -1)
+	sampSendDialogResponse(25244, 1 , 2, -1)
 	else
 	closeDialog()
 	end
@@ -14304,9 +14324,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14320,9 +14340,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14336,9 +14356,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14352,9 +14372,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14376,9 +14396,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14392,9 +14412,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14408,9 +14428,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14424,9 +14444,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14448,9 +14468,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14464,9 +14484,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14480,9 +14500,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14496,9 +14516,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14520,9 +14540,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14536,9 +14556,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14552,9 +14572,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14568,9 +14588,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14592,9 +14612,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14608,9 +14628,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14624,9 +14644,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14640,9 +14660,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14666,9 +14686,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14682,9 +14702,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14698,9 +14718,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14714,9 +14734,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14738,9 +14758,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14754,9 +14774,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14770,9 +14790,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14786,9 +14806,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14810,9 +14830,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14826,9 +14846,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14842,9 +14862,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14858,9 +14878,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14882,9 +14902,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14898,9 +14918,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14914,9 +14934,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14930,9 +14950,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14954,9 +14974,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(500)
 	if statuspusk then
-	sampSendDialogResponse(15272, 1 , 0, -1)
+	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14970,9 +14990,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk2 then
-	sampSendDialogResponse(15272, 1 , 1, -1)
+	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -14986,9 +15006,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk3 then
-	sampSendDialogResponse(15272, 1 , 2, -1)
+	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -15002,9 +15022,9 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	if statuspusk4 then
-	sampSendDialogResponse(15272, 1 , 3, -1)
+	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
-	sampSendDialogResponse(15273, 1 , 0, -1)
+	sampSendDialogResponse(25244, 1 , 0, -1)
 	else
 	closeDialog()
 	end
@@ -18944,6 +18964,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'19. В "Roulette Tools" добавлена кнопка "Выбрать все сундуки для открытия".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'20. В /lovec добавлено удаление игроков.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. В "Bank Menu" добавлена возможность продажи BTC каждый PD.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[27.02.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Фикс Майнинг функций (из-за обновления диалогов не работало снятие BTC, заливка жидкости и так далее)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс продажи BTC в банке (также не работало из-за обновления диалогов)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. В /lovec добавлена ловля BTC в банке.')
 			imgui.End()
 		end
 	
