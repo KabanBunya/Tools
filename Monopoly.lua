@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.10')
+script_version('3.3.11')
 
 local use = false
 local close = false
@@ -8420,7 +8420,8 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Ambassador (100 руб) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	end
@@ -16731,7 +16732,8 @@ function reklamawinmenu()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:   ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Ambassador (100 руб) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	imgui.EndChild()
