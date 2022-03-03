@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.11')
+script_version('3.3.12')
 
 local use = false
 local close = false
@@ -8419,9 +8419,9 @@ function imgui.OnDrawFrame()
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Ambassador (100 руб) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	end
@@ -8683,7 +8683,7 @@ end
 				imgui.Text('') imgui.SameLine(90) imgui.Text(u8'F3 или установленная вами клавиша - закрывает все окна.')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK скрипта (информация, помощь, предложения)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Джузеп (300 рублей))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Nismo (333 рубля))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
 				
 				imgui.Separator()
 				imgui.Text('')
@@ -16731,9 +16731,9 @@ function reklamawinmenu()
 	imgui.BeginChild('reklama##12342345345431', imgui.ImVec2(305, 56), true)
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:   ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Benito (100 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Ambassador (100 руб) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
 	imgui.EndChild()
