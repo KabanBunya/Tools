@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.12')
+script_version('3.3.13')
 
 local use = false
 local close = false
@@ -21,6 +21,8 @@ local fontsize = nil
 fontsizev2 = nil
 fontsizev3 = nil
 fontsizev4 = nil
+slotazfind = false
+findrul = false
 local fa_font = nil
 delplayer = false
 begauto = false
@@ -28,6 +30,7 @@ local npc, infnpc = {}, {}
 local admmp = 2110
 clickpay = 0
 buypay = 0
+countaz = 0
 analysis = nil
 last_text = nil
 data_cost = {} 
@@ -993,6 +996,7 @@ local SET = {
 		zadervka = 3,
 		zadervkav2 = 3,
 		zadervkatree = 10,
+		slotazrul = 1,
 		razmer = 40,
 		delayintv2 = 500,
 		vsevorul = 0,
@@ -1212,6 +1216,7 @@ checked_test13 = imgui.ImBool(false)
 checked_test14 = imgui.ImBool(false)
 ostanovka = imgui.ImBool(false)
 ostanovka2 = imgui.ImBool(false)
+ostanovka3 = imgui.ImBool(false)
 local delplayeractive = imgui.ImBool(false)
 podarki = imgui.ImBool(false)
 customlarec = imgui.ImBool(false)
@@ -3044,6 +3049,8 @@ end
 		unix_time = os.time(os.date('!*t'))
 		moscow_time = unix_time + timefix.v * 60 * 60
 		
+		if droneoption.v then developMode = 1 end
+		
 		if sampGetGamestate() == 3 then sessiononline = os.time() - sessionStart end
 		if gametime.v ~= -1 then writeMemory(0xB70153, 1, gametime.v, true) end -- установка игрового времени
 		if weather.v ~= -1 then writeMemory(0xC81320, 1, weather.v, true) end -- установка игровой погоды
@@ -3723,6 +3730,7 @@ function saveSettings(args, key)
 	ini.settings.zadervka = zadervka.v
 	ini.settings.zadervkav2 = zadervkav2.v
 	ini.settings.zadervkatree = zadervkatree.v
+	ini.settings.slotazrul = slotazrul.v
 	ini.settings.razmer = razmer.v
 	ini.settings.delayintv2 = delayintv2.v
 	ini.settings.vsevorul = vsevorul.v
@@ -4577,6 +4585,7 @@ end
 	
 	if dialogId == 9237 and checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then
 	poiskrul = text:match('Стоимость: {BEB455}0 {FFFFFF}AZ')
+	findrul = true
 	end
 	if dialogId == 119 and autoopl.v then
 	sendchot5()
@@ -4661,6 +4670,7 @@ end
 		checked_test11.v = false
 		ostanovka.v = false
 		ostanovka2.v = false
+		ostanovka3.v = false
         krytim = true
         sampAddChatMessage('{FFB140}Рулетки закончились.', 0xFFB140)
 		wait(5000)
@@ -4957,6 +4967,16 @@ end
 	if ostanovka2.v then 
 	if data.modelId == 17027 or data.modelId == 19941 or data.modelId == 18874 or data.modelId == 400 or data.modelId == 401 or data.modelId == 402 or data.modelId == 403 or data.modelId == 404 or data.modelId == 405 or data.modelId == 406 or data.modelId == 407 or data.modelId == 408 or data.modelId == 409 or data.modelId == 410 or data.modelId == 411 or data.modelId == 412 or data.modelId == 413 or data.modelId == 414 or data.modelId == 415 or data.modelId == 416 or data.modelId == 417 or data.modelId == 418 or data.modelId == 419 or data.modelId == 420 or data.modelId == 421 or data.modelId == 422 or data.modelId == 423 or data.modelId == 424 or data.modelId == 425 or data.modelId == 426 or data.modelId == 427 or data.modelId == 428 or data.modelId == 429 or data.modelId == 430 or data.modelId == 431 or data.modelId == 432 or data.modelId == 433 or data.modelId == 434 or data.modelId == 435 or data.modelId == 436 or data.modelId == 437 or data.modelId == 438 or data.modelId == 439 or data.modelId == 440 or data.modelId == 441 or data.modelId == 442 or data.modelId == 443 or data.modelId == 444 or data.modelId == 445 or data.modelId == 446 or data.modelId == 447 or data.modelId == 448 or data.modelId == 449 or data.modelId == 450 or data.modelId == 451 or data.modelId == 452 or data.modelId == 453 or data.modelId == 454 or data.modelId == 455 or data.modelId == 456 or data.modelId == 457 or data.modelId == 458 or data.modelId == 459 or data.modelId == 460 or data.modelId == 461 or data.modelId == 462 or data.modelId == 463 or data.modelId == 464 or data.modelId == 465 or data.modelId == 466 or data.modelId == 467 or data.modelId == 468 or data.modelId == 469 or data.modelId == 470 or data.modelId == 471 or data.modelId == 472 or data.modelId == 473 or data.modelId == 474 or data.modelId == 475 or data.modelId == 476 or data.modelId == 477 or data.modelId == 478 or data.modelId == 479 or data.modelId == 480 or data.modelId == 481 or data.modelId == 482 or data.modelId == 483 or data.modelId == 484 or data.modelId == 485 or data.modelId == 486 or data.modelId == 487 or data.modelId == 488 or data.modelId == 489 or data.modelId == 490 or data.modelId == 491 or data.modelId == 492 or data.modelId == 493 or data.modelId == 494 or data.modelId == 495 or data.modelId == 496 or data.modelId == 497 or data.modelId == 498 or data.modelId == 499 or data.modelId == 500 or data.modelId == 501 or data.modelId == 502 or data.modelId == 503 or data.modelId == 504 or data.modelId == 505 or data.modelId == 506 or data.modelId == 507 or data.modelId == 508 or data.modelId == 509 or data.modelId == 510 or data.modelId == 511 or data.modelId == 513 or data.modelId == 514 or data.modelId == 515 or data.modelId == 516 or data.modelId == 517 or data.modelId == 518 or data.modelId == 519 or data.modelId == 520 or data.modelId == 521 or data.modelId == 522 or data.modelId == 523 or data.modelId == 524 or data.modelId == 525 or data.modelId == 526 or data.modelId == 527 or data.modelId == 528 or data.modelId == 529 or data.modelId == 530 or data.modelId == 531 or data.modelId == 532 or data.modelId == 533 or data.modelId == 534 or data.modelId == 535 or data.modelId == 536 or data.modelId == 537 or data.modelId == 538 or data.modelId == 539 or data.modelId == 540 or data.modelId == 541 or data.modelId == 542 or data.modelId == 543 or data.modelId == 544 or data.modelId == 545 or data.modelId == 546 or data.modelId == 547 or data.modelId == 548 or data.modelId == 549 or data.modelId == 550 or data.modelId == 551 or data.modelId == 552 or data.modelId == 553 or data.modelId == 554 or data.modelId == 555 or data.modelId == 556 or data.modelId == 557 or data.modelId == 558 or data.modelId == 559 or data.modelId == 560 or data.modelId == 561 or data.modelId == 562 or data.modelId == 563 or data.modelId == 564 or data.modelId == 565 or data.modelId == 566 or data.modelId == 567 or data.modelId == 568 or data.modelId == 569 or data.modelId == 570 or data.modelId == 571 or data.modelId == 572 or data.modelId == 573 or data.modelId == 574 or data.modelId == 575 or data.modelId == 576 or data.modelId == 577 or data.modelId == 578 or data.modelId == 579 or data.modelId == 580 or data.modelId == 581 or data.modelId == 582 or data.modelId == 583 or data.modelId == 584 or data.modelId == 585 or data.modelId == 586 or data.modelId == 587 or data.modelId == 588 or data.modelId == 589 or data.modelId == 590 or data.modelId == 591 or data.modelId == 592 or data.modelId == 593 or data.modelId == 594 or data.modelId == 595 or data.modelId == 596 or data.modelId == 597 or data.modelId == 598 or data.modelId == 599 or data.modelId == 600 or data.modelId == 601 or data.modelId == 602 or data.modelId == 603 or data.modelId == 604 or data.modelId == 605 or data.modelId == 606 or data.modelId == 607 or data.modelId == 608 or data.modelId == 609 or data.modelId == 610 or data.modelId == 611 
 	then slotruletka2 = false checked_test12.v = true end
+	end
+	
+	if data.modelId == 1274 and checked_test12.v and findrul == true and ostanovka3.v then 
+	countaz = countaz + 1
+	if countaz > slotazrul.v then 
+	slotazfind = true
+	end
+	if countaz == slotazrul.v then 
+	slotazfind = true
+		end
 	end
 	
 	if checked_test11.v and slotruletka == true and ostanovka.v then
@@ -10069,7 +10089,7 @@ end
 function fixprice()
 	lua_thread.create(function()
 		wait(10000)
-		thisScript():reload()
+		sampSendChat('/invent')
 		end)
 	end
 	
@@ -10370,7 +10390,7 @@ function sampev.onServerMessage(color, text)
 	if text:match("%[Подсказка%] {FFFFFF}Вы получили +(.+)%$!") and checked_test12.v then
 	statarulpodarki = text:match('(%d+)')
 	statarulpodarki1 = tonumber(statarulpodarki:match('(%d+)'))
-	vsevorulmoney.v = vsevorulmoney.v + statarulpodarki1
+	vsevorulmoneyv2.v = vsevorulmoneyv2.v + statarulpodarki1
 	saveSettings()
 	end
 	
@@ -10469,7 +10489,7 @@ end
 		wait(100)
 		sampSendChat(u8:decode ('/ad '..adredak.v))
 		wait(300)
-		sampSendDialogResponse(15346, 1, 1, -1)
+		sampSendDialogResponse(15346, 1, 0, -1)
 		wait(200)
 		sampSendDialogResponse(15347, 1, 0, -1)
 		wait(200)
@@ -10485,7 +10505,7 @@ end
 		wait(100)
 		sampSendChat(u8:decode ('/ad '..adredak2.v))
 		wait(300)
-		sampSendDialogResponse(15346, 1, 2, -1)
+		sampSendDialogResponse(15346, 1, 1, -1)
 		wait(200)
 		sampSendDialogResponse(15347, 1, 0, -1)
 		wait(200)
@@ -11402,6 +11422,7 @@ function load_settings() -- загрузка настроек
 	zadervka = imgui.ImInt(ini.settings.zadervka)
 	zadervkav2 = imgui.ImInt(ini.settings.zadervkav2)
 	zadervkatree = imgui.ImInt(ini.settings.zadervkatree)
+	slotazrul = imgui.ImInt(ini.settings.slotazrul)
 	razmer = imgui.ImInt(ini.settings.razmer)
 	delayintv2 = imgui.ImInt(ini.settings.delayintv2)
 	vsevorul = imgui.ImInt(ini.settings.vsevorul)
@@ -12620,9 +12641,9 @@ while true do
 	  closeDialog()
       wait(500)
       sampSendClickTextdraw(2080)
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
     end
@@ -12639,9 +12660,9 @@ while true do
 	  closeDialog()
       wait(500)
       sampSendClickTextdraw(2085)
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
     end
@@ -12658,9 +12679,9 @@ while true do
 	  closeDialog()
       wait(500)
       sampSendClickTextdraw(2090)
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
     end
@@ -12677,9 +12698,9 @@ while true do
 	  closeDialog()
       wait(500)
       sampSendClickTextdraw(admmp)
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
 	end
@@ -12710,9 +12731,9 @@ while true do
 	  wait(200)
 	  closeDialog()
 	  end
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
 	end
@@ -12733,21 +12754,28 @@ while true do
 	  wait(500)
 	  sampSendClickTextdraw(2105)
 	  wait(1000)
-	  if poiskrul then
+	  if poiskrul and slotazfind == false then
 	  wait(200)
 	  sampSendDialogResponse(9237, 1, -1, -1)
 	  wait(200)
 	  closeDialog()
+	  wait(100)
+	  countaz = 0
+	  findrul = false
 	  else
 	  sampSendDialogResponse(9237, 0, -1, -1)
 	  wait(200)
 	  closeDialog()
+	  wait(100)
+	  countaz = 0
+	  findrul = false
 	  end
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
+	  slotazfind = false
 	end
 	if checked_test13.v and krytim then
 	checked_test2.v = false
@@ -12775,9 +12803,9 @@ while true do
 	  wait(200)
 	  closeDialog()
 	  end
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
 	end
@@ -12807,9 +12835,9 @@ while true do
 	  wait(200)
 	  closeDialog()
 	  end
-	  wait(1000)
+	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(500)
+	  wait(200)
       sampSendClickTextdraw(2091)
       krytim = false
 			end
@@ -15048,7 +15076,7 @@ while true do
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
-	sampSendDialogResponse(15346, 1, 1, -1)
+	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
 	wait(200)
@@ -15068,7 +15096,7 @@ while true do
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
-	sampSendDialogResponse(15346, 1, 2, -1)
+	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
 	wait(200)
@@ -15872,7 +15900,7 @@ function rpredak()
 function yashikisroulette()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(997, 503), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(997, 533), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_DROPBOX..u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize)
 			imgui.Columns(2, _, false)
 			imgui.Text('')
@@ -15987,6 +16015,10 @@ function yashikisroulette()
 			elseif otkrytie2.v then otkrytie.v = false otkrytie3.v = false 
 			elseif otkrytie3.v then otkrytie.v = false otkrytie2.v = false 
 			end
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Не обновлять слот в серебряной рулетке, если найдены ячейки с AZ")); imgui.SameLine(); imgui.ToggleButton(u8'Не обновлять слот в серебряной рулетке, если найдены ячейки с AZ', ostanovka3) imgui.SameLine(); imgui.TextQuestion(u8"Функция работает только в том случае, если вы открываете серебряные рулетки с обновлением слотов. Если выпадет слот с указанным количеством ячеек с AZ, то скрипт будет крутить данный слот, пока он не обновится и пойдет искать слот дальше.")
+			if ostanovka3.v then 
+			imgui.SliderInt(u8'Минимальное кол-во ячеек##tyre477214652',slotazrul,1, 16)
+			end
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Вторая задержка")); imgui.SameLine(); imgui.ToggleButton(u8'Вторая задержка', zadervkatwo) imgui.SameLine(); imgui.TextQuestion(u8"Суть функции в том, что если у вас есть сундук 'Илона Маска', то вторая задержка позволяет сделать проверку сундуков эффективнее. Т.е если включена 'вторая задержка', то сундуки перед 'Илоном Маском' проверяются по вашему кд, например, 1 минута и после проверки 'Илона Маска', активируется задержка, например, в 10 минут на то, чтобы осуществить опять проверку сундуков.")
 			if zadervkatwo.v then 
 			imgui.SliderInt(u8'в минутах ##477',zadervkatree,1, 60)
@@ -16023,8 +16055,10 @@ function yashikisroulette()
 			zadervka.v = '3'
 			zadervkav2.v = '3'
 			zadervkatree.v = '10'
+			slotazrul.v = '1'
 			ostanovka.v = false
 			ostanovka2.v = false
+			ostanovka3.v = false
 			checked_test5.v = false
 			checked_test6.v = false
 			checked_test7.v = false
@@ -16944,7 +16978,6 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный")); imgui.SameLine(); imgui.ToggleButton(u8' ', bindreshim); imgui.SameLine(); imgui.Text(u8("Продвинутый")) imgui.SameLine() imgui.TextQuestion(u8"Есть 2 режима работы биндера. Режим 'Обычный' - биндер не оставляет написанный текст в чате и не работают скриптовые команды через биндер. Режим 'Продвинутый' - оставляет написанный ранее текст в чате, но зато работают команды скрипта через биндер.")
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'Режим работы Дрона:')
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный")); imgui.SameLine(); imgui.ToggleButton(u8'  ', droneoption); imgui.SameLine(); imgui.Text(u8("Продвинутый")) imgui.SameLine() imgui.TextQuestion(u8"Есть 2 режима работы дрона. Режим 'Обычный' - убирает ники и прочие надписи на игроках. Режим 'Продвинутый' - не убираются ники и прочие надписи на игроках и встроен ВХ, который показывает не все ники в радиусе, а показывает ник игрока только в том случае, если вы дроном подлетели к нему.")
-			if droneoption.v then developMode = 1 end
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_ON..u8' Включить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(280, 0)) then toggle = true end 
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_OFF..u8' Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(280, 0)) then toggle = false end
 			imgui.PushItemWidth(280)
@@ -18970,6 +19003,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Фикс Майнинг функций (из-за обновления диалогов не работало снятие BTC, заливка жидкости и так далее)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс продажи BTC в банке (также не работало из-за обновления диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. В /lovec добавлена ловля BTC в банке.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[09.03.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс режима дрона "Продвинутый" (не работало должным образом после выхода из игры и приходилось заного включать функцию)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Фикс "Roulette Tools" - "Всегда открывать сундуки" (больше не будет подвисания при заходе в игру)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'27. Очередной фикс функционала "Roulette Tools" под рулеточный компас.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'28. Фикс "Piar Menu" (вместо обычных начали отправляться VIP объявления)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'29. В "Roulette Tools" добавлено "Не обновлять слот в серебряной рулетке, если найдены ячейки с AZ".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'30. В /statarul пофикшено зачисление денег в статистику при прокрутке серебряной рулетки (зачисляло в статистику бронзовых рулеток)')
 			imgui.End()
 		end
 	
@@ -20570,7 +20610,7 @@ lua_thread.create(function()
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
-	sampSendDialogResponse(15346, 1, 1, -1)
+	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
 	wait(200)
@@ -20586,7 +20626,7 @@ lua_thread.create(function()
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
-	sampSendDialogResponse(15346, 1, 2, -1)
+	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
 	wait(200)
