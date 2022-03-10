@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.13')
+script_version('3.3.14')
 
 local use = false
 local close = false
@@ -4876,7 +4876,7 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	
 	if id == 2075 and data.text == 'TELEPORT_EVENT' then
 	lua_thread.create(function()
-	admmp = 2124
+	admmp = 2119
 	wait(120000)
 	admmp = 2110
 	end)
@@ -12643,7 +12643,7 @@ while true do
       sampSendClickTextdraw(2080)
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
     end
@@ -12662,7 +12662,7 @@ while true do
       sampSendClickTextdraw(2085)
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
     end
@@ -12681,7 +12681,7 @@ while true do
       sampSendClickTextdraw(2090)
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
     end
@@ -12700,7 +12700,7 @@ while true do
       sampSendClickTextdraw(admmp)
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
 	end
@@ -12733,7 +12733,7 @@ while true do
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
 	end
@@ -12772,7 +12772,7 @@ while true do
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
 	  slotazfind = false
@@ -12805,7 +12805,7 @@ while true do
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
 	end
@@ -12837,7 +12837,7 @@ while true do
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
-	  wait(200)
+	  wait(300)
       sampSendClickTextdraw(2091)
       krytim = false
 			end
