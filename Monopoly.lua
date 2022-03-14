@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.14')
+script_version('3.3.15')
 
 local use = false
 local close = false
@@ -1143,7 +1143,6 @@ win_state['help'] = imgui.ImBool(false)
 win_state['nastroikawin'] = imgui.ImBool(false)
 win_state['googlewin'] = imgui.ImBool(false)
 win_state['support'] = imgui.ImBool(false)
-win_state['reklamawin'] = imgui.ImBool(false)
 win_state['messanger'] = imgui.ImBool(false)
 win_state['gamer'] = imgui.ImBool(false)
 win_state['yashiki'] = imgui.ImBool(false)
@@ -2150,7 +2149,7 @@ function apply_custom_style()
     colors[clr.WindowBg]               = ImVec4(0.06, 0.53, 0.98, 1.00)
 	colors[clr.PopupBg]                = ImVec4(0.06, 0.53, 0.98, 0.94)
 	end
-    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.00)
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.15)
     colors[clr.ComboBg]                = colors[clr.PopupBg]
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
     colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
@@ -2232,7 +2231,7 @@ function apply_custom_style2()
 	colors[clr.WindowBg]               = ImVec4(0.11, 0.10, 0.11, 1.00)
 	colors[clr.PopupBg]                = ImVec4(0.11, 0.10, 0.11, 0.94)
 	
-    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.15)
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.3)
     colors[clr.ComboBg]                = colors[clr.PopupBg]
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
     colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
@@ -2474,8 +2473,6 @@ function mainmenu()
 			win_state['googlewin'].v = not win_state['googlewin'].v
 		elseif win_state['support'].v then
 			win_state['support'].v = not win_state['support'].v
-		elseif win_state['reklamawin'].v then
-			win_state['reklamawin'].v = not win_state['reklamawin'].v
 		elseif win_state['messanger'].v then
 			win_state['messanger'].v = not win_state['messanger'].v
 		elseif win_state['yashiki'].v then
@@ -7855,10 +7852,6 @@ function imgui.OnDrawFrame()
 	if not win_state['main'].v then 
           imgui.Process = false
        end
-	
-	if not win_state['main'].v then 
-		win_state['reklamawin'].v = false
-	   end
 	   
 	if not win_state['main'].v then 
 		win_state['windowspusk'].v = false
@@ -7904,7 +7897,6 @@ function imgui.OnDrawFrame()
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 	   end
 	   
@@ -8086,7 +8078,51 @@ function imgui.OnDrawFrame()
 		if rabstol6.v then 
 		imgui.Image(winbackground6, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 		end
-		win_state['reklamawin'].v = true
+		
+	imgui.SameLine(340) imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 56), false)
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Открыт набор в фулл семью "Simpsons" на Arizona Role Play Prescott! В нашей семье самые дружелюбные и')
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'отзывчивые люди! Хочешь к нам? Пиши скорей в DS - Artie#8372')
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
+	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
+	imgui.EndChild()
+		
+	imgui.SameLine(5) 
+	imgui.BeginChild('##asdasasddf1246243254576456', imgui.ImVec2(318, 56), false)
+	
+	if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(140) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(140) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
+	imgui.Text("") imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11 - {0F52BA}#monopoly{0F52BA}")
+	end
+	
+	if os.date("%d") == '02' or os.date("%d") == '05' or os.date("%d") == '08' or os.date("%d") == '11' or os.date("%d") == '14' or os.date("%d") == '17' or os.date("%d") == '20' or os.date("%d") == '23' or os.date("%d") == '26' or os.date("%d") == '29' then
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Спасибо всем, а в частности тем, кто перечислен")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"ниже, за их участие в развитий скрипта:")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Роман, Июнь, Саня, Алексей, kriper2009, Islamov,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Эмиль, mizert, rodriguez_7777, Graph_Bavles,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Илья, COSMIK, arabKRYT, TodFox, Владимир,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"ner9xa, Дима, Арчи, Имран, UPuser, Павленко,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Никита, Тревоp, Jonathan Of, Игорь, Клави,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Егорик, vulya_1706, David, Элла, Petrosyan, Майк,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"AnUbiSa, Marquis, Рафи, vanyaghdh, rassaro,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Комаров, No8i4Ok, Панов, Цой, Иван, Максим,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"AngeloMoreno, Kristian, Михаил, exxc1ted, Густов,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach,")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов.")
+	end
+	
+	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Дима (100 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) | #Pharaoh (11 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	end
+	
+	imgui.EndChild()
 		
 	imgui.Text('')
 	imgui.SameLine(335)	
@@ -8406,6 +8442,14 @@ function imgui.OnDrawFrame()
 	imgui.PushFont(fontsizev2)
 	imgui.Text('') imgui.SameLine(50) imgui.Text(os.date("%H:%M")) 
 	imgui.PopFont()
+	
+	imgui.SameLine(350) imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 50), false)
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Открыт набор в фулл семью "Simpsons" на Arizona Role Play Prescott! В нашей семье самые дружелюбные')
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'и отзывчивые люди! Хочешь к нам? Пиши скорей в DS - Artie#8372')
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
+	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
+	imgui.EndChild()
+	
 	imgui.PushFont(fontsize)
 	imgui.Text('') imgui.SameLine(50) imgui.Text(os.date("%A")..', '..os.date("%B")..' '..os.date("%d"))
 	imgui.PopFont()
@@ -8441,9 +8485,9 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Yamaha (30 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Дима (100 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) | #Pharaoh (11 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -8563,7 +8607,6 @@ function imgui.OnDrawFrame()
 	imgui.PopFont()
 	
 	imgui.Text('')
-	imgui.Text('')
 	imgui.Text('') imgui.SameLine(250) imgui.BeginChild('##asdasasddf31211312', imgui.ImVec2(485, 96), false)
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() 
@@ -8581,7 +8624,6 @@ function imgui.OnDrawFrame()
 	imgui.SameLine()
 	if imgui.ImageButton(winnotesipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['noteswin'].v = not win_state['noteswin'].v end
 	imgui.Text('')
-	win_state['reklamawin'].v = false
 	imgui.EndChild()
 	imgui.End()
 	end
@@ -8829,10 +8871,6 @@ end
 	
 	if win_state['support'].v then
 		supportwinmenu()
-	end
-	
-	if win_state['reklamawin'].v then
-		reklamawinmenu()
 	end
 	
 	if win_state['messanger'].v then
@@ -9635,7 +9673,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
@@ -9693,7 +9730,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
@@ -9751,7 +9787,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
@@ -9809,7 +9844,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
@@ -9866,7 +9900,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
@@ -9923,7 +9956,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
@@ -9980,7 +10012,6 @@ function onWindowMessage(m, p)
 		win_state['nastroikawin'].v = false
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
-		win_state['reklamawin'].v = false
 		win_state['messanger'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
@@ -16721,58 +16752,6 @@ function supportwinmenu()
 		end
 		
         imgui.End()
-	end
-	
-function reklamawinmenu()
-	local tLastKeys = {} -- это у нас для клавиш
-	local input = sampGetInputInfoPtr()
-    local input = getStructElement(input, 0x8, 4)
-    local windowPosX = getStructElement(input, 0x8, 4)
-    local windowPosY = getStructElement(input, 0xC, 4)
-	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.516, 0.56))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 520), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8('РЕКЛАМА'), win_state['reklamawin'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings)
-		
-		if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
-		imgui.BeginChild('reklama##12342345345433', imgui.ImVec2(525, 56), true)
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK 'Monopoly' - ") imgui.SameLine(140) imgui.TextColoredRGB("{0F52BA}https://vk.com/monopolyfam{0F52BA}") imgui.SameLine(140) imgui.Link('https://vk.com/monopolyfam','https://vk.com/monopolyfam')
-		imgui.Text("") imgui.SameLine() imgui.TextColoredRGB("Промокод на 09 и 11, за который можно получить вирты от Монополистов: {0F52BA}#monopoly{0F52BA}   ")
-		imgui.EndChild()
-		end
-	
-	if os.date("%d") == '02' or os.date("%d") == '05' or os.date("%d") == '08' or os.date("%d") == '11' or os.date("%d") == '14' or os.date("%d") == '17' or os.date("%d") == '20' or os.date("%d") == '23' or os.date("%d") == '26' or os.date("%d") == '29' then
-	imgui.BeginChild('reklama##12342345345432', imgui.ImVec2(318, 56), true)
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Спасибо всем, а в частности тем, кто перечислен   ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"ниже, за их участие в развитий скрипта:")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Роман, Июнь, Саня, Алексей, kriper2009, Islamov,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Эмиль, mizert, rodriguez_7777, Graph_Bavles,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Илья, COSMIK, arabKRYT, TodFox, Владимир,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"ner9xa, Дима, Арчи, Имран, UPuser, Павленко,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Никита, Тревоp, Jonathan Of, Игорь, Клави,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Егорик, vulya_1706, David, Элла, Petrosyan, Майк,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"AnUbiSa, Marquis, Рафи, vanyaghdh, rassaro,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Комаров, No8i4Ok, Панов, Цой, Иван, Максим,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"AngeloMoreno, Kristian, Михаил, exxc1ted, Густов,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"kxnrsxny, Владислав, Марьян, Patrik, Milly, Alex,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Fbianchi.exe, Ambassador, ArchiYT, Bayerbach,")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Botik228, Густов.")
-	imgui.EndChild()
-	end
-	
-	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
-	imgui.BeginChild('reklama##12342345345431', imgui.ImVec2(305, 56), true)
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:   ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Yamaha (30 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| #Pharaoh (11 рублей) | Соул (5 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) |")
-	imgui.EndChild()
-	end
-	   imgui.End()
 	end
 	
 function messangerwinmenu()
