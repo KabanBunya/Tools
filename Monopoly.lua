@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.15')
+script_version('3.3.16')
 
 local use = false
 local close = false
@@ -8085,6 +8085,14 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
+	
+	imgui.SameLine(5) imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 100), false)
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
+	imgui.EndChild()
 		
 	imgui.SameLine(5) 
 	imgui.BeginChild('##asdasasddf1246243254576456', imgui.ImVec2(318, 56), false)
@@ -8115,11 +8123,13 @@ function imgui.OnDrawFrame()
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Reason (444 рубля) | Nismo (333 рубля) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Дима (100 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) | #Pharaoh (11 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Соул (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) | DonatoV (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -8483,11 +8493,13 @@ function imgui.OnDrawFrame()
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Джузеп (300 рублей) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Reason (444 рубля) | Nismo (333 рубля) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Август (100 рублей) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Ambassador (100 руб) | Дима (100 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Yamaha (30 рублей) | #Pharaoh (11 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Соул (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) | DonatoV (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -8519,7 +8531,11 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(915) 
 	imgui.Text(u8"Pong")
 	
-	imgui.Text('') 
+	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212', imgui.ImVec2(318, 35), false)
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
+	imgui.EndChild()
+	
+
 	imgui.Text('') 
 	imgui.SameLine(490)
 	if imgui.ImageButton(winsnakegame, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then snaketaken = not snaketaken win_state['main'].v = false win_state['pravilasnake'].v = true end
@@ -8587,6 +8603,11 @@ function imgui.OnDrawFrame()
 	imgui.Text(u8"2048")
 	imgui.SameLine(594) 
 	imgui.Text(u8"VKoin")
+	
+	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212', imgui.ImVec2(318, 35), false)
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
+	imgui.EndChild()
+	
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
@@ -8597,7 +8618,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
-	imgui.Text('')
+	
 	end
 	
 	imgui.Text('') 
@@ -8745,7 +8766,7 @@ end
 				imgui.Text('') imgui.SameLine(90) imgui.Text(u8'F3 или установленная вами клавиша - закрывает все окна.')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK скрипта (информация, помощь, предложения)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Nismo (333 рубля))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Reason (444 рубля))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://www.donationalerts.com/r/bunya75") end
 				
 				imgui.Separator()
 				imgui.Text('')
