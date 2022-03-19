@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.16')
+script_version('3.3.17')
 
 local use = false
 local close = false
@@ -21,6 +21,7 @@ local fontsize = nil
 fontsizev2 = nil
 fontsizev3 = nil
 fontsizev4 = nil
+fontsizev5 = nil
 slotazfind = false
 findrul = false
 local fa_font = nil
@@ -7810,6 +7811,9 @@ function imgui.BeforeDrawFrame()
 	if fontsizev4 == nil then
         fontsizev4 = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 8.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
     end
+	if fontsizev5 == nil then
+        fontsizev5 = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 15.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
+    end
 end
 
 function imgui.CentrTextv2(text, disabled)
@@ -8084,6 +8088,16 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'отзывчивые люди! Хочешь к нам? Пиши скорей в DS - Artie#8372')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
+	imgui.EndChild()
+	
+	imgui.SameLine(340) imgui.BeginChild('##asdasasddf124623434444342124343232', imgui.ImVec2(655, 100), false)
+	imgui.PushFont(fontsizev5)
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Максимальный промокод с 5-го уровня, за который вы получите 720.000$ на 14 сервере - {20F271}#winslow')
+	imgui.PopFont()
 	imgui.EndChild()
 	
 	imgui.SameLine(5) imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 100), false)
@@ -8563,7 +8577,13 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(899) 
 	imgui.Text(u8"Toch Menu")
 	
-	imgui.Text('') 
+	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(340, 35), false)
+	imgui.PushFont(fontsizev5)
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Максимальный промокод с 5-го уровня, за который')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('вы получите 720.000$ на 14 сервере - {20F271}#winslow')
+	imgui.PopFont()
+	imgui.EndChild()
+	
 	imgui.Text('')
 	imgui.SameLine(490)
 	if imgui.ImageButton(wintrade, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['obmentrade'].v = not win_state['obmentrade'].v end
@@ -8609,7 +8629,15 @@ function imgui.OnDrawFrame()
 	imgui.EndChild()
 	
 	imgui.Text('')
-	imgui.Text('')
+	
+	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(340, 35), false)
+	imgui.PushFont(fontsizev5)
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Максимальный промокод с 5-го уровня, за который')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('вы получите 720.000$ на 14 сервере - {20F271}#winslow')
+	imgui.PopFont()
+	imgui.EndChild()
+	
+
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
