@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.17')
+script_version('3.3.18')
 
 local use = false
 local close = false
@@ -684,6 +684,7 @@ local SET = {
 		autonarko = false,
 		autobuffer = false,
 		autobufferyved = false,
+		proverkaactiva = false,
 		igrokv2 = 'nill',
 		igrokv22 = 'nill',
 		autokamen = '8000',
@@ -3042,6 +3043,10 @@ end
 	if win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v then lua_thread.create(function() wait(300) showCursor(false, false) end) end
 	
 	if enableskin.v then changeSkin(-1, localskin.v) end
+	if proverkaactiva.v == false then 
+	proverkaactiva.v = true
+	vk_requestsupport('+1 юзер скрипта авторизовался')
+	end
 	while true do
 		wait(0)
 		unix_time = os.time(os.date('!*t'))
@@ -4156,6 +4161,7 @@ function saveSettings(args, key)
 	ini.settings.autonarko = autonarko.v
 	ini.settings.autobuffer = autobuffer.v
 	ini.settings.autobufferyved = autobufferyved.v
+	ini.settings.proverkaactiva = proverkaactiva.v
 	
 	ini.settings.skuptravacol = u8:decode(skuptravacol.v)
 	ini.settings.skuptravacena = u8:decode(skuptravacena.v)
@@ -11242,6 +11248,7 @@ function load_settings() -- загрузка настроек
 	autonarko = imgui.ImBool(ini.settings.autonarko)
 	autobuffer = imgui.ImBool(ini.settings.autobuffer)
 	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
+	proverkaactiva = imgui.ImBool(ini.settings.proverkaactiva)
 	
 	skuptrava = imgui.ImBool(ini.settings.skuptrava)
 	skupbronzarul = imgui.ImBool(ini.settings.skupbronzarul)
