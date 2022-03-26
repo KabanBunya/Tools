@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.20')
+script_version('3.3.21')
 
 local use = false
 local close = false
@@ -8084,8 +8084,7 @@ function imgui.OnDrawFrame()
 		end
 		
 	imgui.SameLine(340) imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 56), false)
-	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Открыт набор в фулл семью "Simpsons" на Arizona Role Play Prescott! В нашей семье самые дружелюбные и')
-	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'отзывчивые люди! Хочешь к нам? Пиши скорей в DS - Artie#8372')
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
@@ -8468,8 +8467,7 @@ function imgui.OnDrawFrame()
 	imgui.PopFont()
 	
 	imgui.SameLine(350) imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 50), false)
-	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Открыт набор в фулл семью "Simpsons" на Arizona Role Play Prescott! В нашей семье самые дружелюбные')
-	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'и отзывчивые люди! Хочешь к нам? Пиши скорей в DS - Artie#8372')
+	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
