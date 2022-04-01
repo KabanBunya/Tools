@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.22')
+script_version('3.3.23')
 
 local use = false
 local close = false
@@ -2150,7 +2150,7 @@ function apply_custom_style()
     colors[clr.WindowBg]               = ImVec4(0.06, 0.53, 0.98, 1.00)
 	colors[clr.PopupBg]                = ImVec4(0.06, 0.53, 0.98, 0.94)
 	end
-    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.15)
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.0)
     colors[clr.ComboBg]                = colors[clr.PopupBg]
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
     colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
@@ -2232,7 +2232,7 @@ function apply_custom_style2()
 	colors[clr.WindowBg]               = ImVec4(0.11, 0.10, 0.11, 1.00)
 	colors[clr.PopupBg]                = ImVec4(0.11, 0.10, 0.11, 0.94)
 	
-    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.3)
+    colors[clr.ChildWindowBg]          = ImVec4(1.00, 1.00, 1.00, 0.0)
     colors[clr.ComboBg]                = colors[clr.PopupBg]
     colors[clr.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
     colors[clr.MenuBarBg]              = ImVec4(0.26, 0.59, 0.98, 0.40)
@@ -8083,7 +8083,9 @@ function imgui.OnDrawFrame()
 		imgui.Image(winbackground6, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 		end
 	
-	imgui.SameLine(340) imgui.BeginChild('##asdasasddf124623434444342124343232', imgui.ImVec2(655, 100), false)
+	imgui.SameLine(340) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf124623434444342124343232', imgui.ImVec2(655, 100), false)
 	imgui.PushFont(fontsizev5)
 	imgui.Text('')
 	imgui.Text('')
@@ -8092,22 +8094,30 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Максимальный промокод с 5-го уровня, за который вы получите 720.000$ на 14 сервере - {20F271}#winslow')
 	imgui.PopFont()
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	
-	imgui.SameLine(340) imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 56), false)
+	imgui.SameLine(340) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 56), false)
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{00bfff}(push me){00bfff}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	
-	imgui.SameLine(5) imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 100), false)
+	imgui.SameLine(5) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 100), false)
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
 	imgui.EndChild()
-		
-	imgui.SameLine(5) 
+	imgui.PopStyleColor()
+	
+	imgui.SameLine(5)
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf1246243254576456', imgui.ImVec2(318, 56), false)
 	
 	if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
@@ -8146,6 +8156,8 @@ function imgui.OnDrawFrame()
 	end
 	
 	imgui.EndChild()
+	imgui.PopStyleColor()
+
 		
 	imgui.Text('')
 	imgui.SameLine(335)	
@@ -8466,18 +8478,23 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine(50) imgui.Text(os.date("%H:%M")) 
 	imgui.PopFont()
 	
-	imgui.SameLine(350) imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 50), false)
+	imgui.SameLine(350) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 50), false)
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	
 	imgui.PushFont(fontsize)
 	imgui.Text('') imgui.SameLine(50) imgui.Text(os.date("%A")..', '..os.date("%B")..' '..os.date("%d"))
 	imgui.PopFont()
 	imgui.Text('')
 	imgui.Text('')
-	imgui.Text('') imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462', imgui.ImVec2(318, 56), false)
+	imgui.Text('') imgui.SameLine(50) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462', imgui.ImVec2(318, 56), false)
 	
 	if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Группа VK скрипта - ") imgui.SameLine(130) imgui.TextColoredRGB("{0F52BA}https://vk.com/mono_tools{0F52BA}") imgui.SameLine(130) imgui.Link('https://vk.com/mono_tools','https://vk.com/mono_tools')
@@ -8515,6 +8532,7 @@ function imgui.OnDrawFrame()
 	end
 	
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	
 	if strinter.v == 2 then
 	imgui.SameLine(490)
@@ -8543,10 +8561,12 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(915) 
 	imgui.Text(u8"Pong")
 	
-	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212', imgui.ImVec2(318, 35), false)
+	imgui.SameLine(50) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462343444434212', imgui.ImVec2(318, 35), false)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
 	imgui.EndChild()
-	
+	imgui.PopStyleColor()
 
 	imgui.Text('') 
 	imgui.SameLine(490)
@@ -8575,12 +8595,15 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(899) 
 	imgui.Text(u8"Toch Menu")
 	
-	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(340, 35), false)
+	imgui.SameLine(50) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(340, 35), false)
 	imgui.PushFont(fontsizev5)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Максимальный промокод с 5-го уровня, за который')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('вы получите 720.000$ на 14 сервере - {20F271}#winslow')
 	imgui.PopFont()
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	
 	imgui.Text('')
 	imgui.SameLine(490)
@@ -8622,19 +8645,24 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(594) 
 	imgui.Text(u8"VKoin")
 	
-	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212', imgui.ImVec2(318, 35), false)
+	imgui.SameLine(50) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462343444434212', imgui.ImVec2(318, 35), false)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	
 	imgui.Text('')
 	
-	imgui.SameLine(50) imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(340, 35), false)
+	imgui.SameLine(50) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(340, 35), false)
 	imgui.PushFont(fontsizev5)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Максимальный промокод с 5-го уровня, за который')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('вы получите 720.000$ на 14 сервере - {20F271}#winslow')
 	imgui.PopFont()
 	imgui.EndChild()
-	
+	imgui.PopStyleColor()
 
 	imgui.Text('')
 	imgui.Text('')
@@ -8654,7 +8682,9 @@ function imgui.OnDrawFrame()
 	imgui.PopFont()
 	
 	imgui.Text('')
-	imgui.Text('') imgui.SameLine(250) imgui.BeginChild('##asdasasddf31211312', imgui.ImVec2(485, 96), false)
+	imgui.Text('') imgui.SameLine(250) 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	imgui.BeginChild('##asdasasddf31211312', imgui.ImVec2(485, 96), false)
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() 
 	if imgui.ImageButton(winphoneipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
@@ -8672,6 +8702,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winnotesipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['noteswin'].v = not win_state['noteswin'].v end
 	imgui.Text('')
 	imgui.EndChild()
+	imgui.PopStyleColor()
 	imgui.End()
 	end
 	imgui.PopStyleColor()
