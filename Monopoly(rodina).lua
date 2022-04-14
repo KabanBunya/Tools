@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.0.2')
+script_version('1.0.3')
 
 local use = false
 local close = false
@@ -13745,6 +13745,10 @@ function nastroikamenu()
 			imgui.NextColumn()
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(352, 0)) then skuppoymol() end
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Ipad Style (Beta)")); imgui.SameLine(); imgui.ToggleButton(u8'', windowsstyle) imgui.SameLine() imgui.Text(u8("Windows Style"))
+			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Skup Menu v2':")
+			imgui.PushItemWidth(200)
+			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'мс ##5523576789612',delayintv2,100, 10000)
+			imgui.PopItemWidth()
 		elseif selected3 == 5 then
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Обновления")
 			imgui.Separator()
@@ -15180,6 +15184,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс майнинг функций и добавление 6-й стойки.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Фикс перезахода между домами.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Незначительная доработка реконнекта.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Фикс Skup Menu v2 (теперь работает стабильно, если кикает, то поставьте выше задержку в "Параметры - Модификации" или в самом')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'меню перед проверкой товаров.)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. В "Параметры - Модификации" добавлена возможность настроить задержку для Skup Menu v2.')
 			imgui.End()
 		end
 	
@@ -19332,32 +19339,14 @@ end
 function buyProcess(n)
 	isBuyProcess = true
 	if inputsskup[n][5].v == true then sampSendDialogResponse(10011, 1, 0, inputsskup[n][2].v)
-	wait(300)
-	closeDialog()
-	wait(300)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(100)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(300)
-	sampSendDialogResponse(10009, 1, 1, -1)
-	
-	else sampSendDialogResponse(10011, 1, 0, inputsskup[n][1].v.." "..inputsskup[n][2].v) 
-	wait(300)
-	closeDialog()
-	wait(300)
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(100)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(300)
-	sampSendDialogResponse(10009, 1, 1, -1)
-	end
+	else sampSendDialogResponse(10011, 1, 0, inputsskup[n][1].v.." "..inputsskup[n][2].v) end
 	wait(1000)
 	inputsskup[n][4] = 1
 	local isEnd = true
 	for i=1, #inputsskup do
 		if inputsskup[i][4] == false then isEnd = false end
 	end
-	if not isEnd then sampSendDialogResponse(10009, 1, 0) else sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Выбранные вами товары успешно выставлены на скупку.", 0x046D63) isBuyProcess = false isEn = 0 win_state['skupv2'].v = true win_state['skupv3'].v = false sampShowDialog(1235, "Выставление", "{7cfc00}Предметы выставлены, можете закрывать окно", "Ок") end
+	if not isEnd then sendKey(1024) wait(delayintv2.v) sampSendDialogResponse(10009, 1, 1) else sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Выбранные вами товары успешно выставлены на скупку.", 0x046D63) isBuyProcess = false isEn = 0 win_state['skupv2'].v = true win_state['skupv3'].v = false sampShowDialog(1235, "Выставление", "{7cfc00}Предметы выставлены, можете закрывать окно", "Ок") end
 end
 
 function checkPage(menu)
