@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.24')
+script_version('3.3.25')
 
 use = false
 close = false
@@ -13069,6 +13069,7 @@ function coinclicker()
 end
 
 function vkget()
+	if vkconnect.v then 
 	longpollGetKeyv2()
 	local reject, args = function() end, ''
 	while not keyvk do 
@@ -13080,6 +13081,7 @@ function vkget()
 		url = servervk .. '?act=a_check&key=' .. keyvk .. '&ts=' .. ts .. '&wait=25' --меняем url каждый новый запрос потокa, так как server/key/ts могут изменяться
 		threadHandle(runner, url, args, longpollResolve, reject)
 		wait(100)
+		end
 	end
 end
 
@@ -23654,7 +23656,7 @@ function vk_requestsupport(msg)
 	
 function longpollGetKeyv2()
 	async_http_request('https://api.vk.com/method/groups.getLongPollServer?group_id=' .. groupvkv2.v .. '&access_token=' .. tokenvkv2.v .. '&v=5.81', '', function (result)
-		if result then
+		if result and vkconnect.v then
 			if not result:sub(1,1) == '{' then
 				vkerr = 'Ошибка!\nПричина: Нет соединения с VK!'
 				return
