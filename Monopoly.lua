@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.26')
+script_version('3.3.27')
 
 use = false
 close = false
@@ -3043,10 +3043,10 @@ function main()
 	enablekill = not enablekill
 	if givemedist.v == true then 
 	if enablekill then 
-	drawdist.v = "35.0"
-	drawdistair.v = "1000.0"
-	fog.v = "-100.0"
-	lod.v = "1.7"
+	drawdist.v = "35"
+	drawdistair.v = "1000"
+	fog.v = "-100"
+	lod.v = "1"
 	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Выполнено! Чтобы вернуть прорисовку, введите команду еще раз.", 0x046D63)
 	else
 	drawdist.v = drawdistv2.v
@@ -10708,6 +10708,7 @@ function sampev.onServerMessage(color, text)
 	if vkconnect.v and sellvip.v and text:match('^{6495ED}%[VIP%]') then vk_requestv2(text) end
 	if vkconnect.v and sellvip.v and text:match('^{F345FC}%[PREMIUM%]') then vk_requestv2(text) end
 	if vkconnect.v and sellorg.v and color == 766526463 and text:match('^%[F%]') then vk_requestv2(text) end
+	if vkconnect.v and sellorg.v and color == 766526463 and text:match('^%[R%]') then vk_requestv2(text) end
 	if vkconnect.v and sellbank.v and text:match("Вы перевели") then vk_requestv2(text) end
 	if vkconnect.v and sellbank.v and text:match("Вам поступил перевод на ваш счет в размере") then vk_requestv2(text) end
 
@@ -19056,10 +19057,10 @@ function nastroikamenu()
 								saveSettings()
 								end
 								imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки 'FPS UP' возвращены по умолчанию.", 0x046D63) 
-								drawdist.v = "250.0"
-								drawdistair.v = "1000.0"
-								fog.v = "1.0"
-								lod.v = "280.0"
+								drawdist.v = "250"
+								drawdistair.v = "1000"
+								fog.v = "1"
+								lod.v = "280"
 								givemedist.v = false
 								saveSettings()
 								end
