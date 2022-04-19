@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.25')
+script_version('3.3.26')
 
 use = false
 close = false
@@ -982,6 +982,7 @@ local SET = {
 		autobeg = false,
 		chatauto = false,
 		chatmessage = false,
+		givemedist = false,
 		infoX = 0,
 		infoY = 0,
 		infoX2 = 0,
@@ -1024,6 +1025,14 @@ local SET = {
 		zadervkareconv2 = 15,
 		bufozy = 400,
 		zadervkareconrestart = 10,
+        drawdist = 250,
+        drawdistair = 1000,
+        fog = 1,
+        lod = 280,
+		drawdistv2 = 250,
+        drawdistairv2 = 1000,
+        fogv2 = 1,
+        lodv2 = 280,
 		zadervkaferma = 30,
 		zadervka = 3,
 		zadervkav2 = 3,
@@ -1139,32 +1148,6 @@ local maincfg = inicfg.load({--конфиг для хоткеев
 	}
 },'Mono\\hotkeymono.ini')
 inicfg.save(maincfg,'Mono\\hotkeymono.ini')
-
-local directIni = "Mono\\gamefixer.ini"
-local ini2 = inicfg.load(inicfg.load({
-    settings = {
-        drawdist = "250.0",
-        drawdistair = "1000.0",
-        fog = "1.0",
-        lod = "280.0",
-		drawdistv2 = "250.0",
-        drawdistairv2 = "1000.0",
-        fogv2 = "1.0",
-        lodv2 = "280.0",
-        givemedist = false
-    },
-}, directIni))
-
-function save()
-    inicfg.save(ini2, directIni)
-end
-
-local sliders = {
-    drawdist = imgui.ImFloat(ini2.settings.drawdist),
-    drawdistair = imgui.ImFloat(ini2.settings.drawdistair),
-    fog = imgui.ImFloat(ini2.settings.fog),
-    lod = imgui.ImFloat(ini2.settings.lod),
-}
 
 local SeleList = {"Досье", "Сведения", "Пентагон"} 
 
@@ -3058,18 +3041,18 @@ function main()
 	sampRegisterChatCommand("connectname", connect_cmdname)
 	sampRegisterChatCommand("killgraph", function() 
 	enablekill = not enablekill
-	if ini2.settings.givemedist == true then 
+	if givemedist.v == true then 
 	if enablekill then 
-	ini2.settings.drawdist = "35.0"
-	ini2.settings.drawdistair = "1000.0"
-	ini2.settings.fog = "-100.0"
-	ini2.settings.lod = "1.7"
+	drawdist.v = "35.0"
+	drawdistair.v = "1000.0"
+	fog.v = "-100.0"
+	lod.v = "1.7"
 	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Выполнено! Чтобы вернуть прорисовку, введите команду еще раз.", 0x046D63)
 	else
-	ini2.settings.drawdist = ini2.settings.drawdistv2
-	ini2.settings.drawdistair = ini2.settings.drawdistairv2
-	ini2.settings.fog = ini2.settings.fogv2
-	ini2.settings.lod = ini2.settings.lodv2
+	drawdist.v = drawdistv2.v
+	drawdistair.v = drawdistairv2.v
+	fog.v = fogv2.v
+	lod.v = lodv2.v
 	sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Выполнено! Прорисовка возвращена на ваши значения.", 0x046D63)
 	end
 	else 
@@ -3153,7 +3136,7 @@ end
 	if win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v then lua_thread.create(function() wait(300) showCursor(false, false) end) end
 	
 	if enableskin.v then changeSkin(-1, localskin.v) end
-	if ini2.settings.givemedist then gotofunc("GivemeDist") end
+	if givemedist.v then gotofunc("GivemeDist") end
 	while true do
 		wait(0)
 		
@@ -3406,23 +3389,23 @@ end
 			end
 		end
 		
-		 if ini2.settings.givemedist then
+		 if givemedist.v then
             if isCharInAnyPlane(PLAYER_PED) or isCharInAnyHeli(PLAYER_PED) then --airveh dist
-                if memory.getfloat(12044272, false) ~= ini2.settings.drawdistair then
-                    memory.setfloat(12044272, ini2.settings.drawdistair, false)
-                    memory.setfloat(13210352, ini2.settings.fog, false)
-                    memory.setfloat(0x858FD8, ini2.settings.lod, false)
+                if memory.getfloat(12044272, false) ~= drawdistair.v then
+                    memory.setfloat(12044272, drawdistair.v, false)
+                    memory.setfloat(13210352, fog.v, false)
+                    memory.setfloat(0x858FD8, lod.v, false)
                 end
             else
-                if memory.getfloat(12044272, false) ~= ini2.settings.drawdist then
-                    memory.setfloat(12044272, ini2.settings.drawdist, false)
-                    memory.setfloat(13210352, ini2.settings.fog, false)
-                    memory.setfloat(0x858FD8, ini2.settings.lod, false)
+                if memory.getfloat(12044272, false) ~= drawdist.v then
+                    memory.setfloat(12044272, drawdist.v, false)
+                    memory.setfloat(13210352, fog.v, false)
+                    memory.setfloat(0x858FD8, lod.v, false)
                 end
             end
             if memory.getfloat(13210352, false) >= memory.getfloat(12044272, false) then --fix bug dist
-                memory.setfloat(13210352, ini2.settings.drawdist - 1.0, false)
-                ini2.settings.fog = ini2.settings.drawdist - 1.0
+                memory.setfloat(13210352, drawdist.v - 1.0, false)
+                fog.v = drawdist.v - 1.0
             end
         end
 			
@@ -3846,6 +3829,7 @@ function saveSettings(args, key)
 	ini.settings.launcherpc = launcherpc.v
 	ini.settings.launcherm = launcherm.v
 	ini.settings.chatauto = chatauto.v
+	ini.settings.givemedist = givemedist.v
 	ini.settings.chatmessage = chatmessage.v
 	ini.settings.eat = eat.v
 	ini.settings.eathouse = eathouse.v
@@ -3916,6 +3900,14 @@ function saveSettings(args, key)
 	ini.settings.zadervkareconv2 = zadervkareconv2.v
 	ini.settings.bufozy = bufozy.v
 	ini.settings.zadervkareconrestart = zadervkareconrestart.v
+	ini.settings.drawdist = drawdist.v
+	ini.settings.drawdistair = drawdistair.v
+	ini.settings.fog = fog.v
+	ini.settings.lod = lod.v
+	ini.settings.drawdistv2 = drawdistv2.v
+	ini.settings.drawdistairv2 = drawdistairv2.v
+	ini.settings.fogv2 = fogv2.v
+	ini.settings.lodv2 = lodv2.v
 	ini.settings.zadervkaferma = zadervkaferma.v
 	ini.settings.zadervka = zadervka.v
 	ini.settings.zadervkav2 = zadervkav2.v
@@ -11919,6 +11911,14 @@ function load_settings() -- загрузка настроек
 	zadervkareconv2 = imgui.ImInt(ini.settings.zadervkareconv2)
 	bufozy = imgui.ImInt(ini.settings.bufozy)
 	zadervkareconrestart = imgui.ImInt(ini.settings.zadervkareconrestart)
+	drawdist = imgui.ImInt(ini.settings.drawdist)
+	drawdistair = imgui.ImInt(ini.settings.drawdistair)
+	fog = imgui.ImInt(ini.settings.fog)
+	lod = imgui.ImInt(ini.settings.lod)
+	drawdistv2 = imgui.ImInt(ini.settings.drawdistv2)
+	drawdistairv2 = imgui.ImInt(ini.settings.drawdistairv2)
+	fogv2 = imgui.ImInt(ini.settings.fogv2)
+	lodv2 = imgui.ImInt(ini.settings.lodv2)
 	zadervkaferma = imgui.ImInt(ini.settings.zadervkaferma)
 	zadervka = imgui.ImInt(ini.settings.zadervka)
 	zadervkav2 = imgui.ImInt(ini.settings.zadervkav2)
@@ -11995,6 +11995,7 @@ function load_settings() -- загрузка настроек
 	launcherpc = imgui.ImBool(ini.settings.launcherpc)
 	launcherm = imgui.ImBool(ini.settings.launcherm)
 	chatauto = imgui.ImBool(ini.settings.chatauto)
+	givemedist = imgui.ImBool(ini.settings.givemedist)
 	chatmessage = imgui.ImBool(ini.settings.chatmessage)
 	eat = imgui.ImBool(ini.settings.eat)
 	eathouse = imgui.ImBool(ini.settings.eathouse)
@@ -19014,53 +19015,53 @@ function nastroikamenu()
 			end
 			
 			 if imgui.CollapsingHeader(u8"FPS UP") then
-                        imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(ini2.settings.givemedist and 'Выключить' or 'Включить')..u8" возможность менять прорисовку", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(300, 25)) then
-                            ini2.settings.givemedist = not ini2.settings.givemedist
-                            sampAddChatMessage(ini2.settings.givemedist and '['..nazvanie.v..']{FFFFFF} Возможность менять прорисовку {73b461}включена' or '['..nazvanie.v..'] {FFFFFF}Возможность менять прорисовку {dc4747}выключена', 0x046D63)
+                        imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(givemedist.v and 'Выключить' or 'Включить')..u8" возможность менять прорисовку", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(300, 25)) then
+                            givemedist.v = not givemedist.v
+                            sampAddChatMessage(givemedist.v and '['..nazvanie.v..']{FFFFFF} Возможность менять прорисовку {73b461}включена' or '['..nazvanie.v..'] {FFFFFF}Возможность менять прорисовку {dc4747}выключена', 0x046D63)
                             gotofunc("GivemeDist")
                         end
 						imgui.SameLine(); imgui.TextQuestion(u8"Внимание! Функция может конфликтовать с похожими скриптами по функционалу в формате cleo, asi и lua.")
-                        if ini2.settings.givemedist then
+                        if givemedist.v then
                            imgui.Text('') imgui.SameLine() imgui.Text(u8"Дальность прорисовки:")
                             imgui.PushItemWidth(625)
-                               imgui.Text('') imgui.SameLine()  if imgui.SliderFloat(u8"##Drawdist", sliders.drawdist, 35, 3600, "%.1f") then
-                                    ini2.settings.drawdist = ("%.1f"):format(sliders.drawdist.v)
-                                    memory.setfloat(12044272, ini2.settings.drawdist, false)
+                               imgui.Text('') imgui.SameLine()  if imgui.SliderInt(u8"##Drawdist", drawdist, 35, 3600, "%.1f") then
+                                    drawdist.v = ("%.1f"):format(drawdist.v)
+                                    memory.setfloat(12044272, drawdist.v, false)
                                 end
                               imgui.Text('') imgui.SameLine()  imgui.Text(u8"Дальность прорисовки в воздушном транспорте:")
-                               imgui.Text('') imgui.SameLine() if imgui.SliderFloat(u8"##drawdistair", sliders.drawdistair, 35, 3600, "%.1f") then
-                                    ini2.settings.drawdistair = ("%.1f"):format(sliders.drawdistair.v)
+                               imgui.Text('') imgui.SameLine() if imgui.SliderInt(u8"##drawdistair", drawdistair, 35, 3600, "%.1f") then
+                                    drawdistair.v = ("%.1f"):format(drawdistair.v)
                                     if isCharInAnyPlane(PLAYER_PED) or isCharInAnyHeli(PLAYER_PED) then
-                                        if memory.getfloat(12044272, false) ~= ini2.settings.drawdistair then
-                                            memory.setfloat(12044272, ini2.settings.drawdistair, false)
+                                        if memory.getfloat(12044272, false) ~= drawdistair.v then
+                                            memory.setfloat(12044272, drawdistair.v, false)
                                         end
                                     end
                                 end
                                imgui.Text('') imgui.SameLine() imgui.Text(u8"Дальность тумана:")
-                              imgui.Text('') imgui.SameLine()  if imgui.SliderFloat(u8"##fog", sliders.fog, -100, 500, "%.1f") then
-                                    ini2.settings.fog = ("%.1f"):format(sliders.fog.v)
-                                    memory.setfloat(13210352, ini2.settings.fog, false)
+                              imgui.Text('') imgui.SameLine()  if imgui.SliderInt(u8"##fog", fog, -100, 500, "%.1f") then
+                                    fog.v = ("%.1f"):format(fog.v)
+                                    memory.setfloat(13210352, fog.v, false)
                                 end
                                imgui.Text('') imgui.SameLine() imgui.Text(u8"Дальность лодов:")
-                               imgui.Text('') imgui.SameLine() if imgui.SliderFloat(u8"##lod", sliders.lod, 0, 300, "%.1f") then
-                                    ini2.settings.lod = ("%.1f"):format(sliders.lod.v)
-                                    memory.setfloat(0x858FD8, ini2.settings.lod, false)
+                               imgui.Text('') imgui.SameLine() if imgui.SliderInt(u8"##lod", lod, 0, 300, "%.1f") then
+                                    lod.v = ("%.1f"):format(lod.v)
+                                    memory.setfloat(0x858FD8, lod.v, false)
                                 end
 								imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then 
 								sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки 'FPS UP' успешно сохранены.", 0x046D63) 
-								ini2.settings.drawdistv2 = ini2.settings.drawdist
-								ini2.settings.drawdistairv2 = ini2.settings.drawdistair
-								ini2.settings.fogv2 = ini2.settings.fog
-								ini2.settings.lodv2 = ini2.settings.lod
-								save() 
+								drawdistv2.v = drawdist.v
+								drawdistairv2.v = drawdistair.v
+								fogv2.v = fog.v
+								lodv2.v = lod.v
+								saveSettings()
 								end
 								imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки 'FPS UP' возвращены по умолчанию.", 0x046D63) 
-								ini2.settings.drawdist = "250.0"
-								ini2.settings.drawdistair = "1000.0"
-								ini2.settings.fog = "1.0"
-								ini2.settings.lod = "280.0"
-								ini2.settings.givemedist = false
-								save()
+								drawdist.v = "250.0"
+								drawdistair.v = "1000.0"
+								fog.v = "1.0"
+								lod.v = "280.0"
+								givemedist.v = false
+								saveSettings()
 								end
                             imgui.PopItemWidth()
                         end
@@ -19088,7 +19089,7 @@ function nastroikamenu()
 				imgui.Text('')
 				imgui.Text('')
 				imgui.Text('')
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(730, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) inicfg.save(maincfg, 'Mono\\hotkeymono.ini') saveSettings() ini2.settings.drawdistv2 = ini2.settings.drawdist ini2.settings.drawdistairv2 = ini2.settings.drawdistair ini2.settings.fogv2 = ini2.settings.fog ini2.settings.lodv2 = ini2.settings.lod save()  end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(730, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) inicfg.save(maincfg, 'Mono\\hotkeymono.ini') drawdistv2.v = drawdist.v drawdistairv2.v = drawdistair.v fogv2.v = fog.v lodv2.v = lod.v saveSettings() end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(730, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию. Перезапустите скрипт, если не восстановились клавиши.", 0x046D63) 
 				timefix.v = '3'
 				enableskin.v = false
@@ -24905,7 +24906,7 @@ end
 function gotofunc(fnc)
     if fnc == "GivemeDist" or fnc == "all" then
         if sampGetVersion() == "0.3.7-R1" then
-            if ini2.settings.givemedist then
+            if givemedist.v then
                 memory.write(5499541, 12044272, 4, false)-- вкл
                 memory.write(8381985, 13213544, 4, false)-- вкл
             else
