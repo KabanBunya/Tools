@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.27')
+script_version('3.3.28')
 
 use = false
 close = false
@@ -38,6 +38,7 @@ analysis = nil
 last_text = nil
 data_cost = {} 
 checkingvip = false
+callwork = false
 tVips = {}
 lavki = {}
 
@@ -163,6 +164,21 @@ itogoskupcoltsr = 0
 itogoskupcolsemmoneta = 0
 
 krytim = true
+
+local keysphone = {
+	[1] = 2108,
+	[2] = 2106,
+	[3] = 2107,
+	[4] = 2111,
+	[5] = 2109,
+	[6] = 2110,
+	[7] = 2114,
+	[8] = 2112,
+	[9] = 2113,
+	[0] = 2115,
+	["call"] = 2100,
+	["go"] = 2101
+}
 
 local restore_text = false
 local dialogs_data = {}
@@ -797,6 +813,7 @@ local SET = {
 		skupautocena = '2000000',
 		activator = 'mono',
 		activcall = 'call',
+		activcallphone = 'icall',
 		nazvanie = 'Mono Tools',
 		nazvanietext = 'Mono Tools',
 		autopassopl = '6',
@@ -3032,6 +3049,7 @@ function main()
 	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
 	sampRegisterChatCommand('pmc', pmchat) -- регистрируем команду
 	sampRegisterChatCommand(activcall.v, Numbercall)
+	sampRegisterChatCommand(activcallphone.v, scrphone)
 	sampRegisterChatCommand('bufram', BufRam)
 	sampRegisterChatCommand('clearram', ClearRam)
 	sampRegisterChatCommand("killinfo", show_dial)
@@ -3060,7 +3078,7 @@ function main()
 		end
 	end)
 	sampRegisterChatCommand("statarul", show_rulstat)
-	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера запущен.", 0x046D63) else isEn = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", 0x046D63) end end)
+	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите 'Добавить товар на покупку'.", 0x046D63) else isEn = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", 0x046D63) end end)
 	if pricecr.v then sampRegisterChatCommand('price', get_price) end
 	if priceab.v then sampRegisterChatCommand('carprice', function(searchv21)
 		searchv21 = to_lower(searchv21)
@@ -3121,14 +3139,11 @@ end
 		end)   
 
 	sampRegisterChatCommand("strobes", function()
-		if isCharInAnyCar(PLAYER_PED) then
+		if isCharInAnyCars(playerPed) then
 			local car = storeCarCharIsInNoSave(PLAYER_PED)
 			local driverPed = getDriverOfCar(car)
-			
-			if PLAYER_PED == driverPed then
-				local state = not isCarSirenOn(car)
-				switchCarSiren(car, state)
-			end
+			state = not state
+			switchCarSiren(car, state)
 		end
 	end)
 	autoupdate("https://raw.githubusercontent.com/KabanBunya/Tools/main/update.json", '['..string.upper(thisScript().name)..']: ')
@@ -4106,6 +4121,7 @@ function saveSettings(args, key)
 	ini.settings.adredak7 = u8:decode(adredak7.v)
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.activcall = u8:decode(activcall.v)
+	ini.settings.activcallphone = u8:decode(activcallphone.v)
 	ini.settings.nazvanie = u8:decode(nazvanie.v)
 	ini.settings.nazvanietext = u8:decode(nazvanietext.v)
 	ini.settings.autologin = autologin.v
@@ -11224,6 +11240,32 @@ end
 	if workcal and (text:match("%{FFFFFF%}Номера телефонов государственных служб:")or text:match('%{FFFFFF%}Проверить баланс телефона')or text:match('%{FFFFFF%}Служба точного времени')or text:match('%{FFFFFF%}Полицейский участок')or text:match('%{FFFFFF%}Скорая помощь')or text:match('%{FFFFFF%}Такси')or text:match('%{FFFFFF%}Механик')or text:match('%{FFFFFF%}Справочная центрального банка')or text:match('%{FFFFFF%}Служба по вопросам жилой недвижимости') )then 
 		return false
 	end
+	if callwork == true and (text:match("%{FFFFFF%}Номера телефонов государственных служб:")or text:match('%{FFFFFF%}Проверить баланс телефона')or text:match('%{FFFFFF%}Служба точного времени')or text:match('%{FFFFFF%}Полицейский участок')or text:match('%{FFFFFF%}Скорая помощь')or text:match('%{FFFFFF%}Такси')or text:match('%{FFFFFF%}Механик')or text:match('%{FFFFFF%}Справочная центрального банка')or text:match('%{FFFFFF%}Служба по вопросам жилой недвижимости') )then 
+		return false
+	end
+	
+	if callwork == true and text:match("^{......}%a+_%a+%[%d+%]:    {......}%d+$") then 
+		local callnumber = text:match("^{......}%a+_%a+%[%d+%]:    {......}(%d+)$")
+		lua_thread.create(function()
+			sampAddChatMessage('['..nazvanie.v..']{FFFFFF} Начинаю звонить по номеру {00C2BB}'..callnumber, 0x046D63)
+			wait(zadervkacall.v)
+			numberv2 = callnumber
+			wait(zadervkacall.v)
+			sampSendChat("/phone")
+			sampSendDialogResponse(1000, 1, 0, 0)
+			sampSendClickTextdraw(keysphone["go"])
+			wait(zadervkacall.v)
+			parseNumber(numberv2)
+			wait(zadervkacall.v)
+			sampSendClickTextdraw(keysphone["call"])
+			wait(zadervkacall.v)
+			sampSendDialogResponse(966, 1, 10, 0)
+			wait(1600)
+			callwork = false
+		end)
+		return false
+	end
+	
 	if workcal and text:match("^{......}%a+_%a+%[%d+%]:    {......}%d+$") then 
 		local numbercall = text:match("^{......}%a+_%a+%[%d+%]:    {......}(%d+)$")
 		lua_thread.create(function()
@@ -11842,6 +11884,7 @@ function load_settings() -- загрузка настроек
 	idtext9 = imgui.ImBuffer(u8(ini.settings.idtext9), 256)
 	activator = imgui.ImBuffer(u8(ini.settings.activator), 256)
 	activcall = imgui.ImBuffer(u8(ini.settings.activcall), 256)
+	activcallphone = imgui.ImBuffer(u8(ini.settings.activcallphone), 256)
 	nazvanie = imgui.ImBuffer(u8(ini.settings.nazvanie), 256)
 	nazvanietext = imgui.ImBuffer(u8(ini.settings.nazvanietext), 256)
 	deagleone = imgui.ImBuffer(u8(ini.settings.deagleone), 256)
@@ -12768,128 +12811,544 @@ end
 function strobe()
 	while true do
 		wait(0)
-		
-		if isCharInAnyCar(PLAYER_PED) then
-		
+		if isCharInAnyCars(playerPed) then
 			local car = storeCarCharIsInNoSave(PLAYER_PED)
 			local driverPed = getDriverOfCar(car)
-			
 			if isCarSirenOn(car) and PLAYER_PED == driverPed then
-			
 				local ptr = getCarPointer(car) + 1440
 				forceCarLights(car, 2)
-				wait(50)
+				--wait(50)
 				stroboscopes(7086336, ptr, 2, 0, 1, 3)
-
-				while isCarSirenOn(car) do
-					wait(0)
-					for i = 1, 12 do
-						wait(100)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						wait(100)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						wait(100)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						wait(100)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-					end
-					
-					if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-
-					for i = 1, 6 do
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 1, 3)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-						wait(300)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-					end
-					
-					if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-
-					for i = 1, 3 do
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 1, 3)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(60)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						wait(60)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(350)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(60)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(50)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						wait(50)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(100)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(100)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						wait(100)
-						stroboscopes(7086336, ptr, 2, 0, 0, 1)
-						stroboscopes(7086336, ptr, 2, 0, 1, 0)
-						wait(80)
-						stroboscopes(7086336, ptr, 2, 0, 1, 1)
-						stroboscopes(7086336, ptr, 2, 0, 0, 0)
-						if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
-					end
-					
-					if not isCarSirenOn(car) or not isCharInAnyCar(PLAYER_PED) then break end
+				while isCarSirenOn(car) do wait(1)
+						for i = 1, 12 do
+							wait(100)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							wait(100)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							wait(100)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							wait(100)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+						end
+						if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+						for i = 1, 6 do
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 1, 3)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+							wait(300)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+						end		
+						if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+						for i = 1, 3 do
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 1, 3)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(60)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							wait(60)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(350)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(60)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(50)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							wait(50)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(100)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(100)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							wait(100)
+							stroboscopes(7086336, ptr, 2, 0, 0, 1)
+							stroboscopes(7086336, ptr, 2, 0, 1, 0)
+							wait(80)
+							stroboscopes(7086336, ptr, 2, 0, 1, 1)
+							stroboscopes(7086336, ptr, 2, 0, 0, 0)
+							if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
+						end
+						if not isCarSirenOn(car) or not isCharInAnyCars(playerPed) then break end
 				end
 			end
 		end
 	end
 end
 
+function isCharInAnyCars(ped)
+	if isCharInAnyCar(ped) and not isCharInAnyBoat(ped) and not isCharInAnyHeli(ped) and not isCharInAnyPlane(ped) and not isCharOnAnyBike(ped) then return true 
+	else return false end
+end
+
 function isCharInAnyCar(ped)
-	local vehicles = {602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585, 405, 587, 409, 466, 550, 492, 566, 546, 540, 551, 421, 516, 529, 485, 552, 431, 438, 437, 574, 420, 525, 408, 416, 596, 433, 597, 427, 599, 490, 528, 601, 407, 428, 544, 523, 470, 598, 499, 588, 609, 403, 498, 514, 524, 423, 532, 414, 578, 443, 486, 515, 406, 531, 573, 456, 455, 459, 543, 422, 583, 482, 478, 605, 554, 530, 418, 572, 582, 413, 440, 536, 575, 534, 567, 535, 576, 412, 402, 542, 603, 475, 568, 557, 424, 471, 504, 495, 457, 483, 508, 500, 444, 556, 429, 411, 541, 559, 415, 561, 480, 560, 562, 506, 565, 451, 434, 558, 494, 555, 502, 477, 503, 579, 400, 404, 489, 505, 479, 442, 458}
+	local vehicles = {400,	
+401, 	
+402, 
+403, 	
+404, 	
+405, 	
+406, 
+407, 	
+408, 	
+409, 	
+410, 	
+411, 	
+412, 	
+413, 	
+414, 	
+415, 	
+416, 	
+417, 	
+418, 	
+419, 	
+420, 	
+421, 	
+422, 	
+423, 	
+424, 	
+425, 	
+426, 	
+427, 	
+428, 	
+429, 	
+430, 
+431, 	
+432, 	
+433, 	
+434, 	
+435, 	
+436, 	
+437,	
+438, 	
+439, 	
+440, 	
+441, 	
+442, 	
+443, 	
+444,	
+445, 	
+446, 	
+447, 	
+448,	
+449, 	
+450, 	
+451, 	
+452, 	
+453, 	
+454, 	
+455, 	
+456, 	
+457,	
+458, 	
+459,	
+460, 	
+461,	
+462,	
+463,	
+464, 	
+465, 	
+466, 	
+467, 	
+468,	
+469, 	
+470,	
+471,	
+472, 		
+473, 	
+474, 	
+475, 	
+476, 	
+477, 	
+478, 	
+479, 	
+480,	
+481,	
+482, 	
+483, 	
+484, 	
+485, 	
+486, 	
+487, 	
+488, 	
+489,	
+490,	
+491, 	
+492, 	
+493, 	
+494,	
+495,	
+496,	
+497, 	
+498, 	
+499, 	
+500,	
+501, 	
+502,	
+503,	
+504, 	
+505,	
+506, 	
+507, 	
+508, 	
+509,	
+510,	
+511, 	
+512, 	
+513, 	
+514, 	
+515, 	
+516, 	
+517, 	
+518, 	
+519, 	
+520, 	
+521,	
+522,	
+523,	
+524, 	
+525, 	
+526, 	
+527, 	
+528, 	
+529, 	
+530, 	
+531, 	
+532, 	
+533,	
+534, 	
+535, 	
+536, 	
+537, 	
+538, 	
+539, 	
+540, 	
+541, 	
+542, 	
+543,	
+544, 	
+545, 	
+546, 	
+547, 	
+548, 	
+549,	
+550, 	
+551, 	
+552, 	
+553, 	
+554,	
+555,	
+556,	
+557,	
+558,	
+559,	
+560,	
+561,	
+562,	
+563, 	
+564, 	
+565,	
+566,	
+567, 	
+568, 	
+569, 	
+570, 	
+571, 	
+572,	
+573,	
+574,
+575, 	
+576, 	
+577, 	
+578, 	
+579,	
+580, 	
+581,	
+582,
+583,	
+584, 	
+585,	
+586,	
+587, 	
+588, 	
+589,	
+590, 	
+591, 
+592, 	
+593,																
+594, 	
+595, 	
+596, 	
+597, 	
+598, 	
+599, 	
+600,	
+601, 	
+602,	
+603, 	
+604, 	
+605,	
+606, 	
+607, 	
+608, 	
+609, 	
+610, 	
+611, 	
+612,	
+613,	
+614,	
+662, 	
+663, 	
+665, 	
+666,	
+667,	
+668, 	
+699,	
+793,	
+794,	
+909, 	
+965,	
+1194,	
+1195, 	
+1196, 
+1197, 
+1198, 	
+1199, 	
+1200, 	
+1201, 	
+1202, 	
+1203, 	
+1204, 	
+1205, 	
+3155, 	
+3156,	
+3157, 	
+3158,	
+3194,	
+3195, 	
+3196, 	
+3197, 	
+3198, 
+3199, 	
+3200,	
+3201,	
+3202,	
+3203,	
+3204,	
+3205,	
+3206,	
+3207,	
+3208,	
+3209,	
+3210,	
+3211,	
+3212,	
+3213,	
+3215,	
+3216,	
+3217,	
+3218,	
+3219,	
+3220,	
+3222,	
+3223,	
+3224,	
+3232,	
+3233,	
+3234,	
+3235,	
+3236,	
+3237,	
+3238,	
+3239,	
+3240,	
+3245,	
+3247, 	
+3248,
+3251,
+3254, 	
+3266, 	
+3348, 	
+3974,	
+4542,	
+4543,	
+4544,	
+4545,
+4546,	
+4547,	
+4548,	
+4774,	
+4775,	
+4776,	
+4777,	
+4778,	
+4779,	
+4780,	
+4781,	
+4782,	
+4783,	
+4784,	
+4785,	
+4786,	
+4787,	
+4788,	
+4789,	
+4790,	
+4791,	
+4792,	
+4793,	
+4794,	
+4795,	
+4796,	
+4797,	
+4798,	
+4799,	
+4800, 	
+4801, 	
+4802,	
+4803,	
+6604,	
+6605,	
+6606,	
+6607,	
+6608,	
+6609,	
+6610,	
+6611,	
+6612,	
+6613,	
+6614,	
+6615,	
+6616,	
+6617,	
+6618,	
+6619,	
+6620,	
+6621,	
+6622,	
+6623,	
+6624,	
+6625,	
+12713,	
+12714, 
+12715, 	
+12716, 	
+12717,	
+12718,	
+12719,	
+12720,
+12721, 
+12722, 	
+12723,
+12724,	
+12725, 
+12726, 
+12727,	
+12728,	
+12729, 	
+12730,	
+12731, 	
+12732, 	
+12733, 
+12734, 
+12735, 	
+12736,	
+12737, 	
+12738,	
+12739, 	
+12740, 
+12741,	
+12742,	
+12743, 
+14119,	
+14120,	
+14121,
+14122,	
+14123,
+14124,	
+14767,	
+14768,	
+14769,	
+14857,	
+14884,
+14899,	
+14904,	
+14905,	
+14906,	
+14907,	
+14908,	
+14909,	
+14910,	
+14911,	
+14912,	
+14913,	
+14914,	
+14915,	
+14916,	
+14917,	
+14918,	
+14919,	
+15085,	
+15098, 
+15099,	
+15100,	
+15101,	
+15102,	
+15103,	
+15104,	
+15105,	
+15106,	
+15107,	
+15108,	
+15109,	
+15110,	
+15111,	
+15112
+}
 	for i, v in ipairs(vehicles) do
 		if isCharInModel(ped, v) then return true end
 	end
@@ -17200,9 +17659,10 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/sfind - Отключение автопоиска.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon - Перезайти на сервер через 30 секунд.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon [время] - Перезайти на сервер через указанное время(в секундах).")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/strobes - включение/отключение стробоскопов.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/strobes - включение/отключение стробоскопов (перед использованием включите фары у транспорта на ctrl или /lights.)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call [id] - позвонить на указанный ID.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call last - позвонить на номер, на который вы звонили в последний раз.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/icall [id] - позвонить на указанный ID (работает только на IPHONE)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/killinfo - посмотреть информацию, какому игроку вы нанесли в последний раз урон или какой игрок нанес урон вам.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bufram - узнать сколько мегабаит составляет память стрима.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/clearram - очистить память стрима.")
@@ -17210,6 +17670,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/price - узнать среднюю цену на товар (предварительно нужно включить функцию 'Центральный рынок')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carprice - узнать среднюю цену на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carab - обновить средние цены на транспорт (предварительно нужно включить функцию 'Автобазар')")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в Skup Menu v2.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/checkvip [id] - проверить, есть ли у игрока Titan или Premium VIP.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bandit - открыть меню 'Однорукий Бандит'.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/lovec - открыть меню 'Авто-ловля'.")
@@ -18782,6 +19243,8 @@ function nastroikamenu()
 					imgui.InputText(u8'##7', activator)
 				imgui.Text(u8("Команда для быстрого набора номера")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) для набора номера(вводить команду на английском). По умолчанию - /call. После того, как вписали команду, необходимо перезапустить скрипт!")
 					imgui.InputText(u8'##777', activcall)
+				imgui.Text(u8("Команда для быстрого набора номера для Iphone")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) для набора номера(вводить команду на английском). По умолчанию - /icall. После того, как вписали команду, необходимо перезапустить скрипт!")
+					imgui.InputText(u8'##7777456567567645634call', activcallphone)
 				imgui.Text(u8("Задержка набора номера")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на автоматический набор номера. Если вас кикает или не вводит - увеличьте задержку.")
 					imgui.SliderInt(u8'##7777',zadervkacall,10, 1000)
 				imgui.Text(u8("Название скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести название скрипта на англ.языке. После ввода названия нажмите кнопку 'Сохранить'. По умолчанию - Mono Tools.")
@@ -19174,6 +19637,7 @@ function nastroikamenu()
 				carsis.v = false
 				activator.v = 'mono'
 				activcall.v = 'call'
+				activcallphone.v = 'icall'
 				nazvanietext.v = 'Mono Tools'
 				otgun.v = false
 				deagle.v = false
@@ -19770,6 +20234,12 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'на тот же сервер с указанным NickName)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'46. Добавлена команда /killgraph (ставит настройки прорисовки на минимум). Идеально для скупа, риск краша уменьшается в разы.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'47. В /lovec добавлен поиск свободных лавок от Adrian G.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'48. Фикс пропадания текстур ПД мотоциклов при включенной сирене.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'49. Стробоскопы (/strobes) теперь работают на любых машинах (перед использованием включите фары у машины)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'50. В информере теперь отбражается хп любого транспорта.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'51. В "Помощь" добавлена команда /cst (обновить список товаров в Skup Menu v2) ибо юзеры забывают как это сделать.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'52. Добавлена команда /icall (фаст звонок для тех, у кого не работает основной. Работает только с телефоном IPHONE. Сменить')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'команду и задержку можно в "Параметры"- "Модификации".)')
 			imgui.End()
 		end
 	
@@ -24965,4 +25435,18 @@ function onReceivePacket(id)
 			vk_requestv2('Сервер закрыл соединение ('..userNick..')')
 		end
 	end
+end
+
+function scrphone(param)
+	callwork = true
+	sampSendChat("/number " .. param)
+end
+
+function parseNumber(n)	
+  local n = tostring(n)
+  for i = 1, #n do
+    numberv2 = n:sub(i, i)
+		sampSendClickTextdraw(keysphone[tonumber(numberv2)])
+		wait(zadervkacall.v)
+  end
 end
