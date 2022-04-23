@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.29')
+script_version('3.3.30')
 
 use = false
 close = false
@@ -8406,7 +8406,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {ffc0cb}Gnidas {FFFFFF}на сервере {ffc0cb}Show-Low {FFFFFF}шлет приветик и рекомендует промокод {ffc0cb}#gnidas. {FFFFFF}Быть движу!')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {000000}Gnidas {FFFFFF}на сервере {000000}Show-Low {FFFFFF}шлет приветик и рекомендует промокод {000000}#gnidas. {FFFFFF}Быть движу!')
 	imgui.EndChild()
 	imgui.PopStyleColor()
 	
@@ -8914,8 +8914,8 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(50) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(348, 35), false)
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {ffc0cb}Gnidas {FFFFFF}на сервере {ffc0cb}Show-Low {FFFFFF}шлет')
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}приветик и рекомендует промокод {ffc0cb}#gnidas. {FFFFFF}Быть движу!')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {000000}Gnidas {FFFFFF}на сервере {000000}Show-Low {FFFFFF}шлет')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}приветик и рекомендует промокод {000000}#gnidas. {FFFFFF}Быть движу!')
 	imgui.EndChild()
 	imgui.PopStyleColor()
 	
@@ -8971,8 +8971,8 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(50) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(348, 35), false)
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {ffc0cb}Gnidas {FFFFFF}на сервере {ffc0cb}Show-Low {FFFFFF}шлет')
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}приветик и рекомендует промокод {ffc0cb}#gnidas. {FFFFFF}Быть движу!')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {000000}Gnidas {FFFFFF}на сервере {000000}Show-Low {FFFFFF}шлет')
+	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}приветик и рекомендует промокод {000000}#gnidas. {FFFFFF}Быть движу!')
 	imgui.EndChild()
 	imgui.PopStyleColor()
 
