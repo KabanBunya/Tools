@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.31')
+script_version('3.3.32')
 
 use = false
 close = false
@@ -8400,7 +8400,7 @@ function imgui.OnDrawFrame()
 		imgui.Image(winbackground6, imgui.ImVec2(1000, 570), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 		end
 	
-	imgui.SameLine(340) 
+	--[[imgui.SameLine(340) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf124623434444342124343232', imgui.ImVec2(655, 100), false)
 	imgui.Text('')
@@ -8409,7 +8409,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {000000}Gnidas {FFFFFF}на сервере {000000}Show-Low {FFFFFF}шлет приветик и рекомендует промокод {000000}#gnidas. {FFFFFF}Быть движу!')
 	imgui.EndChild()
-	imgui.PopStyleColor()
+	imgui.PopStyleColor()]]
 	
 	imgui.SameLine(340) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
@@ -8912,13 +8912,13 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(899) 
 	imgui.Text(u8"Toch Menu")
 	
-	imgui.SameLine(50) 
+	--[[imgui.SameLine(50) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(348, 35), false)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {000000}Gnidas {FFFFFF}на сервере {000000}Show-Low {FFFFFF}шлет')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}приветик и рекомендует промокод {000000}#gnidas. {FFFFFF}Быть движу!')
 	imgui.EndChild()
-	imgui.PopStyleColor()
+	imgui.PopStyleColor()]]
 	
 	imgui.Text('')
 	imgui.SameLine(490)
@@ -8969,13 +8969,13 @@ function imgui.OnDrawFrame()
 	
 	imgui.Text('')
 	
-	imgui.SameLine(50) 
+	--[[imgui.SameLine(50) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf12462343444434212434', imgui.ImVec2(348, 35), false)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}Бодрая семья {000000}Gnidas {FFFFFF}на сервере {000000}Show-Low {FFFFFF}шлет')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('{FFFFFF}приветик и рекомендует промокод {000000}#gnidas. {FFFFFF}Быть движу!')
 	imgui.EndChild()
-	imgui.PopStyleColor()
+	imgui.PopStyleColor()]]
 
 	imgui.Text('')
 	imgui.Text('')
