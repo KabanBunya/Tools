@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.33')
+script_version('3.3.34')
 
 use = false
 close = false
@@ -40,9 +40,47 @@ last_text = nil
 data_cost = {} 
 checkingvip = false
 callwork = false
+itemfindfish = {}
+rodfindfish = {}
+fishinfo = 'Информация с эхолота (чтобы появилась информация, включите "Записывать информацию с эхолота" и откройте эхолот)'
+fishbool = false
+fishboolv2 = false
+fishboolv3 = false
+activeeholot = false
+useeholot = false
+closeeholot = false
+fishses = 0
+itemses = 0
+sellkolitem = 0
+sellkolfish = 0
+moneyfish = 0
+fishrodv1 = true
+fishrodv2 = false
+fishrodv3 = false
+fishrodv4 = false
+fishrodv5 = false
+fishrodv6 = false
+fishrodv7 = false
+fishrodv8 = false
+fishrodv9 = false
+fishrodv10 = false
+fishrodv11 = false
+fishrodv12 = false
+fishrodv13 = false
+fishrodv14 = false
+fishrodv15 = false
+fishrodv16 = false
+fishrodv17 = false
+fishrodv18 = false
+fishrodv19 = false
+fishrodv20 = false
+fishrodv21 = false
+fishrodv22 = false
+fishrodv23 = false
+fishrodv24 = false
+fishrodv25 = false
 tVips = {}
 lavki = {}
-
 car_last = {}
 car_markers = {}
 timer_marker = 10000
@@ -90,39 +128,6 @@ itogobtc = 0
 local font = renderCreateFont('Arial', 10, 5)
 local connected = false
 local connecting = false
-itogoskuptrava = 0
-itogoskupbronzarul = 0
-itogoskupserebrorul = 0
-itogoskupgoldrul = 0
-itogoskupplatinarul = 0
-itogoskupkamen = 0
-itogoskupmetal = 0
-itogoskupbronza = 0
-itogoskupserebro = 0
-itogoskupgold = 0
-itogoskuppodarki = 0
-itogoskuptalon = 0
-itogoskupsemtalon = 0
-itogoskupskidtalon = 0
-itogoskuptochkamen = 0
-itogoskuptochamulet = 0
-itogoskuplarec = 0
-itogoskupsmazka = 0
-itogoskupcarbox = 0
-itogoskupohlad = 0
-itogoskuptt = 0
-itogoskupmoneta = 0
-itogoskuplen = 0
-itogoskupxlopok = 0
-itogoskuprespekt = 0
-itogoskupmaterial = 0
-itogoskupdrova = 0
-itogoskupantibiotik = 0
-itogoskuptsr = 0
-itogoskupsemmoneta = 0
-itogoskupauto = 0
-skuptovaracol = 0
-itogoskuptovara = 0
 igroklastweapon = 'nill'
 igroklastweapon2 = 'nill'
 igroktelo = 'nill'
@@ -133,36 +138,6 @@ PhoneColorcall =''
 Phonecall =""
 Modelcall =""
 lastcall = 0
-
-itogoskupcoltrava = 0
-itogoskupcolbronzarul = 0
-itogoskupcolserebrorul = 0
-itogoskupcolgoldrul = 0
-itogoskupcolplatinarul = 0
-itogoskupcolkamen = 0
-itogoskupcolmetal = 0
-itogoskupcolbronza = 0
-itogoskupcolserebro = 0
-itogoskupcolgold = 0
-itogoskupcolpodarki = 0
-itogoskupcoltalon = 0
-itogoskupcolsemtalon = 0
-itogoskupcolskidtalon = 0
-itogoskupcoltochkamen = 0
-itogoskupcoltochamulet = 0
-itogoskupcollarec = 0
-itogoskupcolsmazka = 0
-itogoskupcolcarbox = 0
-itogoskupcolohlad = 0
-itogoskupcolmoneta = 0
-itogoskupcollen = 0
-itogoskupcolxlopok = 0
-itogoskupcolrespekt = 0
-itogoskupcolmaterial = 0
-itogoskupcoldrova = 0
-itogoskupcolantibiotik = 0
-itogoskupcoltsr = 0
-itogoskupcolsemmoneta = 0
 
 krytim = true
 
@@ -210,6 +185,7 @@ local dif_colors = {
 bike = {[481] = true, [509] = true, [510] = true, [14914] = true, [14915] = true, [14916] = true, [14917] = true}
 moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true, [3197] = true, [3194] = true, [3195] = true, [3196] = true, [3198] = true}
 
+package.path = ".\\?\\init.lua;" .. package.path
 local res = pcall(require, "lib.moonloader")
 assert(res, 'Library "lib.moonloader" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ---------------------------------------------------------------
@@ -258,6 +234,9 @@ assert(res, 'Library "effil" не найдена. Cкачать все нужны файлы и библиотеки, в
 local res, fa = pcall(require, "faIcons")
 assert(res, 'Library "faIcons" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
 ------------------------------------------------------------------
+local res, requests = pcall(require, "requests")
+assert(res, 'Library "requests" не найдена. Cкачать все нужны файлы и библиотеки, вы можете на форуме БХ - https://www.blast.hk/threads/89343/')
+------------------------------------------------------------------
 
 -----------------------------------------------
 local new                   = imgui 
@@ -276,6 +255,167 @@ encoding.default = 'CP1251'
 u8 = encoding.UTF8
 
 ffi.cdef[[
+    typedef unsigned long DWORD;
+
+    struct d3ddeviceVTBL {
+        void *QueryInterface;
+        void *AddRef;
+        void *Release;
+        void *TestCooperativeLevel;
+        void *GetAvailableTextureMem;
+        void *EvictManagedResources;
+        void *GetDirect3D;
+        void *GetDeviceCaps;
+        void *GetDisplayMode;
+        void *GetCreationParameters;
+        void *SetCursorProperties;
+        void *SetCursorPosition;
+        void *ShowCursor;
+        void *CreateAdditionalSwapChain;
+        void *GetSwapChain;
+        void *GetNumberOfSwapChains;
+        void *Reset;
+        void *Present;
+        void *GetBackBuffer;
+        void *GetRasterStatus;
+        void *SetDialogBoxMode;
+        void *SetGammaRamp;
+        void *GetGammaRamp;
+        void *CreateTexture;
+        void *CreateVolumeTexture;
+        void *CreateCubeTexture;
+        void *CreateVertexBuffer;
+        void *CreateIndexBuffer;
+        void *CreateRenderTarget;
+        void *CreateDepthStencilSurface;
+        void *UpdateSurface;
+        void *UpdateTexture;
+        void *GetRenderTargetData;
+        void *GetFrontBufferData;
+        void *StretchRect;
+        void *ColorFill;
+        void *CreateOffscreenPlainSurface;
+        void *SetRenderTarget;
+        void *GetRenderTarget;
+        void *SetDepthStencilSurface;
+        void *GetDepthStencilSurface;
+        void *BeginScene;
+        void *EndScene;
+        void *Clear;
+        void *SetTransform;
+        void *GetTransform;
+        void *MultiplyTransform;
+        void *SetViewport;
+        void *GetViewport;
+        void *SetMaterial;
+        void *GetMaterial;
+        void *SetLight;
+        void *GetLight;
+        void *LightEnable;
+        void *GetLightEnable;
+        void *SetClipPlane;
+        void *GetClipPlane;
+        void *SetRenderState;
+        void *GetRenderState;
+        void *CreateStateBlock;
+        void *BeginStateBlock;
+        void *EndStateBlock;
+        void *SetClipStatus;
+        void *GetClipStatus;
+        void *GetTexture;
+        void *SetTexture;
+        void *GetTextureStageState;
+        void *SetTextureStageState;
+        void *GetSamplerState;
+        void *SetSamplerState;
+        void *ValidateDevice;
+        void *SetPaletteEntries;
+        void *GetPaletteEntries;
+        void *SetCurrentTexturePalette;
+        void *GetCurrentTexturePalette;
+        void *SetScissorRect;
+        void *GetScissorRect;
+        void *SetSoftwareVertexProcessing;
+        void *GetSoftwareVertexProcessing;
+        void *SetNPatchMode;
+        void *GetNPatchMode;
+        void *DrawPrimitive;
+        void* DrawIndexedPrimitive;
+        void *DrawPrimitiveUP;
+        void *DrawIndexedPrimitiveUP;
+        void *ProcessVertices;
+        void *CreateVertexDeclaration;
+        void *SetVertexDeclaration;
+        void *GetVertexDeclaration;
+        void *SetFVF;
+        void *GetFVF;
+        void *CreateVertexShader;
+        void *SetVertexShader;
+        void *GetVertexShader;
+        void *SetVertexShaderConstantF;
+        void *GetVertexShaderConstantF;
+        void *SetVertexShaderConstantI;
+        void *GetVertexShaderConstantI;
+        void *SetVertexShaderConstantB;
+        void *GetVertexShaderConstantB;
+        void *SetStreamSource;
+        void *GetStreamSource;
+        void *SetStreamSourceFreq;
+        void *GetStreamSourceFreq;
+        void *SetIndices;
+        void *GetIndices;
+        void *CreatePixelShader;
+        void *SetPixelShader;
+        void *GetPixelShader;
+        void *SetPixelShaderConstantF;
+        void *GetPixelShaderConstantF;
+        void *SetPixelShaderConstantI;
+        void *GetPixelShaderConstantI;
+        void *SetPixelShaderConstantB;
+        void *GetPixelShaderConstantB;
+        void *DrawRectPatch;
+        void *DrawTriPatch;
+        void *DeletePatch;
+    };
+
+    struct d3ddevice {
+        struct d3ddeviceVTBL** vtbl;
+    };
+    
+    struct RECT {
+        long left;
+        long top;
+        long right;
+        long bottom;
+    };
+    
+    struct POINT {
+        long x;
+        long y;
+    };
+    
+    int __stdcall GetSystemMetrics(
+      int nIndex
+    );
+    
+    int __stdcall GetClientRect(
+        int   hWnd,
+        struct RECT* lpRect
+    );
+    
+    int __stdcall ClientToScreen(
+        int    hWnd,
+        struct POINT* lpPoint
+    );
+    
+    int __stdcall D3DXSaveSurfaceToFileA(
+        const char*          pDestFile,
+        int DestFormat,
+        void*       pSrcSurface,
+        void*        pSrcPalette,
+        struct RECT                 *pSrcRect
+    );
+	
 	short GetKeyState(int nVirtKey);
 	bool GetKeyboardLayoutNameA(char* pwszKLID);
 	int GetLocaleInfoA(int Locale, int LCType, char* lpLCData, int cchData);
@@ -294,6 +434,8 @@ ffi.cdef[[
     uint32_t nFileSystemNameSize
 );
 ]]
+local d3dx9_43 = ffi.load('d3dx9_43.dll')
+
 local LocalSerial = ffi.new("unsigned long[1]", 0)
 ffi.C.GetVolumeInformationA(nil, nil, 0, LocalSerial, nil, nil, nil, 0)
 LocalSerial = LocalSerial[0]
@@ -424,6 +566,10 @@ local cfg = inicfg.load({
 		vippiarsh5 = 0,
 		piarsh6 = 0,
 		vippiarsh6 = 0
+	},
+	infofishkol = {
+		fishkol = 0,
+		itemkol = 0
 	},
 	settingcall = {
         lastcall ='2222',
@@ -675,37 +821,6 @@ local SET = {
 		autoryda = false,
 		autolen = false,
 		versiontoch = true,
-		skuptrava = false,
-		skupbronzarul = false,
-		skupserebrorul = false,
-		skupgoldrul = false,
-		skupplatinarul = false,
-		skupkamen = false,
-		skupmetal = false,
-		skupbronza = false,
-		skupserebro = false,
-		skupgold = false,
-		skuppodarki = false,
-		skuptalon = false,
-		skupsemtalon = false,
-		skupskidtalon = false,
-		skuptochkamen = false,
-		skuptochamulet = false,
-		skuplarec = false,
-		skupsmazka = false,
-		skupcarbox = false,
-		skupohlad = false,
-		skuptt = false,
-		skupmoneta = false,
-		skuplen = false,
-		skupxlopok = false,
-		skuprespekt = false,
-		skupmaterial = false,
-		skupdrova = false,
-		skupantibiotik = false,
-		skuptsr = false,
-		skupsemmoneta = false,
-		skupauto = false,
 		autopin = false,
 		autopay = false,
 		autopaybtc = false,
@@ -752,66 +867,6 @@ local SET = {
 		adredak5 = 'В 165 баре много девочек и пива.',
 		adredak6 = 'В 165 баре много девочек и пива.',
 		adredak7 = 'В 165 баре много девочек и пива.',
-		skuptravacol = '1',
-		skuptravacena = '1000',
-		skupbronzarulcol = '1',
-		skupbronzarulcena = '15000',
-		skupserebrorulcol = '1',
-		skupserebrorulcena = '95000',
-		skupgoldrulcol = '1',
-		skupgoldrulcena = '300000',
-		skupplatinarulcol = '1',
-		skupplatinarulcena = '600000',
-		skupkamencol = '1',
-		skupkamencena = '10000',
-		skupmetalcol = '1',
-		skupmetalcena = '5000',
-		skupbronzacol = '1',
-		skupbronzacena = '50000',
-		skupserebrocol = '1',
-		skupserebrocena = '100000',
-		skupgoldcol = '1',
-		skupgoldcena = '50000',
-		skuppodarkicol = '1',
-		skuppodarkicena = '10000',
-		skuptaloncol = '1',
-		skuptaloncena = '7000',
-		skupsemtaloncol = '1',
-		skupsemtaloncena = '17000',
-		skupskidtaloncol = '1',
-		skupskidtaloncena = '2000000',
-		skuptochkamencol = '1',
-		skuptochamuletcol = '1',
-		skuptochkamencena = '80000',
-		skuptochamuletcena = '200000',
-		skuplareccol = '1',
-		skupsmazkacol = '1',
-		skupcarboxcol = '1',
-		skupohladcol = '1',
-		skuplareccena = '300000',
-		skupsmazkacena = '600000',
-		skupcarboxcena = '1500000',
-		skupohladcena = '600000',
-		skupttcena = '9000000',
-		skupmonetacol = '1',
-		skupmonetacena = '2000',
-		skuplencol = '1',
-		skuplencena = '2000',
-		skupxlopokcol = '1',
-		skupxlopokcena = '1500',
-		skuprespektcol = '1',
-		skuprespektcena = '2000',
-		skupmaterialcol = '1',
-		skupmaterialcena = '100',
-		skupdrovacol = '1',
-		skupdrovacena = '100',
-		skupantibiotikcol = '1',
-		skupantibiotikcena = '10000',
-		skuptsrcol = '1',
-		skuptsrcena = '15000',
-		skupsemmonetacol = '1',
-		skupsemmonetacena = '5000',
-		skupautocena = '2000000',
 		activator = 'mono',
 		activcall = 'call',
 		activcallphone = 'icall',
@@ -1059,6 +1114,7 @@ local SET = {
 		slotpodarokrul = 1,
 		razmer = 40,
 		delayintv2 = 500,
+		delayintsellv2 = 500,
 		vsevorul = 0,
 		vsevorulpodarok = 0,
 		vsevorulexp = 0,
@@ -1082,6 +1138,42 @@ local SET = {
 		vsevorulzolotov2 = 0,
 		vsevorulserebrov2 = 0,
 		enableskin = false,
+		zadervkafish = 300,
+		zadervkafishtime = 60,
+		zadervkafishklava = 10,
+		zadervkafishclick = 10,
+		zadervkaeholot = 5,
+		zadervkasellfish = 300,
+		infofish = false,
+		saveinfofish = false,
+		statafish = false,
+		fishydo = false,
+		fishbaitv1 = false,
+		fishbaitv2 = false,
+		fishbaitv3 = false,
+		fishbaitv4 = false,
+		fishbaitv5 = false,
+		fishbaitv6 = false,
+		fishbaitv7 = false,
+		fishbaitv8 = false,
+		fishbaitv9 = false,
+		fishbaitv10 = false,
+		fishbaitv11 = false,
+		fishbaitv12 = false,
+		fishbaitv13 = false,
+		fishbaitv14 = false,
+		fishbaitv15 = false,
+		fishbaitv16 = false,
+		fishbaitv17 = false,
+		fishbaitv18 = false,
+		fishbaitv19 = false,
+		fishbaitv20 = false,
+		fishbaitv21 = false,
+		fishbaitv22 = false,
+		fishbaitv23 = false,
+		fishbaitv24 = false,
+		fishbaitv25 = false,
+		fishklavaN = false,
 		skin = 1
 	},
 	assistant = {
@@ -1232,7 +1324,6 @@ win_state['skupv2'] = imgui.ImBool(false)
 win_state['skupv3'] = imgui.ImBool(false)
 win_state['skup'] = imgui.ImBool(false)
 win_state['skup2'] = imgui.ImBool(false)
-win_state['skup3'] = imgui.ImBool(false)
 win_state['oscripte'] = imgui.ImBool(false)
 win_state['zadach'] = imgui.ImBool(false)
 win_state['zadachv2'] = imgui.ImBool(false)
@@ -1248,7 +1339,6 @@ win_state['shemafunks'] = imgui.ImBool(false)
 win_state['housenumber'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
 win_state['kartinst'] = imgui.ImBool(false)
-win_state['skupshema'] = imgui.ImBool(false)
 win_state['piarshema'] = imgui.ImBool(false)
 win_state['vkshema'] = imgui.ImBool(false)
 win_state['pravila2048'] = imgui.ImBool(false)
@@ -1264,6 +1354,7 @@ win_state['base'] = imgui.ImBool(false)
 win_state['dial'] = imgui.ImBool(false)
 win_state['bandit'] = imgui.ImBool(false)
 win_state['lovec'] = imgui.ImBool(false)
+win_state['fishmenu'] = imgui.ImBool(false)
 win_state['rulstat'] = imgui.ImBool(false)
 win_state['informer'] = imgui.ImBool(false)
 win_state['informervrem'] = imgui.ImBool(false)
@@ -1282,6 +1373,7 @@ checked_test11 = imgui.ImBool(false)
 checked_test12 = imgui.ImBool(false)
 checked_test13 = imgui.ImBool(false)
 checked_test14 = imgui.ImBool(false)
+checked_test144 = imgui.ImBool(false)
 ostanovka = imgui.ImBool(false)
 ostanovka2 = imgui.ImBool(false)
 ostanovka3 = imgui.ImBool(false)
@@ -1391,6 +1483,12 @@ testbox3 = imgui.ImBool(false)
 dostypbox = false
 dostypbox2 = false
 dostypbox3 = false
+fishlovlya = imgui.ImBool(false)
+fishlovlyav2 = imgui.ImBool(false)
+nofunction = imgui.ImBool(false)
+obmenmonetafish = imgui.ImBool(false)
+obmenrodfish = imgui.ImBool(false)
+checkeholot = imgui.ImBool(false)
 local result = '';
 local inputBufferText = imgui.ImBuffer(256)
 local sessionStart = os.time()
@@ -1435,14 +1533,23 @@ isBuyProcess = false
 rbut = imgui.ImInt(1)
 findBuf = imgui.ImBuffer(124)
 findBufInt = imgui.ImInt(0)
-delayInt = imgui.ImInt(1000)
 itemsskup = ({})
 inputsskup = {}
 _nameini = "Mono\\CentralBuy"
 colorskup = "{7cfc00}"
 isEn = 0
-
 inicfg.load(itemsskup, _nameini)
+
+isSellProcess = false
+rbutsell = imgui.ImInt(1)
+findBufsell = imgui.ImBuffer(124)
+findBufIntsell = imgui.ImInt(0)
+itemssell = ({})
+inputssell = {}
+_nameinisell = "Mono\\CentralSell"
+colorsell = "{7cfc00}"
+isEnsell = 0
+inicfg.load(itemssell, _nameinisell)
 
 if doesFileExist(getWorkingDirectory() .. "\\config\\Mono\\keys.bind") then 
 	os.remove(getWorkingDirectory() .. "\\config\\Mono\\keys.bind")
@@ -2586,8 +2693,6 @@ function mainmenu()
 			win_state['skup'].v = not win_state['skup'].v
 		elseif win_state['skup2'].v then
 			win_state['skup2'].v = not win_state['skup2'].v
-		elseif win_state['skup3'].v then
-			win_state['skup3'].v = not win_state['skup3'].v
 		elseif win_state['oscripte'].v then
 			win_state['oscripte'].v = not win_state['oscripte'].v
 		elseif win_state['zadach'].v then
@@ -2633,8 +2738,6 @@ function mainmenu()
 			win_state['games'].v = not win_state['games'].v
 		elseif win_state['shahtamenu'].v then
 			win_state['shahtamenu'].v = not win_state['shahtamenu'].v
-		elseif win_state['skupshema'].v then
-			win_state['skupshema'].v = not win_state['skupshema'].v
 		elseif win_state['piarshema'].v then
 			win_state['piarshema'].v = not win_state['piarshema'].v
 		elseif win_state['vkshema'].v then
@@ -3032,6 +3135,13 @@ function main()
 	lua_thread.create(coinclicker)
 	lua_thread.create(lovecpremium)
 	lua_thread.create(vkget)
+	lua_thread.create(roulettetime)
+	lua_thread.create(fishlovec)
+	lua_thread.create(fishballon)
+	lua_thread.create(fishballonv2)
+	lua_thread.create(fishballonv3)
+	lua_thread.create(obmentradefish)
+	lua_thread.create(eholotcheck)
 	if raskladka.v then
 	lua_thread.create(inputChat)
 	end
@@ -3056,6 +3166,7 @@ function main()
 	sampRegisterChatCommand("killinfo", show_dial)
 	sampRegisterChatCommand("bandit", show_dialv3)
 	sampRegisterChatCommand("lovec", show_dialv4)
+	sampRegisterChatCommand("fishmenu", show_dialv5)
 	sampRegisterChatCommand("connect", connect_cmd)
 	sampRegisterChatCommand("connectname", connect_cmdname)
 	sampRegisterChatCommand("killgraph", function() 
@@ -3080,6 +3191,7 @@ function main()
 	end)
 	sampRegisterChatCommand("statarul", show_rulstat)
 	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите 'Добавить товар на покупку'.", 0x046D63) else isEn = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", 0x046D63) end end)
+	sampRegisterChatCommand("cstsell", function() if isEnsell == 0 then isEnsell = 2 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите 'Выставить товар на продажу'.", 0x046D63) itemssell = ({}) else isEnsell = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", 0x046D63) end end)
 	if pricecr.v then sampRegisterChatCommand('price', get_price) end
 	if priceab.v then sampRegisterChatCommand('carprice', function(searchv21)
 		searchv21 = to_lower(searchv21)
@@ -3443,7 +3555,7 @@ end
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['fishmenu'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -3821,6 +3933,43 @@ function saveSettings(args, key)
 	ini.shahtainformer.sbor = infsbor.v
 	ini.shahtainformer.sborferma = infsborferma.v
 	
+	ini.settings.zadervkafish = zadervkafish.v
+	ini.settings.zadervkafishtime = zadervkafishtime.v
+	ini.settings.zadervkafishklava = zadervkafishklava.v
+	ini.settings.zadervkafishclick = zadervkafishclick.v
+	ini.settings.zadervkaeholot = zadervkaeholot.v
+	ini.settings.zadervkasellfish = zadervkasellfish.v
+	ini.settings.infofish = infofish.v
+	ini.settings.saveinfofish = saveinfofish.v
+	ini.settings.statafish = statafish.v
+	ini.settings.fishydo = fishydo.v
+	ini.settings.fishbaitv1 = fishbaitv1.v
+	ini.settings.fishbaitv2 = fishbaitv2.v
+	ini.settings.fishbaitv3 = fishbaitv3.v
+	ini.settings.fishbaitv4 = fishbaitv4.v
+	ini.settings.fishbaitv5 = fishbaitv5.v
+	ini.settings.fishbaitv6 = fishbaitv6.v
+	ini.settings.fishbaitv7 = fishbaitv7.v
+	ini.settings.fishbaitv8 = fishbaitv8.v
+	ini.settings.fishbaitv9 = fishbaitv9.v
+	ini.settings.fishbaitv10 = fishbaitv10.v
+	ini.settings.fishbaitv11 = fishbaitv11.v
+	ini.settings.fishbaitv12 = fishbaitv12.v
+	ini.settings.fishbaitv13 = fishbaitv13.v
+	ini.settings.fishbaitv14 = fishbaitv14.v
+	ini.settings.fishbaitv15 = fishbaitv15.v
+	ini.settings.fishbaitv16 = fishbaitv16.v
+	ini.settings.fishbaitv17 = fishbaitv17.v
+	ini.settings.fishbaitv18 = fishbaitv18.v
+	ini.settings.fishbaitv19 = fishbaitv19.v
+	ini.settings.fishbaitv20 = fishbaitv20.v
+	ini.settings.fishbaitv21 = fishbaitv21.v
+	ini.settings.fishbaitv22 = fishbaitv22.v
+	ini.settings.fishbaitv23 = fishbaitv23.v
+	ini.settings.fishbaitv24 = fishbaitv24.v
+	ini.settings.fishbaitv25 = fishbaitv25.v
+	ini.settings.fishklavaN = fishklavaN.v
+	
 	ini.settings.assistant = assistant.v
 	ini.settings.assistant1 = assistant1.v
 	ini.settings.assistant2 = assistant2.v
@@ -3932,6 +4081,7 @@ function saveSettings(args, key)
 	ini.settings.slotpodarokrul = slotpodarokrul.v
 	ini.settings.razmer = razmer.v
 	ini.settings.delayintv2 = delayintv2.v
+	ini.settings.delayintsellv2 = delayintsellv2.v
 	ini.settings.vsevorul = vsevorul.v
 	ini.settings.vsevorulpodarok = vsevorulpodarok.v
 	ini.settings.vsevorulexp = vsevorulexp.v
@@ -4382,99 +4532,6 @@ function saveSettings(args, key)
 	ini.settings.autonarko = autonarko.v
 	ini.settings.autobuffer = autobuffer.v
 	ini.settings.autobufferyved = autobufferyved.v
-	
-	ini.settings.skuptravacol = u8:decode(skuptravacol.v)
-	ini.settings.skuptravacena = u8:decode(skuptravacena.v)
-	ini.settings.skupbronzarulcol = u8:decode(skupbronzarulcol.v)
-	ini.settings.skupbronzarulcena = u8:decode(skupbronzarulcena.v)
-	ini.settings.skupserebrorulcol = u8:decode(skupserebrorulcol.v)
-	ini.settings.skupserebrorulcena = u8:decode(skupserebrorulcena.v)
-	ini.settings.skupgoldrulcol = u8:decode(skupgoldrulcol.v)
-	ini.settings.skupgoldrulcena = u8:decode(skupgoldrulcena.v)
-	ini.settings.skupplatinarulcol = u8:decode(skupplatinarulcol.v)
-	ini.settings.skupplatinarulcena = u8:decode(skupplatinarulcena.v)
-	ini.settings.skupkamencol = u8:decode(skupkamencol.v)
-	ini.settings.skupkamencena = u8:decode(skupkamencena.v)
-	ini.settings.skupmetalcol = u8:decode(skupmetalcol.v)
-	ini.settings.skupmetalcena = u8:decode(skupmetalcena.v)
-	ini.settings.skupbronzacol = u8:decode(skupbronzacol.v)
-	ini.settings.skupbronzacena = u8:decode(skupbronzacena.v)
-	ini.settings.skupserebrocol = u8:decode(skupserebrocol.v)
-	ini.settings.skupserebrocena = u8:decode(skupserebrocena.v)
-	ini.settings.skupgoldcol = u8:decode(skupgoldcol.v)
-	ini.settings.skupgoldcena = u8:decode(skupgoldcena.v)
-	ini.settings.skuppodarkicol = u8:decode(skuppodarkicol.v)
-	ini.settings.skuppodarkicena = u8:decode(skuppodarkicena.v)
-	ini.settings.skuptaloncol = u8:decode(skuptaloncol.v)
-	ini.settings.skuptaloncena = u8:decode(skuptaloncena.v)
-	ini.settings.skupsemtaloncol = u8:decode(skupsemtaloncol.v)
-	ini.settings.skupsemtaloncena = u8:decode(skupsemtaloncena.v)
-	ini.settings.skupskidtaloncol = u8:decode(skupskidtaloncol.v)
-	ini.settings.skupskidtaloncena = u8:decode(skupskidtaloncena.v)
-	ini.settings.skuptochkamencol = u8:decode(skuptochkamencol.v)
-	ini.settings.skuptochamuletcol = u8:decode(skuptochamuletcol.v)
-	ini.settings.skuptochkamencena = u8:decode(skuptochkamencena.v)
-	ini.settings.skuptochamuletcena = u8:decode(skuptochamuletcena.v)
-	ini.settings.skuplareccol = u8:decode(skuplareccol.v)
-	ini.settings.skupsmazkacol = u8:decode(skupsmazkacol.v)
-	ini.settings.skupcarboxcol = u8:decode(skupcarboxcol.v)
-	ini.settings.skupohladcol = u8:decode(skupohladcol.v)
-	ini.settings.skuplareccena = u8:decode(skuplareccena.v)
-	ini.settings.skupsmazkacena = u8:decode(skupsmazkacena.v)
-	ini.settings.skupcarboxcena = u8:decode(skupcarboxcena.v)
-	ini.settings.skupohladcena = u8:decode(skupohladcena.v)
-	ini.settings.skupttcena = u8:decode(skupttcena.v)
-	ini.settings.skupmonetacol = u8:decode(skupmonetacol.v)
-	ini.settings.skupmonetacena = u8:decode(skupmonetacena.v)
-	ini.settings.skuplencol = u8:decode(skuplencol.v)
-	ini.settings.skuplencena = u8:decode(skuplencena.v)
-	ini.settings.skupxlopokcol = u8:decode(skupxlopokcol.v)
-	ini.settings.skupxlopokcena = u8:decode(skupxlopokcena.v)
-	ini.settings.skuprespektcol = u8:decode(skuprespektcol.v)
-	ini.settings.skuprespektcena = u8:decode(skuprespektcena.v)
-	ini.settings.skupmaterialcol = u8:decode(skupmaterialcol.v)
-	ini.settings.skupmaterialcena = u8:decode(skupmaterialcena.v)
-	ini.settings.skupdrovacol = u8:decode(skupdrovacol.v)
-	ini.settings.skupdrovacena = u8:decode(skupdrovacena.v)
-	ini.settings.skupantibiotikcol = u8:decode(skupantibiotikcol.v)
-	ini.settings.skupantibiotikcena = u8:decode(skupantibiotikcena.v)
-	ini.settings.skuptsrcol = u8:decode(skuptsrcol.v)
-	ini.settings.skuptsrcena = u8:decode(skuptsrcena.v)
-	ini.settings.skupsemmonetacol = u8:decode(skupsemmonetacol.v)
-	ini.settings.skupsemmonetacena = u8:decode(skupsemmonetacena.v)
-	ini.settings.skupautocena = u8:decode(skupautocena.v)
-	
-	ini.settings.skuptrava = skuptrava.v
-	ini.settings.skupbronzarul = skupbronzarul.v
-	ini.settings.skupserebrorul = skupserebrorul.v
-	ini.settings.skupgoldrul = skupgoldrul.v
-	ini.settings.skupplatinarul = skupplatinarul.v
-	ini.settings.skupkamen = skupkamen.v
-	ini.settings.skupmetal = skupmetal.v
-	ini.settings.skupbronza = skupbronza.v
-	ini.settings.skupserebro = skupserebro.v
-	ini.settings.skupgold = skupgold.v
-	ini.settings.skuppodarki = skuppodarki.v
-	ini.settings.skuptalon = skuptalon.v
-	ini.settings.skupsemtalon = skupsemtalon.v
-	ini.settings.skupskidtalon = skupskidtalon.v
-	ini.settings.skuptochkamen = skuptochkamen.v
-	ini.settings.skuptochamulet = skuptochamulet.v
-	ini.settings.skuplarec = skuplarec.v
-	ini.settings.skupsmazka = skupsmazka.v
-	ini.settings.skupcarbox = skupcarbox.v
-	ini.settings.skupohlad = skupohlad.v
-	ini.settings.skuptt = skuptt.v
-	ini.settings.skupmoneta = skupmoneta.v
-	ini.settings.skuplen = skuplen.v
-	ini.settings.skupxlopok = skupxlopok.v
-	ini.settings.skuprespekt = skuprespekt.v
-	ini.settings.skupmaterial = skupmaterial.v
-	ini.settings.skupdrova = skupdrova.v
-	ini.settings.skupantibiotik = skupantibiotik.v
-	ini.settings.skuptsr = skuptsr.v
-	ini.settings.skupsemmoneta = skupsemmoneta.v
-	ini.settings.skupauto = skupauto.v
 
 	ini.assistant.asX = asX
 	ini.assistant.asY = asY
@@ -4532,6 +4589,49 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+
+	if title:find('Информация о рыбе') and infofish.v then fishinfo = text:gsub('/ Отсутствует','') end
+	if title:find('Информация о рыбе') and saveinfofish.v then 
+	lua_thread.create(function()
+	fishbaitv1.v = false fishbaitv2.v = false fishbaitv3.v = false fishbaitv4.v = false fishbaitv5.v = false fishbaitv6.v = false fishbaitv7.v = false fishbaitv8.v = false fishbaitv9.v = false fishbaitv10.v = false fishbaitv11.v = false fishbaitv12.v = false fishbaitv13.v = false fishbaitv14.v = false fishbaitv15.v = false fishbaitv16.v = false fishbaitv17.v = false fishbaitv18.v = false fishbaitv19.v = false fishbaitv20.v = false fishbaitv21.v = false fishbaitv22.v = false fishbaitv23.v = false fishbaitv24.v = false fishbaitv25.v = false
+	wait(100)
+	if text:find('Хлеб') then fishbaitv1.v = true end
+	if text:find('Червь') then fishbaitv2.v = true end
+	if text:find('Опарыш') then fishbaitv3.v = true end
+	if text:find('Лягушка') then fishbaitv4.v = true end
+	if text:find('Кукуруза') then fishbaitv5.v = true end
+	if text:find('Кузнечик') then fishbaitv6.v = true end
+	if text:find('Мотыль') then fishbaitv7.v = true end
+	if text:find('Муха') then fishbaitv8.v = true end
+	if text:find('Тесто') then fishbaitv9.v = true end
+	if text:find('Живец') then fishbaitv10.v = true end
+	if text:find('Икра') then fishbaitv11.v = true end
+	if text:find('Горох') then fishbaitv12.v = true end
+	if text:find('Овод') then fishbaitv21.v = true end
+	if text:find('Сыр') then fishbaitv15.v = true end
+	if text:find('Подёнка') then fishbaitv14.v = true end
+	if text:find('Медведка') then fishbaitv23.v = true end
+	if text:find('Пиявка') then fishbaitv20.v = true end
+	if text:find('Сверчок') then fishbaitv24.v = true end
+	if text:find('Личинка ручейника') then fishbaitv19.v = true end
+	if text:find('Манная каша') then fishbaitv17.v = true end
+	if text:find('Перловая каша') then fishbaitv16.v = true end
+	if text:find('Личинка короеда') then fishbaitv13.v = true end
+	if text:find('Личинка майского жука') then fishbaitv18.v = true end
+	if text:find('Креветка') then fishbaitv25.v = true end
+	if text:find('Майский жук') then fishbaitv22.v = true end
+		end)
+	end
+	if dialogId == 25288 and fishlovlya.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
+	if dialogId == 25288 and fishlovlyav2.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
+	if dialogId == 25288 and nofunction.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
+	if dialogId == 25294 and text:match('{ffffff}У вас в наличии: {ae433d}(%d+) шт.') and obmenmonetafish.v then
+	sellkolitem = tonumber(text:match('{ae433d}(%d+) шт.'))
+	end
+	if dialogId == 25292 and text:match('{ffffff}У вас в наличии: {ae433d}(%d+) шт.') and obmenrodfish.v then
+	sellkolfish = tonumber(text:match('{ae433d}(%d+) шт.'))
+	end
+
 	if diaenable.v and vkconnect.v then
 		if style == 1 or style == 3 then
 			vk_requestv2('' .. title .. '\n' .. text .. '\n\n[______________]\n\n[' .. button1 .. '] | [' .. button2 .. ']' )
@@ -4566,6 +4666,19 @@ end
 		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
 		return false
 	end
+	
+	if dialogId == 3060 and isEndsell ~= 0 and isBuyProcesssell then return false end
+	if dialogId == 3040 and isEndsell ~= 0 and isBuyProcesssell then return false end
+	if dialogId == 3050 and isEnsell == 1 then
+		lua_thread.create(checkPagesell, text)
+		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
+		return false
+	end
+	if dialogId == 3050 and isEnsell == 2 then
+		lua_thread.create(pageWritesell, text)
+		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
+		return false
+	end
 
 	if ndr.v then
 		dialogIncoming = dialogId
@@ -4586,6 +4699,7 @@ end
 		closeDialog()
 		end
 	end
+	
 	if liquid.v then
 	statuszidkost1 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
@@ -4822,7 +4936,7 @@ end
 	saveSettings()
 	end
 	
-	if dialogId == 9237 and checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then
+	if dialogId == 9237 and checked_test144.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then
 	poiskrul = text:match('Стоимость: {BEB455}0 {FFFFFF}AZ')
 	findrul = true
 	end
@@ -4867,6 +4981,7 @@ end
     nodial = false
     return false
   end
+  
   if dialogId == 25012 and payclick.v then return false end
   if dialogId == 25012 and mouseclick.v then return false end
   if dialogId == 25012 and videoclick.v then return false end
@@ -5112,6 +5227,52 @@ end
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
+
+	if data.text == 'PULL_THE_FISH' and fishlovlya.v then 
+	lua_thread.create(function()
+	fishbool = true
+	wait(zadervkafishklava.v*1000)
+	fishbool = false
+		end)
+	end
+	if data.text == 'PULL_THE_FISH' and fishlovlyav2.v then 
+	lua_thread.create(function()
+	fishboolv2 = true
+	wait(zadervkafishklava.v*1000)
+	fishboolv2 = false
+		end)
+	end
+	if data.text == 'PULL_THE_FISH' and nofunction.v then 
+	lua_thread.create(function()
+	fishboolv3 = true
+	wait(zadervkafishklava.v*1000)
+	fishboolv3 = false
+		end)
+	end
+	if checkeholot.v and activeeholot then 
+    lua_thread.create(function()
+	 if data.modelId == 18875 then
+		wait(1000)
+        sampSendClickTextdraw(id)
+		useeholot = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and useeholot then
+        clickID = id + 1
+		wait(500)
+        sampSendClickTextdraw(clickID)
+        useeholot = false
+        closeeholot = true
+      end
+      if closeeholot then
+        wait(300)
+		sampSendClickTextdraw(admmp)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+        closeeholot = false
+        activeeholot = false
+      end
+    end)
+  end
 	
 	if closefind == false and data.text == 'CLOSE' then 
 	lua_thread.create(function()
@@ -8189,8 +8350,6 @@ function imgui.OnDrawFrame()
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
-		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['bank'].v = false
 		win_state['noteswin'].v = false
@@ -8205,7 +8364,6 @@ function imgui.OnDrawFrame()
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -8232,6 +8390,11 @@ function imgui.OnDrawFrame()
        end
 	   
 	if not win_state['main'].v and win_state['lovec'].v then 
+          imgui.Process = true
+		  imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['fishmenu'].v then 
           imgui.Process = true
 		  imgui.ShowCursor = true
        end
@@ -8264,12 +8427,6 @@ function imgui.OnDrawFrame()
 	   
 	if not win_state['main'].v and win_state['timeyved'].v then
 		 imgui.Process = true
-       end
-	   
-	if win_state['skup'].v or win_state['skup2'].v or win_state['skup3'].v then
-		 win_state['skupshema'].v = true
-	else
-		win_state['skupshema'].v = false
        end
 	   
 	if win_state['vkmessage'].v then
@@ -8414,7 +8571,8 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(340) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 56), false)
-	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вводи промокод #monopoly на Page и получай 1.5кк на банк.счёт.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{00bfff}(push me){00bfff}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
@@ -8463,7 +8621,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{00bfff}push me{00bfff}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Reason (444 рубля) | Nismo (333 рубля) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Котиков (150 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Archi (100 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Ambassador (100 руб) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Дима (100 рублей) | Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Pentium (15 рублей) | #Pharaoh (11 рублей) |")
@@ -8490,7 +8648,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winphone, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
 	end
 	if panel4.v then 
-	if imgui.ImageButton(wintelega, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	if imgui.ImageButton(wintelega, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	end
 	if panel5.v then 
 	if imgui.ImageButton(win2048, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['games'].v = not win_state['games'].v end
@@ -8550,7 +8708,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winphone2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
 	end
 	if panelv24.v then 
-	if imgui.ImageButton(wintelega2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	if imgui.ImageButton(wintelega2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	end
 	if panelv25.v then 
 	if imgui.ImageButton(win20482, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['games'].v = not win_state['games'].v end
@@ -8610,7 +8768,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winphone3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
 	end
 	if panelv34.v then 
-	if imgui.ImageButton(wintelega3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	if imgui.ImageButton(wintelega3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	end
 	if panelv35.v then 
 	if imgui.ImageButton(win20483, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['games'].v = not win_state['games'].v end
@@ -8670,7 +8828,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winphone4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
 	end
 	if panelv44.v then 
-	if imgui.ImageButton(wintelega4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	if imgui.ImageButton(wintelega4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	end
 	if panelv45.v then 
 	if imgui.ImageButton(win20484, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['games'].v = not win_state['games'].v end
@@ -8730,7 +8888,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winphone5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
 	end
 	if panelv54.v then 
-	if imgui.ImageButton(wintelega5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	if imgui.ImageButton(wintelega5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	end
 	if panelv55.v then 
 	if imgui.ImageButton(win20485, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['games'].v = not win_state['games'].v end
@@ -8797,7 +8955,8 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(350) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 50), false)
-	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'')
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вводи промокод #monopoly на Page и получай 1.5кк на банк.счёт.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Хочешь заказать рекламу? Тогда пиши в группу VK') imgui.SameLine(310) imgui.TextColoredRGB("{0F52BA}(push me){0F52BA}") imgui.SameLine(310) imgui.Link('https://vk.com/mono_tools','(push me)')
 	imgui.SameLine(370) imgui.Text(u8"Цены крайне низкие, 10 рублей в день.") 
 	imgui.EndChild()
@@ -8840,7 +8999,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB("{0F52BA}push me{0F52BA}") imgui.SameLine(200) imgui.Link('https://www.donationalerts.com/r/bunya75','push me')
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Reason (444 рубля) | Nismo (333 рубля) | ")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Котиков (150 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Archi (100 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Август (100 рублей) | Ambassador (100 руб) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Дима (100 рублей) | Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Pentium (15 рублей) | #Pharaoh (11 рублей) |")
@@ -8859,7 +9018,7 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(660)
 	if imgui.ImageButton(winphoneipad, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v end
 	imgui.SameLine(740)
-	if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false end
+	if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	imgui.SameLine(820)
 	if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
 	imgui.SameLine(900)
@@ -8871,10 +9030,10 @@ function imgui.OnDrawFrame()
 	imgui.Text(u8"Bank Menu")
 	imgui.SameLine(661) 
 	imgui.Text(u8"Piar Menu")
-	imgui.SameLine(740) 
+	imgui.SameLine(743) 
+	imgui.Text(u8"Sell Menu")
+	imgui.SameLine(820) 
 	imgui.Text(u8"Skup Menu")
-	imgui.SameLine(812) 
-	imgui.Text(u8"Skup Menu v2")
 	imgui.SameLine(915) 
 	imgui.Text(u8"Pong")
 	
@@ -9034,7 +9193,7 @@ end
 				imgui.SameLine(185)
 				if imgui.ImageButton(winphone, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['piar'].v = not win_state['piar'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(270)
-				if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['skup2'].v = false win_state['skup3'].v = false win_state['windowspusk'].v = false end
+				if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(355)
 				if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
 				imgui.SameLine(440)
@@ -9047,9 +9206,9 @@ end
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(188) imgui.Text(u8"Piar Menu")
 				imgui.SameLine(100) 
-				imgui.Text('') imgui.SameLine(270) imgui.Text(u8"Skup Menu")
+				imgui.Text('') imgui.SameLine(273) imgui.Text(u8"Sell Menu")
 				imgui.SameLine(100) 
-				imgui.Text('') imgui.SameLine(348) imgui.Text(u8"Skup Menu v2")
+				imgui.Text('') imgui.SameLine(355) imgui.Text(u8"Skup Menu")
 				imgui.SameLine(100) 
 				imgui.Text('') imgui.SameLine(458) imgui.Text(u8"Pong")
 				
@@ -9188,10 +9347,6 @@ end
 		koinoknomenu()
 	end
 	
-	if win_state['skupshema'].v then
-		shemaskup()
-	end
-	
 	if win_state['piarshema'].v then
 		shemapiar()
 	end
@@ -9319,14 +9474,14 @@ end
 	if win_state['skupv2'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8'[New] Skup Menu ', win_state['skupv2'], imgui.WindowFlags.NoResize)
+		imgui.Begin(u8'Skup Menu##4353464563', win_state['skupv2'], imgui.WindowFlags.NoResize)
 		
 		if #itemsskup ~= 0 then
 				imgui.Text('')
-				imgui.SetCursorPosX(170)
-				imgui.Text(u8"Все загруженные предметы:")
+				imgui.SetCursorPosX(120)
+				imgui.Text(u8"Все загруженные предметы (обновить /cst):")
 				imgui.SameLine()
-				imgui.SetCursorPosX(560)
+				imgui.SetCursorPosX(630)
 				imgui.Text(u8"Выбранные предметы:")
 
 				imgui.Text('') imgui.SameLine() imgui.BeginChild("##202020", imgui.ImVec2(500, 450))
@@ -9375,14 +9530,14 @@ end
 						if itemsskup[i][4] then table.insert(inputsskup, {imgui.ImInt(itemsskup[i][2]), imgui.ImInt(itemsskup[i][3]), i, false, imgui.ImBool(itemsskup[i][5])}) end
 					end
 				end
-			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить напишите '/cst'. Затем нажмите в лавке 'Выставить товар\nна покупку'.")
+			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить напишите '/cst'. Затем нажмите в лавке 'Выставить товар на покупку'.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров составляет: ")
 				imgui.PushItemWidth(200)
 				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
 				imgui.PopItemWidth()
 					imgui.Text('')
-					imgui.SetCursorPosX(300)
-					if imgui.CustomButton(u8'Ок, понял', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then saveSettings() win_state['skupv2'].v = false end
+					imgui.SetCursorPosX(350)
+					if imgui.CustomButton(u8'Ок, понял', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then win_state['skupv2'].v = false end
 			end
 		imgui.End()
 	end
@@ -9390,7 +9545,7 @@ end
 		local isWarning = false
 		imgui.SetNextWindowSize(imgui.ImVec2(740, 550), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.Begin(u8"Окно скупа предметов", win_state['skupv3'])
+		imgui.Begin(u8"Окно скупа предметов##4564563543", win_state['skupv3'], imgui.WindowFlags.NoResize)
 			imgui.Text('') 
 			imgui.Text('') imgui.SameLine() imgui.BeginChild("##3", imgui.ImVec2(500, 450))
 				for i=1, #inputsskup do
@@ -9407,11 +9562,13 @@ end
 			imgui.EndChild()
 			imgui.SameLine()
 			imgui.BeginGroup()
-				if imgui.CustomButton(u8"Вернуться к выбору", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(200, 75)) then win_state['skupv3'].v = false win_state['skupv2'].v = true end
-				if imgui.CustomButton(u8"Начать закупку", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(200, 75)) then if isEn == 1 then isEn = 0 else isEn = 1 for i=1, #inputsskup do itemsskup[inputsskup[i][3]][2] = inputsskup[i][1].v itemsskup[inputsskup[i][3]][3] = inputsskup[i][2].v itemsskup[inputsskup[i][3]][5] = inputsskup[i][5].v inicfg.save(itemsskup, _nameini) end end end
+				if imgui.CustomButton(u8"Вернуться к выбору", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 75)) then win_state['skupv3'].v = false win_state['skupv2'].v = true end
+				if imgui.CustomButton(u8"Начать закупку", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 75)) then if isEn == 1 then isEn = 0 else isEn = 1 for i=1, #inputsskup do itemsskup[inputsskup[i][3]][2] = inputsskup[i][1].v itemsskup[inputsskup[i][3]][3] = inputsskup[i][2].v itemsskup[inputsskup[i][3]][5] = inputsskup[i][5].v inicfg.save(itemsskup, _nameini) end end end
+				if imgui.CustomButton(u8"Сохранить настройки", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 0)) then saveSettings() sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) for i=1, #inputsskup do itemsskup[inputsskup[i][3]][2] = inputsskup[i][1].v itemsskup[inputsskup[i][3]][3] = inputsskup[i][2].v itemsskup[inputsskup[i][3]][5] = inputsskup[i][5].v inicfg.save(itemsskup, _nameini) end end
+				
 				if isEn == 1 then if isWarning then imgui.TextColoredRGB("{ff2400}Проверьте цены!") else imgui.TextColoredRGB('{7cfc00}Нажми "Добавить товар на покупку"!') end end
 				imgui.PushItemWidth(100)
-				imgui.InputInt(u8"Задержка (мсек)", delayInt)
+				imgui.SliderInt(u8'Задержка (мс) ##55235212767896',delayintv2,100, 10000)
 				imgui.TextColoredRGB("1 секунда = 1000 миллисекунд")
 			imgui.EndGroup()
 		local mon = 0
@@ -9427,30 +9584,116 @@ end
 	
 	
 	if win_state['skup'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.705, 0.6422))
-		imgui.SetNextWindowSize(imgui.ImVec2(708, 507), imgui.Cond.FirstUseEver)
-		imgui.Begin(fa.ICON_QRCODE..u8' Skup Menu ', win_state['skup'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf32345235412', imgui.ImVec2(708, 483), false)
-				getArizonaSkup()
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8'Sell Menu##4534543543', win_state['skup'], imgui.WindowFlags.NoResize)
+		
+		if #itemssell ~= 0 then
+				imgui.Text('')
+				imgui.SetCursorPosX(120)
+				imgui.Text(u8"Все загруженные предметы (обновить /cstsell):")
+				imgui.SameLine()
+				imgui.SetCursorPosX(630)
+				imgui.Text(u8"Выбранные предметы:")
+
+				imgui.Text('') imgui.SameLine() imgui.BeginChild("##20202076899", imgui.ImVec2(500, 450))
+					imgui.Text('') imgui.SameLine() imgui.RadioButton(u8"Искать по названию предмета", rbutsell, 1)
+					imgui.Text('') imgui.SameLine() imgui.RadioButton(u8"Искать по номеру предмета", rbutsell, 2)
+					if rbutsell.v == 1 then imgui.Text('') imgui.SameLine() imgui.InputText(u8'Поиск по названию', findBufsell) end
+					if rbutsell.v == 2 then imgui.Text('') imgui.SameLine() imgui.InputInt(u8'Поиск по номеру', findBufIntsell) end
+					for i=2, #itemssell do
+						local isFoundedsell = false
+						if rbutsell.v == 1 then
+							local pat1sell = string.rlower(itemssell[i][1])
+							local pat2sell = string.rlower(u8:decode(findBufsell.v))
+							if pat1sell:find(pat2sell, 0, true) then
+								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then stablesell(i) end
+								imgui.SameLine()
+								imgui.TextColoredRGB(itemssell[i][1])
+								isFoundedsell = true
+							end
+						end
+						if rbutsell.v == 2 then
+							if tostring(i):match(findBufIntsell.v, 0, true) then
+								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then stablesell(i) end
+								imgui.SameLine()
+								imgui.TextColoredRGB(itemssell[i][1])
+								isFoundedsell = true
+							end
+						end
+					end
 				imgui.EndChild()
+				imgui.SameLine()
+
+				imgui.BeginChild("##25476543", imgui.ImVec2(360, 450))
+				imgui.SetCursorPosX(65)
+				if imgui.CustomButton(u8"Очистить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(225, 25)) then for i=1, #itemssell do itemssell[i][4] = false end inicfg.save(itemssell, _nameinisell) end
+					for i=1, #itemssell do
+						if itemssell[i][4] then
+							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then itemssell[i][4] = false inicfg.save(itemssell, _nameinisell) end
+							imgui.SameLine()
+							imgui.TextColoredRGB(" "..itemssell[i][1])
+						end
+					end
+				imgui.EndChild()
+				imgui.SetCursorPosX(300)
+				if imgui.CustomButton(u8"Продолжить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then win_state['skup'].v = false win_state['skup2'].v = true inputssell = {}
+					for i=1, #itemssell do
+						if itemssell[i][4] then table.insert(inputssell, {imgui.ImInt(itemssell[i][2]), imgui.ImInt(itemssell[i][3]), i, false, imgui.ImBool(itemssell[i][5])}) end
+					end
+				end
+			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить, напишите '/cstsell'. Затем нажмите в лавке 'Выставить товар на продажу'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров составляет: ")
+				imgui.PushItemWidth(200)
+				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896sell',delayintsellv2,100, 10000)
+				imgui.PopItemWidth()
+					imgui.Text('')
+					imgui.SetCursorPosX(350)
+					if imgui.CustomButton(u8'Ок, понял', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then win_state['skup'].v = false end
+			end
 		imgui.End()
 	end
 	if win_state['skup2'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.705, 0.6422))
-		imgui.SetNextWindowSize(imgui.ImVec2(708, 507), imgui.Cond.FirstUseEver)
-		imgui.Begin(fa.ICON_QRCODE..u8' Skup Menu ', win_state['skup2'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf3234432', imgui.ImVec2(708, 483), false)
-				getArizonaSkup2str()
-				imgui.EndChild()
-		imgui.End()
-	end
-	if win_state['skup3'].v then
-		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.705, 0.6422))
-		imgui.SetNextWindowSize(imgui.ImVec2(708, 507), imgui.Cond.FirstUseEver)
-		imgui.Begin(fa.ICON_QRCODE..u8' Skup Menu ', win_state['skup3'], imgui.WindowFlags.NoResize)
-				imgui.BeginChild('##asdasasddf2121', imgui.ImVec2(708, 483), false)
-				getArizonaSkup3str()
-				imgui.EndChild()
+		local isWarningsell = false
+		imgui.SetNextWindowSize(imgui.ImVec2(742, 550), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.Begin(u8"Окно продажи предметов##546y5yg45t", win_state['skup2'], imgui.WindowFlags.NoResize)
+			imgui.Text('') 
+			imgui.Text('') imgui.SameLine() imgui.BeginChild("##3sell", imgui.ImVec2(500, 450))
+				for i=1, #inputssell do
+						if itemssell[inputssell[i][3]][4] then
+							imgui.Separator()
+								imgui.TextColoredRGB(" Предмет: "..itemssell[inputssell[i][3]][1])
+								imgui.Checkbox(u8(" Единичный предмет ["..i.."]"), inputssell[i][5])
+								if not inputssell[i][5].v then imgui.InputInt(u8(" Кол-во ".."["..i.."]"), inputssell[i][1]) end
+								imgui.InputInt(u8(" Стоимость ".."["..i.."]"), inputssell[i][2])
+								if inputssell[i][2].v < 10 then imgui.TextColoredRGB("{FF2400}Минимальная цена товара 10$!") isWarningsell = true end
+							imgui.Separator()
+						end
+				end
+			imgui.EndChild()
+			imgui.SameLine()
+			imgui.BeginGroup()
+				if imgui.CustomButton(u8"Вернуться к выбору", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 75)) then win_state['skup2'].v = false win_state['skup'].v = true end
+				if imgui.CustomButton(u8"Начать закупку", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 75)) then if isEnsell == 1 then isEnsell = 0 else isEnsell = 1 for i=1, #inputssell do itemssell[inputssell[i][3]][2] = inputssell[i][1].v itemssell[inputssell[i][3]][3] = inputssell[i][2].v itemssell[inputssell[i][3]][5] = inputssell[i][5].v inicfg.save(itemssell, _nameinisell) end end end
+				if imgui.CustomButton(u8"Сделать предметы единичными", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 0)) then 
+				for i=1, #inputssell do
+				inputssell[i][5].v = true
+					end
+				end
+				if imgui.CustomButton(u8"Сохранить настройки", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 0)) then saveSettings() sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) for i=1, #inputssell do itemssell[inputssell[i][3]][2] = inputssell[i][1].v itemssell[inputssell[i][3]][3] = inputssell[i][2].v itemssell[inputssell[i][3]][5] = inputssell[i][5].v inicfg.save(itemssell, _nameinisell) end end
+				if isEnsell == 1 then if isWarningsell then imgui.TextColoredRGB("{ff2400}Проверьте цены!") else imgui.TextColoredRGB('{7cfc00}Нажми "Выставить товар на продажу"!') end end
+				imgui.PushItemWidth(100)
+				imgui.SliderInt(u8'Задержка (мс) ##552357678296432354',delayintsellv2,100, 10000)
+				imgui.TextColoredRGB("1 секунда = 1000 миллисекунд")
+			imgui.EndGroup()
+		local monsell = 0
+		for i=1, #inputssell do
+				if inputssell[i][5].v then monsell = monsell + inputssell[i][2].v else
+				monsell = monsell + (inputssell[i][1].v * inputssell[i][2].v) end
+		end
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Всего будет заработано: "..comma_value(monsell).." вирт"))
+		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Ваши вирты: "..colorsell..comma_value(getPlayerMoney()).." вирт")
 		imgui.End()
 	end
 	
@@ -9655,7 +9898,7 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 280), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 335), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю праздничных монет', lovlymonet) imgui.SameLine() imgui.TextQuestion(u8"Ловля монет на праздничном квесте. После активации функционала, нажав на кнопку '1' - будет флуд клавишей ALT. Если нажать на кнопку '2' - прекратится флуд ALT и начнется флуд пробелом. Если нажать на кнопку '3' - функционал будет отключен. Чем больше фпс - тем быстрее нажимаются клавиши. Задержка влияет на нажатие на пробел, если не кикает, ставьте минимальную задержку.")
@@ -9686,10 +9929,193 @@ end
 		end
 	imgui.SameLine()
 	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
-	
+		
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (мс)##432545745643',zadervkalovly,10, 2000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на клики в диалогах и их открытие. Поставьте значение выше, если кикает за флуд диалогами. По умолчанию задержка установлена на 100 мс.");  
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Кол-во BTC ##2521354', autopasspaybtc); imgui.SameLine(); imgui.TextQuestion(u8"В данном пункте обязательно нужно указать количество биткоинов (до 600)")
 		
+		imgui.End()
+	end
+	
+	if win_state['fishmenu'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(985, 540), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8'FishRod | Авто-ловля рыбы', win_state['fishmenu'], imgui.WindowFlags.NoResize)
+		imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 0.15))
+		imgui.Text('') imgui.SameLine() 
+		imgui.BeginChild('##asdasasddf12462323', imgui.ImVec2(969, 132), false)
+		imgui.Text(u8'Рыбы поймано: | За сессию: '..fishses..u8' шт | За всё время: '..cfg.infofishkol.fishkol..u8' шт')
+		imgui.Text(u8'Предметов поймано: | За сессию: '..itemses..u8' шт | За всё время: '..cfg.infofishkol.itemkol..u8' шт')
+		imgui.Separator()
+		imgui.TextColoredRGB(''..fishinfo)
+		imgui.EndChild()
+		
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine()  imgui.Text(u8'Способ ловли рыбы №1') imgui.SameLine() imgui.TextQuestion(u8"Данный способ ловли очень прост. Активируете ловлю, укомплектовываете удочку и начинаете рыбачить. Если наживка будет неподходящей, то скрипт сменит её на другую. Меняет наживки скрипт по порядку, как есть в списке наживок. Если вы хотите менять наживки самостоятельно, то включите функцию 'Запретить смену наживки'.") 
+		imgui.Separator()
+		
+		imgui.Text('') imgui.SameLine()  imgui.Checkbox(u8'Активировать ловлю рыбы', fishlovlya) imgui.SameLine() imgui.TextQuestion(u8"Для активации Авто-ловли нужно укомплектовать удочку всем необходимым, включить функцию и забросить удочку. Далее скрипт автоматический будет нажимать N для ловли рыбы и после забрасывать удочку обратно. Если у вас будет стоять неподходящая наживка - скрипт поменяет её. Если у вас нет наживки, которую выбрал скрипт - он выберет другую. Если у вас закончится наживка - скрипт поменяет её на другую. Советую рыбачить в море на лодке (там больше всего рыбы) и купить с собой побольше наживки.") 
+		if fishlovlya.v then fishlovlyav2.v = false end
+		
+		imgui.SameLine() imgui.Checkbox(u8'Запретить смену наживки', fishydo) imgui.SameLine() imgui.TextQuestion(u8"Если вы не хотите, чтобы скрипт автоматический менял наживку, то включите данную функцию.") 
+		
+		imgui.SameLine() imgui.Checkbox(u8'Нажимать только на клавишу N', nofunction) imgui.SameLine() imgui.TextQuestion(u8"Если вы хотите, чтобы скрипт только нажимал в нужное время на N, без смены наживки и закидывания удочки, то активируйте данный функционал.") 
+		if nofunction.v then fishlovlyav2.v = false fishlovlya.v = false fishydo.v = false end
+		
+		imgui.SameLine() imgui.Checkbox(u8'Записывать информацию с эхолота', infofish)
+
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Способ ловли рыбы №2') imgui.SameLine() imgui.TextQuestion(u8"В отличии от первого способа, в данном способе вы сможете выбрать определенную наживку для рыбалки.") 
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю рыбы##21231312', fishlovlyav2) imgui.SameLine() imgui.TextQuestion(u8"Для работы функции нужно укомплектовать удочку всем необходимым, настроить в скрипте наживку, на которую хотите ловить, и активировать ловлю. Далее скрипт автоматический будет нажимать N для ловли рыбы и после забрасывать удочку обратно. Наживку скрипт будет использовать ту, которую выбрали вы. Менять её он будет каждый раз. Советую рыбачить в море на лодке (там больше всего рыбы) и купить с собой побольше наживки.") 
+		if fishlovlyav2.v then fishlovlya.v = false fishydo.v = false end
+		
+		imgui.SameLine(244) imgui.Checkbox(u8'Выбирать наживку, найденную в эхолоте', saveinfofish) imgui.SameLine() imgui.TextQuestion(u8"Если включено, то при открытии эхолота, убирается старый выбор наживок и устанавливается новый.") 
+		
+		imgui.SameLine(555) imgui.Checkbox(u8'Авто-проверка эхолота', checkeholot) imgui.SameLine() imgui.TextQuestion(u8"Через установленное вами время, будет открываться эхолот, чтобы обновить с него данные. Инвентарь должен быть на англ.языке. Эхолот должен быть на первой странице. По умолчанию установлена задержка на 5 минут.") 
+		
+		imgui.SameLine()
+		imgui.PushItemWidth(70)
+		imgui.SliderInt(u8'Задержка на проверку##436546ytght',zadervkaeholot,1, 60)
+		imgui.PopItemWidth()
+		
+		imgui.SameLine() imgui.TextQuestion(u8"Задержка влияет на то, через сколько будет повторно открываться эхолот для обновления данных. Задержка устанавливается в минутах. По умолчанию установлено на 5 минут.") 
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлеб', fishbaitv1)
+		imgui.SameLine(83)
+		imgui.Checkbox(u8'Червь', fishbaitv2)
+		imgui.SameLine(157)
+		imgui.Checkbox(u8'Опарыш', fishbaitv3)
+		imgui.SameLine(244)
+		imgui.Checkbox(u8'Лягушка', fishbaitv4)
+		imgui.SameLine(334)
+		imgui.Checkbox(u8'Кукуруза', fishbaitv5)
+		imgui.SameLine(426)
+		imgui.Checkbox(u8'Кузнечик', fishbaitv6)
+		imgui.SameLine(520)
+		imgui.Checkbox(u8'Мотыль', fishbaitv7)
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Муха', fishbaitv8)
+		imgui.SameLine()
+		imgui.Checkbox(u8'Тесто', fishbaitv9)
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Живец', fishbaitv10)
+		imgui.SameLine()
+		imgui.Checkbox(u8'Икра', fishbaitv11)
+		imgui.SameLine()
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Горох', fishbaitv12)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Овод', fishbaitv21)
+		imgui.SameLine(83)
+		imgui.Checkbox(u8'Сыр', fishbaitv15)
+		
+		imgui.SameLine(157)
+		imgui.Checkbox(u8'Подёнка', fishbaitv14)
+		imgui.SameLine(244)
+		imgui.Checkbox(u8'Медведка', fishbaitv23)
+		
+		imgui.SameLine(334)
+		imgui.Checkbox(u8'Пиявка', fishbaitv20)
+		imgui.SameLine(426)
+		imgui.Checkbox(u8'Сверчок', fishbaitv24)
+		imgui.SameLine(520)
+		imgui.Checkbox(u8'Личинка ручейника', fishbaitv19)
+		imgui.SameLine(673)
+		imgui.Checkbox(u8'Манная каша', fishbaitv17)
+		imgui.SameLine(825)
+		imgui.Checkbox(u8'Перловая каша', fishbaitv16)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Личинка короеда', fishbaitv13)
+		imgui.SameLine(157)
+		imgui.Checkbox(u8'Личинка майского жука', fishbaitv18)
+		imgui.SameLine(334)
+		imgui.Checkbox(u8'Креветка', fishbaitv25)
+		imgui.SameLine(426)
+		imgui.Checkbox(u8'Майский жук', fishbaitv22)
+		
+		imgui.SameLine(560)
+		if imgui.CustomButton(u8'Выбрать все наживки',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(204, 0)) then fishbaitv1.v = true fishbaitv2.v = true fishbaitv3.v = true fishbaitv4.v = true fishbaitv5.v = true fishbaitv6.v = true fishbaitv7.v = true fishbaitv8.v = true fishbaitv9.v = true fishbaitv10.v = true fishbaitv11.v = true fishbaitv12.v = true fishbaitv13.v = true fishbaitv14.v = true fishbaitv15.v = true fishbaitv16.v = true fishbaitv17.v = true fishbaitv18.v = true fishbaitv19.v = true fishbaitv20.v = true fishbaitv21.v = true fishbaitv22.v = true fishbaitv23.v = true fishbaitv24.v = true fishbaitv25.v = true end
+		imgui.SameLine()
+		if imgui.CustomButton(u8'Снять галочки со всех наживок',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(204, 0)) then fishbaitv1.v = false fishbaitv2.v = false fishbaitv3.v = false fishbaitv4.v = false fishbaitv5.v = false fishbaitv6.v = false fishbaitv7.v = false fishbaitv8.v = false fishbaitv9.v = false fishbaitv10.v = false fishbaitv11.v = false fishbaitv12.v = false fishbaitv13.v = false fishbaitv14.v = false fishbaitv15.v = false fishbaitv16.v = false fishbaitv17.v = false fishbaitv18.v = false fishbaitv19.v = false fishbaitv20.v = false fishbaitv21.v = false fishbaitv22.v = false fishbaitv23.v = false fishbaitv24.v = false fishbaitv25.v = false end
+		
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на действия в диалогах (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на действия в диалогах при выборе наживки, забрасывании удочки, после поимки рыбы и так далее. Если вам кажется, что скрипт делает действия в диалогах слишком быстро или медленно - то поменяйте задержку.")
+		imgui.SameLine(295)
+		imgui.Text(u8("Задержка на ловлю рыбы в способе №2 (сек):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, когда будет смена наживки на другую. По моим подсчетам, рыба ловится за 50 секунд и потом нужно сменить наживку и заново забросить удочку. Если вы не успеваете поймать рыбу до смены наживки, то увеличьте задержку. По умолчанию установлена на 60 секунд.")
+		imgui.SameLine(650)
+		imgui.Text(u8("Задержка на нажатие клавиши N по времени (сек):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, сколько секунд будет нажиматься клавиша N для поимки рыбы. Если вы не успеваете поймать рыбу, то увеличьте задержку.")
+		imgui.PushItemWidth(230)
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##7777',zadervkafish,100, 1000)
+		imgui.PopItemWidth()
+		imgui.SameLine(295)
+		imgui.PushItemWidth(270)
+		imgui.SliderInt(u8'##777734534523time',zadervkafishtime,1, 120)
+		imgui.PopItemWidth()
+		imgui.SameLine(650)
+		imgui.PushItemWidth(300)
+		imgui.SliderInt(u8'##777734534523timefish',zadervkafishklava,1, 60)
+		imgui.PopItemWidth()
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на скорость нажатия N (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на скорость нажатия клавиши. Чем меньше - тем быстрее, но есть шанс кика или краша. По умолчанию - 10 мс.")
+		imgui.SameLine(295)
+		imgui.Text(u8("Задержка на продажу и обмен рыбы (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на скорость продажи и обмена монет. Если не продаёт всю рыбу или не обменивает все предметы на монеты - то увеличьте задержку.")
+		
+		
+		imgui.PushItemWidth(230)
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##777734534523timefish3423423flash',zadervkafishclick,0, 200)
+		imgui.PopItemWidth()
+		imgui.SameLine(295)
+		imgui.PushItemWidth(270)
+		imgui.SliderInt(u8'##sellfish23546t547y',zadervkasellfish,100, 1000)
+		imgui.PopItemWidth()
+		
+		imgui.SameLine() imgui.Checkbox(u8'Обменять предметы на монеты', obmenmonetafish) imgui.SameLine(); imgui.TextQuestion(u8"Встаньте перед обменником и включите функцию. После обмена предметов, функция выключится атоматический.")
+		imgui.SameLine() imgui.Checkbox(u8'Продать всю рыбу', obmenrodfish) imgui.SameLine(); imgui.TextQuestion(u8"Встаньте на пикап продажи рыбы и включите функцию. После продажи рыбы, функция выключится атоматический и в чате напишется, сколько вы заработали с продажи.")
+		
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Нажимать N, используя синхронизацию с сервером"));  imgui.SameLine();  imgui.ToggleButton(u8'##34535435trdgdft43t45', fishklavaN) imgui.SameLine(); imgui.Text(u8("Нажимать N, используя игровые клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"Нажатие N через синхронизацию предпочительный вариант т.к работает быстрее, но может кикнуть или крашнуть (зависит от скорости нажатия). Оба варианта работают в свернутом режиме, используя Анти-Афк. Если рыбачите с берега, то включайте 'нажатие N, используя игровые клавиши', через синхронизацию с берега почему то не ловит, хотя с лодки всё работает нормально.")
+		imgui.SameLine() imgui.Checkbox(u8'Вести статистику пойманной рыбы и предметов', statafish)
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine()  if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
+		imgui.Text('') imgui.SameLine()  if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
+		zadervkafish.v = '300'
+		zadervkafishtime.v = '60'
+		zadervkafishklava.v = '10'
+		zadervkafishclick.v = '10'
+		zadervkaeholot.v = '5'
+		zadervkasellfish.v = '300'
+		cfg.infofishkol.itemkol = '0'
+		cfg.infofishkol.fishkol = '0'
+		infofish.v = false
+		saveinfofish.v = false
+		statafish.v = false
+		fishydo.v = false
+		fishbaitv1.v = false
+		fishbaitv2.v = false
+		fishbaitv3.v = false
+		fishbaitv4.v = false
+		fishbaitv5.v = false
+		fishbaitv6.v = false
+		fishbaitv7.v = false
+		fishbaitv8.v = false
+		fishbaitv9.v = false
+		fishbaitv10.v = false
+		fishbaitv11.v = false
+		fishbaitv12.v = false
+		fishbaitv13.v = false
+		fishbaitv14.v = false
+		fishbaitv15.v = false
+		fishbaitv16.v = false
+		fishbaitv17.v = false
+		fishbaitv18.v = false
+		fishbaitv19.v = false
+		fishbaitv20.v = false
+		fishbaitv21.v = false
+		fishbaitv22.v = false
+		fishbaitv23.v = false
+		fishbaitv24.v = false
+		fishbaitv25.v = false
+		fishklavaN.v = false		
+		sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) 
+		saveSettings() 
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+		end
+		imgui.PopStyleColor()
 		imgui.End()
 	end
 	
@@ -10045,7 +10471,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10064,7 +10489,6 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10104,7 +10528,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10123,7 +10546,6 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10163,7 +10585,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10182,7 +10603,6 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10222,7 +10642,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10241,7 +10660,6 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10280,7 +10698,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10299,7 +10716,6 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10338,7 +10754,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10357,7 +10772,62 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['oscriptepeople'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['fishmenu'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['videoset2'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['housenumber'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10396,7 +10866,6 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
-		win_state['skupshema'].v = false
 		win_state['piarshema'].v = false
 		win_state['vkshema'].v = false
 		win_state['pravila2048'].v = false
@@ -10415,7 +10884,6 @@ function onWindowMessage(m, p)
 		win_state['skupv3'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
-		win_state['skup3'].v = false
 		win_state['oscripte'].v = false
 		win_state['zadach'].v = false
 		win_state['zadachv2'].v = false
@@ -10692,6 +11160,1635 @@ function podklchat()
 
 function sampev.onServerMessage(color, text)
 
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv1 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 0, -1)
+	fishrodv1 = false
+	fishrodv2 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv2 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 1, -1)
+	fishrodv2 = false
+	fishrodv3 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv3 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 2, -1)
+	fishrodv3 = false
+	fishrodv4 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv4 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 3, -1)
+	fishrodv4 = false
+	fishrodv5 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv5 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 4, -1)
+	fishrodv5 = false
+	fishrodv6 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv6 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 5, -1)
+	fishrodv6 = false
+	fishrodv7 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv7 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 6, -1)
+	fishrodv7 = false
+	fishrodv8 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv8 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 7, -1)
+	fishrodv8 = false
+	fishrodv9 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv9 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 8, -1)
+	fishrodv9 = false
+	fishrodv10 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv10 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 9, -1)
+	fishrodv10 = false
+	fishrodv11 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv11 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 10, -1)
+	fishrodv11 = false
+	fishrodv12 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv12 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 11, -1)
+	fishrodv12 = false
+	fishrodv13 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv13 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 12, -1)
+	fishrodv13 = false
+	fishrodv14 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv14 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 13, -1)
+	fishrodv14 = false
+	fishrodv15 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv15 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 14, -1)
+	fishrodv15 = false
+	fishrodv16 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv16 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 15, -1)
+	fishrodv16 = false
+	fishrodv17 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv17 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 16, -1)
+	fishrodv17 = false
+	fishrodv18 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv18 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 17, -1)
+	fishrodv18 = false
+	fishrodv19 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv19 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 18, -1)
+	fishrodv19 = false
+	fishrodv20 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv20 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 19, -1)
+	fishrodv20 = false
+	fishrodv21 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv21 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 20, -1)
+	fishrodv21 = false
+	fishrodv22 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv22 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 21, -1)
+	fishrodv22 = false
+	fishrodv23 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv23 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 22, -1)
+	fishrodv23 = false
+	fishrodv24 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv24 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 23, -1)
+	fishrodv24 = false
+	fishrodv25 = true
+	end)
+end
+	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv25 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 24, -1)
+	fishrodv25 = false
+	fishrodv1 = true
+	end)
+end
+
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv1 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 0, -1)
+	fishrodv1 = false
+	fishrodv2 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv2 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 1, -1)
+	fishrodv2 = false
+	fishrodv3 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv3 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 2, -1)
+	fishrodv3 = false
+	fishrodv4 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv4 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 3, -1)
+	fishrodv4 = false
+	fishrodv5 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv5 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 4, -1)
+	fishrodv5 = false
+	fishrodv6 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv6 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 5, -1)
+	fishrodv6 = false
+	fishrodv7 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv7 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 6, -1)
+	fishrodv7 = false
+	fishrodv8 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv8 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 7, -1)
+	fishrodv8 = false
+	fishrodv9 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv9 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 8, -1)
+	fishrodv9 = false
+	fishrodv10 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv10 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 9, -1)
+	fishrodv10 = false
+	fishrodv11 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv11 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 10, -1)
+	fishrodv11 = false
+	fishrodv12 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv12 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 11, -1)
+	fishrodv12 = false
+	fishrodv13 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv13 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 12, -1)
+	fishrodv13 = false
+	fishrodv14 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv14 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 13, -1)
+	fishrodv14 = false
+	fishrodv15 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv15 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 14, -1)
+	fishrodv15 = false
+	fishrodv16 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv16 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 15, -1)
+	fishrodv16 = false
+	fishrodv17 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv17 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 16, -1)
+	fishrodv17 = false
+	fishrodv18 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv18 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 17, -1)
+	fishrodv18 = false
+	fishrodv19 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv19 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 18, -1)
+	fishrodv19 = false
+	fishrodv20 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv20 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 19, -1)
+	fishrodv20 = false
+	fishrodv21 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv21 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 20, -1)
+	fishrodv21 = false
+	fishrodv22 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv22 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 21, -1)
+	fishrodv22 = false
+	fishrodv23 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv23 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 22, -1)
+	fishrodv23 = false
+	fishrodv24 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv24 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 23, -1)
+	fishrodv24 = false
+	fishrodv25 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and fishlovlya.v and fishrodv25 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 24, -1)
+	fishrodv25 = false
+	fishrodv1 = true
+	end)
+end
+
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv1 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 0, -1)
+	fishrodv1 = false
+	fishrodv2 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv2 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 1, -1)
+	fishrodv2 = false
+	fishrodv3 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv3 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 2, -1)
+	fishrodv3 = false
+	fishrodv4 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv4 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 3, -1)
+	fishrodv4 = false
+	fishrodv5 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv5 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 4, -1)
+	fishrodv5 = false
+	fishrodv6 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv6 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 5, -1)
+	fishrodv6 = false
+	fishrodv7 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv7 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 6, -1)
+	fishrodv7 = false
+	fishrodv8 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv8 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 7, -1)
+	fishrodv8 = false
+	fishrodv9 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv9 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 8, -1)
+	fishrodv9 = false
+	fishrodv10 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv10 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 9, -1)
+	fishrodv10 = false
+	fishrodv11 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv11 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 10, -1)
+	fishrodv11 = false
+	fishrodv12 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv12 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 11, -1)
+	fishrodv12 = false
+	fishrodv13 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv13 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 12, -1)
+	fishrodv13 = false
+	fishrodv14 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv14 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 13, -1)
+	fishrodv14 = false
+	fishrodv15 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv15 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 14, -1)
+	fishrodv15 = false
+	fishrodv16 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv16 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 15, -1)
+	fishrodv16 = false
+	fishrodv17 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv17 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 16, -1)
+	fishrodv17 = false
+	fishrodv18 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv18 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 17, -1)
+	fishrodv18 = false
+	fishrodv19 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv19 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 18, -1)
+	fishrodv19 = false
+	fishrodv20 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv20 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 19, -1)
+	fishrodv20 = false
+	fishrodv21 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv21 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 20, -1)
+	fishrodv21 = false
+	fishrodv22 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv22 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 21, -1)
+	fishrodv22 = false
+	fishrodv23 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv23 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 22, -1)
+	fishrodv23 = false
+	fishrodv24 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv24 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 23, -1)
+	fishrodv24 = false
+	fishrodv25 = true
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы не можете забросить удочку, потому что ваша удочка недоукомплектована') and fishlovlya.v and fishrodv25 == true and not fishydo.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 24, -1)
+	fishrodv25 = false
+	fishrodv1 = true
+	end)
+end
+
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки:') and fishlovlya.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	end)
+end
+
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Хлеб".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = true
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Червь".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = true
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Опарыш".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = true
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Лягушка".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = true
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Кукуруза".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = true
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Кузнечик".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = true
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Мотыль".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = true
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Муха".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = true
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Тесто".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = true
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Живец".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = true
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Икра".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = true
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Горох".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = true
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Личинка короеда".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = true
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Подёнка".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = true
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Сыр".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = true
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Перловая каша".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = true
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Манная каша".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = true
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Личинка майского жука".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = true
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Личинка ручейника".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = true
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Пиявка".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = true
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Овод".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = true
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Майский жук".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = true
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Медведка".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = true
+	fishrodv25 = false
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Сверчок".') and fishlovlya.v then 
+	fishrodv1 = false
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = true
+	end
+	if text:match('%[Информация%] {ffffff}Вы выбрали основную наживку для удочки: {cccccc}"Креветка".') and fishlovlya.v then 
+	fishrodv1 = true
+	fishrodv2 = false
+	fishrodv3 = false
+	fishrodv4 = false
+	fishrodv5 = false
+	fishrodv6 = false
+	fishrodv7 = false
+	fishrodv8 = false
+	fishrodv9 = false
+	fishrodv10 = false
+	fishrodv11 = false
+	fishrodv12 = false
+	fishrodv13 = false
+	fishrodv14 = false
+	fishrodv15 = false
+	fishrodv16 = false
+	fishrodv17 = false
+	fishrodv18 = false
+	fishrodv19 = false
+	fishrodv20 = false
+	fishrodv21 = false
+	fishrodv22 = false
+	fishrodv23 = false
+	fishrodv24 = false
+	fishrodv25 = false
+	end
+	if text:match('%[Ошибка%] {ffffff}У вас уже установлена эта наживка.') and fishlovlya.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	end)
+end
+	if text:match('%[Рыбалка%] {ffffff}Вы поймали') and fishlovlya.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	end)
+end
+	if text:match('%[Рыбалка%]{ffffff} Вы поймали') and fishlovlya.v then 
+	lua_thread.create(function()
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+		end)
+	end
+	if text:match('%[Рыбалка%]{ffffff} Вы поймали рыбу') and statafish.v then 
+	fishses = fishses + 1
+	cfg.infofishkol.fishkol = cfg.infofishkol.fishkol + 1
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text:match('%[Рыбалка%] {ffffff}Вы поймали') and statafish.v then 
+	itemses = itemses + 1
+	cfg.infofishkol.itemkol = cfg.infofishkol.itemkol + 1
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
 	
 	if vkconnect.v and sellid.v and text:match('%[(%d+)%] (.*) | Уровень:') then vk_requestv2(''..text) end
 	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
@@ -11448,6 +13545,43 @@ function load_settings() -- загрузка настроек
 	obkachet = imgui.ImBool(ini.settings.obkachet)
 	windowsstyle = imgui.ImBool(ini.settings.windowsstyle)
 	
+	zadervkafish = imgui.ImInt(ini.settings.zadervkafish)
+	zadervkafishtime = imgui.ImInt(ini.settings.zadervkafishtime)
+	zadervkafishklava = imgui.ImInt(ini.settings.zadervkafishklava)
+	zadervkafishclick = imgui.ImInt(ini.settings.zadervkafishclick)
+	zadervkaeholot = imgui.ImInt(ini.settings.zadervkaeholot)
+	zadervkasellfish = imgui.ImInt(ini.settings.zadervkasellfish)
+	infofish = imgui.ImBool(ini.settings.infofish)
+	saveinfofish = imgui.ImBool(ini.settings.saveinfofish)
+	statafish = imgui.ImBool(ini.settings.statafish)
+	fishydo = imgui.ImBool(ini.settings.fishydo)
+	fishbaitv1 = imgui.ImBool(ini.settings.fishbaitv1)
+	fishbaitv2 = imgui.ImBool(ini.settings.fishbaitv2)
+	fishbaitv3 = imgui.ImBool(ini.settings.fishbaitv3)
+	fishbaitv4 = imgui.ImBool(ini.settings.fishbaitv4)
+	fishbaitv5 = imgui.ImBool(ini.settings.fishbaitv5)
+	fishbaitv6 = imgui.ImBool(ini.settings.fishbaitv6)
+	fishbaitv7 = imgui.ImBool(ini.settings.fishbaitv7)
+	fishbaitv8 = imgui.ImBool(ini.settings.fishbaitv8)
+	fishbaitv9 = imgui.ImBool(ini.settings.fishbaitv9)
+	fishbaitv10 = imgui.ImBool(ini.settings.fishbaitv10)
+	fishbaitv11 = imgui.ImBool(ini.settings.fishbaitv11)
+	fishbaitv12 = imgui.ImBool(ini.settings.fishbaitv12)
+	fishbaitv13 = imgui.ImBool(ini.settings.fishbaitv13)
+	fishbaitv14 = imgui.ImBool(ini.settings.fishbaitv14)
+	fishbaitv15 = imgui.ImBool(ini.settings.fishbaitv15)
+	fishbaitv16 = imgui.ImBool(ini.settings.fishbaitv16)
+	fishbaitv17 = imgui.ImBool(ini.settings.fishbaitv17)
+	fishbaitv18 = imgui.ImBool(ini.settings.fishbaitv18)
+	fishbaitv19 = imgui.ImBool(ini.settings.fishbaitv19)
+	fishbaitv20 = imgui.ImBool(ini.settings.fishbaitv20)
+	fishbaitv21 = imgui.ImBool(ini.settings.fishbaitv21)
+	fishbaitv22 = imgui.ImBool(ini.settings.fishbaitv22)
+	fishbaitv23 = imgui.ImBool(ini.settings.fishbaitv23)
+	fishbaitv24 = imgui.ImBool(ini.settings.fishbaitv24)
+	fishbaitv25 = imgui.ImBool(ini.settings.fishbaitv25)
+	fishklavaN = imgui.ImBool(ini.settings.fishklavaN)
+	
 	panel = imgui.ImBool(ini.settings.panel)
 	panel2 = imgui.ImBool(ini.settings.panel2)
 	panel3 = imgui.ImBool(ini.settings.panel3)
@@ -11685,38 +13819,6 @@ function load_settings() -- загрузка настроек
 	autonarko = imgui.ImBool(ini.settings.autonarko)
 	autobuffer = imgui.ImBool(ini.settings.autobuffer)
 	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
-	
-	skuptrava = imgui.ImBool(ini.settings.skuptrava)
-	skupbronzarul = imgui.ImBool(ini.settings.skupbronzarul)
-	skupserebrorul = imgui.ImBool(ini.settings.skupserebrorul)
-	skupgoldrul = imgui.ImBool(ini.settings.skupgoldrul)
-	skupplatinarul = imgui.ImBool(ini.settings.skupplatinarul)
-	skupkamen = imgui.ImBool(ini.settings.skupkamen)
-	skupmetal = imgui.ImBool(ini.settings.skupmetal)
-	skupbronza = imgui.ImBool(ini.settings.skupbronza)
-	skupserebro = imgui.ImBool(ini.settings.skupserebro)
-	skupgold = imgui.ImBool(ini.settings.skupgold)
-	skuppodarki = imgui.ImBool(ini.settings.skuppodarki)
-	skuptalon = imgui.ImBool(ini.settings.skuptalon)
-	skupsemtalon = imgui.ImBool(ini.settings.skupsemtalon)
-	skupskidtalon = imgui.ImBool(ini.settings.skupskidtalon)
-	skuptochkamen = imgui.ImBool(ini.settings.skuptochkamen)
-	skuptochamulet = imgui.ImBool(ini.settings.skuptochamulet)
-	skuplarec = imgui.ImBool(ini.settings.skuplarec)
-	skupsmazka = imgui.ImBool(ini.settings.skupsmazka)
-	skupcarbox = imgui.ImBool(ini.settings.skupcarbox)
-	skupohlad = imgui.ImBool(ini.settings.skupohlad)
-	skuptt = imgui.ImBool(ini.settings.skuptt)
-	skupmoneta = imgui.ImBool(ini.settings.skupmoneta)
-	skuplen = imgui.ImBool(ini.settings.skuplen)
-	skupxlopok = imgui.ImBool(ini.settings.skupxlopok)
-	skuprespekt = imgui.ImBool(ini.settings.skuprespekt)
-	skupmaterial = imgui.ImBool(ini.settings.skupmaterial)
-	skupdrova = imgui.ImBool(ini.settings.skupdrova)
-	skupantibiotik = imgui.ImBool(ini.settings.skupantibiotik)
-	skuptsr = imgui.ImBool(ini.settings.skuptsr)
-	skupsemmoneta = imgui.ImBool(ini.settings.skupsemmoneta)
-	skupauto = imgui.ImBool(ini.settings.skupauto)
 
 	autokamen = imgui.ImBuffer(u8(ini.settings.autokamen), 256)
 	autolenf = imgui.ImBuffer(u8(ini.settings.autolenf), 256)
@@ -11770,67 +13872,6 @@ function load_settings() -- загрузка настроек
 	adredak5 = imgui.ImBuffer(u8(ini.settings.adredak5), 1000)
 	adredak6 = imgui.ImBuffer(u8(ini.settings.adredak6), 1000)
 	adredak7 = imgui.ImBuffer(u8(ini.settings.adredak7), 1000)
-	
-	skuptravacol = imgui.ImBuffer(u8(ini.settings.skuptravacol), 256)
-	skuptravacena = imgui.ImBuffer(u8(ini.settings.skuptravacena), 256)
-	skupbronzarulcol = imgui.ImBuffer(u8(ini.settings.skupbronzarulcol), 256)
-	skupbronzarulcena = imgui.ImBuffer(u8(ini.settings.skupbronzarulcena), 256)
-	skupserebrorulcol = imgui.ImBuffer(u8(ini.settings.skupserebrorulcol), 256)
-	skupserebrorulcena = imgui.ImBuffer(u8(ini.settings.skupserebrorulcena), 256)
-	skupgoldrulcol = imgui.ImBuffer(u8(ini.settings.skupgoldrulcol), 256)
-	skupgoldrulcena = imgui.ImBuffer(u8(ini.settings.skupgoldrulcena), 256)
-	skupplatinarulcol = imgui.ImBuffer(u8(ini.settings.skupplatinarulcol), 256)
-	skupplatinarulcena = imgui.ImBuffer(u8(ini.settings.skupplatinarulcena), 256)
-	skupkamencol = imgui.ImBuffer(u8(ini.settings.skupkamencol), 256)
-	skupkamencena = imgui.ImBuffer(u8(ini.settings.skupkamencena), 256)
-	skupmetalcol = imgui.ImBuffer(u8(ini.settings.skupmetalcol), 256)
-	skupmetalcena = imgui.ImBuffer(u8(ini.settings.skupmetalcena), 256)
-	skupbronzacol = imgui.ImBuffer(u8(ini.settings.skupbronzacol), 256)
-	skupbronzacena = imgui.ImBuffer(u8(ini.settings.skupbronzacena), 256)
-	skupserebrocol = imgui.ImBuffer(u8(ini.settings.skupserebrocol), 256)
-	skupserebrocena = imgui.ImBuffer(u8(ini.settings.skupserebrocena), 256)
-	skupgoldcol = imgui.ImBuffer(u8(ini.settings.skupgoldcol), 256)
-	skupgoldcena = imgui.ImBuffer(u8(ini.settings.skupgoldcena), 256)
-	skuppodarkicol = imgui.ImBuffer(u8(ini.settings.skuppodarkicol), 256)
-	skuppodarkicena = imgui.ImBuffer(u8(ini.settings.skuppodarkicena), 256)
-	skuptaloncol = imgui.ImBuffer(u8(ini.settings.skuptaloncol), 256)
-	skuptaloncena = imgui.ImBuffer(u8(ini.settings.skuptaloncena), 256)
-	skupsemtaloncol = imgui.ImBuffer(u8(ini.settings.skupsemtaloncol), 256)
-	skupsemtaloncena = imgui.ImBuffer(u8(ini.settings.skupsemtaloncena), 256)
-	skupskidtaloncol = imgui.ImBuffer(u8(ini.settings.skupskidtaloncol), 256)
-	skupskidtaloncena = imgui.ImBuffer(u8(ini.settings.skupskidtaloncena), 256)
-	skuptochkamencol = imgui.ImBuffer(u8(ini.settings.skuptochkamencol), 256)
-	skuptochamuletcol = imgui.ImBuffer(u8(ini.settings.skuptochamuletcol), 256)
-	skuptochkamencena = imgui.ImBuffer(u8(ini.settings.skuptochkamencena), 256)
-	skuptochamuletcena = imgui.ImBuffer(u8(ini.settings.skuptochamuletcena), 256)
-	skuplareccol = imgui.ImBuffer(u8(ini.settings.skuplareccol), 256)
-	skupsmazkacol = imgui.ImBuffer(u8(ini.settings.skupsmazkacol), 256)
-	skupcarboxcol = imgui.ImBuffer(u8(ini.settings.skupcarboxcol), 256)
-	skupohladcol = imgui.ImBuffer(u8(ini.settings.skupohladcol), 256)
-	skuplareccena = imgui.ImBuffer(u8(ini.settings.skuplareccena), 256)
-	skupsmazkacena = imgui.ImBuffer(u8(ini.settings.skupsmazkacena), 256)
-	skupcarboxcena = imgui.ImBuffer(u8(ini.settings.skupcarboxcena), 256)
-	skupohladcena = imgui.ImBuffer(u8(ini.settings.skupohladcena), 256)
-	skupttcena = imgui.ImBuffer(u8(ini.settings.skupttcena), 256) 
-	skupmonetacol = imgui.ImBuffer(u8(ini.settings.skupmonetacol), 256)
-	skupmonetacena = imgui.ImBuffer(u8(ini.settings.skupmonetacena), 256) 
-	skuplencol = imgui.ImBuffer(u8(ini.settings.skuplencol), 256)
-	skuplencena = imgui.ImBuffer(u8(ini.settings.skuplencena), 256) 
-	skupxlopokcol = imgui.ImBuffer(u8(ini.settings.skupxlopokcol), 256)
-	skupxlopokcena = imgui.ImBuffer(u8(ini.settings.skupxlopokcena), 256) 
-	skuprespektcol = imgui.ImBuffer(u8(ini.settings.skuprespektcol), 256)
-	skuprespektcena = imgui.ImBuffer(u8(ini.settings.skuprespektcena), 256) 
-	skupmaterialcol = imgui.ImBuffer(u8(ini.settings.skupmaterialcol), 256)
-	skupmaterialcena = imgui.ImBuffer(u8(ini.settings.skupmaterialcena), 256)
-	skupdrovacol = imgui.ImBuffer(u8(ini.settings.skupdrovacol), 256)
-	skupdrovacena = imgui.ImBuffer(u8(ini.settings.skupdrovacena), 256)
-	skupantibiotikcol = imgui.ImBuffer(u8(ini.settings.skupantibiotikcol), 256)
-	skupantibiotikcena = imgui.ImBuffer(u8(ini.settings.skupantibiotikcena), 256)
-	skuptsrcol = imgui.ImBuffer(u8(ini.settings.skuptsrcol), 256)
-	skuptsrcena = imgui.ImBuffer(u8(ini.settings.skuptsrcena), 256)
-	skupsemmonetacol = imgui.ImBuffer(u8(ini.settings.skupsemmonetacol), 256)
-	skupsemmonetacena = imgui.ImBuffer(u8(ini.settings.skupsemmonetacena), 256)
-	skupautocena = imgui.ImBuffer(u8(ini.settings.skupautocena), 256)
 	
 	shematext1 = imgui.ImBuffer(u8(ini.settings.shematext1), 256)
 	shematext2 = imgui.ImBuffer(u8(ini.settings.shematext2), 256)
@@ -11968,6 +14009,7 @@ function load_settings() -- загрузка настроек
 	slotpodarokrul = imgui.ImInt(ini.settings.slotpodarokrul)
 	razmer = imgui.ImInt(ini.settings.razmer)
 	delayintv2 = imgui.ImInt(ini.settings.delayintv2)
+	delayintsellv2 = imgui.ImInt(ini.settings.delayintsellv2)
 	vsevorul = imgui.ImInt(ini.settings.vsevorul)
 	vsevorulpodarok = imgui.ImInt(ini.settings.vsevorulpodarok)
 	vsevorulexp = imgui.ImInt(ini.settings.vsevorulexp)
@@ -13352,6 +15394,122 @@ function isCharInAnyCar(ped)
 	return false
 end
 
+function fishballon()
+	while true do 
+	if fishbool == true and fishlovlya.v then 
+	if fishklavaN.v then 
+	wait(zadervkafishclick.v)
+	setGameKeyState(10, 1)
+	wait(0)
+	setGameKeyState(10, 0)
+	else
+	wait(zadervkafishclick.v)
+	sendKey(128)
+		end
+	end
+	wait(0)
+	end
+end
+
+function fishballonv2()
+	while true do 
+	if fishboolv2 == true and fishlovlyav2.v then 
+	if fishklavaN.v then 
+	wait(zadervkafishclick.v)
+	setGameKeyState(10, 1)
+	wait(0)
+	setGameKeyState(10, 0)
+	else
+	wait(zadervkafishclick.v)
+	sendKey(128)
+		end
+	end
+	wait(0)
+	end
+end
+
+function fishballonv3()
+	while true do 
+	if fishboolv3 == true and nofunction.v then 
+	if fishklavaN.v then 
+	wait(zadervkafishclick.v)
+	setGameKeyState(10, 1)
+	wait(0)
+	setGameKeyState(10, 0)
+	else
+	wait(zadervkafishclick.v)
+	sendKey(128)
+		end
+	end
+	wait(0)
+	end
+end
+
+function eholotcheck()
+	while true do 
+	if checkeholot.v then
+	  sampCloseCurrentDialogWithButton(0) 
+	  wait(200)
+	  sampSendClickTextdraw(admmp)
+	  wait(500)
+      activeeholot = true
+      sampSendChat("/invent")
+      wait(zadervkaeholot.v*60000)
+    end
+	wait(0)
+	end
+end
+
+function obmentradefish()
+	while true do 
+	if obmenmonetafish.v then
+	for i = 1, 18 do itemfindfish[i] = imgui.ImBool(false) end
+	for k, v in ipairs(itemfindfish) do
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25296, 1 , 0, -1)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25290, 1 , k-1, -1)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25294, 1 , 1, sellkolitem)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25295, 1 , 1, -1)
+	wait(zadervkasellfish.v)
+	closeDialog()
+	wait(zadervkasellfish.v)
+	closeDialog()
+	wait(zadervkasellfish.v)
+	end
+	obmenmonetafish.v = false
+end
+	if obmenrodfish.v then
+	for i = 1, 56 do rodfindfish[i] = imgui.ImBool(false) end
+	for k, v in ipairs(rodfindfish) do
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25291, 1 , k-1, -1)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25292, 1 , 1, sellkolfish)
+	wait(zadervkasellfish.v)
+	sampSendDialogResponse(25293, 1 , 1, -1)
+	wait(zadervkasellfish.v)
+	closeDialog()
+	wait(zadervkasellfish.v)
+	closeDialog()
+	wait(zadervkasellfish.v)
+	end
+	obmenrodfish.v = false
+	sampAddChatMessage("{FF0000}[FishRod]{FFFFFF} С продажи рыбы вы заработали {F08080}"..number_separator(moneyfish)..'$', -1)
+	moneyfish = 0
+end
+	wait(0)
+	end
+end
+
 function autobmx()
 while true do 
 	if not sampIsChatInputActive() and isCharOnAnyBike(playerPed) and isKeyDown(0xA0) and autobike.v then
@@ -13522,6 +15680,29 @@ function coinclicker()
 	payclickv2 = payclickv2 + 1
 	end
 	end
+	wait(0)
+	end
+end
+
+function roulettetime()
+	while true do 
+	local today_time = os.date("%M:%S")
+	if string.find(today_time, '59:00') and checked_test.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test2.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test3.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test4.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test11.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test12.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test13.v then samprulstop = false end
+	if string.find(today_time, '59:00') and checked_test14.v then samprulstop = false end
+	if string.find(today_time, '01:00') and checked_test.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test2.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test3.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test4.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test11.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test12.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test13.v then samprulstop = true ruletka() end
+	if string.find(today_time, '01:00') and checked_test14.v then samprulstop = true ruletka() end
 	wait(0)
 	end
 end
@@ -15008,7 +17189,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
@@ -15026,7 +17207,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
@@ -15044,7 +17225,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
@@ -15088,7 +17269,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
@@ -15106,7 +17287,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
@@ -15124,7 +17305,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
@@ -15168,7 +17349,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
@@ -15186,7 +17367,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
@@ -15204,7 +17385,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
@@ -15248,7 +17429,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
@@ -15266,7 +17447,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
@@ -15284,7 +17465,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
@@ -15328,7 +17509,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost2 < 51 then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(200)
@@ -15346,7 +17527,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost3 < 51 then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(200)
@@ -15364,7 +17545,7 @@ while true do
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
+	wait(500)
 	if statuszidkost4 < 51 then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(200)
@@ -17709,10 +19890,12 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/price - узнать среднюю цену на товар (предварительно нужно включить функцию 'Центральный рынок')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carprice - узнать среднюю цену на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carab - обновить средние цены на транспорт (предварительно нужно включить функцию 'Автобазар')")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в Skup Menu v2.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в Skup Menu.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstsell - обновить список товаров в Sell Menu.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/checkvip [id] - проверить, есть ли у игрока Titan или Premium VIP.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bandit - открыть меню 'Однорукий Бандит'.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/lovec - открыть меню 'Авто-ловля'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/fishmenu - открыть меню с 'FishRod' (помощник для рыбалки)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/killgraph - устанавливает минимальные настройки прорисовки, если ввести повторно - то вернет ваши значения.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/connect IP - перезайти на указанный сервер по IP.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/connectname NickName - перезайти на тот же сервер с указанным NickName.")
@@ -18021,12 +20204,15 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_TOGGLE_OFF..u8' Выключить отображение ID Текстдравов', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(280, 0)) then toggle = false end
 			imgui.PushItemWidth(280)
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
-			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Skup Menu v2':")
+			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Skup Menu':")
 			imgui.PushItemWidth(200)
 			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
 			imgui.PopItemWidth()
+			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Sell Menu':")
+			imgui.PushItemWidth(200)
+			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896432354',delayintsellv2,100, 10000)
+			imgui.PopItemWidth()
 			imgui.NextColumn()
-			imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(352, 0)) then skuppoymol() end
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Ipad Style (Beta)")); imgui.SameLine(); imgui.ToggleButton(u8'', windowsstyle) imgui.SameLine() imgui.Text(u8("Windows Style"))
 		
 		elseif selected3 == 7 then
@@ -20037,20 +22223,6 @@ function kartinstr()
 			imgui.End()
 	end
 	
-function shemaskup()
-	local sw, sh = getScreenResolution()
-	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -1.50))
-	imgui.SetNextWindowSize(imgui.ImVec2(1000, 115), imgui.Cond.FirstUseEver)
-	imgui.Begin(u8' Инструкция', win_state['skupshema'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-		imgui.Text('')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"1) Для начала поставьте галочку на тех товарах, которые хотите скупать. 2) Введите количество товара и цену за штуку в соответствующих полях.")
-		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! НЕ НАЖИМАЙТЕ НА КНОПКУ 'РАССЧИТАТЬ ТОВАРЫ', ЕСЛИ ЗАПОЛНИЛИ НЕ ВСЕ ПОЛЯ! И В БУДУЩЕМ, ЕСЛИ ВЫ НЕ МОЖЕТЕ ЗАЙТИ В СКУП МЕНЮ - ЗАЙДИТЕ В")
-		imgui.Text('') imgui.SameLine() imgui.TextColored(imgui.ImVec4(1.0, 0.0, 0.0, 1.0), u8"*ВАЖНО! 'ПАРАМЕТРЫ' - 'ДЛЯ РАЗРАБОТЧИКОВ' И НАЖМИТЕ КНОПКУ 'ВЕРНУТЬ ЗНАЧЕНИЯ СКУПА ПО УМОЛЧАНИЮ'.")
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"3) Встаньте в лавку, введите название, и нажмите альт, чтобы попасть в начальное меню лавки. Далее откройте меню скрипта - 'Skup Menu' и нажмите на кнопку")
-		imgui.Text('') imgui.SameLine() imgui.Text(u8"'Выставить товары на скуп'.")
-		imgui.End()
-	end
-	
 function shemapiar()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.401))
@@ -20286,6 +22458,14 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'видеокарт, ловля и всё в таком духе.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'55. Фикс "Skup Menu v2" (скупка в диалоге стала 3 пунктом, ранее была 1)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'56. Фикс кнопки "Игроки в радиусе" в Vk Connect.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[09.05.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'57. Фикс поиска AZ в платиновой рулетке.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'58. Добавлена защита, когда в ПД добавляются предметы и рулетка реагировала на это. Теперь перед ПД прокрутка рулетки')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'останавливается и продолжается автоматический после ПД.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'59. Добавлена команда /fishmenu - открывает меню с "FishRod" (помощник для рыбалки)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'60. Удалена первая версия скуп меню и добавлено Sell Menu.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'61. Подправлена менюшка и тексты в "Skup Menu" и добавлена кнопка "сохранить настройки".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'62. В "VK Connect" добавлена возможность сделать скриншот (подробнее в пункте "помощь" на клавиатуре в боте ВК)')
 			imgui.End()
 		end
 	
@@ -20419,221 +22599,6 @@ function getArizonaName()
 	imgui.Separator()
 	imgui.PopItemWidth()
 end
-
-function getArizonaSkup()
-	imgui.PushItemWidth(83)
-	imgui.VerticalSeparator() imgui.SameLine(707) imgui.VerticalSeparator()
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
-    imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Счастливая травка', skuptrava) imgui.SameLine(177) imgui.InputText(u8'##100', skuptravacol) imgui.SameLine(281) imgui.InputText(u8'##101', skuptravacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltrava).." шт. товара нужно заплатить "..number_separator(itogoskuptrava)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронзовая рулетка', skupbronzarul) imgui.SameLine(177) imgui.InputText(u8'##102', skupbronzarulcol) imgui.SameLine(281) imgui.InputText(u8'##103', skupbronzarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolbronzarul).." шт. товара нужно заплатить "..number_separator(itogoskupbronzarul)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебряная рулетка', skupserebrorul) imgui.SameLine(177) imgui.InputText(u8'##104', skupserebrorulcol) imgui.SameLine(281) imgui.InputText(u8'##133', skupserebrorulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolserebrorul).." шт. товара нужно заплатить "..number_separator(itogoskupserebrorul)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золотая рулетка', skupgoldrul) imgui.SameLine(177) imgui.InputText(u8'##105', skupgoldrulcol) imgui.SameLine(281) imgui.InputText(u8'##134', skupgoldrulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolgoldrul).." шт. товара нужно заплатить "..number_separator(itogoskupgoldrul)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Платиновая рулетка', skupplatinarul) imgui.SameLine(177) imgui.InputText(u8'##106', skupplatinarulcol) imgui.SameLine(281) imgui.InputText(u8'##135', skupplatinarulcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolplatinarul).." шт. товара нужно заплатить "..number_separator(itogoskupplatinarul)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Камень', skupkamen) imgui.SameLine(177) imgui.InputText(u8'##107', skupkamencol) imgui.SameLine(281) imgui.InputText(u8'##136', skupkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolkamen).." шт. товара нужно заплатить "..number_separator(itogoskupkamen)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Металл', skupmetal) imgui.SameLine(177) imgui.InputText(u8'##108', skupmetalcol) imgui.SameLine(281) imgui.InputText(u8'##137', skupmetalcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolmetal).." шт. товара нужно заплатить "..number_separator(itogoskupmetal)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бронза', skupbronza) imgui.SameLine(177) imgui.InputText(u8'##109', skupbronzacol) imgui.SameLine(281) imgui.InputText(u8'##138', skupbronzacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolbronza).." шт. товара нужно заплатить "..number_separator(itogoskupbronza)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Серебро', skupserebro) imgui.SameLine(177) imgui.InputText(u8'##110', skupserebrocol) imgui.SameLine(281) imgui.InputText(u8'##139', skupserebrocena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolserebro).." шт. товара нужно заплатить "..number_separator(itogoskupserebro)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Золото', skupgold) imgui.SameLine(177) imgui.InputText(u8'##111', skupgoldcol) imgui.SameLine(281) imgui.InputText(u8'##140', skupgoldcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolgold).." шт. товара нужно заплатить "..number_separator(itogoskupgold)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Подарки', skuppodarki) imgui.SameLine(177) imgui.InputText(u8'##112', skuppodarkicol) imgui.SameLine(281) imgui.InputText(u8'##141', skuppodarkicena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolpodarki).." шт. товара нужно заплатить "..number_separator(itogoskuppodarki)..'$')) 
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
-		delplayer = not delplayer
-			for _, handle in ipairs(getAllChars()) do
-				if doesCharExist(handle) then
-					local _, id = sampGetPlayerIdByCharHandle(handle)
-					if id ~= myid then
-						emul_rpc('onPlayerStreamOut', { id })
-						npc[#npc + 1] = id
-					end
-				end
-			end
-			
-			if not delplayer then
-				for i = 1, #npc do
-					send_player_stream(npc[i], infnpc[npc[i]])
-					npc[i] = nil
-				end
-			end
-		end
-	imgui.SameLine()
-	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..number_separator(skuptovaracol).." шт. товара нужно заплатить "..number_separator(itogoskuptovara)..'$'))
-	imgui.Separator()
-	imgui.Text('')
-	imgui.SameLine(285)
-	if imgui.CustomButton(u8'1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
-	win_state['skup'].v = true
-	win_state['skup2'].v = false 
-	win_state['skup3'].v = false 
-	end
-	imgui.SameLine()
-	if imgui.CustomButton(u8'2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then 
-	win_state['skup2'].v = true
-	win_state['skup'].v = false 
-	win_state['skup3'].v = false 
-	end
-	imgui.SameLine()
-	if imgui.CustomButton(u8'3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
-	win_state['skup3'].v = true
-	win_state['skup'].v = false  
-	win_state['skup2'].v = false  
-	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
-	imgui.SameLine()
-	if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuppoymol() sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) end 
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_CALCULATOR..u8' Рассчитать товары', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then load_static() end
-	imgui.SameLine() if imgui.CustomButton(fa.ICON_SHOPPING_CART..u8' Выставить товары на скуп', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuptovarov() end
-	imgui.Separator()
-	imgui.PopItemWidth()
-end
-
-function getArizonaSkup2str()
-	imgui.PushItemWidth(83)
-	imgui.VerticalSeparator() imgui.SameLine(707) imgui.VerticalSeparator()
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
-    imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Гражданский талон', skuptalon) imgui.SameLine(177) imgui.InputText(u8'##113', skuptaloncol) imgui.SameLine(281) imgui.InputText(u8'##142', skuptaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltalon).." шт. товара нужно заплатить "..number_separator(itogoskuptalon)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейный талон', skupsemtalon) imgui.SameLine(177) imgui.InputText(u8'##117', skupsemtaloncol) imgui.SameLine(281) imgui.InputText(u8'##146', skupsemtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolsemtalon).." шт. товара нужно заплатить "..number_separator(itogoskupsemtalon)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Скидочный талон', skupskidtalon) imgui.SameLine(177) imgui.InputText(u8'##118', skupskidtaloncol) imgui.SameLine(281) imgui.InputText(u8'##147', skupskidtaloncena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolskidtalon).." шт. товара нужно заплатить "..number_separator(itogoskupskidtalon)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный камень', skuptochkamen) imgui.SameLine(177) imgui.InputText(u8'##114', skuptochkamencol) imgui.SameLine(281) imgui.InputText(u8'##143', skuptochkamencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltochkamen).." шт. товара нужно заплатить "..number_separator(itogoskuptochkamen)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Точильный амулет', skuptochamulet) imgui.SameLine(177) imgui.InputText(u8'##1444', skuptochamuletcol) imgui.SameLine(281) imgui.InputText(u8'##144', skuptochamuletcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltochamulet).." шт. товара нужно заплатить "..number_separator(itogoskuptochamulet)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Ларец с премией', skuplarec) imgui.SameLine(177) imgui.InputText(u8'##116', skuplareccol) imgui.SameLine(281) imgui.InputText(u8'##145', skuplareccena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcollarec).." шт. товара нужно заплатить "..number_separator(itogoskuplarec)..'$')) 
-	imgui.PushItemWidth(187)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Твин Турбо', skuptt) imgui.SameLine(177) imgui.InputText(u8'##148', skupttcena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskuptt)..'$'))
-	imgui.PopItemWidth()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Зловещая монета', skupmoneta) imgui.SameLine(177) imgui.InputText(u8'##120', skupmonetacol) imgui.SameLine(281) imgui.InputText(u8'##149', skupmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolmoneta).." шт. товара нужно заплатить "..number_separator(itogoskupmoneta)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Лён', skuplen) imgui.SameLine(177) imgui.InputText(u8'##121', skuplencol) imgui.SameLine(281) imgui.InputText(u8'##150', skuplencena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcollen).." шт. товара нужно заплатить "..number_separator(itogoskuplen)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлопок', skupxlopok) imgui.SameLine(177) imgui.InputText(u8'##122', skupxlopokcol) imgui.SameLine(281) imgui.InputText(u8'##151', skupxlopokcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolxlopok).." шт. товара нужно заплатить "..number_separator(itogoskupxlopok)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Бандитский респект', skuprespekt) imgui.SameLine(177) imgui.InputText(u8'##123', skuprespektcol) imgui.SameLine(281) imgui.InputText(u8'##152', skuprespektcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolrespekt).." шт. товара нужно заплатить "..number_separator(itogoskuprespekt)..'$')) 
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
-		delplayer = not delplayer
-			for _, handle in ipairs(getAllChars()) do
-				if doesCharExist(handle) then
-					local _, id = sampGetPlayerIdByCharHandle(handle)
-					if id ~= myid then
-						emul_rpc('onPlayerStreamOut', { id })
-						npc[#npc + 1] = id
-					end
-				end
-			end
-			
-			if not delplayer then
-				for i = 1, #npc do
-					send_player_stream(npc[i], infnpc[npc[i]])
-					npc[i] = nil
-				end
-			end
-		end
-	imgui.SameLine()
-	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к упадет шанс краша игры.")
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..number_separator(skuptovaracol).." шт. товара нужно заплатить "..number_separator(itogoskuptovara)..'$'))
-	imgui.Separator()
-	imgui.Text('')
-	imgui.SameLine(285)
-	if imgui.CustomButton(u8'1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
-	win_state['skup'].v = true
-	win_state['skup2'].v = false 
-	win_state['skup3'].v = false 
-	end
-	imgui.SameLine()
-	if imgui.CustomButton(u8'2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then 
-	win_state['skup2'].v = true
-	win_state['skup'].v = false 
-	win_state['skup3'].v = false 
-	end
-	imgui.SameLine()
-	if imgui.CustomButton(u8'3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
-	win_state['skup3'].v = true
-	win_state['skup'].v = false  
-	win_state['skup2'].v = false  
-	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
-	imgui.SameLine()
-	if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuppoymol() sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) end 
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_CALCULATOR..u8' Рассчитать товары', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then load_static() end
-	imgui.SameLine() if imgui.CustomButton(fa.ICON_SHOPPING_CART..u8' Выставить товары на скуп', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuptovarov() end
-	imgui.Separator()
-	imgui.PopItemWidth()
-end
-
-function getArizonaSkup3str()
-	imgui.PushItemWidth(83)
-	imgui.VerticalSeparator() imgui.SameLine(707) imgui.VerticalSeparator()
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine(60) imgui.Text(u8("Название")) imgui.SameLine(183) imgui.Text(u8("Количество")) imgui.SameLine(307) imgui.Text(u8("Цена")) imgui.SameLine(490) imgui.Text(u8("Итого"))
-    imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Материалы', skupmaterial) imgui.SameLine(177) imgui.InputText(u8'##124', skupmaterialcol) imgui.SameLine(281) imgui.InputText(u8'##153', skupmaterialcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolmaterial).." шт. товара нужно заплатить "..number_separator(itogoskupmaterial)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Дрова', skupdrova) imgui.SameLine(177) imgui.InputText(u8'##125', skupdrovacol) imgui.SameLine(281) imgui.InputText(u8'##154', skupdrovacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoldrova).." шт. товара нужно заплатить "..number_separator(itogoskupdrova)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Антибиотики', skupantibiotik) imgui.SameLine(177) imgui.InputText(u8'##126', skupantibiotikcol) imgui.SameLine(281) imgui.InputText(u8'##155', skupantibiotikcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolantibiotik).." шт. товара нужно заплатить "..number_separator(itogoskupantibiotik)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отмычки от ТСР', skuptsr) imgui.SameLine(177) imgui.InputText(u8'##127', skuptsrcol) imgui.SameLine(281) imgui.InputText(u8'##156', skuptsrcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcoltsr).." шт. товара нужно заплатить "..number_separator(itogoskuptsr)..'$'))
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Семейные монеты', skupsemmoneta) imgui.SameLine(177) imgui.InputText(u8'##128', skupsemmonetacol) imgui.SameLine(281) imgui.InputText(u8'##157', skupsemmonetacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolsemmoneta).." шт. товара нужно заплатить "..number_separator(itogoskupsemmoneta)..'$')) 
-	imgui.PushItemWidth(187)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Улучшение для авто', skupauto) imgui.SameLine(177) imgui.InputText(u8'##158', skupautocena) imgui.SameLine(385) imgui.Text(u8("За 1 шт. товара нужно заплатить "..number_separator(itogoskupauto)..'$'))
-	imgui.PopItemWidth()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Смазка для видеокарт', skupsmazka) imgui.SameLine(177) imgui.InputText(u8'##159', skupsmazkacol) imgui.SameLine(281) imgui.InputText(u8'##160', skupsmazkacena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolsmazka).." шт. товара нужно заплатить "..number_separator(itogoskupsmazka)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Жидкость для карт', skupohlad) imgui.SameLine(177) imgui.InputText(u8'##161', skupohladcol) imgui.SameLine(281) imgui.InputText(u8'##162', skupohladcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolohlad).." шт. товара нужно заплатить "..number_separator(itogoskupohlad)..'$')) 
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Super Car Box', skupcarbox) imgui.SameLine(177) imgui.InputText(u8'##163', skupcarboxcol) imgui.SameLine(281) imgui.InputText(u8'##164', skupcarboxcena) imgui.SameLine(385) imgui.Text(u8("За "..number_separator(itogoskupcolcarbox).." шт. товара нужно заплатить "..number_separator(itogoskupcarbox)..'$')) 
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Text('')
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
-		delplayer = not delplayer
-			for _, handle in ipairs(getAllChars()) do
-				if doesCharExist(handle) then
-					local _, id = sampGetPlayerIdByCharHandle(handle)
-					if id ~= myid then
-						emul_rpc('onPlayerStreamOut', { id })
-						npc[#npc + 1] = id
-					end
-				end
-			end
-			
-			if not delplayer then
-				for i = 1, #npc do
-					send_player_stream(npc[i], infnpc[npc[i]])
-					npc[i] = nil
-				end
-			end
-		end
-	imgui.SameLine()
-	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к упадет шанс краша игры.")
-	imgui.Separator()
-	imgui.Text('') imgui.SameLine(210) imgui.Text(u8("Итого за "..number_separator(skuptovaracol).." шт. товара нужно заплатить "..number_separator(itogoskuptovara)..'$'))
-	imgui.Separator()
-	imgui.Text('')
-	imgui.SameLine(285)
-	if imgui.CustomButton(u8'1', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
-	win_state['skup'].v = true
-	win_state['skup2'].v = false 
-	win_state['skup3'].v = false 
-	end
-	imgui.SameLine()
-	if imgui.CustomButton(u8'2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then 
-	win_state['skup2'].v = true
-	win_state['skup'].v = false 
-	win_state['skup3'].v = false 
-	end
-	imgui.SameLine()
-	if imgui.CustomButton(u8'3', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then
-	win_state['skup3'].v = true
-	win_state['skup'].v = false  
-	win_state['skup2'].v = false  
-	end
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", 0x046D63) saveSettings() end
-	imgui.SameLine()
-	if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть значения скупа по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuppoymol() sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", 0x046D63) end 
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_CALCULATOR..u8' Рассчитать товары', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then load_static() end
-	imgui.SameLine() if imgui.CustomButton(fa.ICON_SHOPPING_CART..u8' Выставить товары на скуп', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(342, 0)) then skuptovarov() end
-	imgui.Separator()
-	imgui.PopItemWidth()
-end
 	
 function rpguns()
 	imgui.BeginChild('##as2dasasdf433433', imgui.ImVec2(2000, 225), false)
@@ -20718,7 +22683,7 @@ function zadachinfo()
 	imgui.Text('') imgui.SameLine() imgui.Image(winphone, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Piar Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = true panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = false panel19.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = true  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = false panel19.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Sell Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = true  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = false panel19.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(win2048, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'2048', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = true  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = false panel19.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winpingpong, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -20746,7 +22711,7 @@ function zadachinfo()
 	imgui.Text('') imgui.SameLine() imgui.Image(winmessage, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Чат', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = true panel18.v = false panel19.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelegav2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu v2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = true panel19.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = true panel19.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoinv2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'VKoin', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panel.v = false panel2.v = false panel3.v = false panel4.v = false  panel5.v = false  panel6.v = false  panel7.v = false  panel8.v = false  panel9.v = false  panel10.v = false  panel11.v = false  panel12.v = false panel13.v = false  panel14.v = false panel15.v = false  panel16.v = false panel17.v = false panel18.v = false panel19.v = true end
 	end
@@ -20760,7 +22725,7 @@ function zadachinfov2()
 	imgui.Text('') imgui.SameLine() imgui.Image(winphone2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Piar Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = true panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = false panelv219.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = true  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = false panelv219.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Sell Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = true  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = false panelv219.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(win20482, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'2048', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = true  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = false panelv219.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winpingpong2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -20788,7 +22753,7 @@ function zadachinfov2()
 	imgui.Text('') imgui.SameLine() imgui.Image(winmessage2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Чат', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = true panelv218.v = false panelv219.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega2v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu v2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = true panelv219.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = true panelv219.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin2v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'VKoin', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv2.v = false panelv22.v = false panelv23.v = false panelv24.v = false  panelv25.v = false  panelv26.v = false  panelv27.v = false  panelv28.v = false  panelv29.v = false  panelv210.v = false  panelv211.v = false  panelv212.v = false panelv213.v = false  panelv214.v = false panelv215.v = false  panelv216.v = false panelv217.v = false panelv218.v = false panelv219.v = true end
 	
@@ -20803,7 +22768,7 @@ function zadachinfov3()
 	imgui.Text('') imgui.SameLine() imgui.Image(winphone3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Piar Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = true panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = false panelv319.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = true  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = false panelv319.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Sell Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = true  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = false panelv319.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(win20483, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'2048', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = true  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = false panelv319.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winpingpong3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -20831,7 +22796,7 @@ function zadachinfov3()
 	imgui.Text('') imgui.SameLine() imgui.Image(winmessage3, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Чат', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = true panelv318.v = false panelv319.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega3v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu v2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = true panelv319.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = true panelv319.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin3v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'VKoin', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv3.v = false panelv32.v = false panelv33.v = false panelv34.v = false  panelv35.v = false  panelv36.v = false  panelv37.v = false  panelv38.v = false  panelv39.v = false  panelv310.v = false  panelv311.v = false  panelv312.v = false panelv313.v = false  panelv314.v = false panelv315.v = false  panelv316.v = false panelv317.v = false panelv318.v = false panelv319.v = true end
 	
@@ -20846,7 +22811,7 @@ function zadachinfov4()
 	imgui.Text('') imgui.SameLine() imgui.Image(winphone4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Piar Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = true panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = false panelv419.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = true  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = false panelv419.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Sell Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = true  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = false panelv419.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(win20484, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'2048', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = true  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = false panelv419.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winpingpong4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -20874,7 +22839,7 @@ function zadachinfov4()
 	imgui.Text('') imgui.SameLine() imgui.Image(winmessage4, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Чат', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = true panelv418.v = false panelv419.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega4v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu v2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = true panelv419.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = true panelv419.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin4v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'VKoin', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv4.v = false panelv42.v = false panelv43.v = false panelv44.v = false  panelv45.v = false  panelv46.v = false  panelv47.v = false  panelv48.v = false  panelv49.v = false  panelv410.v = false  panelv411.v = false  panelv412.v = false panelv413.v = false  panelv414.v = false panelv415.v = false  panelv416.v = false panelv417.v = false panelv418.v = false panelv419.v = true end
 	
@@ -20889,7 +22854,7 @@ function zadachinfov5()
 	imgui.Text('') imgui.SameLine() imgui.Image(winphone5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Piar Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = true panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = false panelv519.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = true  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = false panelv519.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Sell Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = true  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = false panelv519.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(win20485, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'2048', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = true  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = false panelv519.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winpingpong5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
@@ -20917,7 +22882,7 @@ function zadachinfov5()
 	imgui.Text('') imgui.SameLine() imgui.Image(winmessage5, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'Чат', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = true panelv518.v = false panelv519.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(wintelega5v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
-	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu v2', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = true panelv519.v = false end
+	imgui.SameLine() if imgui.CustomButton(u8'Skup Menu', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = true panelv519.v = false end
 	imgui.Text('') imgui.SameLine() imgui.Image(winbitkoin5v2, imgui.ImVec2(24, 24), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1))
 	imgui.SameLine() if imgui.CustomButton(u8'VKoin', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then panelv5.v = false panelv52.v = false panelv53.v = false panelv54.v = false  panelv55.v = false  panelv56.v = false  panelv57.v = false  panelv58.v = false  panelv59.v = false  panelv510.v = false  panelv511.v = false  panelv512.v = false panelv513.v = false  panelv514.v = false panelv515.v = false  panelv516.v = false panelv517.v = false panelv518.v = false panelv519.v = true end
 	
@@ -21636,6 +23601,47 @@ end
 
 function sampev.onDisplayGameText(style, tm, text)
 
+	if text:match('+(.+)%$') and obmenrodfish.v then 
+	fishmoney = tonumber(text:match('+(.+)%$'))
+	moneyfish = moneyfish + fishmoney
+	end
+	if text:find('PRESS N') and fishlovlya.v then 
+	lua_thread.create(function()
+	if fishklavaN.v then 
+	setGameKeyState(10, 1)
+	wait(0)
+	setGameKeyState(10, 0)
+	else
+	wait(200)
+	sendKey(128)
+			end
+		end)
+	end
+	if text:find('PRESS N') and fishlovlyav2.v then 
+	lua_thread.create(function()
+	if fishklavaN.v then 
+	setGameKeyState(10, 1)
+	wait(0)
+	setGameKeyState(10, 0)
+	else
+	wait(200)
+	sendKey(128)
+			end
+		end)
+	end
+	if text:find('PRESS N') and nofunction.v then 
+	lua_thread.create(function()
+	if fishklavaN.v then 
+	setGameKeyState(10, 1)
+	wait(0)
+	setGameKeyState(10, 0)
+	else
+	wait(200)
+	sendKey(128)
+			end
+		end)
+	end
+
 	if vkconnect.v and sellgolod.v and text:find('You are hungry!') then vk_requestv2('['..nazvanie.v..'] Вы голодны! Вам необходимо поесть.') end
 	if vkconnect.v and sellgolod.v and text:find('You are very hungry!') then vk_requestv2('['..nazvanie.v..'] Вы очень голодны! Вам необходимо срочно поесть.') end
 
@@ -22193,1116 +24199,6 @@ function photo_load()
 	skupinst6 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst6.png')
 	skupinst7 = imgui.CreateTextureFromFile('moonloader/config/Mono/icons/inst7.png')
 	end
-
-function load_static()
-	itogoskuptrava = skuptravacol.v * skuptravacena.v
-	itogoskupbronzarul = skupbronzarulcol.v * skupbronzarulcena.v
-	itogoskupserebrorul = skupserebrorulcol.v * skupserebrorulcena.v
-	itogoskupgoldrul = skupgoldrulcol.v * skupgoldrulcena.v
-	itogoskupplatinarul = skupplatinarulcol.v * skupplatinarulcena.v
-	itogoskupkamen = skupkamencol.v * skupkamencena.v
-	itogoskupmetal = skupmetalcol.v * skupmetalcena.v
-	itogoskupbronza = skupbronzacol.v * skupbronzacena.v
-	itogoskupserebro = skupserebrocol.v * skupserebrocena.v
-	itogoskupgold = skupgoldcol.v * skupgoldcena.v
-	itogoskuppodarki = skuppodarkicol.v * skuppodarkicena.v
-	itogoskuptalon = skuptaloncol.v * skuptaloncena.v
-	itogoskupsemtalon = skupsemtaloncol.v * skupsemtaloncena.v
-	itogoskupskidtalon = skupskidtaloncol.v * skupskidtaloncena.v
-	itogoskuptochkamen = skuptochkamencol.v * skuptochkamencena.v
-	itogoskuptochamulet = skuptochamuletcol.v * skuptochamuletcena.v
-	itogoskuplarec = skuplareccol.v * skuplareccena.v
-	itogoskupsmazka = skupsmazkacol.v * skupsmazkacena.v
-	itogoskupcarbox = skupcarboxcol.v * skupcarboxcena.v
-	itogoskupohlad = skupohladcol.v * skupohladcena.v
-	itogoskuptt = 1 * skupttcena.v
-	itogoskupmoneta = skupmonetacol.v * skupmonetacena.v
-	itogoskuplen = skuplencol.v * skuplencena.v
-	itogoskupxlopok = skupxlopokcol.v * skupxlopokcena.v
-	itogoskuprespekt = skuprespektcol.v * skuprespektcena.v
-	itogoskupmaterial = skupmaterialcol.v * skupmaterialcena.v
-	itogoskupdrova = skupdrovacol.v * skupdrovacena.v
-	itogoskupantibiotik = skupantibiotikcol.v * skupantibiotikcena.v
-	itogoskuptsr = skuptsrcol.v * skuptsrcena.v
-	itogoskupsemmoneta = skupsemmonetacol.v * skupsemmonetacena.v
-	itogoskupauto = 1 * skupautocena.v
-	
-	itogoskupcoltrava = skuptravacol.v
-	itogoskupcolbronzarul = skupbronzarulcol.v
-	itogoskupcolserebrorul = skupserebrorulcol.v
-	itogoskupcolgoldrul = skupgoldrulcol.v
-	itogoskupcolplatinarul = skupplatinarulcol.v
-	itogoskupcolkamen = skupkamencol.v
-	itogoskupcolmetal = skupmetalcol.v
-	itogoskupcolbronza = skupbronzacol.v
-	itogoskupcolserebro = skupserebrocol.v
-	itogoskupcolgold = skupgoldcol.v
-	itogoskupcolpodarki = skuppodarkicol.v
-	itogoskupcoltalon = skuptaloncol.v
-	itogoskupcolsemtalon = skupsemtaloncol.v
-	itogoskupcolskidtalon = skupskidtaloncol.v
-	itogoskupcoltochkamen = skuptochkamencol.v
-	itogoskupcoltochamulet = skuptochamuletcol.v
-	itogoskupcollarec = skuplareccol.v
-	itogoskupcolsmazka = skupsmazkacol.v
-	itogoskupcolcarbox = skupcarboxcol.v
-	itogoskupcolohlad = skupohladcol.v
-	itogoskupcolmoneta = skupmonetacol.v
-	itogoskupcollen = skuplencol.v
-	itogoskupcolxlopok = skupxlopokcol.v
-	itogoskupcolrespekt = skuprespektcol.v
-	itogoskupcolmaterial = skupmaterialcol.v
-	itogoskupcoldrova = skupdrovacol.v
-	itogoskupcolantibiotik = skupantibiotikcol.v
-	itogoskupcoltsr = skuptsrcol.v
-	itogoskupcolsemmoneta = skupsemmonetacol.v
-	
-	if skuptrava.v then skuptravacool = skuptravacol.v else skuptravacool = 0 end
-	if skupbronzarul.v then skupbronzarulcool = skupbronzarulcol.v else skupbronzarulcool = 0 end
-	if skupserebrorul.v then skupserebrorulcool = skupserebrorulcol.v else skupserebrorulcool = 0 end
-	if skupgoldrul.v then skupgoldrulcool = skupgoldrulcol.v else skupgoldrulcool = 0 end
-	if skupplatinarul.v then skupplatinarulcool = skupplatinarulcol.v else skupplatinarulcool = 0 end
-	if skupkamen.v then skupkamencool = skupkamencol.v else skupkamencool = 0 end
-	if skupmetal.v then skupmetalcool = skupmetalcol.v else skupmetalcool = 0 end
-	if skupbronza.v then skupbronzacool = skupbronzacol.v else skupbronzacool = 0 end
-	if skupserebro.v then skupserebrocool = skupserebrocol.v else skupserebrocool = 0 end
-	if skupgold.v then skupgoldcool = skupgoldcol.v else skupgoldcool = 0 end
-	if skuppodarki.v then skuppodarkicool = skuppodarkicol.v else skuppodarkicool = 0 end
-	if skuptrava.v then skuptravacennik = itogoskuptrava else skuptravacennik = 0 end
-	if skupbronzarul.v then skupbronzarulcennik = itogoskupbronzarul else skupbronzarulcennik = 0 end
-	if skupserebrorul.v then skupserebrorulcennik = itogoskupserebrorul else skupserebrorulcennik = 0 end
-	if skupgoldrul.v then skupgoldrulcennik = itogoskupgoldrul else skupgoldrulcennik = 0 end
-	if skupplatinarul.v then skupplatinarulcennik = itogoskupplatinarul else skupplatinarulcennik = 0 end
-	if skupkamen.v then skupkamencennik = itogoskupkamen else skupkamencennik = 0 end
-	if skupmetal.v then skupmetalcennik = itogoskupmetal else skupmetalcennik = 0 end
-	if skupbronza.v then skupbronzacennik = itogoskupbronza else skupbronzacennik = 0 end
-	if skupserebro.v then skupserebrocennik = itogoskupserebro else skupserebrocennik = 0 end
-	if skupgold.v then skupgoldcennik = itogoskupgold else skupgoldcennik = 0 end
-	if skuppodarki.v then skuppodarkicennik = itogoskuppodarki else skuppodarkicennik = 0 end
-	if skuptalon.v then skuptaloncool = skuptaloncol.v else skuptaloncool = 0 end
-	if skupsemtalon.v then skupsemtaloncool = skupsemtaloncol.v else skupsemtaloncool = 0 end
-	if skupskidtalon.v then skupskidtaloncool = skupskidtaloncol.v else skupskidtaloncool = 0 end
-	if skuptochkamen.v then skuptochkamencool = skuptochkamencol.v else skuptochkamencool = 0 end
-	if skuptochamulet.v then skuptochamuletcool = skuptochamuletcol.v else skuptochamuletcool = 0 end
-	if skuplarec.v then skuplareccool = skuplareccol.v else skuplareccool = 0 end
-	if skupsmazka.v then skupsmazkacool = skupsmazkacol.v else skupsmazkacool = 0 end
-	if skupcarbox.v then skupcarboxcool = skupcarboxcol.v else skupcarboxcool = 0 end
-	if skupohlad.v then skupohladcool = skupohladcol.v else skupohladcool = 0 end
-	if skuptt.v then skupttcool = 1 else skupttcool = 0 end
-	if skupmoneta.v then skupmonetacool = skupmonetacol.v else skupmonetacool = 0 end
-	if skuplen.v then skuplencool = skuplencol.v else skuplencool = 0 end
-	if skupxlopok.v then skupxlopokcool = skupxlopokcol.v else skupxlopokcool = 0 end
-	if skuprespekt.v then skuprespektcool = skuprespektcol.v else skuprespektcool = 0 end
-	if skuptalon.v then skuptaloncennik = itogoskuptalon else skuptaloncennik = 0 end
-	if skupsemtalon.v then skupsemtaloncennik = itogoskupsemtalon else skupsemtaloncennik = 0 end
-	if skupskidtalon.v then skupskidtaloncennik = itogoskupskidtalon else skupskidtaloncennik = 0 end
-	if skuptochkamen.v then skuptochkamencennik = itogoskuptochkamen else skuptochkamencennik = 0 end
-	if skuptochamulet.v then skuptochamuletcennik = itogoskuptochamulet else skuptochamuletcennik = 0 end
-	if skuplarec.v then skuplareccennik = itogoskuplarec else skuplareccennik = 0 end
-	if skupsmazka.v then skupsmazkacennik = itogoskupsmazka else skupsmazkacennik = 0 end
-	if skupcarbox.v then skupcarboxcennik = itogoskupcarbox else skupcarboxcennik = 0 end
-	if skupohlad.v then skupohladcennik = itogoskupohlad else skupohladcennik = 0 end
-	if skuptt.v then skupttcennik = itogoskuptt else skupttcennik = 0 end
-	if skupmoneta.v then skupmonetacennik = itogoskupmoneta else skupmonetacennik = 0 end
-	if skuplen.v then skuplencennik = itogoskuplen else skuplencennik = 0 end
-	if skupxlopok.v then skupxlopokcennik = itogoskupxlopok else skupxlopokcennik = 0 end
-	if skuprespekt.v then skuprespektcennik = itogoskuprespekt else skuprespektcennik = 0 end
-	if skupmaterial.v then skupmaterialcool = skupmaterialcol.v else skupmaterialcool = 0 end
-	if skupdrova.v then skupdrovacool = skupdrovacol.v else skupdrovacool = 0 end
-	if skupantibiotik.v then skupantibiotikcool = skupantibiotikcol.v else skupantibiotikcool = 0 end
-	if skuptsr.v then skuptsrcool = skuptsrcol.v else skuptsrcool = 0 end
-	if skupsemmoneta.v then skupsemmonetacool = skupsemmonetacol.v else skupsemmonetacool = 0 end
-	if skupauto.v then skupautocool = 1 else skupautocool = 0 end
-	if skupmaterial.v then skupmaterialcennik = itogoskupmaterial else skupmaterialcennik = 0 end
-	if skupdrova.v then skupdrovacennik = itogoskupdrova else skupdrovacennik = 0 end
-	if skupantibiotik.v then skupantibiotikcennik = itogoskupantibiotik else skupantibiotikcennik = 0 end
-	if skuptsr.v then skuptsrcennik = itogoskuptsr else skuptsrcennik = 0 end
-	if skupsemmoneta.v then skupsemmonetacennik = itogoskupsemmoneta else skupsemmonetacennik = 0 end
-	if skupauto.v then skupautocennik = itogoskupauto else skupautocennik = 0 end
-	
-	skuptovaracol = skuptravacool + skupbronzarulcool + skupserebrorulcool + skupgoldrulcool + skupplatinarulcool + skupkamencool + skupmetalcool + skupbronzacool + skupserebrocool + skupgoldcool + skuppodarkicool + skuptaloncool + skupsemtaloncool + skupskidtaloncool + skuptochkamencool + skuptochamuletcool + skuplareccool + skupsmazkacool + skupcarboxcool + skupohladcool + skupttcool + skupmonetacool + skuplencool + skupxlopokcool + skuprespektcool + skupmaterialcool + skupdrovacool + skupantibiotikcool + skuptsrcool + skupsemmonetacool + skupautocool
-	itogoskuptovara = skuptravacennik + skupbronzarulcennik + skupserebrorulcennik + skupgoldrulcennik + skupplatinarulcennik + skupkamencennik + skupmetalcennik + skupbronzacennik + skupserebrocennik + skupgoldcennik + skuppodarkicennik + skuptaloncennik + skupsemtaloncennik + skupskidtaloncennik + skuptochkamencennik + skuptochamuletcennik + skuplareccennik + skupsmazkacennik + skupcarboxcennik + skupohladcennik + skupttcennik + skupmonetacennik + skuplencennik + skupxlopokcennik + skuprespektcennik + skupmaterialcennik + skupdrovacennik + skupantibiotikcennik + skuptsrcennik + skupsemmonetacennik + skupautocennik
-end
-
-function skuptovarov()
-lua_thread.create(function()
-	if skuptrava.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 1, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuptravacol.v..','..skuptravacena.v)
-	end
-	if skupbronzarul.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 8, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupbronzarulcol.v..','..skupbronzarulcena.v)
-	end
-	if skupserebrorul.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 9, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupserebrorulcol.v..','..skupserebrorulcena.v)
-	end
-	if skupgoldrul.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 10, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupgoldrulcol.v..','..skupgoldrulcena.v)
-	end
-	if skupplatinarul.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 10, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupplatinarulcol.v..','..skupplatinarulcena.v)
-	end
-	if skupkamen.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 4, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupkamencol.v..','..skupkamencena.v)
-	end
-	if skupmetal.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 5, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupmetalcol.v..','..skupmetalcena.v)
-	end
-	if skupbronza.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 6, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupbronzacol.v..','..skupbronzacena.v)
-	end
-	if skupserebro.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 7, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupserebrocol.v..','..skupserebrocena.v)
-	end
-	if skupgold.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 8, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupgoldcol.v..','..skupgoldcena.v)
-	end
-	if skuppodarki.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 5, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuppodarkicol.v..','..skuppodarkicena.v)
-	end
-	if skuptalon.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 5, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuptaloncol.v..','..skuptaloncena.v)
-	end
-	if skupsemtalon.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 12, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupsemtaloncol.v..','..skupsemtaloncena.v)
-	end
-	if skupskidtalon.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 4, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupskidtaloncol.v..','..skupskidtaloncena.v)
-	end
-	if skuptochkamen.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 18, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuptochkamencol.v..','..skuptochkamencena.v)
-	end
-	if skuptochamulet.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 1, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuptochamuletcol.v..','..skuptochamuletcena.v)
-	end
-	if skuplarec.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuplareccol.v..','..skuplareccena.v)
-	end
-	if skupsmazka.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 6, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupsmazkacol.v..','..skupsmazkacena.v)
-	end
-	if skupcarbox.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 9, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupcarboxcol.v..','..skupcarboxcena.v)
-	end
-	if skupohlad.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 7, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupohladcol.v..','..skupohladcena.v)
-	end
-	if skuptt.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 7, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupttcena.v)
-	end
-	if skupmoneta.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 17, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupmonetacol.v..','..skupmonetacena.v)
-	end
-	if skuplen.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 3, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuplencol.v..','..skuplencena.v)
-	end
-	if skupxlopok.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupxlopokcol.v..','..skupxlopokcena.v)
-	end
-	if skuprespekt.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 17, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuprespektcol.v..','..skuprespektcena.v)
-	end
-	if skupmaterial.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 1, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupmaterialcol.v..','..skupmaterialcena.v)
-	end
-	if skupdrova.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 18, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupdrovacol.v..','..skupdrovacena.v)
-	end
-	if skupantibiotik.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 6, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupantibiotikcol.v..','..skupantibiotikcena.v)
-	end
-	if skuptsr.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 7, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skuptsrcol.v..','..skuptsrcena.v)
-	end
-	if skupsemmoneta.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 14, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupsemmonetacol.v..','..skupsemmonetacena.v)
-	end
-	if skupauto.v then 
-	sampSendDialogResponse(3040, 1, 2, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 19, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 20, -1)
-	wait(500)
-	sampSendDialogResponse(3050, 1, 8, -1)
-	wait(500)
-	sampSendDialogResponse(3060, 1, 1, ''..skupautocena.v)
-		end
-	end)
-end
-
-function skuppoymol()
-		skuptravacol.v = '1'
-		skuptravacena.v = '1000'
-		skupbronzarulcol.v = '1'
-		skupbronzarulcena.v = '15000'
-		skupserebrorulcol.v = '1'
-		skupserebrorulcena.v = '95000'
-		skupgoldrulcol.v = '1'
-		skupgoldrulcena.v = '300000'
-		skupplatinarulcol.v = '1'
-		skupplatinarulcena.v = '600000'
-		skupkamencol.v = '1'
-		skupkamencena.v = '10000'
-		skupmetalcol.v = '1'
-		skupmetalcena.v = '5000'
-		skupbronzacol.v = '1'
-		skupbronzacena.v = '50000'
-		skupserebrocol.v = '1'
-		skupserebrocena.v = '100000'
-		skupgoldcol.v = '1'
-		skupgoldcena.v = '50000'
-		skuppodarkicol.v = '1'
-		skuppodarkicena.v = '10000'
-		skuptaloncol.v = '1'
-		skuptaloncena.v = '7000'
-		skupsemtaloncol.v = '1'
-		skupsemtaloncena.v = '17000'
-		skupskidtaloncol.v = '1'
-		skupskidtaloncena.v = '2000000'
-		skuptochkamencol.v = '1'
-		skuptochamuletcol.v = '1'
-		skuptochkamencena.v = '80000'
-		skuptochamuletcena.v = '200000'
-		skuplareccol.v = '1'
-		skupsmazkacol.v = '1'
-		skupcarboxcol.v = '1'
-		skupohladcol.v = '1'
-		skuplareccena.v = '300000'
-		skupsmazkacena.v = '600000'
-		skupcarboxcena.v = '1500000'
-		skupohladcena.v = '600000'
-		skupttcena.v = '9000000'
-		skupmonetacol.v = '1'
-		skupmonetacena.v = '2000'
-		skuplencol.v = '1'
-		skuplencena.v = '2000'
-		skupxlopokcol.v = '1'
-		skupxlopokcena.v = '1500'
-		skuprespektcol.v = '1'
-		skuprespektcena.v = '2000'
-		skupmaterialcol.v = '1'
-		skupmaterialcena.v = '100'
-		skupdrovacol.v = '1'
-		skupdrovacena.v = '100'
-		skupantibiotikcol.v = '1'
-		skupantibiotikcena.v = '10000'
-		skuptsrcol.v = '1'
-		skuptsrcena.v = '15000'
-		skupsemmonetacol.v = '1'
-		skupsemmonetacena.v = '5000'
-		skupautocena.v = '2000000'
-		saveSettings(4)
-	end
 	
 function videoover()
 	video.v = false
@@ -23703,7 +24599,7 @@ function getOnline()
 end
 
 function sendHelp()
-	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#9000; - нажатие клавиш N и ALT.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n &#128073; Roulette Tools - можно по нажатию кнопки включить такой функционал как: включение/отключение проверки всех сундуков, включение/отключение открытие бронзовых рулеток с обновлением слотов и поиском подарков и включение/отключение открытие серебряных, золотых и платиновых рулеток с обновлением слотов и поиском AZ (чтобы выключить открытие сундуков или рулеток, нужно повторно нажать на кнопку)\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов. \n\n &#128204; Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n &#128073; !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n &#128073; !dc - закрыть открытый диалог.\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics. \n &#128073; /reload - перезагрузить скрипт. \n &#128073; /recon - перезайти на сервер через 30 секунд. \n &#128073; /recon [время] - перезайти на сервер через указанное время. \n &#128073; /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n &#128073; /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
+	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#9000; - нажатие клавиш N и ALT.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n &#128073; Roulette Tools - можно по нажатию кнопки включить такой функционал как: включение/отключение проверки всех сундуков, включение/отключение открытие бронзовых рулеток с обновлением слотов и поиском подарков и включение/отключение открытие серебряных, золотых и платиновых рулеток с обновлением слотов и поиском AZ (чтобы выключить открытие сундуков или рулеток, нужно повторно нажать на кнопку)\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов. \n\n &#128204; Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n &#128073; !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n &#128073; !dc - закрыть открытый диалог.\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !screen - сделать скриншот и отправить его в VK (на лаунчере работает отлично, а на сборке работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально на сборке - нужно сделать игру в оконный режим и растянуть на весь экран.)\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics. \n &#128073; /reload - перезагрузить скрипт. \n &#128073; /recon - перезайти на сервер через 30 секунд. \n &#128073; /recon [время] - перезайти на сервер через указанное время. \n &#128073; /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n &#128073; /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
 end
 
 function sendresetstatarul()
@@ -24065,6 +24961,8 @@ function longpollResolve(result)
 						sendDialog()
 					elseif text:match('^!statarul') then
 						sendstatarul()
+					elseif text:match('^!screen') then
+						sendscreen()
 					elseif text:match('^!resetstatarul') then
 						sendresetstatarul()
 					elseif text:match('^!d ') then
@@ -25059,6 +25957,10 @@ function show_dialv4()
 	win_state['lovec'].v = not win_state['lovec'].v
 	end
 	
+function show_dialv5()
+	win_state['fishmenu'].v = not win_state['fishmenu'].v
+	end
+	
 function connect_cmd(arg)
 	if arg == '' then sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Введите IP сервера! Пример: /connect 185.169.134.166.", 0x046D63) 
 	else
@@ -25376,7 +26278,7 @@ function checkPage(menu)
 		local isFounded = false
 		for i=1, #t do
 			for n=1, #inputsskup do
-				if t[i]:find(itemsskup[inputsskup[n][3]][1], 0, true) and inputsskup[n][4] == false then sampSendDialogResponse(3050, 1, i - 2) isFounded = true wait(delayInt.v) buyProcess(n) break end
+				if t[i]:find(itemsskup[inputsskup[n][3]][1], 0, true) and inputsskup[n][4] == false then sampSendDialogResponse(3050, 1, i - 2) isFounded = true wait(delayintv2.v) buyProcess(n) break end
 			end
 			if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) haveExit = true end
 			if isFounded then break end
@@ -25401,6 +26303,59 @@ function pageWrite(menu)
 		if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNext = true end
 	end
 	if not isNext then isEn = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", 0x046D63) inicfg.save(itemsskup, _nameini) sampSendDialogResponse(3050, 0) isBuyProcess = false end
+end
+
+function stablesell(n)
+	if itemssell[n][4] then itemssell[n][4] = false else itemssell[n][4] = true end
+	inicfg.save(itemssell, _nameinisell)
+end
+
+function buyProcesssell(n)
+	isBuyProcesssell = true
+	if inputssell[n][5].v == true then sampSendDialogResponse(3060, 1, 0, inputssell[n][2].v)
+	else sampSendDialogResponse(3060, 1, 0, inputssell[n][1].v..","..inputssell[n][2].v) end
+	wait(1000)
+	inputssell[n][4] = 1
+	local isEndsell = true
+	for i=1, #inputssell do
+		if inputssell[i][4] == false then isEndsell = false end
+	end
+	if not isEndsell then sampSendDialogResponse(3040, 1, 0) else sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Выбранные вами товары успешно выставлены на скупку.", 0x046D63) isBuyProcesssell = false isEnsell = 0 win_state['skup'].v = true win_state['skup2'].v = false sampShowDialog(1235, "Выставление", "{7cfc00}Предметы выставлены, можете закрывать окно", "Ок") end
+end
+
+function checkPagesell(menusell)
+		local cleanedsell = menusell
+		local haveExitsell = false
+		local t = {}
+		for line in cleanedsell:gmatch("(.-)\n") do t[#t+1] = line:gsub("\r","") end
+		local isFoundedsell = false
+		for i=1, #t do
+			for n=1, #inputssell do
+				if t[i]:find(itemssell[inputssell[n][3]][1], 0, true) and inputssell[n][4] == false then sampSendDialogResponse(3050, 1, i - 2) isFoundedsell = true wait(delayintsellv2.v) buyProcesssell(n) break end
+			end
+			if t[i]:find(">>>") then wait(delayintsellv2.v) sampSendDialogResponse(3050, 1, i - 2) haveExitsell = true end
+			if isFoundedsell then break end
+		end
+end
+
+function pageWritesell(menusell)
+	isBuyProcesssell = true
+	local cleanedsell = menusell
+	local t = {}
+	local isNextsell = false
+	for line in cleanedsell:gmatch("(.-)\n") do t[#t+1] = line:gsub("\r","") end
+	for i=1, #t do
+		local itemsell = t[i]:match("%{777777%}(.+)%s%{B6B425%}")
+		if itemsell ~= "Название" and itemsell ~= nil then
+			local isFoundedsell = false
+			for n=1, #itemssell do
+				if itemssell[n][2] == itemsell then isFoundedsell = true end
+			end
+			if not isFoundedsell then table.insert(itemssell, {itemsell, 0, 0, false, false}) end
+		end
+		if t[i]:find(">>>") then wait(delayintsellv2.v) sampSendDialogResponse(3050, 1, i - 2) isNextsell = true end
+	end
+	if not isNextsell then isEnsell = 0 sampAddChatMessage("["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", 0x046D63) inicfg.save(itemssell, _nameinisell) sampSendDialogResponse(3050, 0) isBuyProcesssell = false end
 end
 
 function boxingtest()
@@ -25496,4 +26451,429 @@ function parseNumber(n)
 		sampSendClickTextdraw(keysphone[tonumber(numberv2)])
 		wait(zadervkacall.v)
   end
+end
+
+function fishmenu()
+	lua_thread.create(function()
+	wait(50)
+	sampSendChat('/fishrod')
+	end)
+end
+
+function fishlovec()
+	while true do 
+	if fishlovlyav2.v and fishbaitv1.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 0, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv2.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 1, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv3.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 2, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv4.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 3, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv5.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 4, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv6.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 5, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv7.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv8.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 7, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv9.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 8, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv10.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 9, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv11.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 10, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv12.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 11, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv13.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 12, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv14.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 13, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv15.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 14, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv16.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 15, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv17.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 16, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv18.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 17, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv19.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 18, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv20.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 19, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv21.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 20, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv22.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 21, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv23.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 22, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv24.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 23, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	if fishlovlyav2.v and fishbaitv25.v then 
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 6, -1)
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25286, 1 , 24, -1)
+	wait(zadervkafish.v)
+	sampSendChat('/fishrod')
+	wait(zadervkafish.v)
+	sampSendDialogResponse(25285, 1 , 7, -1)
+	wait(zadervkafish.v)
+	closeDialog()
+	wait(zadervkafishtime.v*1000)
+	end
+	wait(0)
+	end
+end
+
+function sendscreen()
+	if vkconnect.v then 
+    local pDevice = ffi.cast("struct d3ddevice*", 0xC97C28)
+    local CreateOffscreenPlainSurface =  ffi.cast("long(__stdcall*)(void*, unsigned long, unsigned long, unsigned long, unsigned long, void**, void*)", pDevice.vtbl[0].CreateOffscreenPlainSurface)
+    local GetFrontBufferData =  ffi.cast("long(__stdcall*)(void*, unsigned long, void*)", pDevice.vtbl[0].GetFrontBufferData)
+    local pSurface = ffi.cast("void**", ffi.new('unsigned long[1]'))
+    local sx = ffi.C.GetSystemMetrics(0);
+    local sy = ffi.C.GetSystemMetrics(1);
+    CreateOffscreenPlainSurface(pDevice, sx, sy, 21, 3, pSurface, ffi.cast("void*", 0))
+    if GetFrontBufferData(pDevice, 0, pSurface[0]) < 0 then
+        print("Screenshot cannot be created")
+    else
+        local Point = ffi.new("struct POINT[1]")
+        local Rect = ffi.new("struct RECT[1]")
+        local HWND = ffi.cast("int*", 0xC97C1C)[0]
+        ffi.C.ClientToScreen(HWND, Point)
+        ffi.C.GetClientRect(HWND, Rect)
+        Rect[0].left = Rect[0].left + Point[0].x
+        Rect[0].right = Rect[0].right + Point[0].x
+        Rect[0].top = Rect[0].top + Point[0].y
+        Rect[0].bottom = Rect[0].bottom + Point[0].y
+        d3dx9_43.D3DXSaveSurfaceToFileA("1.png", 3, pSurface[0], ffi.cast("void*", 0), Rect) -- second parameter(3) is D3DXIMAGE_FILEFORMAT, checkout https://docs.microsoft.com/en-us/windows/win32/direct3d9/d3dximage-fileformat
+        sendPhoto(getGameDirectory()..'/1.png') -- отправка фотки после скрина
+		end
+	end
+end
+function uploadPhoto(filename, uploadUrl) 
+	if vkconnect.v then 
+    local fileHandle = io.open(filename,"rb") 
+    if (fileHandle) then 
+      local fileContent = fileHandle:read( "*a" )
+      fileHandle:close()
+      local boundary = 'abcd'
+      local header_b = 'Content-Disposition: form-data; name="file"; filename="' .. filename .. '"\r\nContent-Type: image/png\r\n'
+      local fileContent =  '--' ..boundary .. '\r\n' ..header_b ..'\r\n'.. fileContent .. '\r\n--' .. boundary ..'--\r\n'
+      local resp = requests.post(uploadUrl, {
+        headers = {
+          ["Content-Length"] =  fileContent:len(), 
+          ['Content-Type'] = 'multipart/form-data; boundary=' .. boundary    
+        },
+        data = fileContent
+      })
+      return resp.json()
+		end
+    end
+end
+function randomInt() 
+    math.randomseed(os.time() + os.clock())
+    return math.random(-2147483648, 2147483648)
+end 
+function sendPhoto(path) 
+	if vkconnect.v then 
+    local upResponse = requests.post(("https://api.vk.com/method/photos.getMessagesUploadServer?peer_id=%d&access_token=%s&v=5.131"):format(idvkv2.v, tokenvkv2.v)).json()
+    local uploadedResponse = uploadPhoto(path, upResponse.response.upload_url)
+    local saveResponse = requests.post(("https://api.vk.com/method/photos.saveMessagesPhoto?server=%d&photo=%s&hash=%s&access_token=%s&v=5.131"):format(uploadedResponse.server,uploadedResponse.photo,uploadedResponse.hash, tokenvkv2.v)).json()
+    local image = saveResponse.response[1]
+    local att_image = ("photo%d_%d_%s"):format(image.owner_id, image.id, image.access_key)
+    os.remove(getGameDirectory()..'/1.png') -- Удаление фотки с глаз долой 
+    return requests.post(("https://api.vk.com/method/messages.send?peer_id=%d&attachment=%s&access_token=%s&random_id=%d&v=5.131"):format(idvkv2.v, att_image, tokenvkv2.v, randomInt()))
+	end
 end
