@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('3.3.34')
+script_version('3.3.35')
 
 use = false
 close = false
@@ -30,7 +30,7 @@ local fa_font = nil
 delplayer = false
 begauto = false
 local npc, infnpc = {}, {}
-local admmp = 0
+local admmp = 2111
 clickpay = 0
 buypay = 0
 countaz = 0
@@ -1464,6 +1464,7 @@ activateplus = false
 activateminus = false
 activateminusv2 = false
 lovlyvideo = imgui.ImBool(false)
+rendernefti = imgui.ImBool(false)
 lovlyohlad = imgui.ImBool(false)
 banditactive = imgui.ImBool(false)
 banditactivev2 = imgui.ImBool(false)
@@ -3516,6 +3517,24 @@ end
 				end
 			end
 		end
+		
+		if rendernefti.v then 
+		for id = 0, 2048 do
+            local result = sampIs3dTextDefined( id )
+            if result then
+                local text, color, posX, posY, posZ, distance, ignoreWalls, playerId, vehicleId = sampGet3dTextInfoById( id )
+                if text:find('Запас нефти:') then
+                    local wposX, wposY = convert3DCoordsToScreen(posX,posY,posZ)
+                    x2,y2,z2 = getCharCoordinates(PLAYER_PED)
+                    x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
+                    local resX, resY = getScreenResolution()
+                    if wposX < resX and wposY < resY and isPointOnScreen (posX,posY,posZ,1) then
+                        renderFontDrawText(font, text, wposX, wposY,-1)
+                    end
+                end
+			end
+		end
+	end
 		
 		 if givemedist.v then
             if isCharInAnyPlane(PLAYER_PED) or isCharInAnyHeli(PLAYER_PED) then --airveh dist
@@ -8578,16 +8597,18 @@ function imgui.OnDrawFrame()
 	imgui.EndChild()
 	imgui.PopStyleColor()
 	
-	--[[imgui.SameLine(5) 
+	imgui.SameLine(5) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
-	imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 100), false)
+	imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 160), false)
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('')
-	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Топовый промокод на сервере Sun-City - {ffff00}#ben')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'Узнать все доступные команды, вы сможете в ')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'разделе "Помощь" (нажмите на иконку) ')
+	imgui.Text('') imgui.SameLine(130) if imgui.ImageButton(winhelper, imgui.ImVec2(30, 30), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['help'].v = not win_state['help'].v end		
 	imgui.EndChild()
-	imgui.PopStyleColor()]]
+	imgui.PopStyleColor()
 	
 	imgui.SameLine(5)
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
@@ -9570,6 +9591,27 @@ end
 				imgui.PushItemWidth(100)
 				imgui.SliderInt(u8'Задержка (мс) ##55235212767896',delayintv2,100, 10000)
 				imgui.TextColoredRGB("1 секунда = 1000 миллисекунд")
+				if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+				delplayer = not delplayer
+				for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
+		
 			imgui.EndGroup()
 		local mon = 0
 		for i=1, #inputsskup do
@@ -9686,6 +9728,27 @@ end
 				imgui.PushItemWidth(100)
 				imgui.SliderInt(u8'Задержка (мс) ##552357678296432354',delayintsellv2,100, 10000)
 				imgui.TextColoredRGB("1 секунда = 1000 миллисекунд")
+				if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+				delplayer = not delplayer
+				for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
+		
 			imgui.EndGroup()
 		local monsell = 0
 		for i=1, #inputssell do
@@ -9898,7 +9961,7 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 335), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 305), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю праздничных монет', lovlymonet) imgui.SameLine() imgui.TextQuestion(u8"Ловля монет на праздничном квесте. После активации функционала, нажав на кнопку '1' - будет флуд клавишей ALT. Если нажать на кнопку '2' - прекратится флуд ALT и начнется флуд пробелом. Если нажать на кнопку '3' - функционал будет отключен. Чем больше фпс - тем быстрее нажимаются клавиши. Задержка влияет на нажатие на пробел, если не кикает, ставьте минимальную задержку.")
@@ -9908,6 +9971,7 @@ end
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю BTC', lovlybtc) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально продать биткоин. Просто включите функционал перед PD и нажимайте N еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер свободных лавок', poisklavka)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер 3D текста для нефтевышек', rendernefti) imgui.SameLine() imgui.TextQuestion(u8"С данной функцией вам не придется вплотную подъезжать к нефтевышке (которые находятся в пустыне), чтобы рассмотреть количество нефти.")
 		imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
 		delplayer = not delplayer
 			for _, handle in ipairs(getAllChars()) do
@@ -22466,6 +22530,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'60. Удалена первая версия скуп меню и добавлено Sell Menu.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'61. Подправлена менюшка и тексты в "Skup Menu" и добавлена кнопка "сохранить настройки".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'62. В "VK Connect" добавлена возможность сделать скриншот (подробнее в пункте "помощь" на клавиатуре в боте ВК)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[11.05.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'63. В "Sell Menu" и "Skup Menu" добавлено удаление игроков.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'64. В Windows Style добавлено упоминание на рабочем столе, где юзер скрипта сможет посмотреть доступные команды.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'65. В /lovec добавлен рендер 3D текста для новых нефтевышек.')
 			imgui.End()
 		end
 	
