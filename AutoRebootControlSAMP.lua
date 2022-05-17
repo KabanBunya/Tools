@@ -22,7 +22,7 @@ end
 function EXPORTS.getfilename() 
 
 	for i, s in pairs(script.list()) do
-		if s.name == 'Mono Tools' then 
+		if s.name == 'Tools' then 
 			name = s.filename -- получаем название скрипта.lua,даже если название будет изменено
 		end
 	end
