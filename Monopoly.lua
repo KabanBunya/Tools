@@ -26621,7 +26621,7 @@ function tupupdate()
 	imgui.Begin(u8'Тестовые обновления v3.4', win_state['tup'], imgui.WindowFlags.NoResize)
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine(170) imgui.Text(u8'Посмотреть полный список обновления вы сможете в "Параметры" - "Обновления".')
-			imgui.Text('') imgui.SameLine()	if imgui.CustomButton(u8'Перейти к списку обновления', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['main'].v = true win_state['nastroikawin'].v = true selected3 = 5 end
+			--imgui.Text('') imgui.SameLine()	if imgui.CustomButton(u8'Перейти к списку обновления', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['main'].v = true win_state['nastroikawin'].v = true selected3 = 5 end
 			imgui.Separator()
 			if imgui.CollapsingHeader(u8'Полный список обновления с версии 3.3 до 3.4') then
 			imgui.BeginChild('##as2dasasdf32451453543654gfhgfhtr235435', imgui.ImVec2(720, 280), false)
