@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.1')
+script_version('3.4.2')
 
 use = false
 close = false
@@ -15285,16 +15285,16 @@ end]]
 	saveSettings()
 	end
 	
-	if vkconnect.v and vkfind.v and vkfindtext.v and text:find(''..inputfindvk.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext2.v and text:find(''..inputfindvk2.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext3.v and text:find(''..inputfindvk3.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext4.v and text:find(''..inputfindvk4.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext5.v and text:find(''..inputfindvk5.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext6.v and text:find(''..inputfindvk6.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext7.v and text:find(''..inputfindvk7.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext8.v and text:find(''..inputfindvk8.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext9.v and text:find(''..inputfindvk9.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if vkconnect.v and vkfind.v and vkfindtext10.v and text:find(''..inputfindvk10.v) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext.v and text:find(''..u8:decode(inputfindvk.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext2.v and text:find(''..u8:decode(inputfindvk2.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext3.v and text:find(''..u8:decode(inputfindvk3.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext4.v and text:find(''..u8:decode(inputfindvk4.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext5.v and text:find(''..u8:decode(inputfindvk5.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext6.v and text:find(''..u8:decode(inputfindvk6.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext7.v and text:find(''..u8:decode(inputfindvk7.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext8.v and text:find(''..u8:decode(inputfindvk8.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext9.v and text:find(''..u8:decode(inputfindvk9.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if vkconnect.v and vkfind.v and vkfindtext10.v and text:find(''..u8:decode(inputfindvk10.v)) then vk_requestv2('['..nazvanie.v..'] По поиску найдено: '..text) end
 
 	if vkconnect.v and sellbar.v and text:match('%a+_%a+ купил у вас (.*)') and text:find('от продажи') then vk_requestv2('[ЦР-ПРОДАЖА] '..text) end
 	if vkconnect.v and sellbar.v and text:match('Вы купили (.*)') and text:find('у игрока %a+_%a+ за') then vk_requestv2('[ЦР-ПОКУПКА] '..text) end
@@ -15316,16 +15316,16 @@ end]]
 	if tgconnect.v and sellbanktg.v and text:match("Вы перевели") then sendTelegramNotification(text) end
 	if tgconnect.v and sellbanktg.v and text:match("Вам поступил перевод на ваш счет в размере") then sendTelegramNotification(text) end
 
-	if tgconnect.v and tgfind.v and tgfindtext.v and text:find(''..inputfindtg.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext2.v and text:find(''..inputfindtg2.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext3.v and text:find(''..inputfindtg3.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext4.v and text:find(''..inputfindtg4.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext5.v and text:find(''..inputfindtg5.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext6.v and text:find(''..inputfindtg6.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext7.v and text:find(''..inputfindtg7.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext8.v and text:find(''..inputfindtg8.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext9.v and text:find(''..inputfindtg9.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
-	if tgconnect.v and tgfind.v and tgfindtext10.v and text:find(''..inputfindtg10.v) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext.v and text:find(''..u8:decode(inputfindtg.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext2.v and text:find(''..u8:decode(inputfindtg2.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext3.v and text:find(''..u8:decode(inputfindtg3.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext4.v and text:find(''..u8:decode(inputfindtg4.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext5.v and text:find(''..u8:decode(inputfindtg5.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext6.v and text:find(''..u8:decode(inputfindtg6.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext7.v and text:find(''..u8:decode(inputfindtg7.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext8.v and text:find(''..u8:decode(inputfindtg8.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext9.v and text:find(''..u8:decode(inputfindtg9.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
+	if tgconnect.v and tgfind.v and tgfindtext10.v and text:find(''..u8:decode(inputfindtg10.v)) then sendTelegramNotification('['..nazvanie.v..'] По поиску найдено: '..text) end
 	
 	if checkingvip then 
 		local getname = text:match('^%[VIP%]: (.+)%[%d+%].+уровень')
@@ -26787,6 +26787,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.05.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "TG Connect" (иногда возникала ошибка подключения к TG.)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Уведомление о PD в TG/VK убрано на доработку (функция крашила скрипт или игру)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс отправки пустого сообщения в /fam /b и так далее в TG. (спасибо за помощь Алексею)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс функционала "Поиск текста в чате" для VK и TG.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Исправлены ошибки в тексте в !help для TG.')
 			imgui.End()
 		end
 	
@@ -29114,7 +29117,7 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
                         else
                                 if text and text:sub(1, 1) == '/' then
 								text = text:sub(1, text:len() - 1)
-								sampProcessChatInput(u8:decode(text))
+								sampProcessChatInput(text)
 								end
                             end
                         end
@@ -29158,7 +29161,7 @@ function sendhelpscreen()
 end
 
 function sendHelpTg()
-	sendTelegramNotification('%F0%9F%93%8C Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n %F0%9F%91%89 !restart - перезагрузка скрипта.\n %F0%9F%91%89 !podk - Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n %F0%9F%91%89 !igrokradius - перезагрузка скрипта. \n %F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n %F0%9F%91%89 !roulleteopen - начать/завершить проверку всех сундуков. \n %F0%9F%91%89 !bronzrulopen - включение/отключение открытия бронзовых рулеток с обновлением слотов и поиском подарков.\n %F0%9F%91%89 !silverrulopen - включение/отключение открытия серебряных рулеток с обновлением слотов и поиском AZ. \n %F0%9F%91%89 !goldrulopen - включение/отключение открытия золотых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !platinarulopen - включение/отключение открытия платиновых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !keyn - нажать на клавишу N. \n %F0%9F%91%89 !keyalt - нажать на клавишу ALT.\n %F0%9F%91%89 !ok - подтверждение действия в диалоговом окне. \n %F0%9F%91%89 !cancel - закрыть активное диалоговое окно.\n %F0%9F%91%89 !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n %F0%9F%91%89 !dc - закрыть открытый диалог.\n %F0%9F%91%89 !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n %F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (на лаунчере работает отлично, а на сборке работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально на сборке - нужно сделать игру в оконный режим и растянуть на весь экран.). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n %F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в VK.\n %F0%9F%91%89 !statarul - вывести в VK информацию с Roulette Statistics.\n %F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics. \n %F0%9F%91%89 /reload - перезагрузить скрипт. \n %F0%9F%91%89 /recon - перезайти на сервер через 30 секунд. \n %F0%9F%91%89 /recon [время] - перезайти на сервер через указанное время. \n %F0%9F%91%89 /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n %F0%9F%91%89 /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
+	sendTelegramNotification('%F0%9F%93%8C Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под TG. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n %F0%9F%91%89 !restart - перезагрузка скрипта.\n %F0%9F%91%89 !podk - Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n %F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n %F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n %F0%9F%91%89 !roulleteopen - начать/завершить проверку всех сундуков. \n %F0%9F%91%89 !bronzrulopen - включение/отключение открытия бронзовых рулеток с обновлением слотов и поиском подарков.\n %F0%9F%91%89 !silverrulopen - включение/отключение открытия серебряных рулеток с обновлением слотов и поиском AZ. \n %F0%9F%91%89 !goldrulopen - включение/отключение открытия золотых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !platinarulopen - включение/отключение открытия платиновых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !keyn - нажать на клавишу N. \n %F0%9F%91%89 !keyalt - нажать на клавишу ALT.\n %F0%9F%91%89 !ok - подтверждение действия в диалоговом окне. \n %F0%9F%91%89 !cancel - закрыть активное диалоговое окно.\n %F0%9F%91%89 !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n %F0%9F%91%89 !dc - закрыть открытый диалог.\n %F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n %F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (на лаунчере работает отлично, а на сборке работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально на сборке - нужно сделать игру в оконный режим и растянуть на весь экран.). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n %F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n %F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n %F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics. \n %F0%9F%91%89 /reload - перезагрузить скрипт. \n %F0%9F%91%89 /recon - перезайти на сервер через 30 секунд. \n %F0%9F%91%89 /recon [время] - перезайти на сервер через указанное время. \n %F0%9F%91%89 /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n %F0%9F%91%89 /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
 end
 
 function sendresetstatarul()
