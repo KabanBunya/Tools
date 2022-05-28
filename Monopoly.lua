@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4')
+script_version('3.4.1')
 
 use = false
 close = false
@@ -15227,16 +15227,8 @@ end
 	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if vkconnect.v and sellrul.v and text:match('Вам был добавлен предмет') then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	
-	if vkconnect.v and pdmaster.v and text:match('__________Банковский чек__________') then 
-	lua_thread.create(function()
-	wait(1000)
-	vk_requestv2('&#10071; PayDay &#10071;\n\nДепозит в банке: '..depozpd..'\nСумма к выплате: '..zppd..'\nВаш уровень на данный момент: '..lvlpd)
-	depozpd = 0
-	zppd = 0
-	lvlpd = 0
-	end)
-end
-	if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
+	
+	--[[if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		depozpd = tonumber(text:match("Депозит в банке: $(%d+)"))
 	end
 	if text:find("Сумма к выплате: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
@@ -15245,22 +15237,21 @@ end
 	if text:find("В данный момент у вас %d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		lvlpd = tonumber(text:match("В данный момент у вас (%d+)"))
     end
+	if vkconnect.v and pdmaster.v and text:match('__________Банковский чек__________') then 
+	vk_requestv2('&#10071; PayDay &#10071;\n\nДепозит в банке: '..depozpd..'\nСумма к выплате: '..zppd..'\nВаш уровень на данный момент: '..lvlpd)
+	depozpd = 0
+	zppd = 0
+	lvlpd = 0
+end]]
+	
 	
 	if tgconnect.v and sellidtg.v and text:match('%[(%d+)%] (.*) | Уровень:') then sendTelegramNotification(''..text) end
 	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellrultg.v and text:match('Вам был добавлен предмет') then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 
-	if tgconnect.v and pdmastertg.v and text:match('__________Банковский чек__________') then 
-		lua_thread.create(function()
-		wait(1000)
-		sendTelegramNotification('%E2%9D%97 PayDay %E2%9D%97\n\nДепозит в банке: '..depozpdtg..'\nСумма к выплате: '..zppdtg..'\nВаш уровень на данный момент: '..lvlpdtg)
-		depozpdtg = 0
-		zppdtg = 0
-		lvlpdtg = 0
-	end)
-end
-	if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
+
+	--[[if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		depozpdtg = tonumber(text:match("Депозит в банке: $(%d+)"))
 	end
 	if text:find("Сумма к выплате: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
@@ -15269,6 +15260,13 @@ end
 	if text:find("В данный момент у вас %d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		lvlpdtg = tonumber(text:match("В данный момент у вас (%d+)"))
     end
+	if tgconnect.v and pdmastertg.v and text:match('__________Банковский чек__________') then 
+		sendTelegramNotification('%E2%9D%97 PayDay %E2%9D%97\n\nДепозит в банке: '..depozpdtg..'\nСумма к выплате: '..zppdtg..'\nВаш уровень на данный момент: '..lvlpdtg)
+		depozpdtg = 0
+		zppdtg = 0
+		lvlpdtg = 0
+end]]
+
 	
 	if text:match("Вам был добавлен предмет 'Samsung") and checked_test12.v then
 	vsevorulphone.v = vsevorulphone.v + 1
@@ -26786,6 +26784,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'107. Обновлён список донатеров и тех, кто предлагал идеи. ')
 		imgui.EndChild()
 		end	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.05.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "TG Connect" (иногда возникала ошибка подключения к TG.)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Уведомление о PD в TG/VK убрано на доработку (функция крашила скрипт или игру)')
 			imgui.End()
 		end
 	
@@ -28951,8 +28952,8 @@ end
 
 ----
 
-function threadHandle2(runner, url, args, resolve, reject) -- обработка effil потока без блокировок
-	local t = runner(url, args)
+function threadHandle2(runner2, url2, args2, resolve2, reject2) -- обработка effil потока без блокировок
+	local t = runner2(url2, args2)
 	local r = t:get(0)
 	while not r do
 		r = t:get(0)
@@ -28961,11 +28962,11 @@ function threadHandle2(runner, url, args, resolve, reject) -- обработка effil по
 	local status = t:status()
 	if status == 'completed' then
 		local ok, result = r[1], r[2]
-		if ok then resolve(result) else reject(result) end
+		if ok then resolve2(result) else reject2(result) end
 	elseif err then
-		reject(err)
+		reject2(err)
 	elseif status == 'canceled' then
-		reject(status)
+		reject2(status)
 	end
 	t:cancel(0)
 end
@@ -28982,11 +28983,11 @@ function requestRunner2() -- создание effil потока с функцией https запроса
 	end)
 end
 
-function async_http_request2(url, args, resolve, reject)
-	local runner = requestRunner2()
-	if not reject then reject = function() end end
+function async_http_request2(url2, args2, resolve2, reject2)
+	local runner2 = requestRunner2()
+	if not reject2 then reject2 = function() end end
 	lua_thread.create(function()
-		threadHandle2(runner, url, args, resolve, reject)
+		threadHandle2(runner2, url2, args2, resolve2, reject2)
 	end)
 end
 
@@ -29027,12 +29028,12 @@ end
 function get_telegram_updates() -- функция получения сообщений от юзера
 	if tgconnect.v then 
     while not updateid do wait(1) end -- ждем пока не узнаем последний ID
-    local runner = requestRunner2()
-    local reject = function() end
-    local args = ''
+    local runner2 = requestRunner2()
+    local reject2 = function() end
+    local args2 = ''
     while true do
-        url = 'https://api.telegram.org/bot'..tokentgv2.v..'/getUpdates?chat_id='..idtgv2.v..'&offset=-1' -- создаем ссылку
-        threadHandle2(runner, url, args, processing_telegram_messages, reject)
+        url2 = 'https://api.telegram.org/bot'..tokentgv2.v..'/getUpdates?chat_id='..idtgv2.v..'&offset=-1' -- создаем ссылку
+        threadHandle2(runner2, url2, args2, processing_telegram_messages, reject2)
         wait(0)
 		end
     end
