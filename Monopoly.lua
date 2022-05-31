@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.2')
+script_version('3.4.3')
 
 use = false
 close = false
@@ -22,8 +22,6 @@ local fontsize = nil
 local updateid
 fontsizev2 = nil
 fontsizev3 = nil
-fontsizev4 = nil
-fontsizev5 = nil
 slotazfind = false
 slotpodarokfind = false
 closefind = false
@@ -476,7 +474,6 @@ ffi.cdef[[
     uint32_t nFileSystemNameSize
 );
 ]]
-local d3dx9_43 = ffi.load('d3dx9_43.dll')
 
 local LocalSerial = ffi.new("unsigned long[1]", 0)
 ffi.C.GetVolumeInformationA(nil, nil, 0, LocalSerial, nil, nil, nil, 0)
@@ -10412,12 +10409,6 @@ function imgui.BeforeDrawFrame()
 	if fontsizev3 == nil then
         fontsizev3 = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', razmer.v, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
     end
-	if fontsizev4 == nil then
-        fontsizev4 = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 8.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
-    end
-	if fontsizev5 == nil then
-        fontsizev5 = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14) .. '\\trebucbd.ttf', 15.0, nil, imgui.GetIO().Fonts:GetGlyphRangesCyrillic()) -- вместо 30 любой нужный размер
-    end
 end
 
 function imgui.CentrTextv2(text, disabled)
@@ -10740,7 +10731,11 @@ function imgui.OnDrawFrame()
 		end
 	
 	imgui.SameLine(340) 
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf124623434444342124343232', imgui.ImVec2(655, 160), false)
 	imgui.Text('')
 	imgui.Text('')
@@ -10754,7 +10749,11 @@ function imgui.OnDrawFrame()
 	imgui.PopStyleColor()
 	
 	imgui.SameLine(340) 
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 70), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
 	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский.')
@@ -10768,7 +10767,11 @@ function imgui.OnDrawFrame()
 	imgui.PopStyleColor()
 	
 	imgui.SameLine(5) 
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf124623434444342121235', imgui.ImVec2(318, 160), false)
 	imgui.Text('')
 	imgui.Text('')
@@ -10781,7 +10784,11 @@ function imgui.OnDrawFrame()
 	imgui.PopStyleColor()
 	
 	imgui.SameLine(5)
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf1246243254576456', imgui.ImVec2(318, 56), false)
 	
 	if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
@@ -11226,7 +11233,11 @@ function imgui.OnDrawFrame()
 	imgui.PopFont()
 	
 	imgui.SameLine(350) 
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 54), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
 	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский.')
@@ -11245,7 +11256,11 @@ function imgui.OnDrawFrame()
 	imgui.Text('')
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine(50) 
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf12462', imgui.ImVec2(318, 56), false)
 	
 	if os.date("%d") == '01' or os.date("%d") == '04' or os.date("%d") == '07' or os.date("%d") == '10' or os.date("%d") == '13' or os.date("%d") == '16' or os.date("%d") == '19' or os.date("%d") == '22' or os.date("%d") == '25' or os.date("%d") == '28' or os.date("%d") == '31' then
@@ -11416,7 +11431,7 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(660) 
 	imgui.Text(u8"Калькулятор")
 	
-	imgui.SameLine(50) 
+	--[[imgui.SameLine(50) 
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
 	imgui.BeginChild('##asdasasddf124623434444342123232', imgui.ImVec2(318, 35), false)
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('На сервере Yuma открыты заявления в семью')
@@ -11426,7 +11441,7 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Фамилий.')
 	imgui.Text('') imgui.SameLine() imgui.TextColoredRGB('Подробнее смотрите в обсуждении: ') imgui.SameLine(225) imgui.TextColoredRGB(""..colorlink.."push me") imgui.SameLine(225) imgui.Link('https://vk.cc/cckolu','push me')
 	imgui.EndChild()
-	imgui.PopStyleColor()
+	imgui.PopStyleColor()]]
 	
 	imgui.Text('')
 	
@@ -11450,14 +11465,17 @@ function imgui.OnDrawFrame()
 	end
 	
 	imgui.Text('') 
-	imgui.PushFont(fontsizev4)
 	imgui.Text('') imgui.SameLine(700) imgui.RadioButton('##1213141', strinter, 2)
-	imgui.SameLine(725) imgui.RadioButton('##1213134', strinter, 1)
-	imgui.PopFont()
+	imgui.SameLine(730) imgui.RadioButton('##1213134', strinter, 1)
 	
 	imgui.Text('')
+	imgui.Text('')
 	imgui.Text('') imgui.SameLine(250) 
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
 	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
 	imgui.BeginChild('##asdasasddf31211312', imgui.ImVec2(485, 100), false)
 	imgui.Text('')
 	imgui.Text('') imgui.SameLine() 
@@ -11485,9 +11503,9 @@ end
 	
 	if win_state['windowspusk'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(515, 520), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(515, 521), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'##windowspusk', win_state['windowspusk'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
-				imgui.BeginChild('##asdasasddf3221', imgui.ImVec2(800, 520), false)
+				imgui.BeginChild('##asdasasddf3221', imgui.ImVec2(800, 521), false)
 				if strinterv2.v == 2 then
 				imgui.SameLine(15) 
 				if imgui.ImageButton(winyashik, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['yashiki'].v = not win_state['yashiki'].v win_state['windowspusk'].v = false end
@@ -11593,10 +11611,8 @@ end
 				end
 				
 				imgui.Text('') 
-				imgui.PushFont(fontsizev4)
 				imgui.Text('') imgui.SameLine(225) imgui.RadioButton('##121314112', strinterv2, 2)
-				imgui.SameLine(250) imgui.RadioButton('##121313412', strinterv2, 1)
-				imgui.PopFont()
+				imgui.SameLine(255) imgui.RadioButton('##121313412', strinterv2, 1)
 				
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine(120) imgui.Text(u8'ESC - закрывает все окна, кроме основного.')
@@ -26790,6 +26806,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс отправки пустого сообщения в /fam /b и так далее в TG. (спасибо за помощь Алексею)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс функционала "Поиск текста в чате" для VK и TG.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Исправлены ошибки в тексте в !help для TG.')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[31.05.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Фикс краша с причиной "Takescreen".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Отредактировано описание команды !screen.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Устранены иероглифы вместо текста в меню у систем, которые работают от встроенного видеоядра в процессоре.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Фикс интерфейса при установке белого цвета на рабочий стол (пропадало выделение рекламы и менюшки, где расположены')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'приложения в IPAD STYLE)')
 			imgui.End()
 		end
 	
@@ -29141,7 +29164,7 @@ function getOnline()
 end
 
 function sendHelp()
-	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#9000; - нажатие клавиш N и ALT.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n &#128073; Roulette Tools - можно по нажатию кнопки включить такой функционал как: включение/отключение проверки всех сундуков, включение/отключение открытие бронзовых рулеток с обновлением слотов и поиском подарков и включение/отключение открытие серебряных, золотых и платиновых рулеток с обновлением слотов и поиском AZ (чтобы выключить открытие сундуков или рулеток, нужно повторно нажать на кнопку)\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов. \n\n &#128204; Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n &#128073; !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n &#128073; !dc - закрыть открытый диалог.\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !screen - сделать скриншот и отправить его в VK (на лаунчере работает отлично, а на сборке работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально на сборке - нужно сделать игру в оконный режим и растянуть на весь экран.). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics. \n &#128073; /reload - перезагрузить скрипт. \n &#128073; /recon - перезайти на сервер через 30 секунд. \n &#128073; /recon [время] - перезайти на сервер через указанное время. \n &#128073; /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n &#128073; /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
+	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#9000; - нажатие клавиш N и ALT.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n &#128073; Roulette Tools - можно по нажатию кнопки включить такой функционал как: включение/отключение проверки всех сундуков, включение/отключение открытие бронзовых рулеток с обновлением слотов и поиском подарков и включение/отключение открытие серебряных, золотых и платиновых рулеток с обновлением слотов и поиском AZ (чтобы выключить открытие сундуков или рулеток, нужно повторно нажать на кнопку)\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов. \n\n &#128204; Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n &#128073; !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n &#128073; !dc - закрыть открытый диалог.\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics. \n &#128073; /reload - перезагрузить скрипт. \n &#128073; /recon - перезайти на сервер через 30 секунд. \n &#128073; /recon [время] - перезайти на сервер через указанное время. \n &#128073; /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n &#128073; /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
 end
 
 function sendhelpscreen()
@@ -29161,7 +29184,7 @@ function sendhelpscreen()
 end
 
 function sendHelpTg()
-	sendTelegramNotification('%F0%9F%93%8C Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под TG. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n %F0%9F%91%89 !restart - перезагрузка скрипта.\n %F0%9F%91%89 !podk - Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n %F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n %F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n %F0%9F%91%89 !roulleteopen - начать/завершить проверку всех сундуков. \n %F0%9F%91%89 !bronzrulopen - включение/отключение открытия бронзовых рулеток с обновлением слотов и поиском подарков.\n %F0%9F%91%89 !silverrulopen - включение/отключение открытия серебряных рулеток с обновлением слотов и поиском AZ. \n %F0%9F%91%89 !goldrulopen - включение/отключение открытия золотых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !platinarulopen - включение/отключение открытия платиновых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !keyn - нажать на клавишу N. \n %F0%9F%91%89 !keyalt - нажать на клавишу ALT.\n %F0%9F%91%89 !ok - подтверждение действия в диалоговом окне. \n %F0%9F%91%89 !cancel - закрыть активное диалоговое окно.\n %F0%9F%91%89 !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n %F0%9F%91%89 !dc - закрыть открытый диалог.\n %F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n %F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (на лаунчере работает отлично, а на сборке работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально на сборке - нужно сделать игру в оконный режим и растянуть на весь экран.). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n %F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n %F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n %F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics. \n %F0%9F%91%89 /reload - перезагрузить скрипт. \n %F0%9F%91%89 /recon - перезайти на сервер через 30 секунд. \n %F0%9F%91%89 /recon [время] - перезайти на сервер через указанное время. \n %F0%9F%91%89 /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n %F0%9F%91%89 /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
+	sendTelegramNotification('%F0%9F%93%8C Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под TG. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n %F0%9F%91%89 !restart - перезагрузка скрипта.\n %F0%9F%91%89 !podk - Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n %F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n %F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n %F0%9F%91%89 !roulleteopen - начать/завершить проверку всех сундуков. \n %F0%9F%91%89 !bronzrulopen - включение/отключение открытия бронзовых рулеток с обновлением слотов и поиском подарков.\n %F0%9F%91%89 !silverrulopen - включение/отключение открытия серебряных рулеток с обновлением слотов и поиском AZ. \n %F0%9F%91%89 !goldrulopen - включение/отключение открытия золотых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !platinarulopen - включение/отключение открытия платиновых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !keyn - нажать на клавишу N. \n %F0%9F%91%89 !keyalt - нажать на клавишу ALT.\n %F0%9F%91%89 !ok - подтверждение действия в диалоговом окне. \n %F0%9F%91%89 !cancel - закрыть активное диалоговое окно.\n %F0%9F%91%89 !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n %F0%9F%91%89 !dc - закрыть открытый диалог.\n %F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n %F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n %F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n %F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n %F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics. \n %F0%9F%91%89 /reload - перезагрузить скрипт. \n %F0%9F%91%89 /recon - перезайти на сервер через 30 секунд. \n %F0%9F%91%89 /recon [время] - перезайти на сервер через указанное время. \n %F0%9F%91%89 /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n %F0%9F%91%89 /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
 end
 
 function sendresetstatarul()
@@ -31653,6 +31676,7 @@ end
 
 function sendscreen()
 	if vkconnect.v then 
+	local d3dx9_43 = ffi.load('d3dx9_43.dll')
     local pDevice = ffi.cast("struct d3ddevice*", 0xC97C28)
     local CreateOffscreenPlainSurface =  ffi.cast("long(__stdcall*)(void*, unsigned long, unsigned long, unsigned long, unsigned long, void**, void*)", pDevice.vtbl[0].CreateOffscreenPlainSurface)
     local GetFrontBufferData =  ffi.cast("long(__stdcall*)(void*, unsigned long, void*)", pDevice.vtbl[0].GetFrontBufferData)
@@ -31714,6 +31738,7 @@ end
 
 function sendScreenTg()
 	if tgconnect.v then 
+	local d3dx9_43 = ffi.load('d3dx9_43.dll')
     local pDevice = ffi.cast("struct d3ddevice*", 0xC97C28)
     local CreateOffscreenPlainSurface =  ffi.cast("long(__stdcall*)(void*, unsigned long, unsigned long, unsigned long, unsigned long, void**, void*)", pDevice.vtbl[0].CreateOffscreenPlainSurface)
     local GetFrontBufferData =  ffi.cast("long(__stdcall*)(void*, unsigned long, void*)", pDevice.vtbl[0].GetFrontBufferData)
