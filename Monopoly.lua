@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.3')
+script_version('3.4.4')
 
 use = false
 close = false
@@ -36,16 +36,16 @@ arztest4 = 1
 arztest5 = 1
 arztest6 = 1
 arztest7 = 1
+depozpdtg = 0
+zppdtg = 0
+lvlpdtg = 0
+depozpd = 0
+zppd = 0
+lvlpd = 0
 clickpay = 0
 buypay = 0
 countaz = 0
 countpodarok = 0
-depozpd = 0
-zppd = 0
-lvlpd = 0
-depozpdtg = 0
-zppdtg = 0
-lvlpdtg = 0
 chleb = 0
 cherv = 0
 opar = 0
@@ -704,6 +704,8 @@ local cfg3 = inicfg.load({
 		sellidv2 = false,
 		sellinfov2 = false,
 		pdmasterv2 = false,
+		phonemasterv2 = false,
+		phonetgmasterv2 = false,
 		pdmastertgv2 = false,
 		sellrulv2 = false,
 		sellgolodv2 = false,
@@ -1240,6 +1242,7 @@ local cfg3 = inicfg.load({
 		otkrytie2v2 = false,
 		otkrytie3v2 = false,
 		otkrytieymnoev2 = false,
+		inventoffv2 = false,
 		zadervkatwov2 = false,
 		ndrv2 = false,
 		tochv2 = false,
@@ -1423,6 +1426,8 @@ local SET = {
 		sellid = false,
 		sellinfo = false,
 		pdmaster = false,
+		phonemaster = false,
+		phonetgmaster = false,
 		pdmastertg = false,
 		sellrul = false,
 		sellgolod = false,
@@ -1959,6 +1964,7 @@ local SET = {
 		otkrytie2 = false,
 		otkrytie3 = false,
 		otkrytieymnoe = false,
+		inventoff = false,
 		zadervkatwo = false,
 		ndr = false,
 		toch = false,
@@ -5173,6 +5179,13 @@ end
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
 		interior = getActiveInterior() -- получаем инту
 		
+		if chatstring == "Server closed the connection." and vkconnect.v and sellclosed.v then 
+			vk_requestv2('@all Сервер закрыл соединение.')
+		end
+		if chatstring == "Server closed the connection." and tgconnect.v and sellclosedtg.v then 
+			sendTelegramNotification('Сервер закрыл соединение.')
+		end
+		
 		local chatstring = sampGetChatString(99)
         if chatstring == "You are banned from this server." and recongen.v and reconbanned.v then
         sampDisconnectWithReason(false)
@@ -5196,13 +5209,6 @@ end
         sampDisconnectWithReason(false)
             wait(zadervkareconv2.v * 1000) -- задержка
             sampSetGamestate(1)
-		end
-		
-		if chatstring == "Server closed the connection." and vkconnect.v and sellclosed.v then 
-			vk_requestv2('@all Сервер закрыл соединение.')
-		end
-		if chatstring == "Server closed the connection." and tgconnect.v and sellclosedtg.v then 
-			sendTelegramNotification('@all Сервер закрыл соединение.')
 		end
 		
 		if chatstring == "You are banned from this server." and reconclosed.v then
@@ -5846,6 +5852,7 @@ function saveSettings(args, key)
 	ini.settings.otkrytie2 = otkrytie2.v
 	ini.settings.otkrytie3 = otkrytie3.v
 	ini.settings.otkrytieymnoe = otkrytieymnoe.v
+	ini.settings.inventoff = inventoff.v
 	ini.settings.zadervkatwo = zadervkatwo.v
 	ini.settings.ndr = ndr.v
 	ini.settings.toch = toch.v
@@ -6167,6 +6174,8 @@ function saveSettings(args, key)
 	ini.settings.sellid = sellid.v
 	ini.settings.sellinfo = sellinfo.v
 	ini.settings.pdmaster = pdmaster.v
+	ini.settings.phonemaster = phonemaster.v
+	ini.settings.phonetgmaster = phonetgmaster.v
 	ini.settings.pdmastertg = pdmastertg.v
 	ini.settings.sellrul = sellrul.v
 	ini.settings.sellgolod = sellgolod.v
@@ -7228,6 +7237,14 @@ end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
 
+	if id == 2104 and data.text == '_' and vkconnect.v and phonemaster.v then 
+	vk_requestv5('['..nazvanie.v..'] Вам кто-то звонит! Выберите одно из предложенных действий.')
+	vkKeyboard5()
+	end
+	if id == 2104 and data.text == '_' and tgconnect.v and phonetgmaster.v then 
+	sendTelegramNotificationv2('['..nazvanie.v..'] Вам кто-то звонит! Выберите одно из предложенных действий.')
+	end
+
 	if data.text == 'TRADE' and tradecalc.v then 
 	win_state['calc'].v = true  
 	end
@@ -7677,7 +7694,11 @@ end
       end
       if close and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7702,7 +7723,11 @@ end
       end
       if close1 and otkrytie.v then
 		wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7727,7 +7752,11 @@ end
       end
       if close2 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7752,7 +7781,11 @@ end
       end
       if close25 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7777,7 +7810,11 @@ end
       end
       if close5 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7802,7 +7839,11 @@ end
       end
       if close and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7827,7 +7868,11 @@ end
       end
       if close1 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7852,7 +7897,11 @@ end
       end
       if close2 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7877,7 +7926,11 @@ end
       end
       if close25 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7902,7 +7955,11 @@ end
       end
       if close3 and otkrytie.v then
         wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou4.v)
 		sampCloseCurrentDialogWithButton(1)
 		ruletka()
@@ -7926,7 +7983,7 @@ end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
         active2 = false
 		testbox2.v = false
 		dostypbox2 = false
@@ -7942,13 +7999,15 @@ end
 		wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active = false
       end
@@ -7962,13 +8021,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active1 = false
       end
@@ -7982,13 +8043,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active2 = false
       end
@@ -8002,13 +8065,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active25 = false
       end
@@ -8022,13 +8087,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
 		wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active5 = false
       end
@@ -8042,13 +8109,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active = false
       end
@@ -8062,13 +8131,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active1 = false
       end
@@ -8082,13 +8153,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active2 = false
       end
@@ -8102,13 +8175,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active25 = false
       end
@@ -8122,13 +8197,15 @@ end
         wait(zadervkasetrou6.v)
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou8.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou9.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou10.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active5 = false
       end
@@ -8149,7 +8226,7 @@ end
 		wait(111)
 		sampCloseCurrentDialogWithButton(1)
 		wait(111)
-		sampSendClickTextdraw(2135)
+		
 		active3 = false
 		testbox3.v = false
 		dostypbox3 = false
@@ -8165,13 +8242,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext1.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active = false
 		end
@@ -8185,19 +8264,21 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext3.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active1 = false
 		end
     end)
   end
-  if checked_test7.v and active4 and otkrytie3.v then
+  if checked_test7.v and active2 and otkrytie3.v then
     lua_thread.create(function()
 		if data.modelId == 1353 then
 		wait(zadervkasetrou11.v)
@@ -8205,15 +8286,17 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext5.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
-        active4 = false
+        active2 = false
 		end
 	 end)
 	end
@@ -8225,13 +8308,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext9.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active25 = false
 		end
@@ -8245,13 +8330,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext7.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active5 = false
 		end
@@ -8265,13 +8352,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext1.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active = false
 		end
@@ -8285,13 +8374,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext3.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active1 = false
 		end
@@ -8305,13 +8396,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext5.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active2 = false
 		end
@@ -8325,13 +8418,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext9.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active25 = false
 		end
@@ -8345,13 +8440,15 @@ end
 		wait(zadervkasetrou12.v)
 		sampSendClickTextdraw(idtext7.v)
         wait(zadervkasetrou13.v)
+		if inventoff.v then 
+		sampSendClickTextdraw(2108)
+		else
 		sampSendClickTextdraw(admmp)
-		wait(zadervkasetrou14.v)
-		sampSendClickTextdraw(admmp)
+		end
 		wait(zadervkasetrou15.v)
 		sampCloseCurrentDialogWithButton(1)
 		wait(zadervkasetrou16.v)
-		sampSendClickTextdraw(2135)
+		
 		ruletka()
         active5 = false
 		end
@@ -13599,6 +13696,22 @@ function podklchat()
 	end
 
 function sampev.onServerMessage(color, text)
+	
+	if text:match('{73B461}%[Тел%]:{FFFFFF}') and vkconnect.v and phonemaster.v then vk_requestv2(''..text) end
+	if text:match('%[Информация%] {FFFFFF}Вы подняли трубку') and vkconnect.v and phonemaster.v then 
+	vk_requestv2('['..nazvanie.v..'] Вы ответили на звонок.')
+	end
+	if text:match('%[Информация%] {FFFFFF}Вы отменили звонок') and vkconnect.v and phonemaster.v then 
+	vk_requestv2('['..nazvanie.v..'] Вы отклонили вызов.')
+	end
+	
+	if text:match('{73B461}%[Тел%]:{FFFFFF}') and tgconnect.v and phonetgmaster.v then sendTelegramNotificationv2(''..text) end
+	if text:match('%[Информация%] {FFFFFF}Вы подняли трубку') and tgconnect.v and phonetgmaster.v then 
+	sendTelegramNotificationv2('['..nazvanie.v..'] Вы ответили на звонок.')
+	end
+	if text:match('%[Информация%] {FFFFFF}Вы отменили звонок') and tgconnect.v and phonetgmaster.v then 
+	sendTelegramNotificationv2('['..nazvanie.v..'] Вы отклонили вызов.')
+	end
 
 	if color == -1104335361 and text:match('Вы отменили сделку') and tradecalc.v then
 	win_state['calc'].v = false 
@@ -15242,9 +15355,7 @@ end
 	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if vkconnect.v and sellrul.v and text:match('Вам был добавлен предмет') then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
-	
-	
-	--[[if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
+	if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		depozpd = tonumber(text:match("Депозит в банке: $(%d+)"))
 	end
 	if text:find("Сумма к выплате: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
@@ -15253,21 +15364,12 @@ end
 	if text:find("В данный момент у вас %d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		lvlpd = tonumber(text:match("В данный момент у вас (%d+)"))
     end
-	if vkconnect.v and pdmaster.v and text:match('__________Банковский чек__________') then 
-	vk_requestv2('&#10071; PayDay &#10071;\n\nДепозит в банке: '..depozpd..'\nСумма к выплате: '..zppd..'\nВаш уровень на данный момент: '..lvlpd)
-	depozpd = 0
-	zppd = 0
-	lvlpd = 0
-end]]
-	
 	
 	if tgconnect.v and sellidtg.v and text:match('%[(%d+)%] (.*) | Уровень:') then sendTelegramNotification(''..text) end
 	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellrultg.v and text:match('Вам был добавлен предмет') then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
-
-
-	--[[if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
+	if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		depozpdtg = tonumber(text:match("Депозит в банке: $(%d+)"))
 	end
 	if text:find("Сумма к выплате: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
@@ -15276,14 +15378,8 @@ end]]
 	if text:find("В данный момент у вас %d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		lvlpdtg = tonumber(text:match("В данный момент у вас (%d+)"))
     end
-	if tgconnect.v and pdmastertg.v and text:match('__________Банковский чек__________') then 
-		sendTelegramNotification('%E2%9D%97 PayDay %E2%9D%97\n\nДепозит в банке: '..depozpdtg..'\nСумма к выплате: '..zppdtg..'\nВаш уровень на данный момент: '..lvlpdtg)
-		depozpdtg = 0
-		zppdtg = 0
-		lvlpdtg = 0
-end]]
 
-	
+
 	if text:match("Вам был добавлен предмет 'Samsung") and checked_test12.v then
 	vsevorulphone.v = vsevorulphone.v + 1
 	saveSettings()
@@ -16095,6 +16191,8 @@ function load_settings() -- загрузка настроек
 	sellid = imgui.ImBool(ini.settings.sellid)
 	sellinfo = imgui.ImBool(ini.settings.sellinfo)
 	pdmaster = imgui.ImBool(ini.settings.pdmaster)
+	phonemaster = imgui.ImBool(ini.settings.phonemaster)
+	phonetgmaster = imgui.ImBool(ini.settings.phonetgmaster)
 	pdmastertg = imgui.ImBool(ini.settings.pdmastertg)
 	sellrul = imgui.ImBool(ini.settings.sellrul)
 	sellgolod = imgui.ImBool(ini.settings.sellgolod)
@@ -16751,6 +16849,7 @@ function load_settings() -- загрузка настроек
 	otkrytie2 = imgui.ImBool(ini.settings.otkrytie2)
 	otkrytie3 = imgui.ImBool(ini.settings.otkrytie3)
 	otkrytieymnoe = imgui.ImBool(ini.settings.otkrytieymnoe)
+	inventoff = imgui.ImBool(ini.settings.inventoff)
 	zadervkatwo = imgui.ImBool(ini.settings.zadervkatwo)
 	ndr = imgui.ImBool(ini.settings.ndr)
 	toch = imgui.ImBool(ini.settings.toch)
@@ -18353,6 +18452,21 @@ function roulettetime()
 	if string.find(today_time, '01:00') and checked_test12.v then samprulstop = true ruletka() end
 	if string.find(today_time, '01:00') and checked_test13.v then samprulstop = true ruletka() end
 	if string.find(today_time, '01:00') and checked_test14.v then samprulstop = true ruletka() end
+	
+	if string.find(today_time, '00:30') and vkconnect.v and pdmaster.v then 
+	vk_requestv2('&#10071; PayDay &#10071;\n\nДепозит в банке: '..depozpd..'\nСумма к выплате: '..zppd..'\nВаш уровень на данный момент: '..lvlpd)
+		depozpd = 0
+		zppd = 0
+		lvlpd = 0
+	wait(1000)
+end
+	if string.find(today_time, '00:30') and tgconnect.v and pdmastertg.v then 
+	sendTelegramNotification('%E2%9D%97 PayDay %E2%9D%97\n\nДепозит в банке: '..depozpdtg..'\nСумма к выплате: '..zppdtg..'\nВаш уровень на данный момент: '..lvlpdtg)
+		depozpdtg = 0
+		zppdtg = 0
+		lvlpdtg = 0
+	wait(1000)
+end	
 	wait(0)
 	end
 end
@@ -18705,11 +18819,18 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	    sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
 	  wait(1000)
       wait((arztest3*60000) + 60000)
     end
@@ -18727,11 +18848,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+		sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest3*60000) + 60000)
     end
@@ -18749,11 +18878,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest3*60000) + 60000)
     end
@@ -18771,11 +18908,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	 if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest3*60000) + 60000)
     end
@@ -18793,11 +18938,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest3*60000) + 60000)
     end
@@ -18815,11 +18968,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	 if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest3*60000) + 60000)
     end
@@ -18843,11 +19004,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest4*60000) + 120000)
     end
@@ -18865,11 +19034,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest4*60000) + 120000)
     end
@@ -18887,11 +19064,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	 if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest4*60000) + 120000)
     end
@@ -18909,11 +19094,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	 if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest4*60000) + 120000)
     end
@@ -18931,11 +19124,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest4*60000) + 120000)
     end
@@ -18953,11 +19154,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest4*60000) + 120000)
     end
@@ -18981,11 +19190,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest5*60000) + 180000)
 	end
@@ -19025,11 +19242,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
-      active4 = true
+      active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest5*60000) + 180000)
 	end
@@ -19047,11 +19272,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest5*60000) + 180000)
     end
@@ -19069,11 +19302,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest5*60000) + 180000)
     end
@@ -19091,11 +19332,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest5*60000) + 180000)
     end
@@ -19119,11 +19368,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest6*60000) + 240000)
 	end
@@ -19141,11 +19398,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest6*60000) + 240000)
 	end
@@ -19163,11 +19428,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest6*60000) + 240000)
 	end
@@ -19185,11 +19458,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest6*60000) + 240000)
     end
@@ -19207,11 +19488,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest6*60000) + 240000)
     end
@@ -19229,11 +19518,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest6*60000) + 240000)
     end
@@ -19257,11 +19554,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-      sampSendClickTextdraw(admmp)
+      if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest7*60000) + 300000)
 	end
@@ -19279,11 +19584,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest7*60000) + 300000)
 	end
@@ -19301,11 +19614,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest7*60000) + 300000)
 	end
@@ -19324,11 +19645,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
 	  wait(1000)
       wait((arztest7*60000) + 300000)
 	end
@@ -19346,11 +19675,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest7*60000) + 300000)
 	end
@@ -19368,11 +19705,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(1000)
       wait((arztest7*60000) + 300000)
 	 end
@@ -19396,11 +19741,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
     end
     if checked_test6.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19417,11 +19770,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
     end
     if checked_test7.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19438,11 +19799,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
 	end
 	if checked_test100.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19459,11 +19828,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
 	end
 	if checked_test10.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19480,11 +19857,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-      sampSendClickTextdraw(admmp)
+      if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
 	  if zadervkatwo.v then 
 	  wait(zadervkatree.v*60000)
 	  else
@@ -19505,11 +19890,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik1.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19526,11 +19919,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik2.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19547,11 +19948,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik4.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19568,11 +19977,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik3.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19589,11 +20006,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
 	  if zadervkatwo.v then 
 	  wait(zadervkatree.v*60000)
 	  else
@@ -19614,11 +20039,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
     end
     if checked_test6.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19635,11 +20068,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
     end
     if checked_test7.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19656,11 +20097,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
 	end
 	 if checked_test100.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19677,11 +20126,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
 	end
 	if checked_test10.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19698,11 +20155,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       if zadervkatwo.v then 
 	  wait(zadervkatree.v*60000)
 	  else
@@ -19723,11 +20188,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik1.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19744,11 +20217,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik2.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19765,11 +20246,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik4.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19786,11 +20275,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik3.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -19807,11 +20304,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       if zadervkatwo.v then 
 	  wait(zadervkatree.v*60000)
 	  else
@@ -19833,11 +20338,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
     end
     if checked_test6.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -19854,11 +20367,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
     end
 	if checked_test7.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -19875,11 +20396,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
-      active4 = true
+      active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
 	end
 	if checked_test100.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -19896,11 +20425,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarul.v*1000)
 	end
 	if checked_test10.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -19917,11 +20454,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       if zadervkatwo.v then 
 	  wait(zadervkatree.v*60000)
 	  else
@@ -19942,11 +20487,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik1.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -19963,11 +20516,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active1 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik2.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -19984,11 +20545,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik4.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -20005,11 +20574,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active25 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       wait(zadervkarulv2.v*1000)
     end
 	if yashik3.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -20026,11 +20603,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active5 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
       if zadervkatwo.v then 
 	  wait(zadervkatree.v*60000)
 	  else
@@ -20667,7 +21252,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF}секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF}секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -20723,7 +21308,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -20779,7 +21364,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -20835,7 +21420,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы забрать прибыль! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -20976,7 +21561,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21056,7 +21641,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21136,7 +21721,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21216,7 +21801,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21753,7 +22338,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21825,7 +22410,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21897,7 +22482,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -21969,7 +22554,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы запустить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -22115,7 +22700,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -22187,7 +22772,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -22259,7 +22844,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -22331,7 +22916,7 @@ while true do
 	wait(zadervkamaining.v)
 	closeDialog()
 	wait(zadervkamaining.v)
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.." {FFFFFF} секунд(а/ы).", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы остановить видеокарты! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
 	wait(kdpusk.v*1000)
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -22548,6 +23133,7 @@ end
 
 function calculator()
 while true do 
+	if chatcalc.v then 
 	text = sampGetChatInputText()
         if text:find('%d+') and text:find('[-+/*^%%]') and not text:find('%a+') and text ~= nil then
             ok, number = pcall(load('return '..text))
@@ -22591,6 +23177,7 @@ while true do
         if text == '' then
             ok = false
 		end
+	end
 		wait(0)
 	end
 end
@@ -23390,6 +23977,7 @@ function yashikisroulette()
 			imgui.SameLine()
 			if imgui.CustomButton(fa.ICON_CHECK..u8(' Настройка открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then win_state['roulset'].v = not win_state['roulset'].v end
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Умная проверка сундуков")); imgui.SameLine(); imgui.ToggleButton(u8'Умная проверка сундуков', otkrytieymnoe) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то время для проверки сундука в следующий раз будет браться из текстдрава в инвентаре, а не через установленные вами задержки. То есть если осталось до открытия сундука 20 минут, то следующая проверка выбранного сундука будет через 20 минут (+- 5 минут в зависимости от сундука). Работает не идеально, возможен кик за флуд функциями.") 
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Не закрывать инвентарь после проверки сундука")); imgui.SameLine(); imgui.ToggleButton(u8'Не закрывать инвентарь после проверки сундука', inventoff) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после проверки сундука - не будет закрываться инвентарь. Перед включением открытия сундуков - откройте инвентарь. Если перетаскиваются вещи или не проверяются сундуки - играйтесь с задержками.") 
 			
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Не обновлять слот в бронзовой рулетке, если слот необновляемый")); imgui.SameLine(); imgui.ToggleButton(u8'Не обновлять слот в бронзовой рулетке, если слот необновляемый', ostanovka) imgui.SameLine(); imgui.TextQuestion(u8"Функция работает только в том случае, если вы открываете бронзовые рулетки с обновлением слотов. Если вдруг выпадет необновляемый слот - то функция прокрутки рулеток выключится. Если слот вам не подходит, то вы можете прокрутить рулетку - обновить слот и скрипт продолжит искать новый необновляемый слот.")
 			imgui.AlignTextToFramePadding(); imgui.Text(u8("Не обновлять слот в серебряной рулетке, если слот необновляемый")); imgui.SameLine(); imgui.ToggleButton(u8'Не обновлять слот в серебряной рулетке, если слот необновляемый', ostanovka2) imgui.SameLine(); imgui.TextQuestion(u8"Функция работает только в том случае, если вы открываете серебряные рулетки с обновлением слотов. Если вдруг выпадет необновляемый слот - то функция прокрутки рулеток выключится. Если слот вам не подходит, то вы можете прокрутить рулетку, обновить слот и скрипт продолжит искать новый необновляемый слот.")
@@ -23397,7 +23985,7 @@ function yashikisroulette()
 			elseif otkrytie2.v then otkrytie.v = false otkrytie3.v = false 
 			elseif otkrytie3.v then otkrytie.v = false otkrytie2.v = false 
 			end
-			imgui.AlignTextToFramePadding(); imgui.Text(u8("Не обновлять слот в бронзовой рулетке, если найдены ячейки с подарками")); imgui.SameLine(); imgui.ToggleButton(u8'Не обновлять слот в бронзовой рулетке, если найдены ячейки с подарками', ostanovka4) imgui.SameLine(); imgui.TextQuestion(u8"Функция работает только в том случае, если вы открываете бронзовые рулетки с обновлением слотов. Если выпадет слот с указанным количеством ячеек с подарков, то скрипт будет крутить данный слот, пока он не обновится и пойдет искать слот дальше.")
+			imgui.AlignTextToFramePadding(); imgui.Text(u8("Не обновлять слот в бронзовой рулетке, если найдены подарки")); imgui.SameLine(); imgui.ToggleButton(u8'Не обновлять слот в бронзовой рулетке, если найдены подарки', ostanovka4) imgui.SameLine(); imgui.TextQuestion(u8"Функция работает только в том случае, если вы открываете бронзовые рулетки с обновлением слотов. Если выпадет слот с указанным количеством ячеек с подарков, то скрипт будет крутить данный слот, пока он не обновится и пойдет искать слот дальше.")
 			if ostanovka4.v then 
 			imgui.SliderInt(u8'Минимальное кол-во ячеек##tyre4772146522134',slotpodarokrul,1, 16)
 			end
@@ -23418,9 +24006,9 @@ function yashikisroulette()
 			--imgui.PushItemWidth(150)
 			imgui.SliderInt(u8'Задержка (в секундах) ##47',zadervkarul,1, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на открытие сундуков. Если выбрано несколько сундуков, то сундуки начинают открываться по очереди. Например: Вы активировали функции - 'Открывать обычный сундук' и 'Открывать платиновый сундук'. Сначала пройдет проверка обычного сундука, через указанное вами время пройдет проверка платиного сундука и потом снова через указанное вами время пройдет проверка обычного сундука. По умолчанию - 3 минуты или 180 секунд.")
 				--imgui.PopItemWidth()
-			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(515, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test10.v = true end
-			if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(515, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
-			if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(515, 0)) then
+			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test10.v = true end
+			if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
+			if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then
 			checked_test.v = false
 			checked_test2.v = false
 			checked_test3.v = false
@@ -23439,6 +24027,7 @@ function yashikisroulette()
 			otkrytie2.v = false
 			otkrytie3.v = false
 			otkrytieymnoe.v = false
+			inventoff.v = false
 			zadervkatwo.v = false
 			zadervkarul.v = '180'
 			zadervkarulv2.v = '180'
@@ -23817,7 +24406,7 @@ function calcmenu()
         imgui.SetNextWindowSize(imgui.ImVec2(249, 280), imgui.Cond.FirstUseEver);
         if not window_pos then
             ScreenX, ScreenY = getScreenResolution()
-            imgui.SetNextWindowPos(imgui.ImVec2(ScreenX / 4.2 , ScreenY / 2), imgui.Cond.FirsUseEver, imgui.ImVec2(0.5, 0.5))
+            imgui.SetNextWindowPos(imgui.ImVec2(ScreenX / 4.6 , ScreenY / 2), imgui.Cond.FirsUseEver, imgui.ImVec2(0.5, 0.5))
             window_pos = true
         end
 		imgui.Begin(u8'Калькулятор', win_state['calc'], imgui.WindowFlags.NoResize)
@@ -24619,6 +25208,8 @@ function nastroikamenu()
 		imgui.SameLine(350) imgui.Checkbox(u8'Отправлять в VK уведомления об открытии сундуков', sellinfo) imgui.SameLine() imgui.TextQuestion(u8"Если скрипт проверил сундук, то вам придет уведомление об этом.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять в VK уведомления о получении PD', pdmaster) imgui.SameLine() imgui.TextQuestion(u8"Вам будет приходить уведомление о том, что вы получили PayDay и сколько вы заработали с него.")
 		imgui.SameLine(350) imgui.Checkbox(u8'Отправлять в VK текст с VIP чата', sellvip) imgui.SameLine() imgui.TextQuestion(u8"Если включить, то в VK вам будут приходить все сообщения из /vr. Отвечать на них вы также сможете, используя /vr [text], если включено принятие команд.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять в VK уведомления о звонках', phonemaster) imgui.SameLine() imgui.TextQuestion(u8"Вам будет приходить уведомление, когда вам кто-то звонит, и вы сможете ответить на звонок и поговорить с игроком или сбросить его. Проверено на телефоне 'IPHONE GOLD', на других телефонах работоспособность не гарантируется (ID тектдравов может отличаться для ответа на вызов или его отмены). Чтобы написать сообщение в чат, используйте !send [text].")
+		
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
 		vkconnect.v = false
@@ -24632,6 +25223,7 @@ function nastroikamenu()
 		sellid.v = false
 		sellinfo.v = false
 		pdmaster.v = false
+		phonemaster.v = false
 		sellrul.v = false
 		sellgolod.v = false
 		sellvip.v = false
@@ -24671,7 +25263,7 @@ function nastroikamenu()
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять диалоги в TG', diaenabletg) imgui.SameLine() imgui.TextQuestion(u8"Скрипт отправляет все серверные диалоги по типу /mm, /stats в вашу беседу в Telegram. Для ответа в диалогах, используйте !d [номер диалога] и !dc, чтобы закрыть диалог.")
 		imgui.SameLine(350)
-		imgui.Checkbox(u8'Принимать команды из TG', sellotvtg) imgui.SameLine() imgui.TextQuestion(u8"Если хотите писать в чаты, писать команды, открывать диалоги из Telegram и так далее, то нужно включить данный функционал. Чтобы узнать все доступные команды, после включения и перезапуска скрипта, напишите !help в беседе в Telegram.")
+		imgui.Checkbox(u8'Принимать команды и нажатие клавиш из TG', sellotvtg) imgui.SameLine() imgui.TextQuestion(u8"Если хотите писать в чаты, писать команды, открывать диалоги из Telegram и так далее, то нужно включить данный функционал. Чтобы узнать все доступные команды, после включения и перезапуска скрипта, напишите !help в беседе в Telegram.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять в TG банковские переводы', sellbanktg) imgui.SameLine() imgui.TextQuestion(u8"Если кто то прислал вам деньги банком или наоборот, вы отправили кому то, то в Telegram придется серверное уведомление.")
 		imgui.SameLine(350) imgui.Checkbox(u8'Отправлять в TG уведомления о потере соединения', sellclosedtg) imgui.SameLine() imgui.TextQuestion(u8"Если персонаж вылетел с сервера, то вам придет уведомление об этом.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять в TG текст с организационного чата', sellorgtg) imgui.SameLine() imgui.TextQuestion(u8"Если включить, то в Telegram вам будут приходить все сообщения из организационного чата. Отвечать на них вы также сможете, используя /f, /fb, /r, /rb, если включено принятие команд.")
@@ -24684,7 +25276,8 @@ function nastroikamenu()
 		imgui.SameLine(350) imgui.Checkbox(u8'Отправлять в TG уведомления об открытии сундуков', sellinfotg) imgui.SameLine() imgui.TextQuestion(u8"Если скрипт проверил сундук, то вам придет уведомление об этом.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять в TG уведомления о получении PD', pdmastertg) imgui.SameLine() imgui.TextQuestion(u8"Вам будет приходить уведомление о том, что вы получили PayDay и сколько вы заработали с него.")
 		imgui.SameLine(350) imgui.Checkbox(u8'Отправлять в TG текст с VIP чата', sellviptg) imgui.SameLine() imgui.TextQuestion(u8"Если включить, то в Telegram вам будут приходить все сообщения из /vr. Отвечать на них вы также сможете, используя /vr [text], если включено принятие команд.")
-		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять в TG уведомления о звонках', phonetgmaster) imgui.SameLine() imgui.TextQuestion(u8"Вам будет приходить уведомление, когда вам кто-то звонит, и вы сможете ответить на звонок и поговорить с игроком или сбросить его. Проверено на телефоне 'IPHONE GOLD', на других телефонах работоспособность не гарантируется (ID тектдравов может отличаться для ответа на вызов или его отмены). Чтобы написать сообщение в чат, используйте !send [text].")
+		
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
 		tgconnect.v = false
@@ -24702,6 +25295,7 @@ function nastroikamenu()
 		sellgolodtg.v = false
 		sellviptg.v = false
 		sellorgtg.v = false
+		phonetgmaster.v = false
 		tokentgv2.v = ''	
 		groupvkv2.v = ''
 		idtgv2.v = ''
@@ -26813,6 +27407,16 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Устранены иероглифы вместо текста в меню у систем, которые работают от встроенного видеоядра в процессоре.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Фикс интерфейса при установке белого цвета на рабочий стол (пропадало выделение рекламы и менюшки, где расположены')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'приложения в IPAD STYLE)')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[05.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'10. Фикс уведомления после кика с сервера (перестали приходить)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'11. Фикс некоторых уведомлений в чат от скрипта (не влазил текст в чат по символам)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'12. Фикс уведомления о PD в TG/VK (функция крашила скрипт или игру)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'13. В "Roulette Tools" добавлено "Не закрывать инвентарь после проверки сундука".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'14. Убран @all в TG при потере соединения.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'15. Добавлена клавиатура в TG.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'16. В VK и TG добавлена возможность отвечать на звонки, отклонять вызов и разговаривать по телефону.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В VK и TG добавлена возможность зайти в банковское меню через телефон.')
 			imgui.End()
 		end
 	
@@ -29027,7 +29631,15 @@ function sendTelegramNotification(msg) -- функция для отправки сообщения юзеру
 	if tgconnect.v then 
     msg = msg:gsub('{......}', '') --тут типо убираем цвет
     msg = encodeUrl1(msg) -- ну тут мы закодируем строку
-    async_http_request2('https://api.telegram.org/bot' .. tokentgv2.v .. '/sendMessage?chat_id=' .. idtgv2.v .. '&text='..msg,'', function(result) end)
+	async_http_request2('https://api.telegram.org/bot' .. tokentgv2.v .. '/sendMessage?chat_id=' .. idtgv2.v .. '&reply_markup={"keyboard": [["Status", "Help", "KillInfo", "Restart"], ["Reconnecting", "Players in radius"], ["Bank Menu", "KEY N", "KEY ALT"], ["OK", "Cancel"]], "resize_keyboard": true}&text='..msg,'', function(result) end)
+	end
+end
+
+function sendTelegramNotificationv2(msg) -- функция для отправки сообщения юзеру
+	if tgconnect.v then 
+    msg = msg:gsub('{......}', '') --тут типо убираем цвет
+    msg = encodeUrl1(msg) -- ну тут мы закодируем строку
+	async_http_request2('https://api.telegram.org/bot' .. tokentgv2.v .. '/sendMessage?chat_id=' .. idtgv2.v .. '&reply_markup={"keyboard": [["Reply"], ["Decline"], ["Back"]], "resize_keyboard": true}&text='..msg,'', function(result) end)
 	end
 end
 
@@ -29079,7 +29691,33 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
                         if message_from_user and sellotvtg.v then
                             -- и тут если чел отправил текст мы сверяем
                             local text = u8:decode(message_from_user) .. ' ' --добавляем в конец пробел дабы не произошли тех. шоколадки с командами(типо чтоб !q не считалось как !qq)
-                            if text:match('^!help') then
+                           
+							if text:match('^Status') then
+                                sendStatusTg()
+							elseif text:match('^Help') then
+                                 sendHelpTg()
+							elseif text:match('^KillInfo') then
+                                sendkillinfogetTg()
+							elseif text:match('^Restart') then
+                                sendrestartTg()
+							elseif text:match('^Reconnecting') then
+                                sendpodkTg()
+							elseif text:match('^Players in radius') then
+                                sendTelegramNotification('Игроки в радиусе:')
+								sendigrokradiusTg()
+							elseif text:match('^OK') then
+                                sampSendDialogResponse(sampGetCurrentDialogId(), 1, -1, -1)
+								closeDialog()
+							elseif text:match('^Cancel') then
+                                sampSendDialogResponse(sampGetCurrentDialogId(), 0, -1, -1)
+								closeDialog()
+							elseif text:match('^KEY N') then
+								sendkeyNTg()
+							elseif text:match('^KEY ALT') then
+								sendkeyALTTg()
+							elseif text:match('^Bank Menu') then
+								sendmenubanktg()
+							elseif text:match('^!help') then
                                 sendHelpTg()
 							elseif text:match('^!status') then
 								sendStatusTg()
@@ -29123,6 +29761,15 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
 								sendstatarulTg()
 							elseif text:match('^!resetstatarul') then
 								sendresetstatarulTg()
+							elseif text:match('^!send') then
+								text = text:sub(1, text:len() - 1):gsub('!send ','')
+								sampProcessChatInput(text)
+							elseif text:match('^Reply') then
+								sampSendClickTextdraw(2109)
+							elseif text:match('^Decline') then
+								sampSendClickTextdraw(2105)
+							elseif text:match('^Back') then
+								sendTelegramNotification('['..nazvanie.v..'] Готово!')
 							elseif text:match('^!d ') then
 								text = text:sub(1, text:len() - 1)
 								local style = sampGetCurrentDialogType()
@@ -29164,7 +29811,7 @@ function getOnline()
 end
 
 function sendHelp()
-	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#9000; - нажатие клавиш N и ALT.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n &#128073; Roulette Tools - можно по нажатию кнопки включить такой функционал как: включение/отключение проверки всех сундуков, включение/отключение открытие бронзовых рулеток с обновлением слотов и поиском подарков и включение/отключение открытие серебряных, золотых и платиновых рулеток с обновлением слотов и поиском AZ (чтобы выключить открытие сундуков или рулеток, нужно повторно нажать на кнопку)\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов. \n\n &#128204; Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n &#128073; !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n &#128073; !dc - закрыть открытый диалог.\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics. \n &#128073; /reload - перезагрузить скрипт. \n &#128073; /recon - перезайти на сервер через 30 секунд. \n &#128073; /recon [время] - перезайти на сервер через указанное время. \n &#128073; /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n &#128073; /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
+	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#9000; - нажатие клавиш N и ALT.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Reconnecting - выводит список IP серверов Аризоны для переподключения между ними.\n &#128073; Bank Menu - достать телефон и зайти в меню переводов (работает скорее всего только на IPHONE и для корректной работы включите автопин). Также, если у вас уже открыт телефон, то функция уберет его. \n &#128073; Roulette Tools - можно по нажатию кнопки включить такой функционал как: включение/отключение проверки всех сундуков, включение/отключение открытие бронзовых рулеток с обновлением слотов и поиском подарков и включение/отключение открытие серебряных, золотых и платиновых рулеток с обновлением слотов и поиском AZ (чтобы выключить открытие сундуков или рулеток, нужно повторно нажать на кнопку)\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов. \n\n &#128204; Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под VK. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n &#128073; !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n &#128073; !dc - закрыть открытый диалог.\n&#128073; !send - отправить ответ в чат (применение: ответить на звонок)\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics. \n &#128073; /reload - перезагрузить скрипт. \n &#128073; /recon - перезайти на сервер через 30 секунд. \n &#128073; /recon [время] - перезайти на сервер через указанное время. \n &#128073; /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n &#128073; /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
 end
 
 function sendhelpscreen()
@@ -29184,7 +29831,7 @@ function sendhelpscreen()
 end
 
 function sendHelpTg()
-	sendTelegramNotification('%F0%9F%93%8C Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под TG. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n %F0%9F%91%89 !restart - перезагрузка скрипта.\n %F0%9F%91%89 !podk - Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n %F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n %F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n %F0%9F%91%89 !roulleteopen - начать/завершить проверку всех сундуков. \n %F0%9F%91%89 !bronzrulopen - включение/отключение открытия бронзовых рулеток с обновлением слотов и поиском подарков.\n %F0%9F%91%89 !silverrulopen - включение/отключение открытия серебряных рулеток с обновлением слотов и поиском AZ. \n %F0%9F%91%89 !goldrulopen - включение/отключение открытия золотых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !platinarulopen - включение/отключение открытия платиновых рулеток с обновлением слотов и поиском AZ.\n %F0%9F%91%89 !keyn - нажать на клавишу N. \n %F0%9F%91%89 !keyalt - нажать на клавишу ALT.\n %F0%9F%91%89 !ok - подтверждение действия в диалоговом окне. \n %F0%9F%91%89 !cancel - закрыть активное диалоговое окно.\n %F0%9F%91%89 !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n %F0%9F%91%89 !dc - закрыть открытый диалог.\n %F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n %F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n %F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n %F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n %F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics. \n %F0%9F%91%89 /reload - перезагрузить скрипт. \n %F0%9F%91%89 /recon - перезайти на сервер через 30 секунд. \n %F0%9F%91%89 /recon [время] - перезайти на сервер через указанное время. \n %F0%9F%91%89 /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n %F0%9F%91%89 /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
+	sendTelegramNotification('%F0%9F%93%8C Действия кнопок:\n\n%F0%9F%91%89 Status - проверка активен ли персонаж/на каком сервере находится.\n%F0%9F%91%89 KillInfo - вывести информацию с KillInfo.\n%F0%9F%91%89 Restart - перезагрузка скрипта.\n%F0%9F%91%89 Reconnecting - выводит список IP серверов Аризоны для переподключения между ними.\n%F0%9F%91%89 Players in radius - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n%F0%9F%91%89 Bank Menu - достать телефон и зайти в меню переводов (работает скорее всего только на IPHONE и для корректной работы включите автопин). Также, если у вас уже открыт телефон, то функция уберет его.\n%F0%9F%91%89 KEY N - нажать на клавишу "N".\n%F0%9F%91%89 KEY ALT - нажать на клавишу "ALT".\n%F0%9F%91%89 OK - подтверждение действия в диалоговом окне.\n%F0%9F%91%89 Cancel - закрыть активное диалоговое окно. Если открывали диалоговое окно, лучше нажмите её, чтобы не случилось багов.\n\n%F0%9F%93%8C Скриптовые команды (вообще работают любые скриптовые и серверные команды, но здесь указан список скриптовых команд, специально сделанных под TG. Серверные команды пишутся также, как и в Сампе (/stats, /mm и так далее)):\n%F0%9F%91%89 !send - отправить ответ в чат (применение: ответить на звонок)\n%F0%9F%91%89 !restart - перезагрузка скрипта.\n%F0%9F%91%89 !podk - Переподключение к серверу - выводит список IP серверов Аризоны для переподключения между ними.\n%F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n%F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n%F0%9F%91%89 !roulleteopen - начать/завершить проверку всех сундуков. \n%F0%9F%91%89 !bronzrulopen - включение/отключение открытия бронзовых рулеток с обновлением слотов и поиском подарков.\n%F0%9F%91%89 !silverrulopen - включение/отключение открытия серебряных рулеток с обновлением слотов и поиском AZ. \n%F0%9F%91%89 !goldrulopen - включение/отключение открытия золотых рулеток с обновлением слотов и поиском AZ.\n%F0%9F%91%89 !platinarulopen - включение/отключение открытия платиновых рулеток с обновлением слотов и поиском AZ.\n%F0%9F%91%89 !keyn - нажать на клавишу N. \n%F0%9F%91%89 !keyalt - нажать на клавишу ALT.\n%F0%9F%91%89 !ok - подтверждение действия в диалоговом окне. \n%F0%9F%91%89 !cancel - закрыть активное диалоговое окно.\n%F0%9F%91%89 !d - используется для ответа в диалогах или его выбора. Например, пишем /lmenu и чтобы выбрать в нем нужный пункт, пишите !d [номер нужного пункта из списка]. Если нужно вписать в диалоговое окно, например, пароль, то пишем !d 123456. Таким же методом можно вводить в диалоги ник, ид и прочее.\n%F0%9F%91%89 !dc - закрыть открытый диалог.\n%F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n%F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n%F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n%F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n%F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics. \n%F0%9F%91%89 /reload - перезагрузить скрипт. \n%F0%9F%91%89 /recon - перезайти на сервер через 30 секунд. \n%F0%9F%91%89 /recon [время] - перезайти на сервер через указанное время. \n%F0%9F%91%89 /connect [IP] - перезайти на сервер по IP (порт указывать не нужно)\n%F0%9F%91%89 /connectname [NickName] - перезайти на тот же сервер с указанным NickName.')
 end
 
 function sendresetstatarul()
@@ -29287,6 +29934,34 @@ end
 
 function sendpodk()
 	vk_requestv2('&#128204; Чтобы подключиться к другому серверу, введи /connect IP. Чтобы сменить ник, введите /connectname NickName. IP серверов Аризоны:\n\n Phoenix - 185.169.134.3\n Tucson - 185.169.134.4\n ScottDale - 185.169.134.43\n Chandler - 185.169.134.44\n Brainburg - 185.169.134.45\n Saint Rose - 185.169.134.5\n Mesa - 185.169.134.59\n Redrock - 185.169.134.61\n Yuma - 185.169.134.107\n Surprise - 185.169.134.109\n Prescott - 185.169.134.166\n Glendale - 185.169.134.171\n Kingman - 185.169.134.172\n Winslow - 185.169.134.173\n Payson - 185.169.134.174\n Gilbert - 80.66.82.191\n Show-Low - 80.66.82.190\n Casa Grande - 80.66.82.188\n Page - 80.66.82.168\n Sun City - 80.66.82.159')
+end
+
+function sendmenubank()
+	 sampSendChat("/phone")
+	 wait(100)
+	 sampSendDialogResponse(1000, 1, 0,-1)
+	 wait(100)
+     sampSendClickTextdraw(2128)
+	 wait(100)
+	 sampSendDialogResponse(991, 1 , 0 , autopasspin.v)
+	 wait(100)
+     closeDialog()
+	 wait(100)
+     sampSendClickTextdraw(2128)
+end
+
+function sendmenubanktg()
+	 sampSendChat("/phone")
+	 wait(100)
+	 sampSendDialogResponse(1000, 1, 0,-1)
+	 wait(100)
+     sampSendClickTextdraw(2128)
+	 wait(100)
+	 sampSendDialogResponse(991, 1 , 0 , autopasspin.v)
+	 wait(100)
+     closeDialog()
+	 wait(100)
+     sampSendClickTextdraw(2128)
 end
 
 function sendpodkTg()
@@ -29782,6 +30457,8 @@ function longpollResolve(result)
 								sendrestart()
 						elseif pl.button == 'podk' then
 								sendpodk()
+						elseif pl.button == 'menubank' then
+								sendmenubank()
 						elseif pl.button == 'igrokradius' then
 								vk_requestv2('Игроки в радиусе:')
 								sendigrokradius()
@@ -29800,7 +30477,11 @@ function longpollResolve(result)
 						elseif pl.button == 'goldrulopen' then
 								sendgoldrulopen()	
 						elseif pl.button == 'platinarulopen' then
-								sendplatinarulopen()	
+								sendplatinarulopen()
+						elseif pl.button == 'enterphone' then
+								sampSendClickTextdraw(2109)
+						elseif pl.button == 'closephone' then
+								sampSendClickTextdraw(2105)
 						elseif pl.button == 'keyN' then
 								sendkeyN()
 						elseif pl.button == 'keyALT' then
@@ -29833,6 +30514,9 @@ function longpollResolve(result)
 						sendHelp()
 					elseif text:match('^!resetstatarul') then
 						sendresetstatarul()
+					elseif text:match('^!send') then
+						text = text:sub(1, text:len() - 1):gsub('!send ','')
+						sampProcessChatInput(u8:decode(text))
 					elseif text:match('^!d ') then
 						text = text:sub(1, text:len() - 1)
 						local style = sampGetCurrentDialogType()
@@ -29993,6 +30677,30 @@ function vk_requestv4(msg)
 	end
 end
 
+function vk_requestv5(msg)
+	msg = msg:gsub('{......}', '')
+	msg = u8(msg)
+	msg = url_encode(msg)
+	local keyboard = vkKeyboard5()
+	keyboard = u8(keyboard)
+	keyboard = url_encode(keyboard)
+	msg = msg .. '&keyboard=' .. keyboard
+	if vkconnect.v and idvkv2.v ~= '' then
+		async_http_request('https://api.vk.com/method/messages.send', 'peer_id=' .. idvkv2.v .. '&message=' .. msg .. '&access_token=' .. tokenvkv2.v .. '&v=5.81',
+		function (result)
+			local t = decodeJson(result)
+			if not t then
+				return
+			end
+			if t.error then
+				vkerrsend = 'Ошибка!\nКод: ' .. t.error.error_code .. ' Причина: ' .. t.error.error_msg
+				return
+			end
+			vkerrsend = nil
+		end)
+	end
+end
+
 function vkKeyboard() --создает конкретную клавиатуру для бота VK, как сделать для более общих случаев пока не задумывался
 	local keyboard = {}
 	keyboard.one_time = false
@@ -30036,7 +30744,13 @@ function vkKeyboard() --создает конкретную клавиатуру для бота VK, как сделать д
 	row[1].color = 'positive'
 	row[1].action.type = 'text'
 	row[1].action.payload = '{"button": "podk"}'
-	row[1].action.label = 'Переподключение к серверу'
+	row[1].action.label = 'Reconnecting'
+	row[2] = {}
+	row[2].action = {}
+	row[2].color = 'positive'
+	row[2].action.type = 'text'
+	row[2].action.payload = '{"button": "menubank"}'
+	row[2].action.label = 'Bank Menu'
 	keyboard.buttons[3] = {} -- вторая строка кнопок
 	row = keyboard.buttons[3]
 	row[1] = {}
@@ -30128,6 +30842,27 @@ function vkKeyboard3() --создает конкретную клавиатуру для бота VK, как сделать 
 	row[1].action.type = 'text'
     row[1].action.payload = '{"button": "platinarulopen"}'
 	row[1].action.label = 'Открывать платиновые рулетки'
+	return encodeJson(keyboard)
+end
+
+function vkKeyboard5() --создает конкретную клавиатуру для бота VK, как сделать для более общих случаев пока не задумывался
+	local keyboard = {}
+	keyboard.inline = true
+	keyboard.buttons = {}
+	keyboard.buttons[1] = {}
+	local row = keyboard.buttons[1]
+	row[1] = {}
+	row[1].action = {}
+	row[1].action.type = 'text'
+    row[1].action.payload = '{"button": "enterphone"}'
+	row[1].action.label = 'Ответить на звонок'
+	keyboard.buttons[2] = {} -- вторая строка кнопок
+	row = keyboard.buttons[2]
+	row[1] = {}
+	row[1].action = {}
+	row[1].action.type = 'text'
+    row[1].action.payload = '{"button": "closephone"}'
+	row[1].action.label = 'Отклонить вызов'
 	return encodeJson(keyboard)
 end
 
@@ -32640,6 +33375,8 @@ function settingosnova()
 		cfg3.backup.sellidv2 = sellid.v
 		cfg3.backup.sellinfov2 = sellinfo.v
 		cfg3.backup.pdmasterv2 = pdmaster.v
+		cfg3.backup.phonemasterv2 = phonemaster.v
+		cfg3.backup.phonetgmasterv2 = phonetgmaster.v
 		cfg3.backup.pdmastertgv2 = pdmastertg.v
 		cfg3.backup.sellrulv2 = sellrul.v
 		cfg3.backup.sellgolodv2 = sellgolod.v
@@ -33174,6 +33911,7 @@ function settingosnova()
 		cfg3.backup.otkrytie2v2 = otkrytie2.v
 		cfg3.backup.otkrytie3v2 = otkrytie3.v
 		cfg3.backup.otkrytieymnoev2 = otkrytieymnoe.v
+		cfg3.backup.inventoffv2 = inventoff.v
 		cfg3.backup.zadervkatwov2 = zadervkatwo.v
 		cfg3.backup.ndrv2 = ndr.v
 		cfg3.backup.tochv2 = toch.v
@@ -33356,6 +34094,8 @@ function settingosnova()
 		 sellid.v =  cfg3.backup.sellidv2 
 		 sellinfo.v =  cfg3.backup.sellinfov2 
 		 pdmaster.v =  cfg3.backup.pdmasterv2 
+		 phonemaster.v =  cfg3.backup.phonemasterv2
+		 phonetgmaster.v =  cfg3.backup.phonetgmasterv2
 		 pdmastertg.v =  cfg3.backup.pdmastertgv2 
 		 sellrul.v =  cfg3.backup.sellrulv2 
 		 sellgolod.v =  cfg3.backup.sellgolodv2 
@@ -33892,6 +34632,7 @@ function settingosnova()
 		 otkrytie2.v = cfg3.backup.otkrytie2v2 
 		 otkrytie3.v = cfg3.backup.otkrytie3v2 
 		 otkrytieymnoe.v = cfg3.backup.otkrytieymnoev2 
+		 inventoff.v = cfg3.backup.inventoffv2 
 		 zadervkatwo.v = cfg3.backup.zadervkatwov2 
 		ndr.v = cfg3.backup.ndrv2
 		toch.v = cfg3.backup.tochv2
