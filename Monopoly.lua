@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.4')
+script_version('3.4.5')
 
 use = false
 close = false
@@ -10853,7 +10853,7 @@ function imgui.OnDrawFrame()
 	end
 	imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 70), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
-	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский.')
+	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский, Грим Лок.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Добавлена подписка "VK Donut" в группе "Mono Tools". За подписку вы получаете: эксклюзивные новости')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'с разработки, ваши предложения будут в приоритете и доступ к ранним версиям скрипта. Оформить')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'подписку можно в группе VK или перейдя по ссылке: ')
@@ -11337,7 +11337,7 @@ function imgui.OnDrawFrame()
 	end
 	imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 54), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
-	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский.')
+	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский, Грим Лок.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Добавлена подписка "VK Donut" в группе "Mono Tools". За подписку вы получаете: эксклюзивные')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'новости с разработки, ваши предложения будут в приоритете и доступ к ранним версиям скрипта.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Оформить подписку можно в группе VK или перейдя по ссылке: ')
