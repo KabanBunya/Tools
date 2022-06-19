@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.7')
+script_version('3.4.8')
 
 use = false
 close = false
@@ -983,6 +983,8 @@ local cfg3 = inicfg.load({
 		fonebutton15v2 = false,
 		fonebutton16v2 = true,
 		dialogclosev2 = false,
+		dialogclosev3v2 = false,
+		dialogclosev4v2 = false,
 		vipresendv2 = false,
 		autorydav2 = false,
 		autolenv2 = false,
@@ -1705,6 +1707,8 @@ local SET = {
 		fonebutton15 = false,
 		fonebutton16 = true,
 		dialogclose = false,
+		dialogclosev3 = false,
+		dialogclosev4 = false,
 		vipresend = false,
 		autoryda = false,
 		autolen = false,
@@ -6465,6 +6469,8 @@ function saveSettings(args, key)
 	ini.settings.fonepol15 = fonepol15.v
 	ini.settings.fonepol16 = fonepol16.v
 	ini.settings.dialogclose = dialogclose.v
+	ini.settings.dialogclosev3 = dialogclosev3.v
+	ini.settings.dialogclosev4 = dialogclosev4.v
 	ini.settings.vipresend = vipresend.v
 	ini.settings.autoryda = autoryda.v
 	ini.settings.autolen = autolen.v
@@ -7012,7 +7018,8 @@ end
   if dialogId == 15346 and vipaddad.v then return false end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
-  if dialogId == 15330 and dialogclose.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
+  if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
+  if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
   if houserespawn == true and dialogId == 1781 then return false end
   if houserespawn == true and dialogId == 7238 then return false end
   if klad№1.v and dialogId == 15550 then return false end
@@ -13559,6 +13566,15 @@ function fixpricecopia()
 		end)
 	end
 	
+function fixpricecopiav2()
+	lua_thread.create(function()
+		wait(2000)
+		sampSendChat("/mm")
+		wait(200)
+		sampCloseCurrentDialogWithButton(0)
+		end)
+	end
+	
 function jumpspawn()
 	lua_thread.create(function()
 	wait(8000)
@@ -15495,6 +15511,9 @@ end
 		sendchot60()
 	end
 	
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and dialogclose.v and dialogclosev4.v then
+		fixpricecopiav2()
+	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik.v then
 		fixprice()
 	end
@@ -16516,6 +16535,8 @@ function load_settings() -- загрузка настроек
 	fonepol15 = imgui.ImBool(ini.settings.fonepol15)
 	fonepol16 = imgui.ImBool(ini.settings.fonepol16)
 	dialogclose = imgui.ImBool(ini.settings.dialogclose)
+	dialogclosev3 = imgui.ImBool(ini.settings.dialogclosev3)
+	dialogclosev4 = imgui.ImBool(ini.settings.dialogclosev4)
 	vipresend = imgui.ImBool(ini.settings.vipresend)
 	autoryda = imgui.ImBool(ini.settings.autoryda)
 	autolen = imgui.ImBool(ini.settings.autolen)
@@ -27259,6 +27280,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'бота (я использовал стандартный код, который используют все. Получается такая уязвимость есть у всех похожих скриптов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'За находку уязвимости огромное спасибо Vladyslav Efli. Единственный адекватный человек, который вместо хейта, нашел причину.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'19. В !help добавлено описание команды !pcoff и исправлены мелкие ошибки.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[19.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'20. В функцию "Убирать диалог с x4 после входа в игру" добавлено 2 способа закрытия диалога. Способ №1 - закрывает диалог сразу')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'после захода и не багает инвентарь (у некоторых юзеров есть проблема в том, что кикает античит за флуд диалогами). Способ №2 -')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'скрывает диалог, но данный способ багает инвентарь, поэтому, через 2 секунды после скрытия диалога, открывается /mm и закрывается')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'(данный способ работает стабильно у всех)')		
 			imgui.End()
 		end
 	
@@ -32598,7 +32624,18 @@ function settingosnova()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Анти-ломка")); imgui.SameLine(); imgui.ToggleButton(u8'Анти-ломка', antilomka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при ломке у вас больше не будет тряски камеры.")
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог c x4 после входа в игру")); imgui.SameLine(); imgui.ToggleButton(u8("Убирать диалог c x4 после входа в игру"), dialogclose) imgui.SameLine() imgui.TextQuestion(u8"Функция закрывает диалог с напоминанием об x4 после спавна персонажа и открывает через 10 секунд /mm и закрывает его, чтобы разбагать инвентарь.")
+				
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог c x4 после входа в игру")); imgui.SameLine(); imgui.ToggleButton(u8("Убирать диалог c x4 после входа в игру"), dialogclose) imgui.SameLine() imgui.TextQuestion(u8"Функция закрывает диалог с напоминанием об x4 или обновления. Способ №1 - закрывает диалог сразу после захода и не багает инвентарь (у некоторых юзеров есть проблема в том, что кикает античит за флуд диалогами). Способ №2 - скрывает диалог, но данный способ багает инвентарь, поэтому, через 2 секунды после скрытия диалога, открывается /mm и закрывается (данный способ работает стабильно у всех)")
+				if dialogclose.v then 
+				imgui.Text('-----------------------------------------------------------------------------')
+				if dialogclosev3.v then dialogclosev4.v = false end
+				if dialogclosev4.v then dialogclosev3.v = false end
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Способ №1")); imgui.SameLine(); imgui.ToggleButton(u8("Способ №1"), dialogclosev3)
+				imgui.SameLine()
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Способ №2")); imgui.SameLine(); imgui.ToggleButton(u8("Способ №2"), dialogclosev4)
+				imgui.Text('-----------------------------------------------------------------------------')
+				end
+				
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("VIP-Resend")); imgui.SameLine(); imgui.ToggleButton(u8'VIP-Resend', vipresend) imgui.SameLine() imgui.TextQuestion(u8"Функция отправляет повторно ваше сообщение в VIP чат, если оно не отправилось из-за кд.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отходить от места спавна")); imgui.SameLine(); imgui.ToggleButton(u8'Отходить от места спавна', antispawn); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж после спавна сделает указанное количество прыжков вперед, чтобы отойти от места спавна. Совершать прыжки персонаж будет только один раз после захода на сервер.")
 				imgui.PushItemWidth(150)
@@ -33115,6 +33152,8 @@ function settingosnova()
 				antilomka.v = false
 				autobuffer.v = false
 				dialogclose.v = false
+				dialogclosev3.v = false
+				dialogclosev4.v = false
 				vipresend.v = false
 				antispawn.v = false
 				zadervkajump.v = '2'
@@ -33500,6 +33539,8 @@ function settingosnova()
 		cfg3.backup.fonebutton15v2 = fonebutton15.v
 		cfg3.backup.fonebutton16v2 = fonebutton16.v
 		cfg3.backup.dialogclosev2 = dialogclose.v
+		cfg3.backup.dialogclosev3v2 = dialogclosev3.v
+		cfg3.backup.dialogclosev4v2 = dialogclosev4.v
 		cfg3.backup.vipresendv2 = vipresend.v
 		cfg3.backup.autorydav2 = autoryda.v
 		cfg3.backup.autolenv2 = autolen.v
@@ -34219,6 +34260,8 @@ function settingosnova()
 		 fonebutton15.v =  cfg3.backup.fonebutton15v2 
 		 fonebutton16.v =  cfg3.backup.fonebutton16v2 
 		 dialogclose.v =  cfg3.backup.dialogclosev2 
+		 dialogclosev3.v =  cfg3.backup.dialogclosev3v2
+		 dialogclosev4.v =  cfg3.backup.dialogclosev4v2
 		 vipresend.v =  cfg3.backup.vipresendv2 
 		 autoryda.v =  cfg3.backup.autorydav2 
 		 autolen.v =  cfg3.backup.autolenv2 
