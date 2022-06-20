@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.8')
+script_version('3.4.9')
 
 use = false
 close = false
@@ -6185,8 +6185,6 @@ function saveSettings(args, key)
 	ini.settings.sellgolod = sellgolod.v
 	ini.settings.sellvip = sellvip.v
 	ini.settings.sellorg = sellorg.v
-	ini.settings.sellotvtg = sellotvtg.v
-	ini.settings.sellbanktg = sellbanktg.v
 	ini.settings.sellfamtg = sellfamtg.v
 	ini.settings.sellspawntg = sellspawntg.v
 	ini.settings.sellclosedtg = sellclosedtg.v
@@ -10939,8 +10937,9 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Дима (100 рублей) | wx_xd (77 рублей)  |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Димчик (50 рублей) | Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Pentium (15 рублей) | #Pharaoh (11 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Соул (5 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) | DonatoV (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Celeron (10 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| DonatoV (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -11411,8 +11410,9 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Дима (100 рублей) | wx_xd (77 рублей)  |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Димчик (50 рублей) | Yamaha (30 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Pentium (15 рублей) | #Pharaoh (11 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Соул (5 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) | DonatoV (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Celeron (10 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Соул (5 рублей) | Bynes (5 рублей) |")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| DonatoV (5 рублей) |")
 	end
 	
 	imgui.EndChild()
@@ -27284,7 +27284,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'20. В функцию "Убирать диалог с x4 после входа в игру" добавлено 2 способа закрытия диалога. Способ №1 - закрывает диалог сразу')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'после захода и не багает инвентарь (у некоторых юзеров есть проблема в том, что кикает античит за флуд диалогами). Способ №2 -')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'скрывает диалог, но данный способ багает инвентарь, поэтому, через 2 секунды после скрытия диалога, открывается /mm и закрывается')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'(данный способ работает стабильно у всех)')		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'(данный способ работает стабильно у всех)')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[20.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. Исправлены небольшие ошибки в VK и TG Connect.')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Обновлён список донатеров.')	
 			imgui.End()
 		end
 	
@@ -32282,7 +32285,7 @@ function fishlovec()
 end
 
 function sendscreen()
-	if vkconnect.v then 
+	if vkconnect.v and sellotv.v then 
 	local d3dx9_43 = ffi.load('d3dx9_43.dll')
     local pDevice = ffi.cast("struct d3ddevice*", 0xC97C28)
     local CreateOffscreenPlainSurface =  ffi.cast("long(__stdcall*)(void*, unsigned long, unsigned long, unsigned long, unsigned long, void**, void*)", pDevice.vtbl[0].CreateOffscreenPlainSurface)
@@ -32344,7 +32347,7 @@ function sendPhoto(path)
 end
 
 function sendScreenTg()
-	if tgconnect.v then 
+	if tgconnect.v and sellotvtg.v then
 	local d3dx9_43 = ffi.load('d3dx9_43.dll')
     local pDevice = ffi.cast("struct d3ddevice*", 0xC97C28)
     local CreateOffscreenPlainSurface =  ffi.cast("long(__stdcall*)(void*, unsigned long, unsigned long, unsigned long, unsigned long, void**, void*)", pDevice.vtbl[0].CreateOffscreenPlainSurface)
@@ -32372,6 +32375,7 @@ end
 
 function sendPhotoTg()
 	lua_thread.create(function ()
+			if tgconnect.v and sellotvtg.v then
             local result, response = telegramRequest(
                 'POST', --[[ https://en.wikipedia.org/wiki/POST_(HTTP) ]]--
                 'sendPhoto', --[[ https://core.telegram.org/bots/api#sendphoto ]]--
@@ -32383,10 +32387,12 @@ function sendPhotoTg()
                 },
                 tokentgv2.v --[[ Токен Бота ]]
             )
+		end
 	end)
 end
 
 function telegramRequest(requestMethod, telegramMethod, requestParameters, requestFile, botToken, debugMode)
+	if tgconnect.v and sellotvtg.v then
 	local multipart = require('multipart-post')
 	local dkjson    = require('dkjson')
     --[[ Arguments Part ]]--
@@ -32505,6 +32511,7 @@ function telegramRequest(requestMethod, telegramMethod, requestParameters, reque
         return false, error
     end
     thread:cancel(0)
+	end
 end
 
 function weatherset(arg)
