@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.9')
+script_version('3.4.10')
 
 use = false
 close = false
@@ -5182,15 +5182,19 @@ end
 		armourNew = getCharArmour(PLAYER_PED) -- получаем броню
 		healNew = getCharHealth(PLAYER_PED) -- получаем ХП
 		interior = getActiveInterior() -- получаем инту
+		local chatstring = sampGetChatString(99)
 		
-		if chatstring == "Server closed the connection." and vkconnect.v and sellclosed.v then 
+		if vkconnect.v and sellclosed.v then 
+		if chatstring == "Server closed the connection." or chatstring == "Сервер закрыл соединение." then 
 			vk_requestv2('@all Сервер закрыл соединение.')
 		end
-		if chatstring == "Server closed the connection." and tgconnect.v and sellclosedtg.v then 
+	end
+		if tgconnect.v and sellclosedtg.v then
+		if chatstring == "Server closed the connection." or chatstring == "Сервер закрыл соединение." then 
 			sendTelegramNotification('Сервер закрыл соединение.')
 		end
+	end
 		
-		local chatstring = sampGetChatString(99)
         if chatstring == "You are banned from this server." and recongen.v and reconbanned.v then
         sampDisconnectWithReason(false)
             wait(zadervkarecon.v * 1000) -- задержка
@@ -5209,11 +5213,13 @@ end
             sampSetGamestate(1)
 		end
 		
-		if chatstring == "Server closed the connection." and reconclosed.v then
+		if reconclosed.v then 
+		if chatstring == "Server closed the connection." or chatstring == "Сервер закрыл соединение." then
         sampDisconnectWithReason(false)
             wait(zadervkareconv2.v * 1000) -- задержка
             sampSetGamestate(1)
 		end
+	end
 		
 		if chatstring == "You are banned from this server." and reconclosed.v then
         sampDisconnectWithReason(false)
@@ -13712,6 +13718,14 @@ function podklchat()
 	end
 
 function sampev.onServerMessage(color, text)
+
+	if color == -10270721 and text:match("%[Ошибка%] {FFFFFF}Данный аккаунт уже авторизирован!") and recongen.v and reconname.v then
+	lua_thread.create(function()
+        sampDisconnectWithReason(false)
+            wait(zadervkarecon.v * 1000)
+            sampSetGamestate(1)
+		end)
+	end
 	
 	if text:match('{73B461}%[Тел%]:{FFFFFF}') and vkconnect.v and phonemaster.v then vk_requestv2(''..text) end
 	if text:match('%[Информация%] {FFFFFF}Вы подняли трубку') and vkconnect.v and phonemaster.v then 
@@ -27287,7 +27301,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'(данный способ работает стабильно у всех)')	
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[20.06.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. Исправлены небольшие ошибки в VK и TG Connect.')	
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Обновлён список донатеров.')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Обновлён список донатеров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс "Обычного Реконнекта" под лаунчер и фикс перезахода в "Умном Реконнекте", если ваш аккаунт уже авторизован.')
 			imgui.End()
 		end
 	
