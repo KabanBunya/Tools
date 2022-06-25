@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.10')
+script_version('3.4.11')
 
 use = false
 close = false
@@ -7706,7 +7706,7 @@ end
       if close and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7735,7 +7735,7 @@ end
       if close1 and otkrytie.v then
 		wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7764,7 +7764,7 @@ end
       if close2 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7793,7 +7793,7 @@ end
       if close25 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7822,7 +7822,7 @@ end
       if close5 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7851,7 +7851,7 @@ end
       if close and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7880,7 +7880,7 @@ end
       if close1 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7909,7 +7909,7 @@ end
       if close2 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7938,7 +7938,7 @@ end
       if close25 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -7967,7 +7967,7 @@ end
       if close3 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8011,7 +8011,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8033,7 +8033,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8055,7 +8055,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8077,7 +8077,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8099,7 +8099,7 @@ end
 		sampSendClickTextdraw(2302)
 		wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8121,7 +8121,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8143,7 +8143,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8165,7 +8165,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8187,7 +8187,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8209,7 +8209,7 @@ end
 		sampSendClickTextdraw(2302)
         wait(zadervkasetrou7.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8254,7 +8254,7 @@ end
 		sampSendClickTextdraw(idtext1.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8276,7 +8276,7 @@ end
 		sampSendClickTextdraw(idtext3.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8298,7 +8298,7 @@ end
 		sampSendClickTextdraw(idtext5.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8320,7 +8320,7 @@ end
 		sampSendClickTextdraw(idtext9.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8342,7 +8342,7 @@ end
 		sampSendClickTextdraw(idtext7.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8364,7 +8364,7 @@ end
 		sampSendClickTextdraw(idtext1.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8386,7 +8386,7 @@ end
 		sampSendClickTextdraw(idtext3.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8408,7 +8408,7 @@ end
 		sampSendClickTextdraw(idtext5.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8430,7 +8430,7 @@ end
 		sampSendClickTextdraw(idtext9.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -8452,7 +8452,7 @@ end
 		sampSendClickTextdraw(idtext7.v)
         wait(zadervkasetrou13.v)
 		if inventoff.v then 
-		sampSendClickTextdraw(2108)
+		
 		else
 		sampSendClickTextdraw(admmp)
 		end
@@ -27304,6 +27304,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Обновлён список донатеров.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.06.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс "Обычного Реконнекта" под лаунчер и фикс перезахода в "Умном Реконнекте", если ваш аккаунт уже авторизован.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[25.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Фикс "Не закрывать инвентарь после проверки сундука" (больше не перетаскивает сундуки)')
 			imgui.End()
 		end
 	
