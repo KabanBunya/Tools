@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.11')
+script_version('3.4.12')
 
 use = false
 close = false
@@ -19255,11 +19255,19 @@ while true do
 	  wait(100)
 	  closeDialog()
 	  end
-	  sampSendClickTextdraw(admmp)
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
 	  wait(500)
       active2 = true
 	  samprulstop = true
-      sampSendChat("/invent")
+      if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+	  else
+	  sampSendChat("/invent")
+	    end
       wait(1000)
       wait((arztest5*60000) + 180000)
 	end
