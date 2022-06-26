@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.12')
+script_version('3.4.13')
 
 use = false
 close = false
@@ -1311,6 +1311,7 @@ local cfg3 = inicfg.load({
         lodv2v2 = 280,
 		zadervkafermav2 = 30,
 		zadervkarulv2 = 180,
+		zadervkadoprulv2 = 0,
 		zadervkarulv2v2 = 180,
 		zadervkatreev2 = 10,
 		slotazrulv2 = 1,
@@ -2035,6 +2036,7 @@ local SET = {
         lodv2 = 280,
 		zadervkaferma = 30,
 		zadervkarul = 180,
+		zadervkadoprul = 0,
 		zadervkarulv2 = 180,
 		zadervkatree = 10,
 		slotazrul = 1,
@@ -5915,6 +5917,7 @@ function saveSettings(args, key)
 	ini.settings.lodv2 = lodv2.v
 	ini.settings.zadervkaferma = zadervkaferma.v
 	ini.settings.zadervkarul = zadervkarul.v
+	ini.settings.zadervkadoprul = zadervkadoprul.v
 	ini.settings.zadervkarulv2 = zadervkarulv2.v
 	ini.settings.zadervkatree = zadervkatree.v
 	ini.settings.slotazrul = slotazrul.v
@@ -16783,6 +16786,7 @@ function load_settings() -- загрузка настроек
 	lodv2 = imgui.ImInt(ini.settings.lodv2)
 	zadervkaferma = imgui.ImInt(ini.settings.zadervkaferma)
 	zadervkarul = imgui.ImInt(ini.settings.zadervkarul)
+	zadervkadoprul = imgui.ImInt(ini.settings.zadervkadoprul)
 	zadervkarulv2 = imgui.ImInt(ini.settings.zadervkarulv2)
 	zadervkatree = imgui.ImInt(ini.settings.zadervkatree)
 	slotazrul = imgui.ImInt(ini.settings.slotazrul)
@@ -18867,7 +18871,8 @@ while true do
 		sampSendChat("/invent")
 		end
 	  wait(1000)
-      wait((arztest3*60000) + 60000)
+	  randomwait = math.random(0, zadervkadoprul.v)
+      wait((arztest3*60000) + 60000 + (randomwait*1000))
     end
 	if checked_test5.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -18897,7 +18902,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest3*60000) + 60000)
+      randomwaitv2 = math.random(0, zadervkadoprul.v)
+      wait((arztest3*60000) + 60000 + (randomwaitv2*1000))
     end
 	if checked_test5.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -18927,7 +18933,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest3*60000) + 60000)
+      randomwaitv3 = math.random(0, zadervkadoprul.v)
+      wait((arztest3*60000) + 60000 + (randomwaitv3*1000))
     end
 	if yashik.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -18957,7 +18964,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest3*60000) + 60000)
+      randomwaitv4 = math.random(0, zadervkadoprul.v)
+      wait((arztest3*60000) + 60000 + (randomwaitv4*1000))
     end
 	if yashik.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -18987,7 +18995,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest3*60000) + 60000)
+      randomwaitv5 = math.random(0, zadervkadoprul.v)
+      wait((arztest3*60000) + 60000 + (randomwaitv5*1000))
     end
 	if yashik.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19017,7 +19026,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest3*60000) + 60000)
+      randomwaitv6 = math.random(0, zadervkadoprul.v)
+      wait((arztest3*60000) + 60000 + (randomwaitv6*1000))
     end
 	wait(0)
 	end
@@ -19053,7 +19063,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest4*60000) + 120000)
+	  randomwaitv7 = math.random(0, zadervkadoprul.v)
+      wait((arztest4*60000) + 120000 + (randomwaitv7*1000))
     end
 	 if checked_test6.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19083,7 +19094,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest4*60000) + 120000)
+      randomwaitv8 = math.random(0, zadervkadoprul.v)
+      wait((arztest4*60000) + 120000 + (randomwaitv8*1000))
     end
 	if checked_test6.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19113,7 +19125,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest4*60000) + 120000)
+      randomwaitv9 = math.random(0, zadervkadoprul.v)
+      wait((arztest4*60000) + 120000 + (randomwaitv9*1000))
     end
 	if yashik1.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19143,7 +19156,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest4*60000) + 120000)
+      randomwaitv10 = math.random(0, zadervkadoprul.v)
+      wait((arztest4*60000) + 120000 + (randomwaitv10*1000))
     end
 	if yashik1.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19173,7 +19187,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest4*60000) + 120000)
+      randomwaitv11 = math.random(0, zadervkadoprul.v)
+      wait((arztest4*60000) + 120000 + (randomwaitv11*1000))
     end
 	if yashik1.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19203,7 +19218,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest4*60000) + 120000)
+      randomwaitv12 = math.random(0, zadervkadoprul.v)
+      wait((arztest4*60000) + 120000 + (randomwaitv12*1000))
     end
 	wait(0)
 	end
@@ -19239,7 +19255,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest5*60000) + 180000)
+	  randomwaitv13 = math.random(0, zadervkadoprul.v)
+      wait((arztest5*60000) + 180000 + (randomwaitv13*1000))
 	end
 	if checked_test7.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19269,7 +19286,8 @@ while true do
 	  sampSendChat("/invent")
 	    end
       wait(1000)
-      wait((arztest5*60000) + 180000)
+      randomwaitv14 = math.random(0, zadervkadoprul.v)
+      wait((arztest5*60000) + 180000 + (randomwaitv14*1000))
 	end
 	if checked_test7.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19299,7 +19317,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest5*60000) + 180000)
+      randomwaitv15 = math.random(0, zadervkadoprul.v)
+      wait((arztest5*60000) + 180000 + (randomwaitv15*1000))
 	end
 	if yashik2.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19329,7 +19348,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest5*60000) + 180000)
+      randomwaitv16 = math.random(0, zadervkadoprul.v)
+      wait((arztest5*60000) + 180000 + (randomwaitv16*1000))
     end
 	if yashik2.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19359,7 +19379,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest5*60000) + 180000)
+      randomwaitv17 = math.random(0, zadervkadoprul.v)
+      wait((arztest5*60000) + 180000 + (randomwaitv17*1000))
     end
 	if yashik2.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19389,7 +19410,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest5*60000) + 180000)
+      randomwaitv18 = math.random(0, zadervkadoprul.v)
+      wait((arztest5*60000) + 180000 + (randomwaitv18*1000))
     end
 	wait(0)
 	end
@@ -19425,7 +19447,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest6*60000) + 240000)
+	  randomwaitv19 = math.random(0, zadervkadoprul.v)
+      wait((arztest6*60000) + 240000 + (randomwaitv19*1000))
 	end
 	if checked_test100.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19455,7 +19478,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest6*60000) + 240000)
+      randomwaitv20 = math.random(0, zadervkadoprul.v)
+      wait((arztest6*60000) + 240000 + (randomwaitv20*1000))
 	end
 	if checked_test100.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19485,7 +19509,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest6*60000) + 240000)
+      randomwaitv21 = math.random(0, zadervkadoprul.v)
+      wait((arztest6*60000) + 240000 + (randomwaitv21*1000))
 	end
 	if yashik4.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19515,7 +19540,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest6*60000) + 240000)
+      randomwaitv22 = math.random(0, zadervkadoprul.v)
+      wait((arztest6*60000) + 240000 + (randomwaitv22*1000))
     end
 	if yashik4.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19545,7 +19571,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest6*60000) + 240000)
+      randomwaitv23 = math.random(0, zadervkadoprul.v)
+      wait((arztest6*60000) + 240000 + (randomwaitv23*1000))
     end
 	if yashik4.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19575,7 +19602,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest6*60000) + 240000)
+      randomwaitv24 = math.random(0, zadervkadoprul.v)
+      wait((arztest6*60000) + 240000 + (randomwaitv24*1000))
     end
 	wait(0)
 	end
@@ -19611,7 +19639,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest7*60000) + 300000)
+	  randomwaitv25 = math.random(0, zadervkadoprul.v)
+      wait((arztest7*60000) + 300000 + (randomwaitv25*1000))
 	end
 	if checked_test10.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19641,7 +19670,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest7*60000) + 300000)
+      randomwaitv26 = math.random(0, zadervkadoprul.v)
+      wait((arztest7*60000) + 300000 + (randomwaitv26*1000))
 	end
 	if checked_test10.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19671,7 +19701,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest7*60000) + 300000)
+      randomwaitv27 = math.random(0, zadervkadoprul.v)
+      wait((arztest7*60000) + 300000 + (randomwaitv27*1000))
 	end
 	
 	if yashik3.v and otkrytie.v and otkrytieymnoe.v then
@@ -19702,7 +19733,8 @@ while true do
 		sampSendChat("/invent")
 		end
 	  wait(1000)
-      wait((arztest7*60000) + 300000)
+      randomwaitv28 = math.random(0, zadervkadoprul.v)
+      wait((arztest7*60000) + 300000 + (randomwaitv28*1000))
 	end
 	if yashik3.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19732,7 +19764,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest7*60000) + 300000)
+      randomwaitv29 = math.random(0, zadervkadoprul.v)
+      wait((arztest7*60000) + 300000 + (randomwaitv29*1000))
 	end
 	if yashik3.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19762,7 +19795,8 @@ while true do
 		sampSendChat("/invent")
 		end
       wait(1000)
-      wait((arztest7*60000) + 300000)
+      randomwaitv30 = math.random(0, zadervkadoprul.v)
+      wait((arztest7*60000) + 300000 + (randomwaitv30*1000))
 	 end
 	wait(0)
 	end
@@ -19797,7 +19831,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+		randomwaitv31 = math.random(0, zadervkadoprul.v)
+        wait((zadervkarul.v + randomwaitv31)*1000)
     end
     if checked_test6.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19826,7 +19861,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+	  randomwaitv32 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv32)*1000)
     end
     if checked_test7.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19855,7 +19891,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+	  randomwaitv33 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv33)*1000)
 	end
 	if checked_test100.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19884,7 +19921,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+	  randomwaitv34 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv34)*1000)
 	end
 	if checked_test10.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19914,9 +19952,11 @@ while true do
 		sampSendChat("/invent")
 		end
 	  if zadervkatwo.v then 
-	  wait(zadervkatree.v*60000)
+	  randomwaitv35 = math.random(0, zadervkadoprul.v)
+	  wait((zadervkatree.v*60000) + (randomwaitv35*1000))
 	  else
-      wait(zadervkarul.v*1000)
+	  randomwaitv35 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv35)*1000)
 	  end
 	end
 	if yashik.v and otkrytie.v and not otkrytieymnoe.v then
@@ -19946,7 +19986,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+	  randomwaitv36 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv36)*1000)
     end
 	if yashik1.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -19975,7 +20016,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv37 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv37)*1000)
     end
 	if yashik2.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20004,7 +20046,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv38 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv38)*1000)
     end
 	if yashik4.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20033,7 +20076,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv39 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv39)*1000)
     end
 	if yashik3.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20063,9 +20107,11 @@ while true do
 		sampSendChat("/invent")
 		end
 	  if zadervkatwo.v then 
-	  wait(zadervkatree.v*60000)
+	  randomwaitv40 = math.random(0, zadervkadoprul.v)
+	  wait((zadervkatree.v*60000) + (randomwaitv40*1000))
 	  else
-      wait(zadervkarulv2.v*1000)
+      randomwaitv40 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv40)*1000)
 	  end
 	end
 	if checked_test5.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -20095,7 +20141,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+	  randomwaitv41 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv41)*1000)
     end
     if checked_test6.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20124,7 +20171,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+      randomwaitv42 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv42)*1000)
     end
     if checked_test7.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20153,7 +20201,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+      randomwaitv43 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv43)*1000)
 	end
 	 if checked_test100.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20182,7 +20231,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+      randomwaitv44 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv44)*1000)
 	end
 	if checked_test10.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20212,9 +20262,11 @@ while true do
 		sampSendChat("/invent")
 		end
       if zadervkatwo.v then 
-	  wait(zadervkatree.v*60000)
+	  randomwaitv45 = math.random(0, zadervkadoprul.v)
+	  wait((zadervkatree.v*60000) + (randomwaitv45*1000))
 	  else
-      wait(zadervkarul.v*1000)
+	  randomwaitv45 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv45)*1000)
 	  end
 	end
 	if yashik.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -20244,7 +20296,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv46 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv46)*1000)
     end
 	if yashik1.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20273,7 +20326,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv47 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv47)*1000)
     end
 	if yashik2.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20302,7 +20356,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv48 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv48)*1000)
     end
 	if yashik4.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20331,7 +20386,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv49 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv49)*1000)
     end
 	if yashik3.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20361,9 +20417,11 @@ while true do
 		sampSendChat("/invent")
 		end
       if zadervkatwo.v then 
-	  wait(zadervkatree.v*60000)
+	  randomwaitv50 = math.random(0, zadervkadoprul.v)
+	  wait((zadervkatree.v*60000) + (randomwaitv50*1000))
 	  else
-      wait(zadervkarulv2.v*1000)
+      randomwaitv50 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv50)*1000)
 	  end
 	end
 		
@@ -20394,7 +20452,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+	  randomwaitv51 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv51)*1000)
     end
     if checked_test6.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20423,7 +20482,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+      randomwaitv52 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv52)*1000)
     end
 	if checked_test7.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20452,7 +20512,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+      randomwaitv53 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv53)*1000)
 	end
 	if checked_test100.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20481,7 +20542,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarul.v*1000)
+      randomwaitv54 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv54)*1000)
 	end
 	if checked_test10.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20511,9 +20573,11 @@ while true do
 		sampSendChat("/invent")
 		end
       if zadervkatwo.v then 
-	  wait(zadervkatree.v*60000)
+	  randomwaitv55 = math.random(0, zadervkadoprul.v)
+	  wait((zadervkatree.v*60000) + (randomwaitv55*1000))
 	  else
-      wait(zadervkarul.v*1000)
+      randomwaitv55 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv55)*1000)
 	  end
 	end
 	if yashik.v and otkrytie3.v and not otkrytieymnoe.v then
@@ -20543,7 +20607,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv56 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv56)*1000)
     end
 	if yashik1.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20572,7 +20637,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv57 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv57)*1000)
     end
 	if yashik2.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20601,7 +20667,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv58 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv58)*1000)
     end
 	if yashik4.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20630,7 +20697,8 @@ while true do
 		else
 		sampSendChat("/invent")
 		end
-      wait(zadervkarulv2.v*1000)
+      randomwaitv59 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv59)*1000)
     end
 	if yashik3.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
@@ -20660,9 +20728,11 @@ while true do
 		sampSendChat("/invent")
 		end
       if zadervkatwo.v then 
-	  wait(zadervkatree.v*60000)
+	  randomwaitv60 = math.random(0, zadervkadoprul.v)
+	  wait((zadervkatree.v*60000) + (randomwaitv60*1000))
 	  else
-      wait(zadervkarulv2.v*1000)
+      randomwaitv60 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarulv2.v + randomwaitv60)*1000)
 	  end
 		end		
 		wait(0)
@@ -23911,7 +23981,7 @@ function yashikisroulette()
 			imgui.Columns(2, _, false)
 			imgui.SetColumnWidth(-1, 475)
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убрать диалог с призами")); imgui.SameLine(); imgui.ToggleButton(u8'Убрать диалог с призами', yashikdialog) imgui.SameLine(); imgui.TextQuestion(u8"Функция убирает диалог с призами, который показывается после каждого прокрута рулетки.")
+			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убрать диалог с призами")); imgui.SameLine(); imgui.ToggleButton(u8'Убрать диалог с призами', yashikdialog) imgui.SameLine(); imgui.TextQuestion(u8"Функция убирает диалог с призами, который показывается после каждого прокрута рулетки. Если включено, то в статистику не будут засчитываться предметы.")
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать бронзовые рулетки', checked_test) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме бронзовые рулетки, пока они у вас не закончатся. Если слот обновляется - функция выключается. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков.")
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать серебряные  рулетки', checked_test2) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме серебряные рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков.")
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки', checked_test3) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме золотые рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков.")
@@ -24048,6 +24118,7 @@ function yashikisroulette()
 			
 			--imgui.PushItemWidth(150)
 			imgui.SliderInt(u8'Задержка (в секундах) ##47',zadervkarul,1, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на открытие сундуков. Если выбрано несколько сундуков, то сундуки начинают открываться по очереди. Например: Вы активировали функции - 'Открывать обычный сундук' и 'Открывать платиновый сундук'. Сначала пройдет проверка обычного сундука, через указанное вами время пройдет проверка платиного сундука и потом снова через указанное вами время пройдет проверка обычного сундука. По умолчанию - 3 минуты или 180 секунд.")
+			imgui.SliderInt(u8'Рандомная задержка ##477',zadervkadoprul,0, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Рандомная задержка для основной задержки для проверки сундуков (как для просто 'Открывать сундуки', так и для 'Всегда открывать сундуки'. 2 этих задержки складываются. Нужно для того, чтобы сундуки не проверялись ровно в одно и тоже время. Задержка прибавляется рандомно от 0 до указанного вами значения (например, ваша задержка составляет 120 секунд. Один раз ваш сундук проверится в 'Ваша задержка' + 100 секунд. Во 2 раз в 'Ваша задержка' + 10 секунд и так далее.) Измеряется в секундах, по умолчанию установлено на 0 секунд.")
 				--imgui.PopItemWidth()
 			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test10.v = true end
 			if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
@@ -24073,6 +24144,7 @@ function yashikisroulette()
 			inventoff.v = false
 			zadervkatwo.v = false
 			zadervkarul.v = '180'
+			zadervkadoprul.v = '0'
 			zadervkarulv2.v = '180'
 			zadervkatree.v = '10'
 			slotazrul.v = '1'
@@ -27314,6 +27386,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс "Обычного Реконнекта" под лаунчер и фикс перезахода в "Умном Реконнекте", если ваш аккаунт уже авторизован.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[25.06.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Фикс "Не закрывать инвентарь после проверки сундука" (больше не перетаскивает сундуки)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. В "Roulette Tools" добавлена "Рандомная задержка" (прибавляет к основной задержке рандомное количество секунд)')
 			imgui.End()
 		end
 	
@@ -33898,6 +33972,7 @@ function settingosnova()
         cfg3.backup.lodv2v2 = lodv2.v
 		cfg3.backup.zadervkafermav2 = zadervkaferma.v
 		cfg3.backup.zadervkarulv2 = zadervkarul.v
+		cfg3.backup.zadervkadoprulv2 = zadervkadoprul.v
 		cfg3.backup.zadervkarulv2v2 = zadervkarulv2.v
 		cfg3.backup.zadervkatreev2 = zadervkatree.v
 		cfg3.backup.slotazrulv2 = slotazrul.v
@@ -34621,6 +34696,7 @@ function settingosnova()
 		lodv2.v = cfg3.backup.lodv2v2
 		 zadervkaferma.v = cfg3.backup.zadervkafermav2 
 		 zadervkarul.v = cfg3.backup.zadervkarulv2 
+		 zadervkadoprul.v = cfg3.backup.zadervkadoprulv2 
 		 zadervkarulv2.v = cfg3.backup.zadervkarulv2v2 
 		 zadervkatree.v = cfg3.backup.zadervkatreev2 
 		 slotazrul.v = cfg3.backup.slotazrulv2 
