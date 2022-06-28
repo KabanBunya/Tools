@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.13')
+script_version('3.4.14')
 
 use = false
 close = false
@@ -20,6 +20,7 @@ local houserespawn = false
 local samprulstop = true
 local fontsize = nil
 local updateid
+serverclosed = true
 fontsizev2 = nil
 fontsizev3 = nil
 slotazfind = false
@@ -2394,6 +2395,7 @@ local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
 lovlylarec = imgui.ImBool(false)
 lovlybtc = imgui.ImBool(false)
+lovlybilet = imgui.ImBool(false)
 poisklavka = imgui.ImBool(false)
 lovlyvideo = imgui.ImBool(false)
 rendernefti = imgui.ImBool(false)
@@ -5186,14 +5188,16 @@ end
 		interior = getActiveInterior() -- получаем инту
 		local chatstring = sampGetChatString(99)
 		
-		if vkconnect.v and sellclosed.v then 
+		if vkconnect.v and sellclosed.v and serverclosed == true then 
 		if chatstring == "Server closed the connection." or chatstring == "Сервер закрыл соединение." then 
 			vk_requestv2('@all Сервер закрыл соединение.')
+			serverclosed = false 
 		end
 	end
-		if tgconnect.v and sellclosedtg.v then
+		if tgconnect.v and sellclosedtg.v and serverclosed == true then
 		if chatstring == "Server closed the connection." or chatstring == "Сервер закрыл соединение." then 
 			sendTelegramNotification('Сервер закрыл соединение.')
+			serverclosed = false 
 		end
 	end
 		
@@ -6997,6 +7001,9 @@ end
 	if dialogId == 25247 and lovlybtc.v then sampSendDialogResponse(25247, 1 , 0, -1) end
 	if dialogId == 25248 and lovlybtc.v then sampSendDialogResponse(25248, 1, 0, u8:decode(autopasspaybtc.v)) end
 	if dialogId == 25249 and lovlybtc.v then sampSendDialogResponse(25249, 1, 0, -1) end
+	
+	if dialogId == 25396 and lovlybilet.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(25396, 1, 0, -1) end) end
+	if dialogId == 25402 and lovlybilet.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(25402, 1, 0, -1) end) end
 	
     if dialogId == 722 and nodial then
     nodial = false
@@ -12381,12 +12388,15 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 277), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 306), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю BTC', lovlybtc) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально продать биткоин. Просто включите функционал перед PD и нажимайте N еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю билетов в Аэропорту', lovlybilet) imgui.SameLine() imgui.TextQuestion(u8"Ловля билетов происходит по принципу - открываете диалог с покупкой билетов, включаете скрипт и скрипт сам начинает нажимать первый пункт в диалоге. Также сам подтвердит покупку, если словит. Билеты начинают продаваться за 20 минут до рейса. Если кикает за флуд функциями - то поставьте значение задержки выше (рекомендую от 600 мс)")
+		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер свободных лавок', poisklavka) imgui.SameLine() imgui.TextQuestion(u8"Данная функция помогает вам в поиске свободных лавок на ЦР. Включать её рекомендуется перед заходом на рынок и чтобы все лавки были в зоне стрима, встать по середине (примерно у эскалатора).")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер 3D текста для нефтевышек', rendernefti) imgui.SameLine() imgui.TextQuestion(u8"С данной функцией вам не придется вплотную подъезжать к нефтевышке (которые находятся в пустыне), чтобы рассмотреть количество нефти.")
 		imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
@@ -15549,6 +15559,13 @@ end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and antispawn.v then
 		jumpspawn()
 	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and vkconnect.v and sellclosed.v then
+		serverclosed = true
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and tgconnect.v and sellclosedtg.v then
+		serverclosed = true
+	end
+	
 	local today_date = os.date("%d.%m.%y")
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and napominalka.v then
 		if string.find(today_date, napominalkadata.v) then win_state['timeyved'].v = not win_state['timeyved'].v
@@ -18545,6 +18562,13 @@ function lovecpremium()
 	sampSendDialogResponse(25249, 1, 0, -1)
 	wait(zadervkalovly.v)
 	closeDialog()
+	end
+	if lovlybilet.v then
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(25396, 1 , 0, -1)
+	wait(zadervkalovly.v)
+	sampSendDialogResponse(25402, 1, 0, -1)
+	wait(zadervkalovly.v)
 	end
 	if lovlyvideo.v then 
 	sendKey(1024)
@@ -27388,6 +27412,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Фикс "Не закрывать инвентарь после проверки сундука" (больше не перетаскивает сундуки)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.06.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. В "Roulette Tools" добавлена "Рандомная задержка" (прибавляет к основной задержке рандомное количество секунд)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. В /lovec добавлена ловля билетов в аэропорту.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'27. Фикс флуда упоминания об "Сервер закрыл соединение" в VK и TG.')
 			imgui.End()
 		end
 	
