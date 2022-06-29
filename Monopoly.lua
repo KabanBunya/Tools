@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.14')
+script_version('3.4.15')
 
 use = false
 close = false
@@ -10874,7 +10874,7 @@ function imgui.OnDrawFrame()
 	end
 	imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 70), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
-	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский, Грим Лок.')
+	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Грим Лок.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Добавлена подписка "VK Donut" в группе "Mono Tools". За подписку вы получаете: эксклюзивные новости')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'с разработки, ваши предложения будут в приоритете и доступ к ранним версиям скрипта. Оформить')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'подписку можно в группе VK или перейдя по ссылке: ')
@@ -11359,7 +11359,7 @@ function imgui.OnDrawFrame()
 	end
 	imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 54), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
-	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Руслан Комаровский, Грим Лок.')
+	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Грим Лок.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Добавлена подписка "VK Donut" в группе "Mono Tools". За подписку вы получаете: эксклюзивные')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'новости с разработки, ваши предложения будут в приоритете и доступ к ранним версиям скрипта.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Оформить подписку можно в группе VK или перейдя по ссылке: ')
@@ -15397,7 +15397,7 @@ end
 	if vkconnect.v and sellid.v and text:match('%[(%d+)%] (.*) | Уровень:') then vk_requestv2(''..text) end
 	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
-	if vkconnect.v and sellrul.v and text:match('Вам был добавлен предмет') then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
+	if vkconnect.v and sellrul.v and text:match('Вам был добавлен предмет') and color == -65281 then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		depozpd = tonumber(text:match("Депозит в банке: $(%d+)"))
 	end
@@ -15411,7 +15411,7 @@ end
 	if tgconnect.v and sellidtg.v and text:match('%[(%d+)%] (.*) | Уровень:') then sendTelegramNotification(''..text) end
 	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
-	if tgconnect.v and sellrultg.v and text:match('Вам был добавлен предмет') then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
+	if tgconnect.v and sellrultg.v and text:match('Вам был добавлен предмет') and color == -65281 then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		depozpdtg = tonumber(text:match("Депозит в банке: $(%d+)"))
 	end
@@ -15517,9 +15517,9 @@ end
 		lastrradiozv, lastrradioID = text:match('%[R%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
 	elseif text:match("^Этот транспорт зарегистрирован на жителя {9ACD32}" ..userNick) and lock.v then
 		sampSendChat('/lock')
-	elseif text:find("Вам был добавлен предмет") and samprulstop == true then
+	elseif text:find("Вам был добавлен предмет") and color == -65281 and samprulstop == true then
 		krytim = true
-	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили +(.+)%$!') and samprulstop == true then
+	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!') and samprulstop == true then
 		krytim = true
 	end
 	local x, y, z = getCharCoordinates(PLAYER_PED)
@@ -15556,6 +15556,23 @@ end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and yashik4.v then
 		fixprice()
 	end
+	
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test5.v then
+		fixprice()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test6.v then
+		fixprice()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test7.v then
+		fixprice()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test100.v then
+		fixprice()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test10.v then
+		fixprice()
+	end
+	
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and antispawn.v then
 		jumpspawn()
 	end
@@ -15599,7 +15616,7 @@ end
 	vsevorul.v = vsevorul.v + 1
 	saveSettings()
 	end
-	if text:match("%[Подсказка%] {FFFFFF}Вы получили +(.+)%$!") and checked_test.v then
+	if text:match("%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!") and checked_test.v then
 	statarulpodarki = text:match('(%d+)')
 	statarulpodarki1 = tonumber(statarulpodarki:match('(%d+)'))
 	vsevorulmoney.v = vsevorulmoney.v + statarulpodarki1
@@ -15610,7 +15627,7 @@ end
 	vsevorul.v = vsevorul.v + 1
 	saveSettings()
 	end
-	if text:match("%[Подсказка%] {FFFFFF}Вы получили +(.+)%$!") and checked_test11.v then
+	if text:match("%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!") and checked_test11.v then
 	statarulpodarki = text:match('(%d+)')
 	statarulpodarki1 = tonumber(statarulpodarki:match('(%d+)'))
 	vsevorulmoney.v = vsevorulmoney.v + statarulpodarki1
@@ -15621,7 +15638,7 @@ end
 	vsevorulv2.v = vsevorulv2.v + 1
 	saveSettings()
 	end
-	if text:match("%[Подсказка%] {FFFFFF}Вы получили +(.+)%$!") and checked_test2.v then
+	if text:match("%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!") and checked_test2.v then
 	statarulpodarki = text:match('(%d+)')
 	statarulpodarki1 = tonumber(statarulpodarki:match('(%d+)'))
 	vsevorulmoneyv2.v = vsevorulmoneyv2.v + statarulpodarki1
@@ -15632,7 +15649,7 @@ end
 	vsevorulv2.v = vsevorulv2.v + 1
 	saveSettings()
 	end
-	if text:match("%[Подсказка%] {FFFFFF}Вы получили +(.+)%$!") and checked_test12.v then
+	if text:match("%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!") and checked_test12.v then
 	statarulpodarki = text:match('(%d+)')
 	statarulpodarki1 = tonumber(statarulpodarki:match('(%d+)'))
 	vsevorulmoneyv2.v = vsevorulmoneyv2.v + statarulpodarki1
@@ -27415,6 +27432,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.06.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. В /lovec добавлена ловля билетов в аэропорту.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'27. Фикс флуда упоминания об "Сервер закрыл соединение" в VK и TG.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'28. Фикс "Roulette Tools" (рулетка останавливалась, если выпадали деньги)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'29. В "Roulette Tools" добавлено открытие инвентаря через 10 секунд после захода на сервер, если включено "не закрывать инвентарь')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'после проверки сундука" и выбраны сундуки для открытия.')
+			
 			imgui.End()
 		end
 	
