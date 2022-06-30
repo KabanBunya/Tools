@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.15')
+script_version('3.4.16')
 
 use = false
 close = false
@@ -32,6 +32,7 @@ delplayer = false
 begauto = false
 local npc, infnpc = {}, {}
 local admmp = 2111
+scancr = 2
 arztest3 = 1
 arztest4 = 1
 arztest5 = 1
@@ -1062,6 +1063,7 @@ local cfg3 = inicfg.load({
 		inputfindtg9v2 = '',
 		inputfindtg10v2 = '',
 		activatorv2 = 'mono',
+		crfindv2 = '233',
 		activcallv2 = 'call',
 		activcallphonev2 = 'icall',
 		nazvaniev2 = 'Mono Tools',
@@ -1787,6 +1789,7 @@ local SET = {
 		inputfindtg9 = '',
 		inputfindtg10 = '',
 		activator = 'mono',
+		crfind = '233',
 		activcall = 'call',
 		activcallphone = 'icall',
 		nazvanie = 'Mono Tools',
@@ -4930,6 +4933,12 @@ end
 	while true do
 		wait(0)
 		
+		if sampGetCurrentServerAddress() == "80.66.82.147" and pricecr.v then 
+		scancr = 3
+		else
+		scancr = 2
+		end
+		
 		if poisklavka.v then
             local input = sampGetInputInfoPtr()
             local input = getStructElement(input, 0x8, 4)
@@ -6144,6 +6153,7 @@ function saveSettings(args, key)
 	ini.settings.inputfindtg9 = u8:decode(inputfindtg9.v)
 	ini.settings.inputfindtg10 = u8:decode(inputfindtg10.v)
 	ini.settings.activator = u8:decode(activator.v)
+	ini.settings.crfind = u8:decode(crfind.v)
 	ini.settings.activcall = u8:decode(activcall.v)
 	ini.settings.activcallphone = u8:decode(activcallphone.v)
 	ini.settings.nazvanie = u8:decode(nazvanie.v)
@@ -6538,6 +6548,15 @@ function separator(text)
 	    	local replace = comma_value(S)
 	    	text = string.gsub(text, S, replace)
 	    end
+		for S in string.gmatch(text, "VC%d+") do
+	    	local replace = comma_value(S)
+	    	text = string.gsub(text, S, replace)
+	    end
+		for S in string.gmatch(text, "%d+VC") do
+	    	S = string.sub(S, 0, #S-1)
+	    	local replace = comma_value(S)
+	    	text = string.gsub(text, S, replace)
+	    end
 	end
 	return text
 end
@@ -6547,7 +6566,7 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	dialogs_data[dialogId] = {listboxId, input}
 	end
 	if pricecr.v then 
-	if dialogId == 15072 and listboxId == 2 and button == 1 then
+	if dialogId == 15072 and listboxId == scancr and button == 1 then
 		analysis = 1
 		last_text = nil
 		data_cost = { sell = {}, buy = {} }
@@ -7167,6 +7186,17 @@ end
 			end
 			break
 		end
+		
+		if text:match('Стоимость: VC$(.*) за') then
+		findcr = text:match('Стоимость: VC$(.*) за')
+		if findcr:match("%.") then
+            findcr=(findcr:gsub("%.", "")) 
+            text=(text:gsub("за 1 шт.", "за 1 шт. | $"..comma_value(findcr*crfind))) 
+        else
+            text=(text:gsub("за 1 шт.", "за 1 шт. | $"..comma_value(findcr*crfind)))
+        end
+	end
+	
 		return { dialogId, style, title, button1, button2, text }
 		end
 	end
@@ -16732,6 +16762,7 @@ function load_settings() -- загрузка настроек
 	idtext8 = imgui.ImBuffer(u8(ini.settings.idtext8), 256)
 	idtext9 = imgui.ImBuffer(u8(ini.settings.idtext9), 256)
 	activator = imgui.ImBuffer(u8(ini.settings.activator), 256)
+	crfind = imgui.ImBuffer(u8(ini.settings.crfind), 256)
 	activcall = imgui.ImBuffer(u8(ini.settings.activcall), 256)
 	activcallphone = imgui.ImBuffer(u8(ini.settings.activcallphone), 256)
 	nazvanie = imgui.ImBuffer(u8(ini.settings.nazvanie), 256)
@@ -27436,8 +27467,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'28. Фикс "Roulette Tools" (рулетка останавливалась, если выпадали деньги)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'29. В "Roulette Tools" добавлено открытие инвентаря через 10 секунд после захода на сервер, если включено "не закрывать инвентарь')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'после проверки сундука" и выбраны сундуки для открытия.')
-			
-			imgui.End()
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.06.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'30. Фикс функции "Точки в числах" для Vice City.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'31. Адаптирована работа функционала "Центральный Рынок" под Vice City.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'32. В функционал "Центральный Рынок" добавлена конвентарция валюты из VC$ в SA$ от Стэнфорда и показывается это в диалоге покупки')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'и продажи. Включить или изменить курс можно в "Параметры" - "Модификации" (баги, которые есть в скрипте Стэнфорда - я исправил)')
+		
+		imgui.End()
 		end
 	
 function timeyveddate()
@@ -32826,7 +32862,10 @@ function settingosnova()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после того, как вы сели в автомобиль, скрипт закроет ваш автомобиль командой /lock.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("AutoFill")); imgui.SameLine(); imgui.ToggleButton(u8'AutoFill', autofill) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы будете автоматический заправляться на заправке.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в диалогах у вас будут стоять в числах точки.")
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Центральный рынок")); imgui.SameLine(); imgui.ToggleButton(u8'Центральный рынок', pricecr) imgui.SameLine(); imgui.TextQuestion(u8"Показывает средние цены на товары в лавках. Так же есть возможность узнать примерную цену на товар через команду. Обновлять информацию нужно самому, желательно раз в день в пикапе на площади ЦР. Узнать цену определённого товара: /price [Название товара или его часть]. После включения или выключения функции - перезапустите скрипт.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Центральный рынок")); imgui.SameLine(); imgui.ToggleButton(u8'Центральный рынок', pricecr) imgui.SameLine(); imgui.TextQuestion(u8"Показывает средние цены на товары в лавках. Также в городе 'Vice City' конвентирует валюту VC$ в SA$ по указанному вами курсу и показывает всё это в диалоге покупки и продажи. Так же есть возможность узнать примерную цену на товар через команду. Обновлять информацию нужно самому, желательно раз в день на пикапе на площади ЦР. Курс VC впишите в текстовое поле ниже (узнать курс можно в аэропорту). Узнать цену определённого товара: /price [Название товара или его часть]. После включения или выключения функции - перезапустите скрипт.")
+				imgui.PushItemWidth(150)
+				if pricecr.v then imgui.InputText(u8'Укажите Ваш курс VC##2342352345', crfind) end
+				imgui.PopItemWidth()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Автобазар")); imgui.SameLine(); imgui.ToggleButton(u8'Автобазар', priceab) imgui.SameLine(); imgui.TextQuestion(u8"Разделение суммы на табличках точками, для более точного восприятия. Уведомление в чат, когда кто-то выставляет авто на продажу. Вместе с уведомлением появляется маркер над табличкой выставленного авто (на 10 секунд), чтобы быстро найти продавца. Для владельцев Premium VIP есть возможность проанализировать средние цены на авто (на пикапе возле метки бизнеса автобазара), чтобы в дальнейшем они показывались в диалоговом окне покупки транспорта, а так же в вышеупомянутом уведомлении. Помимо этого есть команда /carprice [Модель т/с или его часть], которая выведет в чат средние цены на автомобили с похожим названием. /carab - загрузить средние цены (нужно встать на чекпоинте на АБ). После включения или выключения функции - перезапустите скрипт.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Calculator в /trade")); imgui.SameLine(); imgui.ToggleButton(u8'Calculator в /trade', tradecalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при /trade у вас будет открываться калькулятор и после обмена закрываться.")
@@ -33331,6 +33370,7 @@ function settingosnova()
 				autoferma.v = false
 				carsis.v = false
 				activator.v = 'mono'
+				crfind.v = '233'
 				activcall.v = 'call'
 				activcallphone.v = 'icall'
 				otgun.v = false
@@ -33773,6 +33813,7 @@ function settingosnova()
 		cfg3.backup.inputfindtg9v2 = inputfindtg9.v
 		cfg3.backup.inputfindtg10v2 = inputfindtg10.v
 		cfg3.backup.activatorv2 = activator.v
+		cfg3.backup.crfindv2 = crfind.v
 		cfg3.backup.activcallv2 = activcall.v
 		cfg3.backup.activcallphonev2 = activcallphone.v
 		cfg3.backup.nazvaniev2 = nazvanie.v
@@ -34496,6 +34537,7 @@ function settingosnova()
 		 inputfindtg9.v =  ''..cfg3.backup.inputfindtg9v2 
 		 inputfindtg10.v =  ''..cfg3.backup.inputfindtg10v2 
 		 activator.v =  ''..cfg3.backup.activatorv2 
+		 crfind.v =  ''..cfg3.backup.crfindv2 
 		 activcall.v =  ''..cfg3.backup.activcallv2 
 		 activcallphone.v =  ''..cfg3.backup.activcallphonev2 
 		 nazvanie.v =  ''..cfg3.backup.nazvaniev2 
