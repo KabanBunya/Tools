@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.16')
+script_version('3.4.17')
 
 use = false
 close = false
@@ -7191,9 +7191,9 @@ end
 		findcr = text:match('Ñעמטלמסעü: VC$(.*) חא')
 		if findcr:match("%.") then
             findcr=(findcr:gsub("%.", "")) 
-            text=(text:gsub("חא 1 רע.", "חא 1 רע. | $"..comma_value(findcr*crfind))) 
+            text=(text:gsub("חא 1 רע.", "חא 1 רע. | $"..comma_value(findcr*crfind.v))) 
         else
-            text=(text:gsub("חא 1 רע.", "חא 1 רע. | $"..comma_value(findcr*crfind)))
+            text=(text:gsub("חא 1 רע.", "חא 1 רע. | $"..comma_value(findcr*crfind.v)))
         end
 	end
 	
