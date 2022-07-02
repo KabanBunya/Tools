@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.17')
+script_version('3.4.18')
 
 use = false
 close = false
@@ -33,6 +33,7 @@ begauto = false
 local npc, infnpc = {}, {}
 local admmp = 2111
 scancr = 2
+pinkod = '1234'
 arztest3 = 1
 arztest4 = 1
 arztest5 = 1
@@ -6721,7 +6722,11 @@ end
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} В настройках скрипта указан неверный пароль! Измените его в настройках или вводите вручную.", -1)
 	end
 	if dialogId == 991 and autopin.v then 
+	if sampGetCurrentServerAddress() == "80.66.82.147" then 
+		sampSendDialogResponse(dialogId, 1, 0, u8:decode(pinkod))
+		else
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
+	end
 		return false
 	end
 	if dialogId == 1000 and workcal then return false end
@@ -27472,7 +27477,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'31. Адаптирована работа функционала "Центральный Рынок" под Vice City.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'32. В функционал "Центральный Рынок" добавлена конвентарция валюты из VC$ в SA$ от Стэнфорда и показывается это в диалоге покупки')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'и продажи. Включить или изменить курс можно в "Параметры" - "Модификации" (баги, которые есть в скрипте Стэнфорда - я исправил)')
-		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[02.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'33. Фикс "Авто-пин" под Vice City (на вашем сервере банковский пароль вводится тот, который вы указали в скрипте, а на Вайсе')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'стандартный, а именно - "1234")')
 		imgui.End()
 		end
 	
