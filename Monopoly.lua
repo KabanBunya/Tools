@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.18')
+script_version('3.4.19')
 
 use = false
 close = false
@@ -723,6 +723,9 @@ local cfg3 = inicfg.load({
 		sellrultgv2 = false,
 		sellgolodtgv2 = false,
 		obkachetv2 = false,
+		smilsv2 = true,
+		smilvv2 = false,
+		smisfv2 = false,
 		windowsstylev2 = true,
 		panelv2 = false,
 		panel2v2 = false,
@@ -1449,6 +1452,9 @@ local SET = {
 		sellrultg = false,
 		sellgolodtg = false,
 		obkachet = false,
+		smils = true,
+		smilv = false,
+		smisf = false,
 		windowsstyle = true,
 		panel = false,
 		panel2 = false,
@@ -6221,6 +6227,9 @@ function saveSettings(args, key)
 	ini.settings.sellorgtg = sellorgtg.v
 	
 	ini.settings.obkachet = obkachet.v
+	ini.settings.smils = smils.v
+	ini.settings.smilv = smilv.v
+	ini.settings.smisf = smisf.v
 	ini.settings.windowsstyle = windowsstyle.v
 	
 	ini.settings.panel = panel.v
@@ -7053,9 +7062,11 @@ end
   if dialogId == 15346 and addad.v then return false end
   if dialogId == 15347 and addad.v then return false end
   if dialogId == 15379 and addad.v then return false end
+  if dialogId == 25473 and addad.v then return false end
   if dialogId == 15346 and vipaddad.v then return false end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
+  if dialogId == 25473 and vipaddad.v then return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
   if houserespawn == true and dialogId == 1781 then return false end
@@ -15698,7 +15709,7 @@ end
         end)
     end
 	
-	if text:find('Необходимо вставить ключи в зажигание. Используйте: "/key"') and fastkey.v then
+	if text:find('Необходимо вставить ключи в зажигание. Используйте: /key') and fastkey.v then
 		lua_thread.create(function()
             wait(228)
             sampSendChat('/key')
@@ -15786,6 +15797,16 @@ end
 		wait(100)
 		sampSendChat(u8:decode ('/ad '..adredak.v))
 		wait(300)
+		if smils.v then 
+		sampSendDialogResponse(25473, 1, 0, -1)
+		end
+		if smilv.v then 
+		sampSendDialogResponse(25473, 1, 1, -1)
+		end
+		if smisf.v then 
+		sampSendDialogResponse(25473, 1, 2, -1)
+		end
+		wait(300)
 		sampSendDialogResponse(15346, 1, 0, -1)
 		wait(200)
 		sampSendDialogResponse(15347, 1, 0, -1)
@@ -15801,6 +15822,16 @@ end
 		closeDialog()
 		wait(100)
 		sampSendChat(u8:decode ('/ad '..adredak2.v))
+		wait(300)
+		if smils.v then 
+		sampSendDialogResponse(25473, 1, 0, -1)
+		end
+		if smilv.v then 
+		sampSendDialogResponse(25473, 1, 1, -1)
+		end
+		if smisf.v then 
+		sampSendDialogResponse(25473, 1, 2, -1)
+		end
 		wait(300)
 		sampSendDialogResponse(15346, 1, 1, -1)
 		wait(200)
@@ -16314,6 +16345,9 @@ function load_settings() -- загрузка настроек
 	sellviptg = imgui.ImBool(ini.settings.sellviptg)
 	sellorgtg = imgui.ImBool(ini.settings.sellorgtg)
 	obkachet = imgui.ImBool(ini.settings.obkachet)
+	smils = imgui.ImBool(ini.settings.smils)
+	smilv = imgui.ImBool(ini.settings.smilv)
+	smisf = imgui.ImBool(ini.settings.smisf)
 	windowsstyle = imgui.ImBool(ini.settings.windowsstyle)
 	
 	zadervkafish = imgui.ImInt(ini.settings.zadervkafish)
@@ -23192,6 +23226,16 @@ while true do
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
+	if smils.v then 
+	sampSendDialogResponse(25473, 1, 0, -1)
+	end
+	if smilv.v then 
+	sampSendDialogResponse(25473, 1, 1, -1)
+	end
+	if smisf.v then 
+	sampSendDialogResponse(25473, 1, 2, -1)
+	end
+	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
@@ -23212,6 +23256,16 @@ while true do
 	closeDialog()
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
+	wait(300)
+	if smils.v then 
+	sampSendDialogResponse(25473, 1, 0, -1)
+	end
+	if smilv.v then 
+	sampSendDialogResponse(25473, 1, 1, -1)
+	end
+	if smisf.v then 
+	sampSendDialogResponse(25473, 1, 2, -1)
+	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
@@ -27480,6 +27534,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[02.07.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'33. Фикс "Авто-пин" под Vice City (на вашем сервере банковский пароль вводится тот, который вы указали в скрипте, а на Вайсе')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'стандартный, а именно - "1234")')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'34. Фикс "Piar Menu" и добавлен выбор, в какой Радиоцентр отправить объявление.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'35. Фикс "AutoKey" (не вставлялись ключи из-за изменения строчки в чате)')
 		imgui.End()
 		end
 	
@@ -27534,6 +27591,12 @@ function getArizonaName()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##98', vipadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить VIP объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel2() end
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'Отправлять объявления в СМИ:') imgui.SameLine(); imgui.TextQuestion(u8"Выберите один из пунктов. Если хотите выбрать другой, то уберите галочку с предыдущего пункта.")
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'ЛС##53r43gt5rotyfn548yhnu86yugj5869gyj', smils) imgui.SameLine() imgui.Checkbox(u8'ЛВ##53r43gt5rotyfn548yhnu86yugj58629gyj', smilv) imgui.SameLine() imgui.Checkbox(u8'СФ##53r43g1t5rotyfn548yhnu86yugj5869gyj', smisf)
+	if smils.v then smilv.v = false smisf.v = false end
+	if smilv.v then smils.v = false smisf.v = false end
+	if smisf.v then smilv.v = false smils.v = false end
+	imgui.Separator()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /fam', famaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##199', famadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /fam сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel3() end
@@ -27603,6 +27666,9 @@ function getArizonaName()
 	idvk.v = ''
 	groupvk.v = ''
 	obkachet.v = false
+	smils.v = true
+	smilv.v = false
+	smisf.v = false
 	adredak.v = u8'В 165 баре много девочек и пива.'
 	adredak2.v = u8'В 165 баре много девочек и пива.'
 	adredak3.v = u8'В 165 баре много девочек и пива.'
@@ -33479,6 +33545,9 @@ function settingosnova()
 		cfg3.backup.sellrultgv2 = sellrultg.v
 		cfg3.backup.sellgolodtgv2 = sellgolodtg.v
 		cfg3.backup.obkachetv2 = obkachet.v
+		cfg3.backup.smilsv2 = smils.v
+		cfg3.backup.smilvv2 = smilv.v
+		cfg3.backup.smisfv2 = smisf.v
 		cfg3.backup.windowsstylev2 = windowsstyle.v
 		cfg3.backup.panelv2 = panel.v
 		cfg3.backup.panel2v2 = panel2.v
@@ -34202,6 +34271,9 @@ function settingosnova()
 		 sellrultg.v =  cfg3.backup.sellrultgv2 
 		 sellgolodtg.v =  cfg3.backup.sellgolodtgv2 
 		 obkachet.v =  cfg3.backup.obkachetv2 
+		 smils.v =  cfg3.backup.smilsv2 
+		 smilv.v =  cfg3.backup.smilvv2 
+		 smisf.v =  cfg3.backup.smisfv2 
 		 windowsstyle.v =  cfg3.backup.windowsstylev2 
 		 panel.v =  cfg3.backup.panelv2 
 		 panel2.v =  cfg3.backup.panel2v2 
