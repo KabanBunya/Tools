@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.19')
+script_version('3.4.20')
 
 use = false
 close = false
@@ -2406,6 +2406,10 @@ local vraddad = imgui.ImBool(false)
 lovlylarec = imgui.ImBool(false)
 lovlybtc = imgui.ImBool(false)
 lovlybilet = imgui.ImBool(false)
+lovlyfura = imgui.ImBool(false)
+lovlyfura1 = imgui.ImBool(false)
+lovlyfura2 = imgui.ImBool(false)
+lovlyfura3 = imgui.ImBool(false)
 poisklavka = imgui.ImBool(false)
 lovlyvideo = imgui.ImBool(false)
 rendernefti = imgui.ImBool(false)
@@ -4859,6 +4863,7 @@ function main()
 	sampRegisterChatCommand("statarul", show_rulstat)
 	sampRegisterChatCommand("scanfish", function() if FishEn == 0 then lua_thread.create(function() FishEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Начинаю сканирование наживки, секунду.", -1) wait(300) sampSendChat('/fishrod') wait(300) sampSendDialogResponse(25285, 1 , 6, -1) end) end end)
 	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
+	sampRegisterChatCommand("cstreset", function() itemsskup = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu' успешно обнулён.", -1) end)
 	sampRegisterChatCommand("cstsell", function() if isEnsell == 0 then isEnsell = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Выставить товар на продажу'{FFFFFF}.", -1) itemssell = ({}) else isEnsell = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
 	if pricecr.v then sampRegisterChatCommand('price', get_price) end
 	if priceab.v then sampRegisterChatCommand('carprice', function(searchv21)
@@ -7038,6 +7043,10 @@ end
 	if dialogId == 25396 and lovlybilet.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(25396, 1, 0, -1) end) end
 	if dialogId == 25402 and lovlybilet.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(25402, 1, 0, -1) end) end
 	
+	if dialogId == 15505 and lovlyfura.v and lovlyfura1.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 0, -1) end) end
+	if dialogId == 15505 and lovlyfura.v and lovlyfura2.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 1, -1) end) end
+	if dialogId == 15505 and lovlyfura.v and lovlyfura3.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 2, -1) end) end
+	
     if dialogId == 722 and nodial then
     nodial = false
     return false
@@ -7494,21 +7503,39 @@ end
 
 	if id == 2063 and data.text == "DIESEL" and autofill.v then 
 	lua_thread.create(function()
+	if sampGetCurrentServerAddress() == "80.66.82.147" then 
 	sampSendClickTextdraw(2064)
-	wait(100)
-	sampSendClickTextdraw(144)
 	wait(200)
-	sampSendClickTextdraw(130)
-	wait(100)
-	sampSendClickTextdraw(144)
+	sampSendClickTextdraw(123)
 	wait(200)
-	sampSendClickTextdraw(130)
-	wait(100)
-	sampSendClickTextdraw(144)
+	sampSendClickTextdraw(109)
 	wait(200)
-	sampSendClickTextdraw(130)
-	wait(100)
-	sampSendClickTextdraw(144)
+	sampSendClickTextdraw(123)
+	wait(200)
+	sampSendClickTextdraw(109)
+	wait(200)
+	sampSendClickTextdraw(123)
+	wait(200)
+	sampSendClickTextdraw(109)
+	wait(200)
+	sampSendClickTextdraw(123)
+	else
+	sampSendClickTextdraw(2064)
+	wait(200)
+	sampSendClickTextdraw(120)
+	wait(200)
+	sampSendClickTextdraw(106)
+	wait(200)
+	sampSendClickTextdraw(120)
+	wait(200)
+	sampSendClickTextdraw(106)
+	wait(200)
+	sampSendClickTextdraw(120)
+	wait(200)
+	sampSendClickTextdraw(106)
+	wait(200)
+	sampSendClickTextdraw(120)
+		end
 	end)
 end
 
@@ -11980,8 +12007,8 @@ end
 		
 		if #itemsskup ~= 0 then
 				imgui.Text('')
-				imgui.SetCursorPosX(120)
-				imgui.Text(u8"Все загруженные предметы (обновить /cst):")
+				imgui.SetCursorPosX(60)
+				imgui.Text(u8"Все загруженные предметы (обновить /cst | обнулить /cstreset):")
 				imgui.SameLine()
 				imgui.SetCursorPosX(630)
 				imgui.Text(u8"Выбранные предметы:")
@@ -12434,14 +12461,23 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 306), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 396), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю охлаждения для видеокарт', lovlyohlad)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю BTC', lovlybtc) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально продать биткоин. Просто включите функционал перед PD и нажимайте N еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
-		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю билетов в Аэропорту', lovlybilet) imgui.SameLine() imgui.TextQuestion(u8"Ловля билетов происходит по принципу - открываете диалог с покупкой билетов, включаете скрипт и скрипт сам начинает нажимать первый пункт в диалоге. Также сам подтвердит покупку, если словит. Билеты начинают продаваться за 20 минут до рейса. Если кикает за флуд функциями - то поставьте значение задержки выше (рекомендую от 600 мс)")
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю фуры в Vice City', lovlyfura) imgui.SameLine() imgui.TextQuestion(u8"Авто-ловля фуры для работы Дальнобойщика в Vice City. Достаточно встать на пикап для аренды фуры, выбрать нужную фуру для ловли и включить данную функцию.")
+		imgui.Text('---------------------------------------------------------------------------------------------------')
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Фура №1##453vg44g64g6g', lovlyfura1) imgui.SameLine() imgui.TextQuestion(u8"Фура 'Linerunner' стоймостью 500 VC$ Подходит для начального уровня работы.")
+		imgui.SameLine() imgui.Checkbox(u8'Фура №2##45byh67hju6hyug6', lovlyfura2) imgui.SameLine() imgui.TextQuestion(u8"Фура 'Tanker' стоймостью 700 VC$ Нужно иметь 100 уровень прокачки на работе Дальнобойщика.")
+		imgui.SameLine() imgui.Checkbox(u8'Фура №3##5n7yn6587j7hu6', lovlyfura3) imgui.SameLine() imgui.TextQuestion(u8"Фура 'RoadTrain' стоймостью 1.000 VC$ Нужно иметь 300 уровень прокачки на работе Дальнобойщика.")
+		if lovlyfura1.v then lovlyfura2.v = false lovlyfura3.v = false end
+		if lovlyfura2.v then lovlyfura1.v = false lovlyfura3.v = false end
+		if lovlyfura3.v then lovlyfura2.v = false lovlyfura1.v = false end
+		imgui.Text('---------------------------------------------------------------------------------------------------')
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер свободных лавок', poisklavka) imgui.SameLine() imgui.TextQuestion(u8"Данная функция помогает вам в поиске свободных лавок на ЦР. Включать её рекомендуется перед заходом на рынок и чтобы все лавки были в зоне стрима, встать по середине (примерно у эскалатора).")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер 3D текста для нефтевышек', rendernefti) imgui.SameLine() imgui.TextQuestion(u8"С данной функцией вам не придется вплотную подъезжать к нефтевышке (которые находятся в пустыне), чтобы рассмотреть количество нефти.")
@@ -18657,6 +18693,25 @@ function lovecpremium()
 	sampSendDialogResponse(25402, 1, 0, -1)
 	wait(zadervkalovly.v)
 	end
+	
+	if lovlyfura.v then
+	wait(zadervkalovly.v)
+	sendKey(1024)
+	wait(zadervkalovly.v)
+	if lovlyfura1.v then 
+	sampSendDialogResponse(15505, 1, 0, -1)
+	wait(zadervkalovly.v)
+	end
+	if lovlyfura2.v then 
+	sampSendDialogResponse(15505, 1, 1, -1)
+	wait(zadervkalovly.v)
+	end
+	if lovlyfura3.v then 
+	sampSendDialogResponse(15505, 1, 2, -1)
+	wait(zadervkalovly.v)
+	end
+end
+
 	if lovlyvideo.v then 
 	sendKey(1024)
 	wait(zadervkalovly.v)
@@ -25033,6 +25088,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carprice - узнать среднюю цену на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carab - обновить средние цены на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в Skup Menu.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstreset - обнулить список товаров в Skup Menu (нужно при баге товаров или смене местоположения их в диалоге)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstsell - обновить список товаров в Sell Menu.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/checkvip [id] - проверить, есть ли у игрока Titan или Premium VIP.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bandit - открыть меню 'Однорукий Бандит'.")
@@ -27537,6 +27593,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.07.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'34. Фикс "Piar Menu" и добавлен выбор, в какой Радиоцентр отправить объявление.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'35. Фикс "AutoKey" (не вставлялись ключи из-за изменения строчки в чате)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'36. Фикс Autofill (смена текстдравов)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'37. Добавлена команда /cstreset - обнулить список товаров в Skup Menu (нужно при баге товаров или смене местоположения их в диалоге)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'38. Подробнее описал, как работает функция "Перезапуск скрипта в случае краша" и что нужно делать, чтобы не запускался скрипт 2')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'и более раз.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'39. В /lovec добавлена ловля фур для Vice City.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'40. Адаптация Autofill под Vice City.')
 		imgui.End()
 		end
 	
@@ -28560,6 +28623,8 @@ function inventory()
 		sampSendClickTextdraw(2093)
 		wait(500)
 		sampSendClickTextdraw(2094)
+		wait(500)
+		sampSendClickTextdraw(2095)
 		wait(500)
 		sampSendClickTextdraw(2077)
 		else
@@ -32919,7 +32984,7 @@ function settingosnova()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
 				
-				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Перезапуск скрипта в случае краша")); imgui.SameLine(); imgui.ToggleButton(u8'Перезапуск скрипта в случае краша', autorelog) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в случае краша скрипта, скрипт перезапуститься. Для работы функции нужен скрипт 'AutoRebootControlSAMP.lua', который скачать вы сможете через скрипт (после включения функции, появится кнопка, по нажатию которой и начнётся скачивание). После скачивания или включения функции, сохраните настройки и перезапустите все скрипты на CTRL + R.")
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Перезапуск скрипта в случае краша")); imgui.SameLine(); imgui.ToggleButton(u8'Перезапуск скрипта в случае краша', autorelog) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в случае краша скрипта, скрипт перезапустится (с включенной функцией скрипт лучше не перезагружать на F4 или CTRL + R т.к он потом запустится 2 раза и поможет только полный выход из игры. В случае, если вам нужно перезапустить скрипт, то выгрузите его. Это можно сделать в пуске, нажав на 'Завершение работы', или выгрузить на комбинацию клавиш ALT + 0 (сменить можно в 'Параметры' - 'Настройка клавиш')) Для работы функции нужен скрипт 'AutoRebootControlSAMP.lua', который скачать вы сможете через скрипт (после включения функции, появится кнопка, по нажатию которой и начнётся скачивание). После скачивания или включения функции, сохраните настройки и перезапустите все скрипты на CTRL + R.")
 				if autorelog.v then 
 				imgui.Text('-----------------------------------------------------------------------------')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Скачать "AutoRebootControlSAMP.lua"', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
