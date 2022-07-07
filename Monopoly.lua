@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.20')
+script_version('3.4.21')
 
 use = false
 close = false
@@ -7046,6 +7046,7 @@ end
 	if dialogId == 15505 and lovlyfura.v and lovlyfura1.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 0, -1) end) end
 	if dialogId == 15505 and lovlyfura.v and lovlyfura2.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 1, -1) end) end
 	if dialogId == 15505 and lovlyfura.v and lovlyfura3.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 2, -1) end) end
+	if dialogId == 15506 and lovlyfura.v then lua_thread.create(function() wait(zadervkalovly.v) sampCloseCurrentDialogWithButton(1) end) end
 	
     if dialogId == 722 and nodial then
     nodial = false
@@ -27600,6 +27601,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'и более раз.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'39. В /lovec добавлена ловля фур для Vice City.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'40. Адаптация Autofill под Vice City.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[07.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'41. Фикс ловли фур.')
 		imgui.End()
 		end
 	
