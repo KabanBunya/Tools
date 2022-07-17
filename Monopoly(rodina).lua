@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1')
+script_version('1.1.1')
 
 local use = false
 local close = false
@@ -5465,9 +5465,9 @@ end
 	else
 	isNext = false
 	end
-	
-	if dialogId == 10010 and isEn == 2 and title:match("{DC143C}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 90) onecheck = false end
-	if dialogId == 10010 and isEn == 1 and title:match("{DC143C}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 90) end) end
+
+	if dialogId == 10010 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 90) onecheck = false end
+	if dialogId == 10010 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 90) end) end
 
 	if dialogId == 10011 and isEnd ~= 0 and isBuyProcess then return false end
 	if dialogId == 10009 and isEnd ~= 0 and isBuyProcess then return false end
@@ -7924,6 +7924,18 @@ function imgui.OnDrawFrame()
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Baron (10 рублей) | Соул (5 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Bynes (5 рублей) | DonatoV (5 рублей) |")
 	end
+	imgui.EndChild()
+	imgui.PopStyleColor()
+	
+	imgui.SameLine(350)	
+	if rabstol9.v then 
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.15))
+	else
+	imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.15))
+	end
+	imgui.BeginChild('##asdasasddf1246243254576456546456', imgui.ImVec2(644, 56), false)
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'В связи с обновлением диалогов, чтобы заработал функционал скрипта (по типу "Skup Menu", "Майнинг" и')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'так далее), нужно зайти в "/settings" и выключить показ новых диалогов.')
 	imgui.EndChild()
 	imgui.PopStyleColor()
 		
@@ -18084,6 +18096,9 @@ function tupupdate()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'26. В "Skup Menu v2" указано пояснение, как выставить аксессуар на скуп с нужным цветом.')
 			imgui.EndChild()
 		end
+			imgui.Separator()
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "Skup Menu" (не проверялись и не выставлялись товары)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'2. На рабочем столе написана подсказка, как убрать новые диалоги, чтобы работал функционал по типу "Skup Menu".')
 			imgui.End()
 		end
 	
