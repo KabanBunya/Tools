@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1.1')
+script_version('1.1.2')
 
 local use = false
 local close = false
@@ -3889,7 +3889,8 @@ function main()
 	sampRegisterChatCommand("connect", connect_cmd)
 	sampRegisterChatCommand("connectname", connect_cmdname)
 	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на скупку'{FFFFFF}.", -1) else isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
-
+	sampRegisterChatCommand("cstreset", function() itemsskup = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu v2' успешно обнулён.", -1) end)
+	
 	sampRegisterChatCommand('checkvip', function(id)
 			if tonumber(id) then 
 				lua_thread.create(function()
@@ -5466,8 +5467,8 @@ end
 	isNext = false
 	end
 
-	if dialogId == 10010 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 90) onecheck = false end
-	if dialogId == 10010 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 90) end) end
+	if dialogId == 10010 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 75) onecheck = false end
+	if dialogId == 10010 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 75) end) end
 
 	if dialogId == 10011 and isEnd ~= 0 and isBuyProcess then return false end
 	if dialogId == 10009 and isEnd ~= 0 and isBuyProcess then return false end
@@ -8826,8 +8827,8 @@ end
 		
 		if #itemsskup ~= 0 then
 				imgui.Text('')
-				imgui.SetCursorPosX(120)
-				imgui.Text(u8"Все загруженные предметы (обновить /cst):")
+				imgui.SetCursorPosX(60)
+				imgui.Text(u8"Все загруженные предметы (обновить /cst | обнулить /cstreset):")
 				imgui.SameLine()
 				imgui.SetCursorPosX(630)
 				imgui.Text(u8"Выбранные предметы:")
@@ -15794,6 +15795,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/connectname NickName - перезайти на тот же сервер с указанным NickName.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/tu - посмотреть тестовые обновления.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в Skup Menu v2.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstreset - обнулить список товаров в Skup Menu v2 (нужно при баге товаров или смене местоположения их в диалоге)")
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -18099,6 +18101,10 @@ function tupupdate()
 			imgui.Separator()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "Skup Menu" (не проверялись и не выставлялись товары)')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'2. На рабочем столе написана подсказка, как убрать новые диалоги, чтобы работал функционал по типу "Skup Menu".')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'19.07.2022')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс "Skup Menu v2" (не проверялись и не выставлялись товары)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'4. В "Skup Menu v2" добавлена команда /cstreset (обнулить список товаров в Skup Menu v2 (нужно при баге товаров')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'или смене местоположения их в диалоге))')
 			imgui.End()
 		end
 	
