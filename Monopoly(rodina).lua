@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1.2')
+script_version('1.1.3')
 
 local use = false
 local close = false
@@ -5467,8 +5467,8 @@ end
 	isNext = false
 	end
 
-	if dialogId == 10010 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 75) onecheck = false end
-	if dialogId == 10010 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 75) end) end
+	if dialogId == 10010 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 70) onecheck = false end
+	if dialogId == 10010 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 70) end) end
 
 	if dialogId == 10011 and isEnd ~= 0 and isBuyProcess then return false end
 	if dialogId == 10009 and isEnd ~= 0 and isBuyProcess then return false end
@@ -18105,6 +18105,8 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс "Skup Menu v2" (не проверялись и не выставлялись товары)')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'4. В "Skup Menu v2" добавлена команда /cstreset (обнулить список товаров в Skup Menu v2 (нужно при баге товаров')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'или смене местоположения их в диалоге))')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'22.07.2022')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Фикс "Skup Menu v2" (не проверялись и не выставлялись товары)')
 			imgui.End()
 		end
 	
