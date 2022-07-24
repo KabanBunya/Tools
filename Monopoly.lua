@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.23')
+script_version('3.4.24')
 
 use = false
 close = false
@@ -25120,6 +25120,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/scanfish - отсканировать количество наживок для авто-покупки.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/tu - посмотреть тестовые обновления.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/calc - открыть калькулятор.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов] - предложить игроку аренду вашего т/с.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/phoneair - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
 		end
 		imgui.EndChild()
@@ -33042,7 +33043,7 @@ function settingosnova()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Invite', invfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в организацию с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка Q)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Key")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Key', fastkey); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то после того, как вы заглушите транспортное средство - вы автоматический вытащите из него ключи. Также если вы попробуете завести транспорт,а в нём не будет ключей - скрипт пропишет /key и заведет транспортное средство.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Lock")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Lock', fastlock); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность открытия или закрытия личного транспорта на кнопку, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка L)");
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Arenda")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Arenda', arendafast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро отправить команду '/arenda' игроку, т.к открывается чат и в чате появляется команда и заранее введенные данные, которые вы можете подредактировать под себя (ID игрока введется автоматический) Отправить команду вы сможете с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка H)");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Arenda")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Arenda', arendafast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро отправить команду '/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов]' игроку, т.к открывается чат и в чате появляется команда с заранее введенными данными, которые вы можете подредактировать под себя (нужный ID игрока введется автоматический) Отправить команду вы сможете с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка H)");
 				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Установить метку кладов по нажатию клавиш")); imgui.SameLine(); imgui.ToggleButton(u8'Установить метку кладов по нажатию клавиш', fastklad); imgui.SameLine(); imgui.TextQuestion(u8"Для работы функции нужно иметь карту кладов из /donate и она должна лежать у вас на первой странице инвентаря. Поставить метку первого клада можно на нажатие клавиш Alt + 1, вторую метку клада на Alt + 2 и третью метку клада на Alt + 3. Менять клавиши временно нельзя.");
 				
