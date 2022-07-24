@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.21')
+script_version('3.4.22')
 
 use = false
 close = false
@@ -18,11 +18,15 @@ local close5 = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
+airphone = false
+phonetext = 'nill'
 local fontsize = nil
 local updateid
 serverclosed = true
 fontsizev2 = nil
 fontsizev3 = nil
+carid = 0
+caridv2 = 0
 slotazfind = false
 slotpodarokfind = false
 closefind = false
@@ -1203,6 +1207,7 @@ local cfg3 = inicfg.load({
 		tradefastv2 = false,
 		autofillv2 = false,
 		faminvfastv2 = false,
+		arendafastv2 = false,
 		invfastv2 = false,
 		fastkeyv2 = false,
 		fastlockv2 = false,
@@ -1309,6 +1314,7 @@ local cfg3 = inicfg.load({
 		bufozyv2 = 600,
 		zadervkareconrestartv2 = 10,
         drawdistv2 = 250,
+		distupv2 = 25,
         drawdistairv2 = 1000,
         fogv2 = 1,
         lodv2 = 280,
@@ -1932,6 +1938,7 @@ local SET = {
 		tradefast = false,
 		autofill = false,
 		faminvfast = false,
+		arendafast = false,
 		invfast = false,
 		fastkey = false,
 		fastlock = false,
@@ -2038,10 +2045,12 @@ local SET = {
 		bufozy = 600,
 		zadervkareconrestart = 10,
         drawdist = 250,
+		distup = 25,
         drawdistair = 1000,
         fog = 1,
         lod = 280,
 		drawdistv2 = 250,
+		distupv2 = 25,
         drawdistairv2 = 1000,
         fogv2 = 1,
         lodv2 = 280,
@@ -2174,6 +2183,7 @@ local maincfg = inicfg.load({--конфиг для хоткеев
 	autoklava = VK_F3,
 	autoklavareload = VK_F4,
 	fasttrade = VK_R,
+	fastarenda = VK_H,
 	fastinvfam = VK_E,
 	fastinv = VK_Q,
 	fastlocking = VK_L,
@@ -4735,6 +4745,7 @@ function main()
 		fastinv = { name = key.key_names[maincfg.hotkeys.fastinv], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /invite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /invite. По умолчанию установлена клавиша Q.' },
 		fastlocking = { name = key.key_names[maincfg.hotkeys.fastlocking], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /lock", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /lock. По умолчанию установлена клавиша L.' },
 		unbaginvent = { name = key.key_names[maincfg.hotkeys.unbaginvent], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для разбага инвентаря", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для того, чтобы легко и быстро разбагать инвентарь, в случае, если у вас в нём ничего не нажимается. По умолчанию установлена клавиша F9.' },
+		fastarenda = { name = key.key_names[maincfg.hotkeys.fastarenda], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /arenda", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /arenda. По умолчанию установлена клавиша H.' },
 		
 		}
 		
@@ -4817,6 +4828,8 @@ function main()
 	lua_thread.create(inputChat)
 	end
 	
+	sampRegisterChatCommand("phoneair", phoneair) -- очистка чата
+	sampRegisterChatCommand("arenda", arendatc) -- очистка чата
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
 	sampRegisterChatCommand("drone", drone) -- дроны
 	sampRegisterChatCommand("reload", rel) -- перезагрузка скрипта
@@ -4990,8 +5003,10 @@ end
 		
 		if isKeyJustPressed(50) and isKeyJustPressed(87) and autobeg.v then begauto = false end
 		
-		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklavareload)) then saveSettings() thisScript():reload() end
-		if isKeyJustPressed(82) and isKeyJustPressed(17) then saveSettings() end
+		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklavareload)) then saveSettings() if autorelog.v then thisScript():unload() else thisScript():reload() end end
+
+		if isKeyJustPressed(82) and isKeyJustPressed(17) then saveSettings() if autorelog.v then thisScript():unload() else thisScript():reload() end end
+		
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.hotkeys.autoklava)) then mainmenu() end
 		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(49) and isKeyJustPressed(18) then activeklad() end
 		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(50) and isKeyJustPressed(18) then activeklad2() end
@@ -5199,6 +5214,10 @@ end
 		if doesCharExist(pedtest) and faminvfast.v and isKeyJustPressed(maincfg.hotkeys.fastinvfam) and not sampIsChatInputActive() then
 			sampSendChat('/faminvite '..idtest)
 			end
+		if doesCharExist(pedtest) and arendafast.v and isKeyJustPressed(maincfg.hotkeys.fastarenda) and not sampIsChatInputActive() then
+			sampSetChatInputEnabled(true) 
+			sampSetChatInputText('/arenda 1, '..idtest..', 1000000, 1')
+			end
 		if doesCharExist(pedtest) and invfast.v and isKeyJustPressed(maincfg.hotkeys.fastinv) and not sampIsChatInputActive() then
 			sampSendChat('/invite '..idtest)
 			end
@@ -5316,6 +5335,7 @@ end
                 memory.setfloat(13210352, drawdist.v - 1.0, false)
                 fog.v = drawdist.v - 1.0
             end
+			nameTagOn()
         end
 			
 		-- определение города
@@ -5933,10 +5953,12 @@ function saveSettings(args, key)
 	ini.settings.bufozy = bufozy.v
 	ini.settings.zadervkareconrestart = zadervkareconrestart.v
 	ini.settings.drawdist = drawdist.v
+	ini.settings.distup = distup.v
 	ini.settings.drawdistair = drawdistair.v
 	ini.settings.fog = fog.v
 	ini.settings.lod = lod.v
 	ini.settings.drawdistv2 = drawdistv2.v
+	ini.settings.distupv2 = distupv2.v
 	ini.settings.drawdistairv2 = drawdistairv2.v
 	ini.settings.fogv2 = fogv2.v
 	ini.settings.lodv2 = lodv2.v
@@ -5993,6 +6015,7 @@ function saveSettings(args, key)
 	ini.settings.tradefast = tradefast.v
 	ini.settings.autofill = autofill.v
 	ini.settings.faminvfast = faminvfast.v
+	ini.settings.arendafast = arendafast.v
 	ini.settings.fastkey = fastkey.v
 	ini.settings.invfast = invfast.v
 	ini.settings.fastlock = fastlock.v
@@ -6592,6 +6615,12 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+
+	if dialogId == 966 and airphone == true and text:match("{FFFFFF} Перевести телефон в режим 'В самолете'") then 
+	phonetext = 'Обычный'
+	else
+	phonetext = 'В самолёте'
+	end
 
 	if dialogId == 25286 and FishEn == 2 then 
 	chleb = tonumber(text:match('Хлеб\t{ae433d}(%d+)'))
@@ -7501,42 +7530,27 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	closefind = false
 	end)
 end
+	
+	if data.text == 'FILL' and autofill.v then carid = id end
+	if data.text == 'LD_BEAT:chit' and autofill.v and math.floor(data.position.x) == 390 and math.floor(data.position.y) == 215 then caridv2 = id end
 
 	if id == 2063 and data.text == "DIESEL" and autofill.v then 
 	lua_thread.create(function()
-	if sampGetCurrentServerAddress() == "80.66.82.147" then 
 	sampSendClickTextdraw(2064)
 	wait(200)
-	sampSendClickTextdraw(123)
+	sampSendClickTextdraw(carid)
 	wait(200)
-	sampSendClickTextdraw(109)
+	sampSendClickTextdraw(caridv2)
 	wait(200)
-	sampSendClickTextdraw(123)
+	sampSendClickTextdraw(carid)
 	wait(200)
-	sampSendClickTextdraw(109)
+	sampSendClickTextdraw(caridv2)
 	wait(200)
-	sampSendClickTextdraw(123)
+	sampSendClickTextdraw(carid)
 	wait(200)
-	sampSendClickTextdraw(109)
+	sampSendClickTextdraw(caridv2)
 	wait(200)
-	sampSendClickTextdraw(123)
-	else
-	sampSendClickTextdraw(2064)
-	wait(200)
-	sampSendClickTextdraw(120)
-	wait(200)
-	sampSendClickTextdraw(106)
-	wait(200)
-	sampSendClickTextdraw(120)
-	wait(200)
-	sampSendClickTextdraw(106)
-	wait(200)
-	sampSendClickTextdraw(120)
-	wait(200)
-	sampSendClickTextdraw(106)
-	wait(200)
-	sampSendClickTextdraw(120)
-		end
+	sampSendClickTextdraw(carid)
 	end)
 end
 
@@ -12004,7 +12018,7 @@ end
 	if win_state['skupv2'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
-		imgui.Begin(u8'Skup Menu##4353464563', win_state['skupv2'], imgui.WindowFlags.NoResize)
+		imgui.Begin(u8"Skup Menu | by Devil`s | доработал Bunya##4353464563", win_state['skupv2'], imgui.WindowFlags.NoResize)
 		
 		if #itemsskup ~= 0 then
 				imgui.Text('')
@@ -13627,7 +13641,7 @@ function rel() -- перезагрузка скрипта
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Скрипт перезагружается.", -1)
 	saveSettings()
 	reloadScript = true
-	thisScript():reload()
+	if autorelog.v then thisScript():unload() else thisScript():reload() end
 end
 
 function clearSeleListBool(var)
@@ -16918,10 +16932,12 @@ function load_settings() -- загрузка настроек
 	bufozy = imgui.ImInt(ini.settings.bufozy)
 	zadervkareconrestart = imgui.ImInt(ini.settings.zadervkareconrestart)
 	drawdist = imgui.ImInt(ini.settings.drawdist)
+	distup = imgui.ImInt(ini.settings.distup)
 	drawdistair = imgui.ImInt(ini.settings.drawdistair)
 	fog = imgui.ImInt(ini.settings.fog)
 	lod = imgui.ImInt(ini.settings.lod)
 	drawdistv2 = imgui.ImInt(ini.settings.drawdistv2)
+	distupv2 = imgui.ImInt(ini.settings.distupv2)
 	drawdistairv2 = imgui.ImInt(ini.settings.drawdistairv2)
 	fogv2 = imgui.ImInt(ini.settings.fogv2)
 	lodv2 = imgui.ImInt(ini.settings.lodv2)
@@ -17051,6 +17067,7 @@ function load_settings() -- загрузка настроек
 	tradefast = imgui.ImBool(ini.settings.tradefast)
 	autofill = imgui.ImBool(ini.settings.autofill)
 	faminvfast = imgui.ImBool(ini.settings.faminvfast)
+	arendafast = imgui.ImBool(ini.settings.arendafast)
 	invfast = imgui.ImBool(ini.settings.invfast)
 	fastkey = imgui.ImBool(ini.settings.fastkey)
 	fastlock = imgui.ImBool(ini.settings.fastlock)
@@ -20918,7 +20935,7 @@ while true do
 	wait(500)
 	sampSendDialogResponse(15177, 1 , 1, -1)
 	wait(500)
-	sampSendDialogResponse(15178, 1 , 0, 200)
+	sampSendDialogResponse(15178, 1 , 0, 500)
 	else
 	closeDialog()
 	end
@@ -20934,7 +20951,7 @@ while true do
 	wait(500)
 	sampSendDialogResponse(15177, 1 , 1, -1)
 	wait(500)
-	sampSendDialogResponse(15178, 1 , 0, 200)
+	sampSendDialogResponse(15178, 1 , 0, 500)
 	else
 	closeDialog()
 	end
@@ -20950,7 +20967,7 @@ while true do
 	wait(500)
 	sampSendDialogResponse(15177, 1 , 1, -1)
 	wait(500)
-	sampSendDialogResponse(15178, 1 , 0, 200)
+	sampSendDialogResponse(15178, 1 , 0, 500)
 	else
 	closeDialog()
 	end
@@ -20966,7 +20983,7 @@ while true do
 	wait(500)
 	sampSendDialogResponse(15177, 1 , 1, -1)
 	wait(500)
-	sampSendDialogResponse(15178, 1 , 0, 200)
+	sampSendDialogResponse(15178, 1 , 0, 500)
 	else
 	closeDialog()
 	end
@@ -20982,7 +20999,7 @@ while true do
 	wait(500)
 	sampSendDialogResponse(15177, 1 , 1, -1)
 	wait(500)
-	sampSendDialogResponse(15178, 1 , 0, 200)
+	sampSendDialogResponse(15178, 1 , 0, 500)
 	else
 	closeDialog()
 	end
@@ -24523,7 +24540,7 @@ function tochmenu()
 			local sw, sh = getScreenResolution() 
 			imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 			imgui.SetNextWindowSize(imgui.ImVec2(625, 170), imgui.Cond.FirstUseEver)
-			imgui.Begin(fa.ICON_DIAMOND..u8' Toch Menu ', win_state['tochilki'], imgui.WindowFlags.NoResize)
+			imgui.Begin(fa.ICON_DIAMOND..u8' Toch Menu | by vegas~ | доработал Bunya', win_state['tochilki'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8(" Брать камни и амулеты только с первой страницы")); imgui.SameLine(); imgui.ToggleButton(u8'', versiontoch); imgui.SameLine(); imgui.Text(u8(" Брать камни и амулеты на всех страницах"))
@@ -24576,7 +24593,7 @@ function offpcmenu()
 			imgui.Begin(u8' Off Menu ', win_state['pcoff'], imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar)
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.Image(winoffpc, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Завершение работы', btn_size) then saveSettings() thisScript():unload() end
-			imgui.Text('') imgui.SameLine() imgui.Image(winreload, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Перезагрузка', btn_size) then saveSettings() thisScript():reload() end
+			imgui.Text('') imgui.SameLine() imgui.Image(winreload, imgui.ImVec2(25, 25), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) imgui.SameLine() if imgui.Button(u8'Перезагрузка', btn_size) then saveSettings() if autorelog.v then thisScript():unload() else thisScript():reload() end end
 				imgui.End()
 			end
 			
@@ -25103,6 +25120,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/scanfish - отсканировать количество наживок для авто-покупки.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/tu - посмотреть тестовые обновления.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/calc - открыть калькулятор.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/phoneair - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -25253,7 +25271,7 @@ function messangerwinmenu()
         imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.Always, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(800, 470), imgui.Cond.FirstUseEver)
 
-        imgui.Begin(fa.ICON_SNAPCHAT..u8(" Чат"), win_state['messanger'], imgui.WindowFlags.NoResize)
+        imgui.Begin(fa.ICON_SNAPCHAT..u8(" Чат | by Котовский"), win_state['messanger'], imgui.WindowFlags.NoResize)
             lockPlayerControl(true)
             local drawList = imgui.GetWindowDrawList()
             local draw = imgui.GetCursorScreenPos() 
@@ -25472,7 +25490,7 @@ function nastroikamenu()
 		elseif selected3 == 7 then
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"VK Connect")
 		imgui.Separator()
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать соединение с VK', vkconnect) imgui.SameLine() imgui.TextQuestion(u8"Активирует подключение к VK. Нужно, чтобы в случае чего, быстро выключить функционал или наоборот включить. Без включения данной функции, подключение к VK работать не будет.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать соединение с VK', vkconnect) imgui.SameLine() imgui.TextQuestion(u8"Активирует подключение к VK. Нужно, чтобы в случае чего, быстро выключить функционал или наоборот включить. Без включения данной функции, подключение к VK работать не будет. Сделано по исходнику от Aniki.")
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Токен', tokenvkv2, imgui.InputTextFlags.Password)
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'ID группы', groupvkv2, imgui.InputTextFlags.Password)
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Peer ID беседы', idvkv2)
@@ -27603,6 +27621,17 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'40. Адаптация Autofill под Vice City.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[07.07.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'41. Фикс ловли фур.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[24.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'42. Если включен "Перезапуск скрипта после краша", то везде, где используется перезагрузка скрипта, скрипт будет выгружаться, чтобы')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'у вас не было двойного запуска.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'43. Переписана система "Autofill".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'44. В "Авто-изменения заданий на ферме" изменено количество с 200 на 500.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'45. Добавлена команда "/arenda [№ т.с в диалоге, ID игрока, цена за час, кол-во часов]" для быстрой сдачи транспорта в аренду.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'46. В "Параметры" - "Модификации" добавлено "Fast Arenda" (открыть чат и написать команду /arenda с данными, которые можно')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'подредактировать под себя, правой кнопкой мыши + H по умолчанию)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'47. Добавлена команда "/phoneair" - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'48. В "FPS UP" добавлена возможность изменить дальность видимости ников.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'49. Указал авторство некоторого функционала. Мог что-то пропустить - авторы могут отписать и я обязательно их укажу.')
 		imgui.End()
 		end
 	
@@ -28086,7 +28115,7 @@ function gamelist()
     local X, Y = getScreenResolution()
     imgui.SetNextWindowSize(imgui.ImVec2(415, 500), imgui.Cond.FirstUseEver)
     imgui.SetNextWindowPos(imgui.ImVec2(X / 2, Y / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.Begin(fa.ICON_GAMEPAD..u8' 2048', win_state['games'], imgui.WindowFlags.NoResize)
+	imgui.Begin(fa.ICON_GAMEPAD..u8' 2048 | by CaJlaT', win_state['games'], imgui.WindowFlags.NoResize)
     imgui.Text('') imgui.SameLine(12) imgui.BeginChild("Score", imgui.ImVec2(105, 60))
         imgui.SetCursorPosX((105-imgui.CalcTextSize('Score: '..score).x)/2)
         imgui.SetCursorPosY((60-imgui.CalcTextSize('Score: '..score).y)/2)
@@ -29447,21 +29476,19 @@ end
 
 function nameTagOn()
 	local pStSet = sampGetServerSettingsPtr()
-	NTdist = memory.getfloat(pStSet + 39)
-	NTwalls = memory.getint8(pStSet + 47)
-	NTshow = memory.getint8(pStSet + 56)
-	memory.setfloat(pStSet + 39, 1488.0)
+	NTdist = memory.getfloat(pStSet + 39) -- дальность
+	NTwalls = memory.getint8(pStSet + 47) -- видимость через стены
+	NTshow = memory.getint8(pStSet + 56) -- видимость тегов
+	memory.setfloat(pStSet + 39, distup.v)
 	memory.setint8(pStSet + 47, 0)
 	memory.setint8(pStSet + 56, 1)
 end
 
 function nameTagOff()
-    lua_thread.create(function()
 	local pStSet = sampGetServerSettingsPtr()
 	memory.setfloat(pStSet + 39, NTdist)
 	memory.setint8(pStSet + 47, NTwalls)
 	memory.setint8(pStSet + 56, NTshow)
-end)
 end
 
 function sampev.onSetPlayerDrunk(drunkLevel)
@@ -30121,7 +30148,7 @@ function sendrestart()
 	scriptoff.v = true
 	saveSettings()
 	wait(100)
-	thisScript():reload()
+	if autorelog.v then thisScript():unload() else thisScript():reload() end
 end
 
 function sendrestartTg()
@@ -30129,7 +30156,7 @@ function sendrestartTg()
 	scriptoff.v = true
 	saveSettings()
 	wait(100)
-	thisScript():reload()
+	if autorelog.v then thisScript():unload() else thisScript():reload() end
 end
 
 function sendpodk()
@@ -32929,7 +32956,7 @@ function settingosnova()
 				imgui.PopItemWidth()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Input Chat")); imgui.SameLine(); imgui.ToggleButton(u8'Input Chat', raskladka); imgui.SameLine(); imgui.TextQuestion(u8"Скрипт вводит команды на английском языке на русской раскладке. После включения или отключения данной функций необходимо перезапустить скрипт. Функционал взят у 'No Feeling'.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Обычный реконнект")); imgui.SameLine(); imgui.ToggleButton(u8'Обычный реконнект', reconclosed); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет перезаходить в игру при любом вылете.")
 				if reconclosed.v then
 				imgui.Text('-----------------------------------------------------------------------------')
@@ -32969,7 +32996,7 @@ function settingosnova()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
 				
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("VIP-Resend")); imgui.SameLine(); imgui.ToggleButton(u8'VIP-Resend', vipresend) imgui.SameLine() imgui.TextQuestion(u8"Функция отправляет повторно ваше сообщение в VIP чат, если оно не отправилось из-за кд.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("VIP-Resend")); imgui.SameLine(); imgui.ToggleButton(u8'VIP-Resend', vipresend) imgui.SameLine() imgui.TextQuestion(u8"Функция отправляет повторно ваше сообщение в VIP чат, если оно не отправилось из-за кд. Функционал взят у Cosmo.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отходить от места спавна")); imgui.SameLine(); imgui.ToggleButton(u8'Отходить от места спавна', antispawn); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж после спавна сделает указанное количество прыжков вперед, чтобы отойти от места спавна. Совершать прыжки персонаж будет только один раз после захода на сервер.")
 				imgui.PushItemWidth(150)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); if antispawn.v then imgui.SliderInt(u8'Кол-во прыжков',zadervkajump,1, 10) end
@@ -32987,7 +33014,7 @@ function settingosnova()
 				imgui.Text('-----------------------------------------------------------------------------')
 				end
 				
-				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Перезапуск скрипта в случае краша")); imgui.SameLine(); imgui.ToggleButton(u8'Перезапуск скрипта в случае краша', autorelog) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в случае краша скрипта, скрипт перезапустится (с включенной функцией скрипт лучше не перезагружать на F4 или CTRL + R т.к он потом запустится 2 раза и поможет только полный выход из игры. В случае, если вам нужно перезапустить скрипт, то выгрузите его. Это можно сделать в пуске, нажав на 'Завершение работы', или выгрузить на комбинацию клавиш ALT + 0 (сменить можно в 'Параметры' - 'Настройка клавиш')) Для работы функции нужен скрипт 'AutoRebootControlSAMP.lua', который скачать вы сможете через скрипт (после включения функции, появится кнопка, по нажатию которой и начнётся скачивание). После скачивания или включения функции, сохраните настройки и перезапустите все скрипты на CTRL + R.")
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Перезапуск скрипта в случае краша")); imgui.SameLine(); imgui.ToggleButton(u8'Перезапуск скрипта в случае краша', autorelog) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в случае краша скрипта, скрипт перезапустится (с включенной функцией скрипт лучше не перезагружать на F4 или CTRL + R т.к он потом запустится 2 раза и поможет только полный выход из игры. В случае, если вам нужно перезапустить скрипт, то выгрузите его. Это можно сделать в пуске, нажав на 'Завершение работы', или выгрузить на комбинацию клавиш ALT + 0 (сменить можно в 'Параметры' - 'Настройка клавиш')) Для работы функции нужен скрипт 'AutoRebootControlSAMP.lua', который скачать вы сможете через скрипт (после включения функции, появится кнопка, по нажатию которой и начнётся скачивание). После скачивания или включения функции, сохраните настройки и перезапустите все скрипты на CTRL + R. Функционал взят у Vespan.")
 				if autorelog.v then 
 				imgui.Text('-----------------------------------------------------------------------------')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Скачать "AutoRebootControlSAMP.lua"', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
@@ -33003,21 +33030,23 @@ function settingosnova()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после того, как вы сели в автомобиль, скрипт закроет ваш автомобиль командой /lock.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("AutoFill")); imgui.SameLine(); imgui.ToggleButton(u8'AutoFill', autofill) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы будете автоматический заправляться на заправке.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Точки в числах")); imgui.SameLine(); imgui.ToggleButton(u8'Точки в числах', toch) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в диалогах у вас будут стоять в числах точки.")
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Центральный рынок")); imgui.SameLine(); imgui.ToggleButton(u8'Центральный рынок', pricecr) imgui.SameLine(); imgui.TextQuestion(u8"Показывает средние цены на товары в лавках. Также в городе 'Vice City' конвентирует валюту VC$ в SA$ по указанному вами курсу и показывает всё это в диалоге покупки и продажи. Так же есть возможность узнать примерную цену на товар через команду. Обновлять информацию нужно самому, желательно раз в день на пикапе на площади ЦР. Курс VC впишите в текстовое поле ниже (узнать курс можно в аэропорту). Узнать цену определённого товара: /price [Название товара или его часть]. После включения или выключения функции - перезапустите скрипт.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Центральный рынок")); imgui.SameLine(); imgui.ToggleButton(u8'Центральный рынок', pricecr) imgui.SameLine(); imgui.TextQuestion(u8"Показывает средние цены на товары в лавках. Также в городе 'Vice City' конвентирует валюту VC$ в SA$ по указанному вами курсу и показывает всё это в диалоге покупки и продажи. Так же есть возможность узнать примерную цену на товар через команду. Обновлять информацию нужно самому, желательно раз в день на пикапе на площади ЦР. Курс VC впишите в текстовое поле ниже (узнать курс можно в аэропорту). Узнать цену определённого товара: /price [Название товара или его часть]. После включения или выключения функции - перезапустите скрипт. Функционал со средними ценами взят у 'Cosmo', исходник на перевод валюты из VC$ в SA$ взят у 'Стэнфорда' и доработан 'Bunya'.")
 				imgui.PushItemWidth(150)
 				if pricecr.v then imgui.InputText(u8'Укажите Ваш курс VC##2342352345', crfind) end
 				imgui.PopItemWidth()
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Автобазар")); imgui.SameLine(); imgui.ToggleButton(u8'Автобазар', priceab) imgui.SameLine(); imgui.TextQuestion(u8"Разделение суммы на табличках точками, для более точного восприятия. Уведомление в чат, когда кто-то выставляет авто на продажу. Вместе с уведомлением появляется маркер над табличкой выставленного авто (на 10 секунд), чтобы быстро найти продавца. Для владельцев Premium VIP есть возможность проанализировать средние цены на авто (на пикапе возле метки бизнеса автобазара), чтобы в дальнейшем они показывались в диалоговом окне покупки транспорта, а так же в вышеупомянутом уведомлении. Помимо этого есть команда /carprice [Модель т/с или его часть], которая выведет в чат средние цены на автомобили с похожим названием. /carab - загрузить средние цены (нужно встать на чекпоинте на АБ). После включения или выключения функции - перезапустите скрипт.")
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Автобазар")); imgui.SameLine(); imgui.ToggleButton(u8'Автобазар', priceab) imgui.SameLine(); imgui.TextQuestion(u8"Разделение суммы на табличках точками, для более точного восприятия. Уведомление в чат, когда кто-то выставляет авто на продажу. Вместе с уведомлением появляется маркер над табличкой выставленного авто (на 10 секунд), чтобы быстро найти продавца. Для владельцев Premium VIP есть возможность проанализировать средние цены на авто (на пикапе возле метки бизнеса автобазара), чтобы в дальнейшем они показывались в диалоговом окне покупки транспорта, а так же в вышеупомянутом уведомлении. Помимо этого есть команда /carprice [Модель т/с или его часть], которая выведет в чат средние цены на автомобили с похожим названием. /carab - загрузить средние цены (нужно встать на чекпоинте на АБ). После включения или выключения функции - перезапустите скрипт. Функционал взят у Cosmo.")
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Chat Calculator")); imgui.SameLine(); imgui.ToggleButton(u8'Chat Calculator', chatcalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете использовать калькулятор в чате. Например: пишите в чате 2+2 и под чатом вам напишется ответ. Можно высчитывать и примеры по типу: (3*3)*(2+2) и тому подобное. Также если напишите в чате 'calchelp', то вам покажет как высчитывать проценты. Функционал взят у Adrian G.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Calculator в /trade")); imgui.SameLine(); imgui.ToggleButton(u8'Calculator в /trade', tradecalc); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при /trade у вас будет открываться калькулятор и после обмена закрываться.")
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Trade")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Trade', tradefast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого трейда с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка R)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Family Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Family Invite', faminvfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в семью с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка E)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Invite', invfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в организацию с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка Q)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Key")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Key', fastkey); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то после того, как вы заглушите транспортное средство - вы автоматический вытащите из него ключи. Также если вы попробуете завести транспорт,а в нём не будет ключей - скрипт пропишет /key и заведет транспортное средство.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Lock")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Lock', fastlock); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность открытия или закрытия личного транспорта на кнопку, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка L)");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Arenda")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Arenda', arendafast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро отправить команду '/arenda' игроку, т.к открывается чат и в чате появляется команда и заранее введенные данные, которые вы можете подредактировать под себя (ID игрока введется автоматический) Отправить команду вы сможете с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка H)");
+				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Установить метку кладов по нажатию клавиш")); imgui.SameLine(); imgui.ToggleButton(u8'Установить метку кладов по нажатию клавиш', fastklad); imgui.SameLine(); imgui.TextQuestion(u8"Для работы функции нужно иметь карту кладов из /donate и она должна лежать у вас на первой странице инвентаря. Поставить метку первого клада можно на нажатие клавиш Alt + 1, вторую метку клада на Alt + 2 и третью метку клада на Alt + 3. Менять клавиши временно нельзя.");
 				
-				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-сбор шара, велосипеда и дельтаплана")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-сбор шара, велосипеда и дельтаплана', autoshar); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то вам больше не нужно будет нажимать кнопки для сборки указанного транспорта.");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-сбор шара, велосипеда и дельтаплана")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-сбор шара, велосипеда и дельтаплана', autoshar); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то вам больше не нужно будет нажимать кнопки для сборки указанного транспорта. Функционал взят у vegas~.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-изменение заданий на ферме")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-изменение заданий на ферме', autoferma); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то через указанное время, скрипт будет проверять количество заданий у первых 5-ти заданий и если, заданий будет меньше 190, то скрипт в автоматическом режиме поменяет на количество - 200. Чтобы функция работала - должен быть соблюден определенный порядок заданий и вы должны стоять на метке на ферме. Порядок: '1. Выкопать ямку для посадки. 2. Посадить. 3. Полить. 4. Прополоть. 5. Выкопать урожай.'. Работает в свернутом режиме, если установлен Анти-афк.");
 				imgui.PushItemWidth(150)
 				imgui.SliderInt(u8'Задержка (в минутах) ##1007',zadervkaferma,1, 120) imgui.SameLine(); imgui.TextQuestion(u8"Задержка для 'Авто-изменение заданий на ферме'. По умолчанию установлено - 30 минут."); 
@@ -33041,7 +33070,7 @@ function settingosnova()
 					imgui.SliderInt(u8'Размер времени на экране ##554',razmer,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"Размер времени на экране. По умолчанию установлено 40. После изменения размера, нажмите на кнопку 'Применить', чтобы изменить размер.")
 					if imgui.CustomButton(u8'Применить', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
 					saveSettings()
-					thisScript():reload()
+					if autorelog.v then thisScript():unload() else thisScript():reload() end
 					imgui.PopItemWidth()
 					end
 					imgui.Text('-----------------------------------------------------------------------------')
@@ -33051,7 +33080,7 @@ function settingosnova()
 				if carsis.v and imgui.CustomButton(fa.ICON_PENCIL..u8' Редактировать cars', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-124, 0)) then carsys() end
 				imgui.Text(u8("Команда для открытия меню скрипта")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) открытия меню(вводить команду на английском). По умолчанию - /mono. После того, как вписали команду, необходимо перезапустить скрипт!")
 					imgui.InputText(u8'##7', activator)
-				imgui.Text(u8("Команда для быстрого набора номера")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) для набора номера(вводить команду на английском). По умолчанию - /call. После того, как вписали команду, необходимо перезапустить скрипт!")
+				imgui.Text(u8("Команда для быстрого набора номера")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) для набора номера(вводить команду на английском). По умолчанию - /call. После того, как вписали команду, необходимо перезапустить скрипт! Функционал взят у Стэнфорда.")
 					imgui.InputText(u8'##777', activcall)
 				imgui.Text(u8("Команда для быстрого набора номера для Iphone")); imgui.SameLine(); imgui.TextQuestion(u8"В поле нужно ввести команду (без /) для набора номера(вводить команду на английском). По умолчанию - /icall. После того, как вписали команду, необходимо перезапустить скрипт!")
 					imgui.InputText(u8'##7777456567567645634call', activcallphone)
@@ -33121,7 +33150,7 @@ function settingosnova()
 			end
 		
 			if imgui.CollapsingHeader(u8'Настройка клавиш') then
-				imgui.BeginChild('##as2dasasdf42121', imgui.ImVec2(725, 280), false)	
+				imgui.BeginChild('##as2dasasdf42121', imgui.ImVec2(725, 310), false)	
 				
 				for s,m in pairs(comboheathotkeys) do 
 					if m.edit then 
@@ -33353,7 +33382,7 @@ function settingosnova()
                             sampAddChatMessage(givemedist.v and ''..colorcm..'['..nazvanie.v..']{FFFFFF} Возможность менять прорисовку '..colorcm2..'включена' or ''..colorcm..'['..nazvanie.v..'] {FFFFFF}Возможность менять прорисовку '..colorcm2..'выключена', -1)
                             gotofunc("GivemeDist")
                         end
-						imgui.SameLine(); imgui.TextQuestion(u8"Внимание! Функция может конфликтовать с похожими скриптами по функционалу в формате cleo, asi и lua.")
+						imgui.SameLine(); imgui.TextQuestion(u8"Внимание! Функция может конфликтовать с похожими скриптами по функционалу в формате cleo, asi и lua. На лаунчере работает только дальность лодов и видимость ников. Если захотите отключить функционал, то перед выключением верните ползунок с дальностью прорисовки на значение '25' или перезайдите в игру.")
                         if givemedist.v then
                            imgui.Text('') imgui.SameLine() imgui.Text(u8"Дальность прорисовки:")
                             imgui.PushItemWidth(625)
@@ -33380,9 +33409,16 @@ function settingosnova()
                                     lod.v = ("%.1f"):format(lod.v)
                                     memory.setfloat(0x858FD8, lod.v, false)
                                 end
+								imgui.Text('') imgui.SameLine() imgui.Text(u8"Дальность видимости ников:")
+								imgui.Text('') imgui.SameLine() if imgui.SliderInt(u8"##distup34534534", distup, 0, 1250, "%.1f") then
+                                    distup.v = ("%.1f"):format(distup.v)
+                                    nameTagOn()
+                                end
+								
 								imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then 
 								sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки "..colorcm2.."'FPS UP'{FFFFFF} успешно сохранены.", -1) 
 								drawdistv2.v = drawdist.v
+								distupv2.v = distup.v
 								drawdistairv2.v = drawdistair.v
 								fogv2.v = fog.v
 								lodv2.v = lod.v
@@ -33390,6 +33426,7 @@ function settingosnova()
 								end
 								imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки 'FPS UP' возвращены по умолчанию.", -1) 
 								drawdist.v = "250"
+								distup.v = "25"
 								drawdistair.v = "1000"
 								fog.v = "1"
 								lod.v = "280"
@@ -33397,7 +33434,7 @@ function settingosnova()
 								saveSettings()
 								end
                             imgui.PopItemWidth()
-                        end
+                        end					
                     end
 			
 			if imgui.CollapsingHeader(u8'Прочие настройки') then
@@ -33419,7 +33456,7 @@ function settingosnova()
 				imgui.Text('')
 				imgui.Text('')
 				imgui.Text('')
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) inicfg.save(maincfg, 'Mono\\hotkeymono.ini') drawdistv2.v = drawdist.v drawdistairv2.v = drawdistair.v fogv2.v = fog.v lodv2.v = lod.v saveSettings() end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) inicfg.save(maincfg, 'Mono\\hotkeymono.ini') drawdistv2.v = drawdist.v distupv2.v = distup.v drawdistairv2.v = drawdistair.v fogv2.v = fog.v lodv2.v = lod.v saveSettings() end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию. Перезапустите скрипт, если не восстановились клавиши.", -1) 
 				timefix.v = '3'
 				combo_select.v = '9'
@@ -33445,6 +33482,7 @@ function settingosnova()
 				maincfg.hotkeys.autoklava = VK_F3
 				maincfg.hotkeys.autoklavareload = VK_F4
 				maincfg.hotkeys.fasttrade = VK_R
+				maincfg.hotkeys.fastarenda = VK_H
 				maincfg.hotkeys.fastinvfam = VK_E
 				maincfg.hotkeys.fastinv = VK_Q
 				maincfg.hotkeys.fastlocking = VK_L
@@ -33504,6 +33542,7 @@ function settingosnova()
 				tradefast.v = false
 				autofill.v = false
 				faminvfast.v = false
+				arendafast.v = false
 				invfast.v = false
 				fastkey.v = false
 				fastlock.v = false
@@ -34091,6 +34130,7 @@ function settingosnova()
 		cfg3.backup.tradefastv2 = tradefast.v
 		cfg3.backup.autofillv2 = autofill.v
 		cfg3.backup.faminvfastv2 = faminvfast.v
+		cfg3.backup.arendafastv2 = arendafast.v
 		cfg3.backup.invfastv2 = invfast.v
 		cfg3.backup.fastkeyv2 = fastkey.v
 		cfg3.backup.fastlockv2 = fastlock.v
@@ -34197,6 +34237,7 @@ function settingosnova()
 		cfg3.backup.bufozyv2 = bufozy.v
 		cfg3.backup.zadervkareconrestartv2 = zadervkareconrestart.v
         cfg3.backup.drawdistv2 = drawdist.v
+		cfg3.backup.distupv2 = distup.v
         cfg3.backup.drawdistairv2 = drawdistair.v
         cfg3.backup.fogv2 = fog.v
         cfg3.backup.lodv2 = lod.v
@@ -34819,6 +34860,7 @@ function settingosnova()
 		 tradefast.v =  cfg3.backup.tradefastv2 
 		 autofill.v  =  cfg3.backup.autofillv2 
 		 faminvfast.v  =  cfg3.backup.faminvfastv2 
+		 arendafast.v  =  cfg3.backup.arendafastv2 
 		 invfast.v =   cfg3.backup.invfastv2 
 		 fastkey.v  =  cfg3.backup.fastkeyv2 
 		 fastlock.v  =  cfg3.backup.fastlockv2 
@@ -34925,6 +34967,7 @@ function settingosnova()
 		 bufozy.v = cfg3.backup.bufozyv2 
 		 zadervkareconrestart.v = cfg3.backup.zadervkareconrestartv2 
 		drawdist.v = cfg3.backup.drawdistv2 
+		distup.v = cfg3.backup.distupv2 
 		drawdistair.v = cfg3.backup.drawdistairv2 
 		fog.v = cfg3.backup.fogv2
 		lod.v = cfg3.backup.lodv2 
@@ -35003,4 +35046,42 @@ function settingosnova()
 		fishklavaN.v = cfg3.backup.fishklavaNv2
 		saveSettings()
 	end
+end
+
+function arendatc(arg, arg1, arg2, arg3, arg4)
+	lua_thread.create(function()
+	if arg:find('(.+),(.+),(.+),(.+)') then
+        arg1, arg2, arg3, arg4 = arg:match('(.+),(.+),(.+),(.+)')
+		sampSendChat('/cars')
+		wait(300)
+		sampSendDialogResponse(162, 1, arg1, -1)
+		wait(300)
+		sampSendDialogResponse(163, 1, 12, -1)
+		wait(300)
+		sampSendDialogResponse(25310, 1, 1, arg2..','..arg3..','..arg4)
+		wair(100)
+		closeDialog()
+	else
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверьте правильность ввода! Пример: "..colorcm2.."/arenda [№ т.с в диалоге, ID игрока, цена за 1 час, кол-во часов]", -1) 
+		end
+	end)
+end
+
+function phoneair()
+	lua_thread.create(function()
+	airphone = true
+	sampSendChat('/phone')
+	wait(200)
+	sampSendDialogResponse(1000, 1, 0, -1)
+	wait(200)
+	sampSendClickTextdraw(2112)
+	wait(200)
+	sampSendDialogResponse(966, 1, 10, -1)
+	wait(200)
+	sampCloseCurrentDialogWithButton(0)
+	wait(200)
+	sampSendChat('/phone')
+	airphone = false
+	sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Вы успешно перевели телефон в режим '..colorcm2..'"'..phonetext..'"{FFFFFF}.', -1) 
+	end)
 end
