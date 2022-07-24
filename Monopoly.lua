@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.22')
+script_version('3.4.23')
 
 use = false
 close = false
@@ -35059,8 +35059,6 @@ function arendatc(arg, arg1, arg2, arg3, arg4)
 		sampSendDialogResponse(163, 1, 12, -1)
 		wait(300)
 		sampSendDialogResponse(25310, 1, 1, arg2..','..arg3..','..arg4)
-		wair(100)
-		closeDialog()
 	else
 		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверьте правильность ввода! Пример: "..colorcm2.."/arenda [№ т.с в диалоге, ID игрока, цена за 1 час, кол-во часов]", -1) 
 		end
