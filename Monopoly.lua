@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.24')
+script_version('3.4.25')
 
 use = false
 close = false
@@ -7075,7 +7075,7 @@ end
 	if dialogId == 15505 and lovlyfura.v and lovlyfura1.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 0, -1) end) end
 	if dialogId == 15505 and lovlyfura.v and lovlyfura2.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 1, -1) end) end
 	if dialogId == 15505 and lovlyfura.v and lovlyfura3.v then lua_thread.create(function() wait(zadervkalovly.v) sampSendDialogResponse(15505, 1, 2, -1) end) end
-	if dialogId == 15506 and lovlyfura.v then lua_thread.create(function() wait(zadervkalovly.v) sampCloseCurrentDialogWithButton(1) end) end
+	if dialogId == 15506 and lovlyfura.v then lua_thread.create(function() wait(zadervkalovly.v) sampCloseCurrentDialogWithButton(1) wait(zadervkalovly.v) lovlyfura.v = false end) end
 	
     if dialogId == 722 and nodial then
     nodial = false
@@ -27633,6 +27633,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'47. Добавлена команда "/phoneair" - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'48. В "FPS UP" добавлена возможность изменить дальность видимости ников.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'49. Указал авторство некоторого функционала. Мог что-то пропустить - авторы могут отписать и я обязательно их укажу.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[27.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'50. Фикс "Ловли Фур" (больше не кикает античит после ловли фуры)')
 		imgui.End()
 		end
 	
