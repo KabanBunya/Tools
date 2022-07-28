@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.25')
+script_version('3.4.26')
 
 use = false
 close = false
@@ -2337,6 +2337,7 @@ customlarec = imgui.ImBool(false)
 local water = imgui.ImBool(false)
 local btc = imgui.ImBool(false)
 local liquid = imgui.ImBool(false)
+superliquid = imgui.ImBool(false)
 btcflash = imgui.ImBool(false)
 pusk = imgui.ImBool(false)
 pusk2 = imgui.ImBool(false)
@@ -2346,6 +2347,7 @@ local platina = imgui.ImBool(false)
 tradeaz = imgui.ImBool(false)
 local moneta = imgui.ImBool(false)
 local tochkamen = imgui.ImBool(false)
+monetaklad = imgui.ImBool(false)
 tradept = imgui.ImBool(false)
 payclick = imgui.ImBool(false)
 mouseclick = imgui.ImBool(false)
@@ -6779,31 +6781,37 @@ end
 		end
 	end
 	
-	if liquid.v then
+	if liquid.v and dialogId == 25243 then
 	statuszidkost1 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost3 = tonumber(text:match('Полка №3 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost4 = tonumber(text:match('Полка №4 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	end
-	if pusk.v then
+	if superliquid.v and dialogId == 25243 then
+	statuszidkost1 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost3 = tonumber(text:match('Полка №3 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost4 = tonumber(text:match('Полка №4 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	end
+	if pusk.v and dialogId == 25243 then
 	statuspusk = text:find('Полка №1 | {F78181}На паузе')
 	statuspusk2 = text:find('Полка №2 | {F78181}На паузе')
 	statuspusk3 = text:find('Полка №3 | {F78181}На паузе')
 	statuspusk4 = text:find('Полка №4 | {F78181}На паузе')
 	end
-	if pusk2.v then
+	if pusk2.v and dialogId == 25243 then
 	statuspusk = text:find('Полка №1 | {BEF781}Работает')
 	statuspusk2 = text:find('Полка №2 | {BEF781}Работает')
 	statuspusk3 = text:find('Полка №3 | {BEF781}Работает')
 	statuspusk4 = text:find('Полка №4 | {BEF781}Работает')
 	end
-	if puskflash.v then
+	if puskflash.v and dialogId == 25182 then
 	statuspusk = text:find('Полка №1 | {F78181}На паузе')
 	statuspusk2 = text:find('Полка №2 | {F78181}На паузе')
 	statuspusk3 = text:find('Полка №3 | {F78181}На паузе')
 	statuspusk4 = text:find('Полка №4 | {F78181}На паузе')
 	end
-	if puskflash2.v then
+	if puskflash2.v and dialogId == 25182 then
 	statuspusk = text:find('Полка №1 | {BEF781}Работает')
 	statuspusk2 = text:find('Полка №2 | {BEF781}Работает')
 	statuspusk3 = text:find('Полка №3 | {BEF781}Работает')
@@ -15781,6 +15789,9 @@ end
 	if text:match("У тебя нет зловещих монет!") and tochkamen.v then
 		tochkamen.v = false
 	end
+	if text:match("У тебя нет зловещих монет!") and monetaklad.v then
+		monetaklad.v = false
+	end
 	if text:match("У вас недостаточно материалов!") and tradept.v then
 		tradept.v = false
 	end
@@ -21304,7 +21315,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
-	sampSendDialogResponse(9542, 1 , 24, -1)
+	sampSendDialogResponse(9542, 1 , 25, -1)
 	wait(100)
 	closeDialog()
 	end
@@ -21314,6 +21325,15 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	sampSendDialogResponse(9542, 1 , 0, -1)
+	wait(100)
+	closeDialog()
+	end
+	if monetaklad.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(9542, 1 , 2, -1)
 	wait(100)
 	closeDialog()
 	end
@@ -21489,7 +21509,6 @@ while true do
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
-	sampCloseCurrentDialogWithButton(0)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
 	btcflash.v = false
 	itogobtc = 0
@@ -22180,6 +22199,409 @@ while true do
 	wait(zadervkamaining.v)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно залили жидкость в видеокарты. Функция выключилась автоматический.", -1)
 	liquid.v = false
+	end
+	
+	if superliquid.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost1 < 51 then 
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost2 < 51 then 
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost3 < 51 then 
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost4 < 51 then 
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost1 < 51 then 
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost2 < 51 then 
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost3 < 51 then 
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost4 < 51 then 
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost1 < 51 then 
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost2 < 51 then 
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost3 < 51 then 
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost4 < 51 then 
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost1 < 51 then 
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost2 < 51 then 
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost3 < 51 then 
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost4 < 51 then 
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Подойдите к следующей полке с видеокартами, чтобы залить жидкость! У вас есть ровно "..colorcm2..""..kdpusk.v.."{FFFFFF} секунд.", -1)
+	wait(kdpusk.v*1000)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost1 < 51 then 
+	sampSendDialogResponse(25243, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost2 < 51 then 
+	sampSendDialogResponse(25243, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost3 < 51 then 
+	sampSendDialogResponse(25243, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	closeDialog()
+	wait(zadervkamaining.v)
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(zadervkamaining.v)
+	if statuszidkost4 < 51 then 
+	sampSendDialogResponse(25243, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25270, 1 , 1, -1)
+	else
+	closeDialog()
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно залили жидкость в видеокарты. Функция выключилась автоматический.", -1)
+	superliquid.v = false
 	end
 	
 	if puskflash.v then 
@@ -23634,6 +24056,111 @@ function housemenu4()
 	end)
 end
 
+function housemenu5()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 5, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu6()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 6, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu7()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 7, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu8()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 8, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu9()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 9, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu10()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 10, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
+function housemenu11()
+	lua_thread.create(function()
+	sampSendChat("/setspawn")
+	wait(200)
+	sampSendDialogResponse(1781, 1 , 2, -1)
+	wait(200)
+	sampSendDialogResponse(7238, 1 , 11, -1)
+	wait(200)
+	closeDialog()
+	wait(200)
+	sampProcessChatInput('/recon 1')
+	houserespawn = false
+	end)
+end
+
 function informerperem()
 while true do
 if zones.v and not workpause then -- показываем информер и его перемещение
@@ -24381,6 +24908,8 @@ function obmenmenu()
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять зловещие монеты на улучшение для авто', moneta); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять зловещие монеты на точильные камни', tochkamen); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять зловещие монеты на ларец кладоискателя', monetaklad); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
+			
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять материалы на патроны (для Хитманов)', tradept); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать у маркера, где брать оружие на базе Хитманов, и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся материалы.")  
 			
 			imgui.End()
@@ -27225,9 +27754,12 @@ function funksmenu()
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты', pusk2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить супер охлаждающую жидкость', superliquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет супер охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты с флешки', puskflash2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
 		imgui.Text('') imgui.SameLine()	if imgui.CustomButton(fa.ICON_HOME..u8(" Перезайти в дом"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumber'].v = not win_state['housenumber'].v end
 		imgui.PushItemWidth(422)
@@ -27250,6 +27782,13 @@ function numberhouse()
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №3"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu2() houserespawn = true end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №4"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu3() houserespawn = true end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №5"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu4() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №6"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu5() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №7"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu6() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №8"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu7() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №9"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu8() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №10"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu9() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №11"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu10() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №12"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu11() houserespawn = true end
 		imgui.End()
 	end
 	
@@ -27635,6 +28174,12 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'49. Указал авторство некоторого функционала. Мог что-то пропустить - авторы могут отписать и я обязательно их укажу.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[27.07.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'50. Фикс "Ловли Фур" (больше не кикает античит после ловли фуры)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'51. В "Trade Menu" добавлен обмен зловещих монет на ларец кладоискателя.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'52. Фикс краша скрипта при использовании функционала "Майнинга", если диалог не успел открыться.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'53. После снятия BTC через флешку, диалог полностью не закрывается, а открывается меню с выбором дома.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'54. В "Майнинг" добавлена заливка супер охлаждающей жидкости.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'55. В "Майнинг" - "Перезаход между домами" добавлено еще 7 домов для перезахода.')
 		imgui.End()
 		end
 	
