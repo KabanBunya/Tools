@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.26')
+script_version('3.4.27')
 
 use = false
 close = false
@@ -44,6 +44,8 @@ arztest5 = 1
 arztest6 = 1
 arztest7 = 1
 depozpdtg = 0
+luxorarenda = 0
+luxorarenda2 = 0
 zppdtg = 0
 lvlpdtg = 0
 depozpd = 0
@@ -142,6 +144,7 @@ banditsesv2 = 0
 kamensession = 0
 lensession = 0
 chlopoksession = 0
+arendasession = 0
 metalsession = 0
 bronzasession = 0
 silversession = 0
@@ -150,9 +153,11 @@ sborsession = 0
 sborsessionferma = 0
 zpsession = 0
 zpsessionferma = 0
+zpsessionarenda = 0
 kamenitog = 0
 lenitog = 0
 chlopokitog = 0
+arendaitog = 0
 metalitog = 0
 bronzaitog = 0
 silveritog = 0
@@ -624,12 +629,14 @@ local cfg = inicfg.load({
 		kamentime = 0,
 		lentime = 0,
 		chlopoktime = 0,
+		arendatime = 0,
 		metaltime = 0,
 		bronzatime = 0,
 		silvertime = 0,
 		goldtime = 0,
 		zptime = 0,
 		zptimeferma = 0,
+		zptimearenda = 0,
 		sbortime = 0,
 		sbortimeferma = 0
 	},
@@ -1070,6 +1077,18 @@ local cfg3 = inicfg.load({
 		inputfindtg8v2 = '',
 		inputfindtg9v2 = '',
 		inputfindtg10v2 = '',
+		inputhousenamev2 = 'Дом №1',
+		inputhousename2v2 = 'Дом №2',
+		inputhousename3v2 = 'Дом №3',
+		inputhousename4v2 = 'Дом №4',
+		inputhousename5v2 = 'Дом №5',
+		inputhousename6v2 = 'Дом №6',
+		inputhousename7v2 = 'Дом №7',
+		inputhousename8v2 = 'Дом №8',
+		inputhousename9v2 = 'Дом №9',
+		inputhousename10v2 = 'Дом №10',
+		inputhousename11v2 = 'Дом №11',
+		inputhousename12v2 = 'Дом №12',
 		activatorv2 = 'mono',
 		crfindv2 = '233',
 		activcallv2 = 'call',
@@ -1194,6 +1213,7 @@ local cfg3 = inicfg.load({
 		tagv2 = '',
 		enable_tagv2 = false,
 		chatInfov2 = false,
+		flashbtcvyborv2 = false,
 		raskladkav2 = false,
 		recongenv2 = false,
 		reconclosedv2 = false,
@@ -1208,6 +1228,7 @@ local cfg3 = inicfg.load({
 		autofillv2 = false,
 		faminvfastv2 = false,
 		arendafastv2 = false,
+		minerfastv2 = false, 
 		invfastv2 = false,
 		fastkeyv2 = false,
 		fastlockv2 = false,
@@ -1243,6 +1264,18 @@ local cfg3 = inicfg.load({
 		antilomkav2 = false,
 		antispawnv2 = false,
 		napominalkav2 = false,
+		flashbtcvybv2 = false,
+		flashbtcvyb2v2 = false,
+		flashbtcvyb3v2 = false,
+		flashbtcvyb4v2 = false,
+		flashbtcvyb5v2 = false,
+		flashbtcvyb6v2 = false,
+		flashbtcvyb7v2 = false,
+		flashbtcvyb8v2 = false,
+		flashbtcvyb9v2 = false,
+		flashbtcvyb10v2 = false,
+		flashbtcvyb11v2 = false,
+		flashbtcvyb12v2 = false,
 		chatcalcv2 = false,
 		tradecalcv2 = false,
 		pismov2 = false,
@@ -1801,6 +1834,18 @@ local SET = {
 		inputfindtg8 = '',
 		inputfindtg9 = '',
 		inputfindtg10 = '',
+		inputhousename = 'Дом №1',
+		inputhousename2 = 'Дом №2',
+		inputhousename3 = 'Дом №3',
+		inputhousename4 = 'Дом №4',
+		inputhousename5 = 'Дом №5',
+		inputhousename6 = 'Дом №6',
+		inputhousename7 = 'Дом №7',
+		inputhousename8 = 'Дом №8',
+		inputhousename9 = 'Дом №9',
+		inputhousename10 = 'Дом №10',
+		inputhousename11 = 'Дом №11',
+		inputhousename12 = 'Дом №12',
 		activator = 'mono',
 		crfind = '233',
 		activcall = 'call',
@@ -1925,6 +1970,7 @@ local SET = {
 		tag = '',
 		enable_tag = false,
 		chatInfo = false,
+		flashbtcvybor = false,
 		raskladka = false,
 		recongen = false,
 		reconclosed = false,
@@ -1939,6 +1985,7 @@ local SET = {
 		autofill = false,
 		faminvfast = false,
 		arendafast = false,
+		minerfast = false,
 		invfast = false,
 		fastkey = false,
 		fastlock = false,
@@ -1974,6 +2021,20 @@ local SET = {
 		antilomka = false,
 		antispawn = false,
 		napominalka = false,
+		
+		flashbtcvyb = false,
+		flashbtcvyb2 = false,
+		flashbtcvyb3 = false,
+		flashbtcvyb4 = false,
+		flashbtcvyb5 = false,
+		flashbtcvyb6 = false,
+		flashbtcvyb7 = false,
+		flashbtcvyb8 = false,
+		flashbtcvyb9 = false,
+		flashbtcvyb10 = false,
+		flashbtcvyb11 = false,
+		flashbtcvyb12 = false,
+		
 		chatcalc = false,
 		tradecalc = false,
 		pismo = false,
@@ -2165,10 +2226,12 @@ local SET = {
 		gold = true,
 		zp = true,
 		zpferma = true,
+		zparenda = true,
 		sbor = true,
 		sborferma = true,
 		lenz = true,
-		chlopokz = true
+		chlopokz = true,
+		arendaz = true
 	},
 	pismoinformer = {
 		
@@ -2206,6 +2269,12 @@ local maincfg = inicfg.load({--конфиг для хоткеев
 	},
 	comboheathotkeys3 = {
 	autodronev6 = VK_MENU
+	},
+	combohotkeys4 = {
+	autodronev7 = VK_Q
+	},
+	comboheathotkeys4 = {
+	autodronev8 = VK_MENU
 	}
 },'Mono\\hotkeymono.ini')
 inicfg.save(maincfg,'Mono\\hotkeymono.ini')
@@ -2287,7 +2356,13 @@ win_state['shahtamenu'] = imgui.ImBool(false)
 win_state['shema'] = imgui.ImBool(false)
 win_state['shematext'] = imgui.ImBool(false)
 win_state['shemafunks'] = imgui.ImBool(false)
+win_state['btcsettings'] = imgui.ImBool(false)
+win_state['btcsettingsv2'] = imgui.ImBool(false)
 win_state['housenumber'] = imgui.ImBool(false)
+win_state['housenumberredak'] = imgui.ImBool(false)
+win_state['housenumberredakv2'] = imgui.ImBool(false)
+win_state['shemafunksv2'] = imgui.ImBool(false)
+win_state['housenumberv2'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
 win_state['kartinst'] = imgui.ImBool(false)
 win_state['piarshema'] = imgui.ImBool(false)
@@ -4308,8 +4383,20 @@ function mainmenu()
 			win_state['shematext'].v = not win_state['shematext'].v
 		elseif win_state['shemafunks'].v then
 			win_state['shemafunks'].v = not win_state['shemafunks'].v
+		elseif win_state['btcsettings'].v then
+			win_state['btcsettings'].v = not win_state['btcsettings'].v
 		elseif win_state['housenumber'].v then
 			win_state['housenumber'].v = not win_state['housenumber'].v
+		elseif win_state['housenumberredak'].v then
+			win_state['housenumberredak'].v = not win_state['housenumberredak'].v
+		elseif win_state['housenumberredakv2'].v then
+			win_state['housenumberredakv2'].v = not win_state['housenumberredakv2'].v
+		elseif win_state['shemafunksv2'].v then
+			win_state['shemafunksv2'].v = not win_state['shemafunksv2'].v
+		elseif win_state['btcsettingsv2'].v then
+			win_state['btcsettingsv2'].v = not win_state['btcsettingsv2'].v
+		elseif win_state['housenumberv2'].v then
+			win_state['housenumberv2'].v = not win_state['housenumberv2'].v
 		elseif win_state['redak'].v then
 			win_state['redak'].v = not win_state['redak'].v
 		elseif win_state['games'].v then
@@ -4742,12 +4829,12 @@ function main()
 	hotkeys = {
 		autoklava = { name = key.key_names[maincfg.hotkeys.autoklava], edit = false, ticked = os.clock(), tickedState = false, sName = "Открытие cкрипта на клавишу", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для открытия скрипта. По умолчанию установлена клавиша F3.' },
 		autoklavareload = { name = key.key_names[maincfg.hotkeys.autoklavareload], edit = false, ticked = os.clock(), tickedState = false, sName = "Перезапуск скрипта на клавишу", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для перезагрузки скрипта. По умолчанию установлена клавиша F4.' },
-		fasttrade = { name = key.key_names[maincfg.hotkeys.fasttrade], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /trade", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /trade. По умолчанию установлена клавиша R.' },
-		fastinvfam = { name = key.key_names[maincfg.hotkeys.fastinvfam], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /faminvite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /faminvite. По умолчанию установлена клавиша E.' },
-		fastinv = { name = key.key_names[maincfg.hotkeys.fastinv], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /invite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /invite. По умолчанию установлена клавиша Q.' },
-		fastlocking = { name = key.key_names[maincfg.hotkeys.fastlocking], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /lock", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /lock. По умолчанию установлена клавиша L.' },
+		fasttrade = { name = key.key_names[maincfg.hotkeys.fasttrade], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /trade", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /trade (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Trade"). По умолчанию установлена клавиша R.' },
+		fastinvfam = { name = key.key_names[maincfg.hotkeys.fastinvfam], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /faminvite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /faminvite (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Family Invite"). По умолчанию установлена клавиша E.' },
+		fastinv = { name = key.key_names[maincfg.hotkeys.fastinv], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /invite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /invite (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Invite"). По умолчанию установлена клавиша Q.' },
+		fastlocking = { name = key.key_names[maincfg.hotkeys.fastlocking], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /lock", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /lock (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Lock"). По умолчанию установлена клавиша L.' },
 		unbaginvent = { name = key.key_names[maincfg.hotkeys.unbaginvent], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для разбага инвентаря", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для того, чтобы легко и быстро разбагать инвентарь, в случае, если у вас в нём ничего не нажимается. По умолчанию установлена клавиша F9.' },
-		fastarenda = { name = key.key_names[maincfg.hotkeys.fastarenda], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /arenda", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /arenda. По умолчанию установлена клавиша H.' },
+		fastarenda = { name = key.key_names[maincfg.hotkeys.fastarenda], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /arenda", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /arenda (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Arenda"). По умолчанию установлена клавиша H.' },
 		
 		}
 		
@@ -4773,6 +4860,14 @@ function main()
 		
 	comboheathotkeys3 = {
 		autodronev6 = { name = key.key_names[maincfg.comboheathotkeys3.autodronev6], edit = false, ticked = os.clock(), tickedState = false, sName = "+" }
+		}
+		
+	combohotkeys4 = {
+		autodronev7 = { name = key.key_names[maincfg.combohotkeys4.autodronev7], edit = false, ticked = os.clock(), tickedState = false, sName = 'Майнинг функции на клавиши', sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою комбинацию клавиш для открытия меню "Прочие функции" в "Майнинге" (для работы функционала, в "Параметры" - "Модификации" нужно включить "Открывать "Майнинг функции" на клавиши"). По умолчанию установлена комбинация клавиш Alt + Q.' }
+		}
+		
+	comboheathotkeys4 = {
+		autodronev8 = { name = key.key_names[maincfg.comboheathotkeys4.autodronev8], edit = false, ticked = os.clock(), tickedState = false, sName = "+" }
 		}
 
 	inputHelpText = renderCreateFont("Arial", 10, FCR_BORDER + FCR_BOLD)
@@ -5015,6 +5110,9 @@ end
 		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(51) and isKeyJustPressed(18) then activeklad3() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys3.autodronev5)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys3.autodronev6)) then thisScript():unload() end
+		
+		if not sampIsChatInputActive() and minerfast.v and isKeyJustPressed(u8:decode(maincfg.combohotkeys4.autodronev7)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys4.autodronev8)) then win_state['shemafunksv2'].v = not win_state['shemafunksv2'].v end
+		
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and isKeyJustPressed(maincfg.hotkeys.unbaginvent) then fixpricecopia() end
 		
@@ -5358,7 +5456,7 @@ end
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['calc'].v or win_state['fishmenu'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['calc'].v or win_state['fishmenu'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['housenumberv2'].v or win_state['housenumberredakv2'].v or win_state['shemafunksv2'].v or win_state['btcsettingsv2'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -5805,12 +5903,14 @@ function saveSettings(args, key)
 	ini.shahtainformer.kamen = infkamen.v
 	ini.shahtainformer.lenz = inflen.v
 	ini.shahtainformer.chlopokz = infchlopok.v
+	ini.shahtainformer.arendaz = infarenda.v
 	ini.shahtainformer.metal = infmetal.v
 	ini.shahtainformer.bronza = infbronza.v
 	ini.shahtainformer.silver = infsilver.v
 	ini.shahtainformer.gold = infgold.v
 	ini.shahtainformer.zp = infzp.v
 	ini.shahtainformer.zpferma = infzpferma.v
+	ini.shahtainformer.zparenda = infzparenda.v
 	ini.shahtainformer.sbor = infsbor.v
 	ini.shahtainformer.sborferma = infsborferma.v
 	
@@ -5888,6 +5988,20 @@ function saveSettings(args, key)
 	ini.settings.antilomka = antilomka.v
 	ini.settings.antispawn = antispawn.v
 	ini.settings.napominalka = napominalka.v
+	
+	ini.settings.flashbtcvyb = flashbtcvyb.v
+	ini.settings.flashbtcvyb2 = flashbtcvyb2.v
+	ini.settings.flashbtcvyb3 = flashbtcvyb3.v
+	ini.settings.flashbtcvyb4 = flashbtcvyb4.v
+	ini.settings.flashbtcvyb5 = flashbtcvyb5.v
+	ini.settings.flashbtcvyb6 = flashbtcvyb6.v
+	ini.settings.flashbtcvyb7 = flashbtcvyb7.v
+	ini.settings.flashbtcvyb8 = flashbtcvyb8.v
+	ini.settings.flashbtcvyb9 = flashbtcvyb9.v
+	ini.settings.flashbtcvyb10 = flashbtcvyb10.v
+	ini.settings.flashbtcvyb11 = flashbtcvyb11.v
+	ini.settings.flashbtcvyb12 = flashbtcvyb12.v
+	
 	ini.settings.idigroklastweapon = idigroklastweapon.v
 	ini.settings.idigroklastweapon2 = idigroklastweapon2.v
 	ini.settings.idigrok = idigrok.v
@@ -6004,6 +6118,7 @@ function saveSettings(args, key)
 	ini.settings.zones = zones.v
 	ini.settings.screentime = screentime.v
 	ini.settings.chatInfo = chatInfo.v
+	ini.settings.flashbtcvybor = flashbtcvybor.v
 	ini.settings.raskladka = raskladka.v
 	ini.settings.recongen = recongen.v
 	ini.settings.reconclosed = reconclosed.v
@@ -6018,6 +6133,7 @@ function saveSettings(args, key)
 	ini.settings.autofill = autofill.v
 	ini.settings.faminvfast = faminvfast.v
 	ini.settings.arendafast = arendafast.v
+	ini.settings.minerfast = minerfast.v
 	ini.settings.fastkey = fastkey.v
 	ini.settings.invfast = invfast.v
 	ini.settings.fastlock = fastlock.v
@@ -6189,6 +6305,20 @@ function saveSettings(args, key)
 	ini.settings.inputfindtg8 = u8:decode(inputfindtg8.v)
 	ini.settings.inputfindtg9 = u8:decode(inputfindtg9.v)
 	ini.settings.inputfindtg10 = u8:decode(inputfindtg10.v)
+
+	ini.settings.inputhousename = u8:decode(inputhousename.v)
+	ini.settings.inputhousename2 = u8:decode(inputhousename2.v)
+	ini.settings.inputhousename3 = u8:decode(inputhousename3.v)
+	ini.settings.inputhousename4 = u8:decode(inputhousename4.v)
+	ini.settings.inputhousename5 = u8:decode(inputhousename5.v)
+	ini.settings.inputhousename6 = u8:decode(inputhousename6.v)
+	ini.settings.inputhousename7 = u8:decode(inputhousename7.v)
+	ini.settings.inputhousename8 = u8:decode(inputhousename8.v)
+	ini.settings.inputhousename9 = u8:decode(inputhousename9.v)
+	ini.settings.inputhousename10 = u8:decode(inputhousename10.v)
+	ini.settings.inputhousename11 = u8:decode(inputhousename11.v)
+	ini.settings.inputhousename12 = u8:decode(inputhousename12.v)
+	
 	ini.settings.activator = u8:decode(activator.v)
 	ini.settings.crfind = u8:decode(crfind.v)
 	ini.settings.activcall = u8:decode(activcall.v)
@@ -10667,6 +10797,10 @@ function imgui.OnDrawFrame()
        end
 	   
 	if not win_state['main'].v then 
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['windowspusk'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -10679,8 +10813,6 @@ function imgui.OnDrawFrame()
 		win_state['shema'].v = false
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
-		win_state['shemafunks'].v = false
-		win_state['housenumber'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['vkshema'].v = false
@@ -10760,6 +10892,26 @@ function imgui.OnDrawFrame()
        end
 	   
 	if not win_state['main'].v and win_state['tup'].v then
+		 imgui.Process = true
+		 imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['housenumberv2'].v then
+		 imgui.Process = true
+		 imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['housenumberredakv2'].v then
+		 imgui.Process = true
+		 imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['shemafunksv2'].v then
+		 imgui.Process = true
+		 imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['btcsettingsv2'].v then
 		 imgui.Process = true
 		 imgui.ShowCursor = true
        end
@@ -11955,8 +12107,32 @@ end
 		funksmenu()
 	end
 	
+	if win_state['btcsettings'].v then
+		settingsbtc()
+	end
+	
 	if win_state['housenumber'].v then
 		numberhouse()
+	end
+	
+	if win_state['housenumberredak'].v then
+		numberhouseredak()
+	end
+	
+	if win_state['housenumberredakv2'].v then
+		numberhouseredakv2()
+	end
+	
+	if win_state['shemafunksv2'].v then
+		funksmenuv2()
+	end
+	
+	if win_state['btcsettingsv2'].v then
+		settingsbtcv2()
+	end
+	
+	if win_state['housenumberv2'].v then
+		numberhousev2()
 	end
 	
 	if win_state['timeyved'].v then
@@ -12047,7 +12223,7 @@ end
 							local pat1 = string.rlower(itemsskup[i][1])
 							local pat2 = string.rlower(u8:decode(findBuf.v))
 							if pat1:find(pat2, 0, true) then
-								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then stable(i) end
+								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then stable(i) end
 								imgui.SameLine()
 								imgui.Text(u8(itemsskup[i][1]))
 								isFounded = true
@@ -12055,7 +12231,7 @@ end
 						end
 						if rbut.v == 2 then
 							if tostring(i):match(findBufInt.v, 0, true) then
-								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(30, 30)) then stable(i) end
+								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then stable(i) end
 								imgui.SameLine()
 								imgui.Text(u8(itemsskup[i][1]))
 								isFounded = true
@@ -12085,7 +12261,7 @@ end
 			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить напишите '/cst'. Затем нажмите в лавке 'Выставить товар на покупку'.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров составляет: ")
 				imgui.PushItemWidth(200)
-				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
+				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,10, 10000)
 				imgui.PopItemWidth()
 					imgui.Text('')
 					imgui.SetCursorPosX(350)
@@ -12120,7 +12296,7 @@ end
 				
 				if isEn == 1 then if isWarning then imgui.TextColoredRGB("{ff2400}Проверьте цены!") else imgui.TextColoredRGB('{7cfc00}Нажми "Добавить товар на покупку"!') end end
 				imgui.PushItemWidth(100)
-				imgui.SliderInt(u8'Задержка (мс) ##55235212767896',delayintv2,100, 10000)
+				imgui.SliderInt(u8'Задержка (мс) ##55235212767896',delayintv2,10, 10000)
 				imgui.TextColoredRGB("1 секунда = 1000 миллисекунд")
 				if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
 				delplayer = not delplayer
@@ -12925,21 +13101,23 @@ function infobar()
 		end
 		
 function infobarshahta()
-		if infkamen.v or inflen.v or infchlopok.v or infmetal.v or infbronza.v or infsilver.v or infgold.v or infzp.v or infzpferma.v or infsbor.v or infsborferma.v then imgui.SameLine(140) imgui.VerticalSeparator() imgui.Text(u8"  За сессию") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"  За всё время") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"       Доход       ") end
+		if infkamen.v or inflen.v or infchlopok.v or infarenda.v or infmetal.v or infbronza.v or infsilver.v or infgold.v or infzp.v or infzpferma.v or infzparenda.v or infsbor.v or infsborferma.v then imgui.SameLine(140) imgui.VerticalSeparator() imgui.Text(u8"    За сессию") imgui.SameLine(230) imgui.VerticalSeparator() imgui.Text(u8"  За всё время") imgui.SameLine() imgui.VerticalSeparator() imgui.Text(u8"       Доход       ") end
 		imgui.Separator()
-		if infkamen.v then imgui.Text(u8(" • Собрано камня: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..kamensession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.kamentime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..kamenitog))) end
-		if infmetal.v then imgui.Text(u8(" • Собрано металла: "))imgui.SameLine(145)  imgui.Text(u8(number_separator(""..metalsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.metaltime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..metalitog))) end
-		if infbronza.v then imgui.Text(u8(" • Собрано бронзы: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..bronzasession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.bronzatime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..bronzaitog))) end
-		if infsilver.v then imgui.Text(u8(" • Собрано серебра: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..silversession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.silvertime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..silveritog))) end
-		if infgold.v then imgui.Text(u8(" • Собрано золота: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..goldsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.goldtime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..golditog))) end
-		if inflen.v then imgui.Text(u8(" • Собрано льна: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..lensession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.lentime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..lenitog))) end
-		if infchlopok.v then imgui.Text(u8(" • Собрано хлопка: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..chlopoksession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.chlopoktime)))) imgui.SameLine(310) imgui.Text(u8(number_separator(""..chlopokitog))) end
+		if infkamen.v then imgui.Text(u8(" • Собрано камня: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..kamensession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.kamentime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..kamenitog))) end
+		if infmetal.v then imgui.Text(u8(" • Собрано металла: "))imgui.SameLine(145)  imgui.Text(u8(number_separator(""..metalsession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.metaltime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..metalitog))) end
+		if infbronza.v then imgui.Text(u8(" • Собрано бронзы: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..bronzasession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.bronzatime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..bronzaitog))) end
+		if infsilver.v then imgui.Text(u8(" • Собрано серебра: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..silversession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.silvertime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..silveritog))) end
+		if infgold.v then imgui.Text(u8(" • Собрано золота: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..goldsession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.goldtime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..golditog))) end
+		if inflen.v then imgui.Text(u8(" • Собрано льна: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..lensession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.lentime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..lenitog))) end
+		if infchlopok.v then imgui.Text(u8(" • Собрано хлопка: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..chlopoksession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.chlopoktime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..chlopokitog))) end
+		if infarenda.v then imgui.Text(u8(" • Аренда т/с (в часах): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..arendasession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.arendatime)))) imgui.SameLine(327) imgui.Text(u8(number_separator(""..arendaitog))) end
 		imgui.Separator()
-		if infsbor.v then imgui.Text(u8(" • Собрано на шахте: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortime)))) end
-		if infsborferma.v then imgui.Text(u8(" • Собрано на ферме: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsessionferma))) imgui.SameLine(218) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortimeferma)))) end
+		if infsbor.v then imgui.Text(u8(" • Собрано на шахте: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsession))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortime)))) end
+		if infsborferma.v then imgui.Text(u8(" • Собрано на ферме: ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..sborsessionferma))) imgui.SameLine(235) imgui.Text(u8(number_separator(''.. tostring(cfg.shahta.sbortimeferma)))) end
 		imgui.Separator()
-		if infzp.v then imgui.Text(u8(" • Заработано (шахта): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsession))) imgui.SameLine(218) imgui.Text(u8(number_separator(""..cfg.shahta.zptime))) end
-		if infzpferma.v then imgui.Text(u8(" • Заработано (ферма): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsessionferma))) imgui.SameLine(218) imgui.Text(u8(number_separator(""..cfg.shahta.zptimeferma))) end
+		if infzp.v then imgui.Text(u8(" • Заработано (шахта): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsession))) imgui.SameLine(235) imgui.Text(u8(number_separator(""..cfg.shahta.zptime))) end
+		if infzpferma.v then imgui.Text(u8(" • Заработано (ферма): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsessionferma))) imgui.SameLine(235) imgui.Text(u8(number_separator(""..cfg.shahta.zptimeferma))) end
+		if infzparenda.v then imgui.Text(u8(" • Заработано (аренда): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsessionarenda))) imgui.SameLine(235) imgui.Text(u8(number_separator(""..cfg.shahta.zptimearenda))) end
 	
 	end
 	
@@ -13082,7 +13260,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13140,7 +13324,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13198,7 +13388,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13256,7 +13452,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13313,7 +13515,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13370,7 +13578,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13427,7 +13641,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13484,7 +13704,13 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13541,7 +13767,269 @@ function onWindowMessage(m, p)
 		win_state['shematext'].v = false
 		win_state['shahtamenu'].v = false
 		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
 		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['rulstat'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['housenumberv2'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['videoset2'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['rulstat'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['housenumberredakv2'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['videoset2'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['rulstat'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['shemafunksv2'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['videoset2'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['rulstat'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['btcsettingsv2'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['videoset2'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		win_state['shemafunksv2'].v = false
+		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
 		win_state['piarshema'].v = false
@@ -13836,6 +14324,19 @@ function podklchat()
 	end
 
 function sampev.onServerMessage(color, text)
+
+	if text:match('%[Информация%] {ffffff}Вы передали (.*) в аренду игроку (.*) на (%d+)ч за (%d+)') then 
+	if infarenda.v or infzparenda.v then
+	luxorarenda = text:match('на (%d+)ч')
+	luxorarenda2 = text:match('за (%d+)')
+	arendasession = arendasession + tonumber(luxorarenda)
+	cfg.shahta.arendatime = cfg.shahta.arendatime + tonumber(luxorarenda)
+	arendaitog = arendaitog + tonumber(luxorarenda2)
+	cfg.shahta.zptimearenda = cfg.shahta.zptimearenda + tonumber(luxorarenda2) 
+	zpsessionarenda = arendaitog
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+end
 
 	if color == -10270721 and text:match("%[Ошибка%] {FFFFFF}Данный аккаунт уже авторизирован!") and recongen.v and reconname.v then
 	lua_thread.create(function()
@@ -16815,6 +17316,20 @@ function load_settings() -- загрузка настроек
 	inputfindtg8 = imgui.ImBuffer(u8(ini.settings.inputfindtg8), 1000)
 	inputfindtg9 = imgui.ImBuffer(u8(ini.settings.inputfindtg9), 1000)
 	inputfindtg10 = imgui.ImBuffer(u8(ini.settings.inputfindtg10), 1000)
+	
+	inputhousename = imgui.ImBuffer(u8(ini.settings.inputhousename), 1000)
+	inputhousename2 = imgui.ImBuffer(u8(ini.settings.inputhousename2), 1000)
+	inputhousename3 = imgui.ImBuffer(u8(ini.settings.inputhousename3), 1000)
+	inputhousename4 = imgui.ImBuffer(u8(ini.settings.inputhousename4), 1000)
+	inputhousename5 = imgui.ImBuffer(u8(ini.settings.inputhousename5), 1000)
+	inputhousename6 = imgui.ImBuffer(u8(ini.settings.inputhousename6), 1000)
+	inputhousename7 = imgui.ImBuffer(u8(ini.settings.inputhousename7), 1000)
+	inputhousename8 = imgui.ImBuffer(u8(ini.settings.inputhousename8), 1000)
+	inputhousename9 = imgui.ImBuffer(u8(ini.settings.inputhousename9), 1000)
+	inputhousename10 = imgui.ImBuffer(u8(ini.settings.inputhousename10), 1000)
+	inputhousename11 = imgui.ImBuffer(u8(ini.settings.inputhousename11), 1000)
+	inputhousename12 = imgui.ImBuffer(u8(ini.settings.inputhousename12), 1000)
+	
 	shematext1 = imgui.ImBuffer(u8(ini.settings.shematext1), 256)
 	shematext2 = imgui.ImBuffer(u8(ini.settings.shematext2), 256)
 	shematext3 = imgui.ImBuffer(u8(ini.settings.shematext3), 256)
@@ -17008,10 +17523,12 @@ function load_settings() -- загрузка настроек
 	infgold = imgui.ImBool(ini.shahtainformer.gold)
 	infzp = imgui.ImBool(ini.shahtainformer.zp)
 	infzpferma = imgui.ImBool(ini.shahtainformer.zpferma)
+	infzparenda = imgui.ImBool(ini.shahtainformer.zparenda)
 	infsbor = imgui.ImBool(ini.shahtainformer.sbor)
 	infsborferma = imgui.ImBool(ini.shahtainformer.sborferma)
 	inflen = imgui.ImBool(ini.shahtainformer.lenz)
 	infchlopok = imgui.ImBool(ini.shahtainformer.chlopokz)
+	infarenda = imgui.ImBool(ini.shahtainformer.arendaz)
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	antiafk = imgui.ImBool(ini.settings.antiafk)
@@ -17043,6 +17560,20 @@ function load_settings() -- загрузка настроек
 	antilomka = imgui.ImBool(ini.settings.antilomka)
 	antispawn = imgui.ImBool(ini.settings.antispawn)
 	napominalka = imgui.ImBool(ini.settings.napominalka)
+	
+	flashbtcvyb = imgui.ImBool(ini.settings.flashbtcvyb)
+	flashbtcvyb2 = imgui.ImBool(ini.settings.flashbtcvyb2)
+	flashbtcvyb3 = imgui.ImBool(ini.settings.flashbtcvyb3)
+	flashbtcvyb4 = imgui.ImBool(ini.settings.flashbtcvyb4)
+	flashbtcvyb5 = imgui.ImBool(ini.settings.flashbtcvyb5)
+	flashbtcvyb6 = imgui.ImBool(ini.settings.flashbtcvyb6)
+	flashbtcvyb7 = imgui.ImBool(ini.settings.flashbtcvyb7)
+	flashbtcvyb8 = imgui.ImBool(ini.settings.flashbtcvyb8)
+	flashbtcvyb9 = imgui.ImBool(ini.settings.flashbtcvyb9)
+	flashbtcvyb10 = imgui.ImBool(ini.settings.flashbtcvyb10)
+	flashbtcvyb11 = imgui.ImBool(ini.settings.flashbtcvyb11)
+	flashbtcvyb12 = imgui.ImBool(ini.settings.flashbtcvyb12)
+	
 	chatcalc = imgui.ImBool(ini.settings.chatcalc)
 	tradecalc = imgui.ImBool(ini.settings.tradecalc)
 	pismo = imgui.ImBool(ini.settings.pismo)
@@ -17065,6 +17596,7 @@ function load_settings() -- загрузка настроек
 	autobike = imgui.ImBool(ini.settings.autobike)
 	autobeg = imgui.ImBool(ini.settings.autobeg)
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
+	flashbtcvybor = imgui.ImBool(ini.settings.flashbtcvybor)
 	raskladka = imgui.ImBool(ini.settings.raskladka)
 	recongen = imgui.ImBool(ini.settings.recongen)
 	reconclosed = imgui.ImBool(ini.settings.reconclosed)
@@ -17079,6 +17611,7 @@ function load_settings() -- загрузка настроек
 	autofill = imgui.ImBool(ini.settings.autofill)
 	faminvfast = imgui.ImBool(ini.settings.faminvfast)
 	arendafast = imgui.ImBool(ini.settings.arendafast)
+	minerfast = imgui.ImBool(ini.settings.minerfast)
 	invfast = imgui.ImBool(ini.settings.invfast)
 	fastkey = imgui.ImBool(ini.settings.fastkey)
 	fastlock = imgui.ImBool(ini.settings.fastlock)
@@ -21346,7 +21879,7 @@ while true do
 	wait(100)
 	closeDialog()
 	end
-	if btcflash.v then 
+	if btcflash.v and flashbtcvybor.v == false then 
 	sampSendDialogResponse(25182, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
@@ -21513,6 +22046,1994 @@ while true do
 	btcflash.v = false
 	itogobtc = 0
 	end
+	
+	if btcflash.v and flashbtcvybor.v then 
+	if flashbtcvyb.v then 
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb2.v then 
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb3.v then 
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb4.v then 
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb5.v then 
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb6.v then 
+	sampSendDialogResponse(7238, 1 , 5, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb7.v then 
+	sampSendDialogResponse(7238, 1 , 6, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb8.v then 
+	sampSendDialogResponse(7238, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb9.v then 
+	sampSendDialogResponse(7238, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb10.v then 
+	sampSendDialogResponse(7238, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb11.v then 
+	sampSendDialogResponse(7238, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	if flashbtcvyb12.v then 
+	sampSendDialogResponse(7238, 1 , 11, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25245, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	end
+	wait(zadervkamaining.v)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	btcflash.v = false
+	itogobtc = 0
+	end
+	
 	if btc.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(200)
@@ -25146,14 +27667,14 @@ function winprofilemenu()
 function kirkamenu()
 	local sw, sh = getScreenResolution() 
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(675, 360), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(675, 385), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_USER..u8' Statistics ', win_state['kirkawin'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_PENCIL..u8' Редактировать цены на ресурсы', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
 				imgui.PushItemWidth(235)
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Автоальт на руде', autoryda) imgui.SameLine() imgui.Checkbox(u8'Автоальт на ферме', autolen) imgui.SameLine() imgui.SliderInt(u8'Задержка на Автоальт##545434',zadervkashahta,1, 1000)
 				imgui.PopItemWidth()
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить статистику на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить статистику на экране', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика выбранных предметов и вашего заработка. Также можно менять цены на каждый предмет. Цвет зависит от цвета окна. Сменить можно в 'Параметры' - 'Персонализация'.");
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить статистику на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить статистику на экране', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика выбранных предметов и вашего заработка. Также можно менять цены на каждый предмет. Информация об аренде - это информация о том, на сколько часов вы сдавали ваш транспорт в аренду и сколько на этом заработали. Сменить цвет окна статистики можно в 'Параметры' - 'Персонализация'.");
 				if ryda.v then
 					imgui.SameLine()
 					if imgui.CustomButton(u8'Переместить', buttonclick, buttonvydel, buttonpol) then 
@@ -25182,6 +27703,11 @@ function kirkamenu()
 				imgui.SameLine(380)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение собранного льна и хлопка")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение собранного льна и хлопка', infsborferma)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение заработка c фермы")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение заработка c фермы', infzpferma)
+				imgui.SameLine(380)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение кол-ва часов аренды")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение кол-ва часов аренды', infarenda)
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображение заработка c аренды")); imgui.SameLine(); imgui.ToggleButton(u8'Отображение заработка c аренды', infzparenda)
+				
+				
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Вернуть настройки по умолчанию', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
 				autoryda.v = false
@@ -25190,6 +27716,7 @@ function kirkamenu()
 				infkamen.v = true
 				inflen.v = true
 				infchlopok.v = true
+				infarenda.v = true
 				infmetal.v = true
 				infbronza.v = true
 				infsilver.v = true
@@ -25198,6 +27725,7 @@ function kirkamenu()
 				infsborferma.v = true
 				infzp.v = true
 				infzpferma.v = true
+				infzparenda.v = true
 				cfg.shahta.kamentime = 0
 				cfg.shahta.metaltime = 0
 				cfg.shahta.bronzatime = 0
@@ -25205,10 +27733,12 @@ function kirkamenu()
 				cfg.shahta.goldtime = 0
 				cfg.shahta.lentime = 0
 				cfg.shahta.chlopoktime = 0
+				cfg.shahta.arendatime = 0
 				cfg.shahta.sbortime = 0
 				cfg.shahta.sbortimeferma = 0
 				cfg.shahta.zptime = 0
 				cfg.shahta.zptimeferma = 0
+				cfg.shahta.zptimearenda = 0
 				zadervkashahta.v = '200'
 				autokamen.v = '8000'
 				autolenf.v = '8000'
@@ -26009,7 +28539,7 @@ function nastroikamenu()
 			imgui.Text('') imgui.SameLine() imgui.InputText(u8'water', watertext) imgui.SameLine(); imgui.TextQuestion(u8"В данное поле нужно ввести ID текстдрава в котором находится дистилированная вода. Узнать ID вы сможете зайдя в меню магазина и нажав на кнопку 'Включить отображение ID Текстдравов'.")
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Skup Menu':")
 			imgui.PushItemWidth(200)
-			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,100, 10000)
+			imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,10, 10000)
 			imgui.PopItemWidth()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров в 'Sell Menu':")
 			imgui.PushItemWidth(200)
@@ -27748,7 +30278,9 @@ function funksmenu()
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC) с флешки', btcflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC) с флешки', btcflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активации функций при способе, когда вы забираете прибыль по 1 дому, вы должны находиться в меню, где показаны все видеокарты дома, с флешки. При активации функций при способе, когда вы забираете прибыль со всех домов сразу, вы должны находиться в меню, где показаны все дома, с флешки.")
+		imgui.SameLine()	
+		if imgui.CustomButton(u8("Настроить способы"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(123, 0)) then win_state['btcsettings'].v = not win_state['btcsettings'].v end
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты с флешки', puskflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -27774,21 +30306,260 @@ function numberhouse()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -0.199))
-	imgui.SetNextWindowSize(imgui.ImVec2(670, 225), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 225), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_HOME..u8' Выберите номер дома', win_state['housenumber'], imgui.WindowFlags.NoResize)
 		imgui.Text('')
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №1"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №2"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu1() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №3"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu2() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №4"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu3() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №5"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu4() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №6"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu5() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №7"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu6() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №8"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu7() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №9"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu8() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №10"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu9() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №11"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu10() houserespawn = true end
-		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8("Дом №12"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu11() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_PENCIL..u8(" Редактировать названия домов"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumberredak'].v = not win_state['housenumberredak'].v end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename2.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu1() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename3.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu2() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename4.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu3() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename5.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu4() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename6.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu5() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename7.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu6() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename8.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu7() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename9.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu8() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename10.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu9() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename11.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu10() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename12.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu11() houserespawn = true end
+		imgui.End()
+	end
+	
+function numberhouseredak()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -0.199))
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 225), imgui.Cond.FirstUseEver)
+	imgui.Begin(fa.ICON_PENCIL..u8' Редактирование названия домов', win_state['housenumberredak'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №1 ##9012', inputhousename)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №2 ##9011', inputhousename2)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №3 ##900', inputhousename3)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №4 ##909', inputhousename4)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №5 ##908', inputhousename5)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №6 ##907', inputhousename6)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №7 ##906', inputhousename7)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №8 ##905', inputhousename8)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №9 ##904', inputhousename9)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №10 ##903', inputhousename10)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №11 ##902', inputhousename11)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №12 ##901', inputhousename12)
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
+		inputhousename.v = u8'Дом №1'
+		inputhousename2.v = u8'Дом №2'
+		inputhousename3.v = u8'Дом №3'
+		inputhousename4.v = u8'Дом №4'
+		inputhousename5.v = u8'Дом №5'
+		inputhousename6.v = u8'Дом №6'
+		inputhousename7.v = u8'Дом №7'
+		inputhousename8.v = u8'Дом №8'
+		inputhousename9.v = u8'Дом №9'
+		inputhousename10.v = u8'Дом №10'
+		inputhousename11.v = u8'Дом №11'
+		inputhousename12.v = u8'Дом №12'
+		end
+		imgui.End()
+	end
+	
+function numberhouseredakv2()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 443), imgui.Cond.FirstUseEver)
+	imgui.Begin(fa.ICON_PENCIL..u8' Редактирование названия домов##3213121', win_state['housenumberredakv2'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №1 ##9012', inputhousename)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №2 ##9011', inputhousename2)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №3 ##900', inputhousename3)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №4 ##909', inputhousename4)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №5 ##908', inputhousename5)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №6 ##907', inputhousename6)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №7 ##906', inputhousename7)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №8 ##905', inputhousename8)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №9 ##904', inputhousename9)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №10 ##903', inputhousename10)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №11 ##902', inputhousename11)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите название дома №12 ##901', inputhousename12)
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
+		inputhousename.v = u8'Дом №1'
+		inputhousename2.v = u8'Дом №2'
+		inputhousename3.v = u8'Дом №3'
+		inputhousename4.v = u8'Дом №4'
+		inputhousename5.v = u8'Дом №5'
+		inputhousename6.v = u8'Дом №6'
+		inputhousename7.v = u8'Дом №7'
+		inputhousename8.v = u8'Дом №8'
+		inputhousename9.v = u8'Дом №9'
+		inputhousename10.v = u8'Дом №10'
+		inputhousename11.v = u8'Дом №11'
+		inputhousename12.v = u8'Дом №12'
+		end
+		imgui.End()
+	end
+	
+function funksmenuv2()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 330), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8' Прочие функции##4354234', win_state['shemafunksv2'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны стоять у полки с видеокартами.")
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC) с флешки', btcflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активации функций при способе, когда вы забираете прибыль по 1 дому, вы должны находиться в меню, где показаны все видеокарты дома, с флешки. При активации функций при способе, когда вы забираете прибыль со всех домов сразу, вы должны находиться в меню, где показаны все дома, с флешки.")
+		imgui.SameLine()	
+		if imgui.CustomButton(u8("Настроить способы"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(123, 0)) then win_state['btcsettingsv2'].v = not win_state['btcsettingsv2'].v end
+		
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты с флешки', puskflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты', pusk2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить супер охлаждающую жидкость', superliquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет супер охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты с флешки', puskflash2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
+		imgui.Text('') imgui.SameLine()	if imgui.CustomButton(fa.ICON_HOME..u8(" Перезайти в дом"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumberv2'].v = not win_state['housenumberv2'].v end
+		imgui.PushItemWidth(422)
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Дата срабатывания напоминания ##90', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
+		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка между диалогами (мс)##545432123414',zadervkamaining,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 400 мс. Задержка влияет на скорость выбора действия в диалогах и их закрытие. Если не успевает - ставьте задержку больше, если кажется, что медленно - ставьте ниже.")
+		imgui.PopItemWidth()
+		imgui.End()
+	end
+	
+function settingsbtcv2()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 250), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8' Настройка способов снятия прибыли##435423456y45ybg4g54', win_state['btcsettingsv2'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Забирать прибыль (BTC) с флешки по 1 дому")); imgui.SameLine(); imgui.ToggleButton(u8'', flashbtcvybor); imgui.SameLine(); imgui.Text(u8("Забирать прибыль (BTC) с флешки сразу со всех домов"))		
+
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename.v), flashbtcvyb)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename2.v), flashbtcvyb2)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename3.v), flashbtcvyb3)
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename4.v), flashbtcvyb4)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename5.v), flashbtcvyb5)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename6.v), flashbtcvyb6)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename7.v), flashbtcvyb7)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename8.v), flashbtcvyb8)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename9.v), flashbtcvyb9)
+
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename10.v), flashbtcvyb10)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename11.v), flashbtcvyb11)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename12.v), flashbtcvyb12)
+		
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
+		flashbtcvybor.v = false
+		flashbtcvyb.v = false
+		flashbtcvyb2.v = false
+		flashbtcvyb3.v = false
+		flashbtcvyb4.v = false
+		flashbtcvyb5.v = false
+		flashbtcvyb6.v = false
+		flashbtcvyb7.v = false
+		flashbtcvyb8.v = false
+		flashbtcvyb9.v = false
+		flashbtcvyb10.v = false
+		flashbtcvyb11.v = false
+		flashbtcvyb12.v = false
+		end
+
+		imgui.End()
+	end
+	
+function settingsbtc()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, -0.199))
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 225), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8' Настройка способов снятия прибыли##435423457657hj57ug66y45ybg4g54', win_state['btcsettings'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Забирать прибыль (BTC) с флешки по 1 дому")); imgui.SameLine(); imgui.ToggleButton(u8'', flashbtcvybor); imgui.SameLine(); imgui.Text(u8("Забирать прибыль (BTC) с флешки сразу со всех домов"))		
+
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename.v), flashbtcvyb)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename2.v), flashbtcvyb2)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename3.v), flashbtcvyb3)
+		
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename4.v), flashbtcvyb4)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename5.v), flashbtcvyb5)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename6.v), flashbtcvyb6)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename7.v), flashbtcvyb7)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename8.v), flashbtcvyb8)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename9.v), flashbtcvyb9)
+
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename10.v), flashbtcvyb10)
+		imgui.SameLine(250)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename11.v), flashbtcvyb11)
+		imgui.SameLine(450)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename12.v), flashbtcvyb12)
+		
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
+		flashbtcvybor.v = false
+		flashbtcvyb.v = false
+		flashbtcvyb2.v = false
+		flashbtcvyb3.v = false
+		flashbtcvyb4.v = false
+		flashbtcvyb5.v = false
+		flashbtcvyb6.v = false
+		flashbtcvyb7.v = false
+		flashbtcvyb8.v = false
+		flashbtcvyb9.v = false
+		flashbtcvyb10.v = false
+		flashbtcvyb11.v = false
+		flashbtcvyb12.v = false
+		end
+
+		imgui.End()
+	end
+	
+function numberhousev2()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 415), imgui.Cond.FirstUseEver)
+	imgui.Begin(fa.ICON_HOME..u8' Выберите номер дома##54654', win_state['housenumberv2'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_PENCIL..u8(" Редактировать названия домов"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumberredakv2'].v = not win_state['housenumberredakv2'].v end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename2.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu1() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename3.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu2() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename4.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu3() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename5.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu4() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename6.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu5() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename7.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu6() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename8.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu7() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename9.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu8() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename10.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu9() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename11.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu10() houserespawn = true end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton((inputhousename12.v), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then housemenu11() houserespawn = true end
 		imgui.End()
 	end
 	
@@ -28180,6 +30951,15 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'53. После снятия BTC через флешку, диалог полностью не закрывается, а открывается меню с выбором дома.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'54. В "Майнинг" добавлена заливка супер охлаждающей жидкости.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'55. В "Майнинг" - "Перезаход между домами" добавлено еще 7 домов для перезахода.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.07.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'56. Фикс размеров кнопок в "Skup Menu" и сделана возможность установить задержку на 10 мс на выставление товаров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'57. В "Параметры" - "Модификации" добавлен функционал "Открывать "Майнинг функции" на клавиши" (быстрое открытие меню на')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'комбинацию ALT + Q для заливки жидкости, запуска видеокарт, перезахода между домами и так далее)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'58. В "Майнинг" - "Прочие функции" - "Перезайти в дом" добавлена возможность изменить название дома.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'59. В "Statistics" добавлена возможность включить отслеживание заработка со сдачи транспорта в аренду.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'60. Фикс "Statistics" (добавлено, чтобы в статистику засчитывалась прибавка льна и хлопка по +12)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'61. В "Майнинг" - "Прочие функции" добавлена возможность выбрать способ снятия BTC (по 1 дому или сразу со всех домов)')
+		
 		imgui.End()
 		end
 	
@@ -29507,6 +32287,11 @@ end
 		lenitog = lensession * autolenf.v
 		cfg.shahta.lentime = cfg.shahta.lentime + 7
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "linen + 12" then
+		lensession = lensession + 12
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 12
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	
 	if text == "cotton + 1" then
@@ -29533,6 +32318,11 @@ end
 		chlopoksession = chlopoksession + 14
 		chlopokitog = chlopoksession * autocotton.v
 		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 14
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif text == "cotton + 12" then
+		chlopoksession = chlopoksession + 12
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 12
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	
@@ -33591,6 +36381,7 @@ function settingosnova()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Key")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Key', fastkey); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то после того, как вы заглушите транспортное средство - вы автоматический вытащите из него ключи. Также если вы попробуете завести транспорт,а в нём не будет ключей - скрипт пропишет /key и заведет транспортное средство.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Lock")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Lock', fastlock); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность открытия или закрытия личного транспорта на кнопку, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка L)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Arenda")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Arenda', arendafast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро отправить команду '/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов]' игроку, т.к открывается чат и в чате появляется команда с заранее введенными данными, которые вы можете подредактировать под себя (нужный ID игрока введется автоматический) Отправить команду вы сможете с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка H)");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8('Открывать "Майнинг функции" на клавиши')); imgui.SameLine(); imgui.ToggleButton(u8'Открывать "Майнинг функции" на клавиши', minerfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро открыть меню 'Прочие настройки' в 'Майнинге' для заливки жидкости, снятия BTC, перезахода между домами и так далее. Сменить комбинацию клавиш можно в 'Настройка клавиш' (по умолчанию ALT + Q)");
 				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Установить метку кладов по нажатию клавиш")); imgui.SameLine(); imgui.ToggleButton(u8'Установить метку кладов по нажатию клавиш', fastklad); imgui.SameLine(); imgui.TextQuestion(u8"Для работы функции нужно иметь карту кладов из /donate и она должна лежать у вас на первой странице инвентаря. Поставить метку первого клада можно на нажатие клавиш Alt + 1, вторую метку клада на Alt + 2 и третью метку клада на Alt + 3. Менять клавиши временно нельзя.");
 				
@@ -33698,7 +36489,7 @@ function settingosnova()
 			end
 		
 			if imgui.CollapsingHeader(u8'Настройка клавиш') then
-				imgui.BeginChild('##as2dasasdf42121', imgui.ImVec2(725, 310), false)	
+				imgui.BeginChild('##as2dasasdf42121', imgui.ImVec2(725, 333), false)	
 				
 				for s,m in pairs(comboheathotkeys) do 
 					if m.edit then 
@@ -33716,7 +36507,7 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -33739,7 +36530,7 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -33764,7 +36555,7 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys2[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys2[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -33787,7 +36578,7 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys2[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys2[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -33812,7 +36603,7 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys3[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys3[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -33835,7 +36626,55 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys3[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys3[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
+						m.edit = true
+					end 
+					imgui.SameLine()
+					imgui.Text(u8(m.sName))
+					imgui.SameLine()
+					imgui.TextQuestion(u8(m.sQuestion))
+				end
+				
+				for s,m in pairs(comboheathotkeys4) do 
+					if m.edit then 
+						local downKey = getDownKeys()
+						maincfg.comboheathotkeys4[s] = downKey
+						if downKey == '' then
+							if os.clock() - m.ticked > 0.5 then
+								m.ticked = os.clock()
+								m.tickedState = not m.tickedState
+							end
+							m.name = m.tickedState and "No" or "##isNo "..m.ticked
+						else
+							m.name = key.key_names[maincfg.comboheathotkeys4[s]]
+							m.edit = false
+							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
+						end
+					end
+					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.comboheathotkeys4[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
+						m.edit = true
+					end 
+					imgui.SameLine()
+					imgui.Text(u8(m.sName))
+				end
+				
+				for s,m in pairs(combohotkeys4) do 
+					if m.edit then 
+						local downKey = getDownKeys()
+						maincfg.combohotkeys4[s] = downKey
+						if downKey == '' then
+							if os.clock() - m.ticked > 0.5 then
+								m.ticked = os.clock()
+								m.tickedState = not m.tickedState
+							end
+							m.name = m.tickedState and "No" or "##isNo "..m.ticked
+						else
+							m.name = key.key_names[maincfg.combohotkeys4[s]]
+							m.edit = false
+							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
+						end
+					end
+					imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.combohotkeys4[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -33860,7 +36699,7 @@ function settingosnova()
 							inicfg.save(maincfg, 'Mono\\hotkeymono.ini')
 						end
 					end
-					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.hotkeys[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(233, 0)) then
+					imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8(tostring(maincfg.hotkeys[s] == nil and "Отсутствует".."##"..s or m.name.."##"..s)), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(219, 0)) then
 						m.edit = true
 					end 
 					imgui.SameLine()
@@ -34041,7 +36880,10 @@ function settingosnova()
 				maincfg.comboheathotkeys2.autodronev4 = VK_C
 				maincfg.combohotkeys3.autodronev5 = VK_MENU
 				maincfg.comboheathotkeys3.autodronev6 = VK_0
+				maincfg.combohotkeys4.autodronev7 = VK_MENU
+				maincfg.comboheathotkeys4.autodronev8 = VK_Q
 				chatInfo.v = false
+				flashbtcvybor.v = false
 				keyT.v = false
 				antiafk.v = false
 				launcher.v = false
@@ -34091,6 +36933,7 @@ function settingosnova()
 				autofill.v = false
 				faminvfast.v = false
 				arendafast.v = false
+				minerfast.v = false
 				invfast.v = false
 				fastkey.v = false
 				fastlock.v = false
@@ -34543,6 +37386,20 @@ function settingosnova()
 		cfg3.backup.inputfindtg8v2 = inputfindtg8.v
 		cfg3.backup.inputfindtg9v2 = inputfindtg9.v
 		cfg3.backup.inputfindtg10v2 = inputfindtg10.v
+		
+		cfg3.backup.inputhousenamev2 = inputhousename.v
+		cfg3.backup.inputhousename2v2 = inputhousename2.v
+		cfg3.backup.inputhousename3v2 = inputhousename3.v
+		cfg3.backup.inputhousename4v2 = inputhousename4.v
+		cfg3.backup.inputhousename5v2 = inputhousename5.v
+		cfg3.backup.inputhousename6v2 = inputhousename6.v
+		cfg3.backup.inputhousename7v2 = inputhousename7.v
+		cfg3.backup.inputhousename8v2 = inputhousename8.v
+		cfg3.backup.inputhousename9v2 = inputhousename9.v
+		cfg3.backup.inputhousename10v2 = inputhousename10.v
+		cfg3.backup.inputhousename11v2 = inputhousename11.v
+		cfg3.backup.inputhousename12v2 = inputhousename12.v
+		
 		cfg3.backup.activatorv2 = activator.v
 		cfg3.backup.crfindv2 = crfind.v
 		cfg3.backup.activcallv2 = activcall.v
@@ -34665,6 +37522,7 @@ function settingosnova()
 		cfg3.backup.assistant2v2 = assistant2.v
 		cfg3.backup.assistant8v2 = assistant8.v
 		cfg3.backup.chatInfov2 = chatInfo.v
+		cfg3.backup.flashbtcvyborv2 = flashbtcvybor.v
 		cfg3.backup.raskladkav2 = raskladka.v
 		cfg3.backup.recongenv2 = recongen.v
 		cfg3.backup.reconclosedv2 = reconclosed.v
@@ -34679,6 +37537,7 @@ function settingosnova()
 		cfg3.backup.autofillv2 = autofill.v
 		cfg3.backup.faminvfastv2 = faminvfast.v
 		cfg3.backup.arendafastv2 = arendafast.v
+		cfg3.backup.minerfastv2 = minerfast.v
 		cfg3.backup.invfastv2 = invfast.v
 		cfg3.backup.fastkeyv2 = fastkey.v
 		cfg3.backup.fastlockv2 = fastlock.v
@@ -35272,6 +38131,20 @@ function settingosnova()
 		 inputfindtg8.v =  ''..cfg3.backup.inputfindtg8v2 
 		 inputfindtg9.v =  ''..cfg3.backup.inputfindtg9v2 
 		 inputfindtg10.v =  ''..cfg3.backup.inputfindtg10v2 
+		 
+		 inputhousename.v =  ''..cfg3.backup.inputhousenamev2 
+		 inputhousename2.v =  ''..cfg3.backup.inputhousename2v2
+		 inputhousename3.v =  ''..cfg3.backup.inputhousename3v2
+		 inputhousename4.v =  ''..cfg3.backup.inputhousename4v2
+		 inputhousename5.v =  ''..cfg3.backup.inputhousename5v2
+		 inputhousename6.v =  ''..cfg3.backup.inputhousename6v2
+		 inputhousename7.v =  ''..cfg3.backup.inputhousename7v2
+		 inputhousename8.v =  ''..cfg3.backup.inputhousename8v2
+		 inputhousename9.v =  ''..cfg3.backup.inputhousename9v2
+		 inputhousename10.v =  ''..cfg3.backup.inputhousename10v2
+		 inputhousename11.v =  ''..cfg3.backup.inputhousename11v2
+		 inputhousename12.v =  ''..cfg3.backup.inputhousename12v2
+		 
 		 activator.v =  ''..cfg3.backup.activatorv2 
 		 crfind.v =  ''..cfg3.backup.crfindv2 
 		 activcall.v =  ''..cfg3.backup.activcallv2 
@@ -35395,6 +38268,7 @@ function settingosnova()
 		 assistant2.v =  cfg3.backup.assistant2v2 
 		 assistant8.v =  cfg3.backup.assistant8v2 
 		 chatInfo.v =  cfg3.backup.chatInfov2 
+		 flashbtcvybor.v =  cfg3.backup.flashbtcvyborv2 
 		 raskladka.v =  cfg3.backup.raskladkav2 
 		 recongen.v =  cfg3.backup.recongenv2 
 		 reconclosed.v =  cfg3.backup.reconclosedv2 
@@ -35409,6 +38283,7 @@ function settingosnova()
 		 autofill.v  =  cfg3.backup.autofillv2 
 		 faminvfast.v  =  cfg3.backup.faminvfastv2 
 		 arendafast.v  =  cfg3.backup.arendafastv2 
+		 minerfast.v  =  cfg3.backup.minerfastv2 
 		 invfast.v =   cfg3.backup.invfastv2 
 		 fastkey.v  =  cfg3.backup.fastkeyv2 
 		 fastlock.v  =  cfg3.backup.fastlockv2 
