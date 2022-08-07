@@ -26,9 +26,12 @@ serverclosed = true
 fontsizev2 = nil
 fontsizev3 = nil
 carid = 0
+itogohat = 0
+itogohatv2 = 0
 caridv2 = 0
 slotazfind = false
 slotpodarokfind = false
+statrbtc = false
 closefind = false
 findrul = false
 local fa_font = nil
@@ -36,6 +39,14 @@ delplayer = false
 begauto = false
 local npc, infnpc = {}, {}
 local admmp = 2111
+statuszidkost1v2 = 0
+statuszidkost2v2 = 0
+statuszidkost3v2 = 0
+statuszidkost4v2 = 0
+statuspuskv2 = ''
+statuspusk2v2 = ''
+statuspusk3v2 = ''
+statuspusk4v2 = ''
 scancr = 2
 pinkod = '1234'
 arztest3 = 1
@@ -85,6 +96,7 @@ last_text = nil
 data_cost = {} 
 checkingvip = false
 callwork = false
+
 itemfindfish = {}
 rodfindfish = {}
 fishinfo = 'Информация с эхолота (чтобы появилась информация, включите "Записывать информацию с эхолота" и откройте эхолот)'
@@ -94,11 +106,18 @@ colorcm2 = '{23ca4c}'
 fishbool = false
 fishboolv2 = false
 fishboolv3 = false
+fishmark = false
 activeeholot = false
+markfish = false
 useeholot = false
+useeholotv2 = false
 closeeholot = false
+closeeholotv2 = false
+
 AutoReboot = nil
 fishses = 0
+fishmoney = 0
+larecses = 0
 itemses = 0
 sellkolitem = 0
 sellkolfish = 0
@@ -541,6 +560,8 @@ mouseCoord6 = false
 mouseCoord7 = false  
 mouseCoord8 = false 
 mouseCoord9 = false 
+mouseCoordfish6 = false
+mouseCoordfish7 = false 
 getServerColored = ''
 arr_str = {
     u8"Синий",
@@ -658,7 +679,9 @@ local cfg = inicfg.load({
 	},
 	infofishkol = {
 		fishkol = 0,
-		itemkol = 0
+		itemkol = 0,
+		moneykol = 0,
+		lareckol = 0
 	},
 	settingcall = {
         lastcall ='2222',
@@ -1396,6 +1419,14 @@ local cfg3 = inicfg.load({
 		zadervkasellfishv2 = 300,
 		infofishv2 = false,
 		saveinfofishv2 = false,
+		
+		markeholotv2 = false,
+		statsfishv2 = false,
+		assistantfish2v2 = false,
+		zadervkafishlovecv2 = 200,
+		infofishX4v2 = 0,
+		infofishY4v2 = 0,
+		
 		statafishv2 = false,
 		fishydov2 = false,
 		fishbaitv1v2 = false,
@@ -1814,6 +1845,8 @@ local SET = {
 		adredak7 = 'В 165 баре много девочек и пива.',
 		adredak8 = 'В 165 баре много девочек и пива.',
 		adredak9 = 'В 165 баре много девочек и пива.',
+		houseone = '',
+		housetwo = '',
 		inputfindvk = '',
 		inputfindvk2 = '',
 		inputfindvk3 = '',
@@ -2148,16 +2181,24 @@ local SET = {
 		vsevorulzolotov2 = 0,
 		vsevorulserebrov2 = 0,
 		enableskin = false,
-		zadervkafish = 300,
-		zadervkafishtime = 60,
+		
+		btcitog = 0,
+		
+		zadervkafish = 400,
+		zadervkafishtime = 5,
 		zadervkafishklava = 10,
-		zadervkafishclick = 10,
-		zadervkaeholot = 5,
+		zadervkafishclick = 110,
+		zadervkaeholot = 30,
 		zadervkasellfish = 300,
-		infofish = false,
-		saveinfofish = false,
-		statafish = false,
+		zadervkafishlovec = 200,
+		infofishX4 = 0,
+		infofishY4 = 0,
+		
+		infofish = true,
+		saveinfofish = true,
+		statafish = true,
 		fishydo = false,
+		klavafish = false,
 		fishbaitv1 = false,
 		fishbaitv2 = false,
 		fishbaitv3 = false,
@@ -2184,6 +2225,11 @@ local SET = {
 		fishbaitv24 = false,
 		fishbaitv25 = false,
 		fishklavaN = false,
+		delyved = false,
+		markeholot = false,
+		statsfish = false,
+		assistantfish2 = false,
+
 		skin = 1
 	},
 	assistant = {
@@ -2201,6 +2247,10 @@ local SET = {
 	assistant8 = {
 		asX8 = 1,
 		asY8 = 1
+	},
+	assistantfish2 = {
+		asfishX4 = 1,
+		asfishY4 = 1
 	},
 	DIALOG_EDITOR = 
 		{
@@ -2237,6 +2287,9 @@ local SET = {
 		
 	},
 	informervrem = {
+		
+	},
+	statsinformerfish = {
 		
 	}
 }
@@ -2362,6 +2415,7 @@ win_state['housenumber'] = imgui.ImBool(false)
 win_state['housenumberredak'] = imgui.ImBool(false)
 win_state['housenumberredakv2'] = imgui.ImBool(false)
 win_state['shemafunksv2'] = imgui.ImBool(false)
+win_state['itogibtc'] = imgui.ImBool(false)
 win_state['housenumberv2'] = imgui.ImBool(false)
 win_state['shemainst'] = imgui.ImBool(false)
 win_state['kartinst'] = imgui.ImBool(false)
@@ -2393,6 +2447,9 @@ win_state['renew'] = imgui.ImBool(false)
 win_state['find'] = imgui.ImBool(false)
 win_state['ass'] = imgui.ImBool(false)
 win_state['leave'] = imgui.ImBool(false)
+win_state['settingsfish'] = imgui.ImBool(false)
+win_state['helpfish'] = imgui.ImBool(false)
+win_state['statsinformerfish'] = imgui.ImBool(false)
 checked_test = imgui.ImBool(false)
 checked_test2 = imgui.ImBool(false)
 checked_test3 = imgui.ImBool(false)
@@ -2500,6 +2557,8 @@ lovlyfura3 = imgui.ImBool(false)
 poisklavka = imgui.ImBool(false)
 lovlyvideo = imgui.ImBool(false)
 rendernefti = imgui.ImBool(false)
+renderapple = imgui.ImBool(false)
+renderolen = imgui.ImBool(false)
 lovlyohlad = imgui.ImBool(false)
 banditactive = imgui.ImBool(false)
 banditactivev2 = imgui.ImBool(false)
@@ -4338,6 +4397,10 @@ function mainmenu()
 			win_state['winprofile'].v = not win_state['winprofile'].v
 		elseif win_state['windowspusk'].v then
 			win_state['windowspusk'].v = not win_state['windowspusk'].v
+		elseif win_state['settingsfish'].v then
+			win_state['settingsfish'].v = not win_state['settingsfish'].v
+		elseif win_state['helpfish'].v then
+			win_state['helpfish'].v = not win_state['helpfish'].v
 		elseif win_state['piar'].v then
 			win_state['piar'].v = not win_state['piar'].v
 		elseif win_state['skupv2'].v then
@@ -4393,6 +4456,8 @@ function mainmenu()
 			win_state['housenumberredakv2'].v = not win_state['housenumberredakv2'].v
 		elseif win_state['shemafunksv2'].v then
 			win_state['shemafunksv2'].v = not win_state['shemafunksv2'].v
+		elseif win_state['itogibtc'].v then
+			win_state['itogibtc'].v = not win_state['itogibtc'].v
 		elseif win_state['btcsettingsv2'].v then
 			win_state['btcsettingsv2'].v = not win_state['btcsettingsv2'].v
 		elseif win_state['housenumberv2'].v then
@@ -4920,6 +4985,8 @@ function main()
 	lua_thread.create(fishballonv3)
 	lua_thread.create(obmentradefish)
 	lua_thread.create(eholotcheck)
+	lua_thread.create(eholotcheckv2)
+	lua_thread.create(informerperemstats)
 	lua_thread.create(get_telegram_updates)
 	if raskladka.v then
 	lua_thread.create(inputChat)
@@ -4949,7 +5016,12 @@ function main()
 	sampRegisterChatCommand("fishmenu", show_dialv5)
 	sampRegisterChatCommand("calc", show_dialv6)
 	sampRegisterChatCommand("connect", connect_cmd)
+	
+	sampRegisterChatCommand("itogibtc", function() win_state['itogibtc'].v = not win_state['itogibtc'].v end)
+	
 	sampRegisterChatCommand("connectname", connect_cmdname)
+	sampRegisterChatCommand("fishlovlya", function() loveckill = not loveckill if loveckill then fishlovlyav2.v = true checkeholot.v = true sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Рыбалка вторым способом и Авто-проверка эхолота включена.", -1) else fishlovlyav2.v = false checkeholot.v = false sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Рыбалка вторым способом и Авто-проверка эхолота отключена.", -1) end end)
+	
 	sampRegisterChatCommand("killgraph", function() 
 	enablekill = not enablekill
 	if givemedist.v == true then 
@@ -5043,7 +5115,7 @@ end
 		end
 	end)
 	
-	if win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v then lua_thread.create(function() wait(4000) showCursor(false, false) end) end
+	if win_state['informer'].v or win_state['statsinformerfish'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v then lua_thread.create(function() wait(4000) showCursor(false, false) end) end
 	
 	if enableskin.v then changeSkin(-1, localskin.v) end
 	if givemedist.v then gotofunc("GivemeDist") end
@@ -5111,10 +5183,11 @@ end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys3.autodronev5)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys3.autodronev6)) then thisScript():unload() end
 		
-		if not sampIsChatInputActive() and minerfast.v and isKeyJustPressed(u8:decode(maincfg.combohotkeys4.autodronev7)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys4.autodronev8)) then win_state['shemafunksv2'].v = not win_state['shemafunksv2'].v end
+		if not sampIsChatInputActive() and minerfast.v and isKeyJustPressed(u8:decode(maincfg.combohotkeys4.autodronev7)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys4.autodronev8)) then win_state['itogibtc'].v = false win_state['btcsettingsv2'].v = false win_state['housenumberv2'].v = false win_state['housenumberredakv2'].v = false win_state['shemafunksv2'].v = not win_state['shemafunksv2'].v end
 		
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and isKeyJustPressed(maincfg.hotkeys.unbaginvent) then fixpricecopia() end
+		if not sampIsChatInputActive() and klavafish.v and isKeyJustPressed(69) and isKeyJustPressed(18) then markfish = true fishmark = true end
 		
 		if windowsstyle.v == false then apply_custom_style2() end
 		if windowsstyle.v then apply_custom_style() end
@@ -5416,6 +5489,69 @@ end
 			end
 		end
 	end
+	
+		if renderapple.v then 
+		for id = 0, 2048 do
+            local result = sampIs3dTextDefined( id )
+            if result then
+                local text, color, posX, posY, posZ, distance, ignoreWalls, playerId, vehicleId = sampGet3dTextInfoById( id )
+                if text:find('Сливовое дерево') then
+                    local wposX, wposY = convert3DCoordsToScreen(posX,posY,posZ)
+                    x2,y2,z2 = getCharCoordinates(PLAYER_PED)
+                    x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
+                    local resX, resY = getScreenResolution()
+                    if wposX < resX and wposY < resY and isPointOnScreen (posX,posY,posZ,1) then
+                        renderFontDrawText(font, text, wposX, wposY,-1)
+                    end
+                end
+			end
+		end
+		for id = 0, 2048 do
+            local result = sampIs3dTextDefined( id )
+            if result then
+                local text, color, posX, posY, posZ, distance, ignoreWalls, playerId, vehicleId = sampGet3dTextInfoById( id )
+                if text:find('Яблочное дерево') then
+                    local wposX, wposY = convert3DCoordsToScreen(posX,posY,posZ)
+                    x2,y2,z2 = getCharCoordinates(PLAYER_PED)
+                    x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
+                    local resX, resY = getScreenResolution()
+                    if wposX < resX and wposY < resY and isPointOnScreen (posX,posY,posZ,1) then
+                        renderFontDrawText(font, text, wposX, wposY,-1)
+                    end
+                end
+			end
+		end
+		for id = 0, 2048 do
+            local result = sampIs3dTextDefined( id )
+            if result then
+                local text, color, posX, posY, posZ, distance, ignoreWalls, playerId, vehicleId = sampGet3dTextInfoById( id )
+                if text:find('Кокосовое дерево') then
+                    local wposX, wposY = convert3DCoordsToScreen(posX,posY,posZ)
+                    x2,y2,z2 = getCharCoordinates(PLAYER_PED)
+                    x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
+                    local resX, resY = getScreenResolution()
+                    if wposX < resX and wposY < resY and isPointOnScreen (posX,posY,posZ,1) then
+                        renderFontDrawText(font, text, wposX, wposY,-1)
+                    end
+                end
+			end
+		end
+	end
+			 if renderolen.v then 
+			 for _, v in pairs(getAllObjects()) do
+                if isObjectOnScreen(v) then
+                    local res, oX, oY, oZ = getObjectCoordinates(v)
+                    local x1, y1 = convert3DCoordsToScreen(oX,oY,oZ)
+                    local objmodel = getObjectModel(v)
+                    local x2,y2,z2 = getCharCoordinates(PLAYER_PED)
+                    local x10, y10 = convert3DCoordsToScreen(x2,y2,z2)
+                    dist = string.format("%.0f", getDistanceBetweenCoords3d(oX,oY,oZ, x2, y2, z2))
+                    if objmodel == 19315 then renderDrawLine(x10, y10, x1, y1 - 4, 1.1, 0xC4C4C4C4)
+					renderFontDrawText(font, string.format("Олень", objmodel), x1, y1, -1)
+					end
+                end
+            end
+		end
 		
 		 if givemedist.v then
             if isCharInAnyPlane(PLAYER_PED) or isCharInAnyHeli(PLAYER_PED) then --airveh dist
@@ -5456,7 +5592,7 @@ end
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['calc'].v or win_state['fishmenu'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['housenumberv2'].v or win_state['housenumberredakv2'].v or win_state['shemafunksv2'].v or win_state['btcsettingsv2'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['statsinformerfish'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['bandit'].v or win_state['lovec'].v or win_state['calc'].v or win_state['fishmenu'].v or win_state['settingsfish'].v or win_state['helpfish'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['housenumberv2'].v or win_state['housenumberredakv2'].v or win_state['shemafunksv2'].v or win_state['itogibtc'].v or win_state['btcsettingsv2'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -5914,15 +6050,20 @@ function saveSettings(args, key)
 	ini.shahtainformer.sbor = infsbor.v
 	ini.shahtainformer.sborferma = infsborferma.v
 	
+	ini.settings.btcitog = btcitog.v
+	
 	ini.settings.zadervkafish = zadervkafish.v
 	ini.settings.zadervkafishtime = zadervkafishtime.v
+	ini.settings.zadervkafishlovec = zadervkafishlovec.v
 	ini.settings.zadervkafishklava = zadervkafishklava.v
 	ini.settings.zadervkafishclick = zadervkafishclick.v
 	ini.settings.zadervkaeholot = zadervkaeholot.v
 	ini.settings.zadervkasellfish = zadervkasellfish.v
+	
 	ini.settings.infofish = infofish.v
 	ini.settings.saveinfofish = saveinfofish.v
 	ini.settings.statafish = statafish.v
+	ini.settings.klavafish = klavafish.v
 	ini.settings.fishydo = fishydo.v
 	ini.settings.fishbaitv1 = fishbaitv1.v
 	ini.settings.fishbaitv2 = fishbaitv2.v
@@ -5950,6 +6091,14 @@ function saveSettings(args, key)
 	ini.settings.fishbaitv24 = fishbaitv24.v
 	ini.settings.fishbaitv25 = fishbaitv25.v
 	ini.settings.fishklavaN = fishklavaN.v
+	ini.settings.delyved = delyved.v
+	ini.settings.markeholot = markeholot.v
+	ini.settings.statsfish = statsfish.v
+	ini.settings.assistantfish2 = assistantfish2.v
+	ini.assistantfish2.asfishX4 = asfishX4
+	ini.assistantfish2.asfishY4 = asfishY4
+	ini.settings.infofishX4 = infofishX4
+	ini.settings.infofishY4 = infofishY4
 	
 	ini.settings.assistant = assistant.v
 	ini.settings.assistant1 = assistant1.v
@@ -6285,6 +6434,8 @@ function saveSettings(args, key)
 	ini.settings.adredak7 = u8:decode(adredak7.v)
 	ini.settings.adredak8 = u8:decode(adredak8.v)
 	ini.settings.adredak9 = u8:decode(adredak9.v)
+	ini.settings.houseone = u8:decode(houseone.v)
+	ini.settings.housetwo = u8:decode(housetwo.v)
 	ini.settings.inputfindvk = u8:decode(inputfindvk.v)
 	ini.settings.inputfindvk2 = u8:decode(inputfindvk2.v)
 	ini.settings.inputfindvk3 = u8:decode(inputfindvk3.v)
@@ -6753,6 +6904,12 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	else
 	phonetext = 'В самолёте'
 	end
+	
+	if title:match('Информация о рыбе') and checkeholot.v == true then
+		if text:match('{ffffff}В данном секторе отсутствует рыба') then checkeholot.v = false fishlovlyav2.v = false 
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Авто-ловля рыбы и Авто-проверка эхолота отключена, т.к в секторе отсутствует рыба.", -1)
+		end
+	end
 
 	if dialogId == 25286 and FishEn == 2 then 
 	chleb = tonumber(text:match('Хлеб\t{ae433d}(%d+)'))
@@ -6785,6 +6942,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	end
 
 	if title:find('Информация о рыбе') and infofish.v then fishinfo = text:gsub('/ Отсутствует','') end
+	
 	if title:find('Информация о рыбе') and saveinfofish.v then 
 	lua_thread.create(function()
 	fishbaitv1.v = false fishbaitv2.v = false fishbaitv3.v = false fishbaitv4.v = false fishbaitv5.v = false fishbaitv6.v = false fishbaitv7.v = false fishbaitv8.v = false fishbaitv9.v = false fishbaitv10.v = false fishbaitv11.v = false fishbaitv12.v = false fishbaitv13.v = false fishbaitv14.v = false fishbaitv15.v = false fishbaitv16.v = false fishbaitv17.v = false fishbaitv18.v = false fishbaitv19.v = false fishbaitv20.v = false fishbaitv21.v = false fishbaitv22.v = false fishbaitv23.v = false fishbaitv24.v = false fishbaitv25.v = false
@@ -6816,6 +6974,7 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	if text:find('Майский жук') then fishbaitv22.v = true end
 		end)
 	end
+	
 	if dialogId == 25288 and fishlovlya.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
 	if dialogId == 25288 and fishlovlyav2.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
 	if dialogId == 25288 and nofunction.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
@@ -6910,6 +7069,34 @@ end
 		closeDialog()
 		end
 	end
+	
+	if btcflash.v and dialogId == 25182 and statrbtc == false then 
+	houseone.v = ''
+	housetwo.v = ''
+	statrbtc = true
+	end
+	if btcflash.v and dialogId == 25182 then
+	statuszidkost1v2 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost2v2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost3v2 = tonumber(text:match('Полка №3 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuszidkost4v2 = tonumber(text:match('Полка №4 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
+	statuspuskv2 = text:find('Полка №1 | {F78181}На паузе')
+	statuspusk2v2 = text:find('Полка №2 | {F78181}На паузе')
+	statuspusk3v2 = text:find('Полка №3 | {F78181}На паузе')
+	statuspusk4v2 = text:find('Полка №4 | {F78181}На паузе')
+	end
+	if btcflash.v and dialogId == 25182 then
+	if statuszidkost1v2 < 15 or statuszidkost2v2 < 15 or statuszidkost3v2 < 15 or statuszidkost4v2 < 15 then
+		itogohat = title:match('№(%d+)')
+		houseone.v = ''..houseone.v..', '..itogohat
+	end
+end
+	if btcflash.v and dialogId == 25182 then
+	if statuspuskv2 or statuspusk2v2 or statuspusk3v2 or statuspusk4v2 then
+		itogohatv2 = title:match('№(%d+)')
+		housetwo.v = ''..housetwo.v..', '..itogohatv2
+	end
+end
 	
 	if liquid.v and dialogId == 25243 then
 	statuszidkost1 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
@@ -7635,7 +7822,8 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	fishboolv3 = false
 		end)
 	end
-	if checkeholot.v and activeeholot then 
+	
+	if checkeholot.v and activeeholot and markeholot.v == false then 
     lua_thread.create(function()
 	 if data.modelId == 18875 then
 		wait(1000)
@@ -7656,6 +7844,32 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		sampCloseCurrentDialogWithButton(1)
         closeeholot = false
         activeeholot = false
+      end
+    end)
+  end
+  
+  if markfish == true and activeeholotv2 then 
+    lua_thread.create(function()
+	 if data.modelId == 18875 then
+		wait(1000)
+        sampSendClickTextdraw(id)
+		useeholotv2 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and useeholotv2 then
+        clickID = id + 1
+		wait(500)
+        sampSendClickTextdraw(clickID)
+        useeholotv2 = false
+        closeeholotv2 = true
+      end
+      if closeeholotv2 then
+        wait(300)
+		sampSendClickTextdraw(admmp)
+		wait(111)
+		sampCloseCurrentDialogWithButton(1)
+        closeeholotv2 = false
+        activeeholotv2 = false
+		markfish = false
       end
     end)
   end
@@ -10790,7 +11004,7 @@ function imgui.OnDrawFrame()
     local windowPosX = getStructElement(input, 0x8, 4)
     local windowPosY = getStructElement(input, 0xC, 4)
 
-	imgui.ShowCursor = not win_state['informer'].v and not win_state['informervrem'].v and not win_state['pismoinformer'].v and not win_state['shahtainformer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
+	imgui.ShowCursor = not win_state['informer'].v and not win_state['informervrem'].v and not win_state['pismoinformer'].v and not win_state['statsinformerfish'].v and not win_state['shahtainformer'].v and not win_state['ass'].v and not win_state['find'].v or win_state['main'].v or win_state['base'].v or win_state['update'].v or win_state['player'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v 
 	
 	if not win_state['main'].v then 
           imgui.Process = false
@@ -10850,6 +11064,10 @@ function imgui.OnDrawFrame()
 		  imgui.ShowCursor = true
        end
 	   
+	if not win_state['main'].v and win_state['statsinformerfish'].v then 
+          imgui.Process = true
+       end
+	   
 	if not win_state['main'].v and win_state['bandit'].v then 
           imgui.Process = true
 		  imgui.ShowCursor = true
@@ -10866,6 +11084,16 @@ function imgui.OnDrawFrame()
        end
 	   
 	if not win_state['main'].v and win_state['fishmenu'].v then 
+          imgui.Process = true
+		  imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['settingsfish'].v then 
+          imgui.Process = true
+		  imgui.ShowCursor = true
+       end
+	
+	if not win_state['main'].v and win_state['helpfish'].v then 
           imgui.Process = true
 		  imgui.ShowCursor = true
        end
@@ -10907,6 +11135,11 @@ function imgui.OnDrawFrame()
        end
 	   
 	if not win_state['main'].v and win_state['shemafunksv2'].v then
+		 imgui.Process = true
+		 imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['itogibtc'].v then
 		 imgui.Process = true
 		 imgui.ShowCursor = true
        end
@@ -12127,6 +12360,10 @@ end
 		funksmenuv2()
 	end
 	
+	if win_state['itogibtc'].v then
+		itogibtcv2()
+	end
+	
 	if win_state['btcsettingsv2'].v then
 		settingsbtcv2()
 	end
@@ -12660,7 +12897,7 @@ end
 	
 	if win_state['lovec'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(360, 396), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(360, 456), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'Авто-ловля', win_state['lovec'], imgui.WindowFlags.NoResize)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю ларцов "Concept Car Luxury"', lovlylarec) imgui.SameLine() imgui.TextQuestion(u8"С данным функционалом вполне реально поймать ларец. Просто включите функционал перед PD и нажимайте ALT еще и вручную. Задержку попробуйте поставить самую минимальную, если не кикает за флуд. Если включен функционал, то диалоги не отображаются ибо они только мешают.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать ловлю видеокарт', lovlyvideo)
@@ -12680,6 +12917,9 @@ end
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер свободных лавок', poisklavka) imgui.SameLine() imgui.TextQuestion(u8"Данная функция помогает вам в поиске свободных лавок на ЦР. Включать её рекомендуется перед заходом на рынок и чтобы все лавки были в зоне стрима, встать по середине (примерно у эскалатора).")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер 3D текста для нефтевышек', rendernefti) imgui.SameLine() imgui.TextQuestion(u8"С данной функцией вам не придется вплотную подъезжать к нефтевышке (которые находятся в пустыне), чтобы рассмотреть количество нефти.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер 3D текста для деревьев', renderapple) imgui.SameLine() imgui.TextQuestion(u8"С данной функцией найти деревья со сливами, яблоками и кокосами будет в 10 раз проще, т.к нужное дерево вы сможете найти по тексту издалека.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать рендер на оленей', renderolen) imgui.SameLine() imgui.TextQuestion(u8"Функция показывает местонахождение оленей линией на экране.")
+		
 		imgui.Text('') imgui.SameLine() if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
 		delplayer = not delplayer
 			for _, handle in ipairs(getAllChars()) do
@@ -12710,16 +12950,36 @@ end
 	
 	if win_state['fishmenu'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(985, 565), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(985, 545), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8'FishRod | Авто-ловля рыбы', win_state['fishmenu'], imgui.WindowFlags.NoResize)
 		imgui.PushStyleColor(imgui.Col.ChildWindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 0.15))
-		imgui.Text('') imgui.SameLine() 
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine()
 		imgui.BeginChild('##asdasasddf12462323', imgui.ImVec2(969, 132), false)
+		imgui.AlignTextToFramePadding(); imgui.Text(u8("Вывести статистику на экран")); imgui.SameLine(); imgui.ToggleButton(u8'Вывести статистику на экран', statsfish)
+		if statsfish.v then
+					imgui.SameLine()
+					if imgui.CustomButton(u8('Переместить'), buttonclick, buttonvydel, buttonpol) then
+						sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Выберите позицию и нажмите "..colorcm2.."Enter{FFFFFF} чтобы сохранить ее.", -1)
+						win_state['fishmenu'].v = false
+						win_state['informer'].v = false
+						win_state['informervrem'].v = false
+						win_state['shahtainformer'].v = false
+						win_state['noteswin'].v = false
+						win_state['pismoinformer'].v = false
+						mouseCoordfish6 = true
+					end
+				end
+		imgui.Separator()
 		imgui.Text(u8'Рыбы поймано: | За сессию: '..fishses..u8' шт | За всё время: '..cfg.infofishkol.fishkol..u8' шт')
 		imgui.Text(u8'Предметов поймано: | За сессию: '..itemses..u8' шт | За всё время: '..cfg.infofishkol.itemkol..u8' шт')
+		imgui.Text(u8'Ларцов получено: | За сессию: '..larecses..u8' шт | За всё время: '..cfg.infofishkol.lareckol..u8' шт')
+		imgui.Text(u8'Всего рыбы продано на сумму в '..number_separator(cfg.infofishkol.moneykol)..u8'$')
 		imgui.Separator()
 		imgui.TextColoredRGB(''..fishinfo)
 		imgui.EndChild()
+		
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8('Инструкция'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['helpfish'].v = not win_state['helpfish'].v end
 		
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine()  imgui.Text(u8'Способ ловли рыбы №1') imgui.SameLine() imgui.TextQuestion(u8"Данный способ ловли очень прост. Активируете ловлю, укомплектовываете удочку и начинаете рыбачить. Если наживка будет неподходящей, то скрипт сменит её на другую. Меняет наживки скрипт по порядку, как есть в списке наживок. Если вы хотите менять наживки самостоятельно, то включите функцию 'Запретить смену наживки'.") 
@@ -12728,13 +12988,14 @@ end
 		imgui.Text('') imgui.SameLine()  imgui.Checkbox(u8'Активировать ловлю рыбы', fishlovlya) imgui.SameLine() imgui.TextQuestion(u8"Для активации Авто-ловли нужно укомплектовать удочку всем необходимым, включить функцию и забросить удочку. Далее скрипт автоматический будет нажимать N для ловли рыбы и после забрасывать удочку обратно. Если у вас будет стоять неподходящая наживка - скрипт поменяет её. Если у вас нет наживки, которую выбрал скрипт - он выберет другую. Если у вас закончится наживка - скрипт поменяет её на другую. Советую рыбачить в море на лодке (там больше всего рыбы) и купить с собой побольше наживки.") 
 		if fishlovlya.v then fishlovlyav2.v = false end
 		
+		
 		imgui.SameLine() imgui.Checkbox(u8'Запретить смену наживки', fishydo) imgui.SameLine() imgui.TextQuestion(u8"Если вы не хотите, чтобы скрипт автоматический менял наживку, то включите данную функцию.") 
 		
 		imgui.SameLine() imgui.Checkbox(u8'Нажимать только на клавишу N', nofunction) imgui.SameLine() imgui.TextQuestion(u8"Если вы хотите, чтобы скрипт только нажимал в нужное время на N, без смены наживки и закидывания удочки, то активируйте данный функционал.") 
 		if nofunction.v then fishlovlyav2.v = false fishlovlya.v = false fishydo.v = false end
 		
-		imgui.SameLine() imgui.Checkbox(u8'Записывать информацию с эхолота', infofish)
-
+		imgui.SameLine() imgui.Checkbox(u8'Вести статистику пойманных вещей', statafish) imgui.SameLine() imgui.TextQuestion(u8"Если включено, то в статистику будут записываться данные о том, сколько вы поймали рыбы, вещей, получили ларцов и заработали с продажи рыбы.") 
+		
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Способ ловли рыбы №2') imgui.SameLine() imgui.TextQuestion(u8"В отличии от первого способа, в данном способе вы сможете выбрать определенную наживку для рыбалки.") 
 		imgui.Separator()
@@ -12742,17 +13003,11 @@ end
 		if fishlovlyav2.v then fishlovlya.v = false fishydo.v = false end
 		
 		imgui.SameLine(244) imgui.Checkbox(u8'Выбирать наживку, найденную в эхолоте', saveinfofish) imgui.SameLine() imgui.TextQuestion(u8"Если включено, то при открытии эхолота, убирается старый выбор наживок и устанавливается новый.") 
+		imgui.SameLine() imgui.Checkbox(u8'Записывать информацию с эхолота', infofish)
+		imgui.SameLine() imgui.Checkbox(u8'Авто-проверка эхолота', checkeholot) imgui.SameLine() imgui.TextQuestion(u8"Через установленное вами время, будет открываться эхолот, чтобы обновить с него данные. Задержку можно поменять в Настройках. Инвентарь должен быть на англ.языке. Эхолот должен быть на первой странице. По умолчанию установлена задержка на 30 секунд. Также можно включить проверку эхолота только после поимки рыбы/предметов в настройках.") 
 		
-		imgui.SameLine(555) imgui.Checkbox(u8'Авто-проверка эхолота', checkeholot) imgui.SameLine() imgui.TextQuestion(u8"Через установленное вами время, будет открываться эхолот, чтобы обновить с него данные. Инвентарь должен быть на англ.языке. Эхолот должен быть на первой странице. По умолчанию установлена задержка на 5 минут.") 
-		
-		imgui.SameLine()
-		imgui.PushItemWidth(70)
-		imgui.SliderInt(u8'Задержка на проверку##436546ytght',zadervkaeholot,1, 60)
-		imgui.PopItemWidth()
-		
-		imgui.SameLine() imgui.TextQuestion(u8"Задержка влияет на то, через сколько будет повторно открываться эхолот для обновления данных. Задержка устанавливается в минутах. По умолчанию установлено на 5 минут.") 
-		
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Хлеб', fishbaitv1)
+		imgui.Text('') imgui.SameLine() 
+		imgui.Checkbox(u8'Хлеб', fishbaitv1)
 		imgui.SameLine(83)
 		imgui.Checkbox(u8'Червь', fishbaitv2)
 		imgui.SameLine(157)
@@ -12765,17 +13020,17 @@ end
 		imgui.Checkbox(u8'Кузнечик', fishbaitv6)
 		imgui.SameLine(520)
 		imgui.Checkbox(u8'Мотыль', fishbaitv7)
-		imgui.SameLine()
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Муха', fishbaitv8)
-		imgui.SameLine()
+		imgui.SameLine(603)
+		imgui.Checkbox(u8'Муха', fishbaitv8)
+		imgui.SameLine(673)
 		imgui.Checkbox(u8'Тесто', fishbaitv9)
-		imgui.SameLine()
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Живец', fishbaitv10)
-		imgui.SameLine()
+		imgui.SameLine(746)
+		imgui.Checkbox(u8'Живец', fishbaitv10)
+		imgui.SameLine(825)
 		imgui.Checkbox(u8'Икра', fishbaitv11)
-		imgui.SameLine()
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Горох', fishbaitv12)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Овод', fishbaitv21)
+		imgui.SameLine(893)
+		imgui.Checkbox(u8'Горох', fishbaitv12)
+		imgui.Text('') imgui.SameLine()  imgui.Checkbox(u8'Овод', fishbaitv21)
 		imgui.SameLine(83)
 		imgui.Checkbox(u8'Сыр', fishbaitv15)
 		
@@ -12803,60 +13058,31 @@ end
 		imgui.Checkbox(u8'Майский жук', fishbaitv22)
 		
 		imgui.SameLine(560)
-		if imgui.CustomButton(u8'Выбрать все наживки',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(204, 0)) then fishbaitv1.v = true fishbaitv2.v = true fishbaitv3.v = true fishbaitv4.v = true fishbaitv5.v = true fishbaitv6.v = true fishbaitv7.v = true fishbaitv8.v = true fishbaitv9.v = true fishbaitv10.v = true fishbaitv11.v = true fishbaitv12.v = true fishbaitv13.v = true fishbaitv14.v = true fishbaitv15.v = true fishbaitv16.v = true fishbaitv17.v = true fishbaitv18.v = true fishbaitv19.v = true fishbaitv20.v = true fishbaitv21.v = true fishbaitv22.v = true fishbaitv23.v = true fishbaitv24.v = true fishbaitv25.v = true end
+		if imgui.CustomButton(u8'Выбрать все наживки',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(209, 0)) then fishbaitv1.v = true fishbaitv2.v = true fishbaitv3.v = true fishbaitv4.v = true fishbaitv5.v = true fishbaitv6.v = true fishbaitv7.v = true fishbaitv8.v = true fishbaitv9.v = true fishbaitv10.v = true fishbaitv11.v = true fishbaitv12.v = true fishbaitv13.v = true fishbaitv14.v = true fishbaitv15.v = true fishbaitv16.v = true fishbaitv17.v = true fishbaitv18.v = true fishbaitv19.v = true fishbaitv20.v = true fishbaitv21.v = true fishbaitv22.v = true fishbaitv23.v = true fishbaitv24.v = true fishbaitv25.v = true end
 		imgui.SameLine()
-		if imgui.CustomButton(u8'Снять галочки со всех наживок',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(204, 0)) then fishbaitv1.v = false fishbaitv2.v = false fishbaitv3.v = false fishbaitv4.v = false fishbaitv5.v = false fishbaitv6.v = false fishbaitv7.v = false fishbaitv8.v = false fishbaitv9.v = false fishbaitv10.v = false fishbaitv11.v = false fishbaitv12.v = false fishbaitv13.v = false fishbaitv14.v = false fishbaitv15.v = false fishbaitv16.v = false fishbaitv17.v = false fishbaitv18.v = false fishbaitv19.v = false fishbaitv20.v = false fishbaitv21.v = false fishbaitv22.v = false fishbaitv23.v = false fishbaitv24.v = false fishbaitv25.v = false end
+		if imgui.CustomButton(u8'Снять галочки со всех наживок',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(197, 0)) then fishbaitv1.v = false fishbaitv2.v = false fishbaitv3.v = false fishbaitv4.v = false fishbaitv5.v = false fishbaitv6.v = false fishbaitv7.v = false fishbaitv8.v = false fishbaitv9.v = false fishbaitv10.v = false fishbaitv11.v = false fishbaitv12.v = false fishbaitv13.v = false fishbaitv14.v = false fishbaitv15.v = false fishbaitv16.v = false fishbaitv17.v = false fishbaitv18.v = false fishbaitv19.v = false fishbaitv20.v = false fishbaitv21.v = false fishbaitv22.v = false fishbaitv23.v = false fishbaitv24.v = false fishbaitv25.v = false end
 		
 		imgui.Separator()
-		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на действия в диалогах (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на действия в диалогах при выборе наживки, забрасывании удочки, после поимки рыбы и так далее. Если вам кажется, что скрипт делает действия в диалогах слишком быстро или медленно - то поменяйте задержку.")
-		imgui.SameLine(295)
-		imgui.Text(u8("Задержка на ловлю рыбы в способе №2 (сек):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, когда будет смена наживки на другую. По моим подсчетам, рыба ловится за 50 секунд и потом нужно сменить наживку и заново забросить удочку. Если вы не успеваете поймать рыбу до смены наживки, то увеличьте задержку. По умолчанию установлена на 60 секунд.")
-		imgui.SameLine(650)
-		imgui.Text(u8("Задержка на нажатие клавиши N по времени (сек):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, сколько секунд будет нажиматься клавиша N для поимки рыбы. Если вы не успеваете поймать рыбу, то увеличьте задержку.")
-		imgui.PushItemWidth(230)
-		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##7777',zadervkafish,100, 1000)
-		imgui.PopItemWidth()
-		imgui.SameLine(295)
-		imgui.PushItemWidth(270)
-		imgui.SliderInt(u8'##777734534523time',zadervkafishtime,1, 120)
-		imgui.PopItemWidth()
-		imgui.SameLine(650)
-		imgui.PushItemWidth(300)
-		imgui.SliderInt(u8'##777734534523timefish',zadervkafishklava,1, 60)
-		imgui.PopItemWidth()
-		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на скорость нажатия N (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на скорость нажатия клавиши. Чем меньше - тем быстрее, но есть шанс кика или краша. По умолчанию - 10 мс.")
-		imgui.SameLine(295)
-		imgui.Text(u8("Задержка на продажу и обмен рыбы (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на скорость продажи и обмена монет. Если не продаёт всю рыбу или не обменивает все предметы на монеты - то увеличьте задержку.")
 		
-		
-		imgui.PushItemWidth(230)
-		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##777734534523timefish3423423flash',zadervkafishclick,0, 200)
-		imgui.PopItemWidth()
-		imgui.SameLine(295)
-		imgui.PushItemWidth(270)
-		imgui.SliderInt(u8'##sellfish23546t547y',zadervkasellfish,100, 1000)
-		imgui.PopItemWidth()
-		
-		imgui.SameLine() imgui.Checkbox(u8'Обменять предметы на монеты', obmenmonetafish) imgui.SameLine(); imgui.TextQuestion(u8"Встаньте перед обменником и включите функцию. После обмена предметов, функция выключится атоматический.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять предметы на монеты', obmenmonetafish) imgui.SameLine(); imgui.TextQuestion(u8"Встаньте перед обменником и включите функцию. После обмена предметов, функция выключится атоматический.")
 		imgui.SameLine() imgui.Checkbox(u8'Продать всю рыбу', obmenrodfish) imgui.SameLine(); imgui.TextQuestion(u8"Встаньте на пикап продажи рыбы и включите функцию. После продажи рыбы, функция выключится атоматический и в чате напишется, сколько вы заработали с продажи.")
-		
-		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Нажимать N, используя синхронизацию с сервером"));  imgui.SameLine();  imgui.ToggleButton(u8'##34535435trdgdft43t45', fishklavaN) imgui.SameLine(); imgui.Text(u8("Нажимать N, используя игровые клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"Нажатие N через синхронизацию предпочительный вариант т.к работает быстрее, но может кикнуть или крашнуть (зависит от скорости нажатия). Оба варианта работают в свернутом режиме, используя Анти-Афк. Если рыбачите с берега, то включайте 'нажатие N, используя игровые клавиши', через синхронизацию с берега почему то не ловит, хотя с лодки всё работает нормально.")
 		imgui.SameLine() imgui.Checkbox(u8'Авто-покупка наживки', autonasfish)  imgui.SameLine(); imgui.TextQuestion(u8"Перед включением авто-покупки наживки, вы должны отсканировать количество наживок, которые у вас уже есть. Сделать это можно командой '/scanfish'. После сканирования, активируйте функцию, закрыв все диалоги и стоя на пикапе покупки. Скрипт автоматический закупит наживки, количество которых менее 50 штук. После авто-покупки наживки, функция выключится автоматический.")  
-		imgui.Text('') imgui.SameLine(640) imgui.Checkbox(u8'Вести статистику пойманной рыбы и предметов', statafish)
+		imgui.SameLine() imgui.Checkbox(u8'Проверка эхолота на клавиши', klavafish) imgui.SameLine() imgui.TextQuestion(u8"Если включено, то на комбинацию клавиш ALT + E, вы сможете в автоматическом режиме проверить эхолот. Облегчит поиск сектора с рыбой, т.к вам не придется всё время вручную заходить в инвентарь и нажимать на эхолот.") 
+		
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Настройки',buttonclick, buttonvydel, buttonpol,imgui.ImVec2(-8, 0)) then win_state['settingsfish'].v = not win_state['settingsfish'].v end
+		
 		imgui.Separator()
+		imgui.Text('')
 		imgui.Text('') imgui.SameLine()  if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 		imgui.Text('') imgui.SameLine()  if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
-		zadervkafish.v = '300'
-		zadervkafishtime.v = '60'
-		zadervkafishklava.v = '10'
-		zadervkafishclick.v = '10'
-		zadervkaeholot.v = '5'
-		zadervkasellfish.v = '300'
 		cfg.infofishkol.itemkol = '0'
 		cfg.infofishkol.fishkol = '0'
-		infofish.v = false
-		saveinfofish.v = false
-		statafish.v = false
+		cfg.infofishkol.moneykol = '0'
+		cfg.infofishkol.lareckol = '0'
+		infofish.v = true
+		saveinfofish.v = true
+		statafish.v = true
+		klavafish.v = false
 		fishydo.v = false
 		fishbaitv1.v = false
 		fishbaitv2.v = false
@@ -12883,13 +13109,92 @@ end
 		fishbaitv23.v = false
 		fishbaitv24.v = false
 		fishbaitv25.v = false
-		fishklavaN.v = false		
+		statsfish.v = false
 		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", -1) 
 		saveSettings() 
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 		end
 		imgui.PopStyleColor()
 		imgui.End()
+	end
+	
+	if win_state['settingsfish'].v then	
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(985, 360), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Настройки##20bfdjgbvjfd22', win_state['settingsfish'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Нажимать N, используя синхронизацию с сервером"));  imgui.SameLine();  imgui.ToggleButton(u8'##34535435trdgdft43t45', fishklavaN) imgui.SameLine(); imgui.Text(u8("Нажимать N, используя игровые клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"Нажатие N через синхронизацию предпочительный вариант т.к работает быстрее, но может кикнуть или крашнуть (зависит от скорости нажатия) и если к вам кто то подходит - вы начинаете смотреть на персонажа. Оба варианта работают в свернутом режиме, используя Анти-Афк. Если рыбачите с берега, то включайте 'нажатие N, используя игровые клавиши', через синхронизацию с берега почему то не ловит, хотя с лодки всё работает нормально.")
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8('Не удалять уведомления по типу: "Вы уже забросили удочку"'));  imgui.SameLine();  imgui.ToggleButton(u8'delyvedhgoij458y9h984', delyved) imgui.SameLine(); imgui.Text(u8('Удалять уведомления по типу: "Вы уже забросили удочку"')); imgui.SameLine(); imgui.TextQuestion(u8'Если включено, то в чате больше не будет флуда от уведомлений: "Вы уже забросили удочку" и "Вы не состоите в ТСР".')
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8('Проверять эхолот по времени'));  imgui.SameLine();  imgui.ToggleButton(u8'##markeholoty54yh45hy45h45', markeholot) imgui.SameLine(); imgui.Text(u8('Проверять эхолот после поимки рыбы/предметов'));
+		
+		imgui.Separator()
+	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на действия в диалогах (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на действия в диалогах при выборе наживки, забрасывании удочки, после поимки рыбы и так далее. Если вам кажется, что скрипт делает действия в диалогах слишком быстро или медленно - то поменяйте задержку.")
+		imgui.SameLine(328)
+		imgui.Text(u8("Задержка на проверку эхолота (сек):")) imgui.SameLine() imgui.TextQuestion(u8"Задержка влияет на то, через сколько будет повторно открываться эхолот для обновления данных. Задержка устанавливается в секундах. По умолчанию установлено на 30 секунд.") 
+		imgui.SameLine(645)
+		imgui.Text(u8("Задержка на нажатие клавиши N по времени (сек):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, сколько секунд будет нажиматься клавиша N для поимки рыбы. Если вы не успеваете поймать рыбу, то увеличьте задержку.")
+		imgui.PushItemWidth(260)
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##7777',zadervkafish,100, 1000)
+		imgui.SameLine(328)
+		imgui.SliderInt(u8'##436546gtrjhtrgh4g58h4g8ytght',zadervkaeholot,1, 3600)
+		imgui.SameLine(645)
+		imgui.SliderInt(u8'##777734534523timefish',zadervkafishklava,1, 60)
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на скорость нажатия N (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на скорость нажатия клавиши. Чем меньше - тем быстрее, но есть шанс кика или краша. По умолчанию - 10 мс.")
+		imgui.SameLine(328)
+		imgui.Text(u8("Задержка на продажу и обмен рыбы (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на скорость продажи и обмена монет. Если не продаёт всю рыбу или не обменивает все предметы на монеты - то увеличьте задержку.")
+		imgui.SameLine(645)
+		imgui.Text(u8("Задержка на ловлю рыбы в способе №2 (сек):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, когда будет смена наживки на другую. По моим подсчетам, рыба ловится за 50 секунд и потом нужно сменить наживку и заново забросить удочку. Если вы не успеваете поймать рыбу до смены наживки, то увеличьте задержку. По умолчанию установлена на 60 секунд.")
+
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##777734534523timefish3423423flash',zadervkafishclick,0, 200)
+		imgui.SameLine(328)
+		imgui.SliderInt(u8'##sellfish23546t547y',zadervkasellfish,100, 1000)
+		imgui.SameLine(645)
+		imgui.SliderInt(u8'##777734534523time',zadervkafishtime,1, 120)
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Задержка на нажатие клавиши N для подсечки (мс):")); imgui.SameLine(); imgui.TextQuestion(u8"Задержка влияет на то, через сколько времени нажмется клавиша N после появления нужного текстдрава (Press N).")
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'##77773453rtgrtgb4523time',zadervkafishlovec,0, 10000)
+
+		imgui.PopItemWidth()
+		imgui.Separator()
+		imgui.Text('')		
+		imgui.Text('') imgui.SameLine()  if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
+		imgui.Text('') imgui.SameLine()  if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
+		zadervkafish.v = '400'
+		zadervkafishtime.v = '5'
+		zadervkafishlovec.v = '200'
+		zadervkafishklava.v = '10'
+		zadervkafishclick.v = '110'
+		zadervkaeholot.v = '30'
+		zadervkasellfish.v = '300'
+		fishklavaN.v = false	
+		delyved.v = false
+		markeholot.v = false
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", -1) 
+		saveSettings() 
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+		end
+	imgui.End()
+	end
+	
+	if win_state['helpfish'].v then	
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(985, 275), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Инструкция##24343tgfdе022', win_state['helpfish'], imgui.WindowFlags.NoResize)
+	imgui.Text('')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Перед первым использованием, если вы использовали старую версию скрипта, рекомендую "Восстановить настройки по умолчанию" и настройть всё сначала.')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Крайне рекомендую включить следующие пункт: "Вести статистику пойманных вещей", "Выбирать наживку, найденную в эхолоте", "Записывать информацию')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'с эхолота", "Проверять эхолот после поимки рыбы".')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'3. По задержкам в пункте "Настройки". Если стандартные настройки не работают стабильно или не так, как это нужно вам, то настраивайте под себя')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'индивидуально.')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'4. По 1 способу ловли. Он нужен, если у вас нет эхолота. Работает примитивно просто - после каждого удачного или неудачного улова, меняет наживку.')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'5. 2 способ подойдет всем остальным, у кого есть эхолот. Работает также просто. Включаете "Авто-проверка эхолота" и "Активировать ловлю рыбы".')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'Скрипт будет брать наживку из эхолота и рыбачить только на ту наживку, которая водится в данном секторе. Проверяется эхолот по времени или после поимки')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'рыбы/предметов (сменить можно нужный вам способ в настройках). Когда рыба в секторе заканчивается - скрипт перестаёт проверять эхолот и ловить рыбу.')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Рекомендации по некоторым задержкам. Есть разница в рыбалке с лодки и берега. С лодки всё работает идеально на стандартных задержках, а вот на берегу')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'нужно перенастроить задержки. Переключите ползунок в "Настройки" на "Нажимать N, используя игровые клавиши". Скорость нажатия сделайте на 10 мс и')
+	imgui.Text('') imgui.SameLine() imgui.Text(u8'время нажатия - 30 секунд. С такими параметрами можно спокойно ловить с берега.')
+	imgui.End()
 	end
 	
 	if win_state['rulstat'].v then
@@ -12956,6 +13261,32 @@ end
 		saveSettings()
 		end
 		imgui.End()
+	end
+	
+	if win_state['statsinformerfish'].v then -- окно информера
+		imgui.SetNextWindowPos(imgui.ImVec2(infofishX4, infofishY4), imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(200, 200), imgui.Cond.FirstUseEver)
+		if fonecolor == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.49, 1.00, 0.3)) end
+		if fonecolor2 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.51, 0.66, 0.3)) end
+		if fonecolor3 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 1.00, 1.00, 0.3)) end
+		if fonecolor4 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.76, 0.31, 0.00, 0.3)) end
+		if fonecolor5 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.46, 0.46, 0.3)) end
+		if fonecolor6 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.232, 0.201, 0.271, 0.3)) end
+		if fonecolor7 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.00, 0.69, 0.33, 0.3)) end
+		if fonecolor8 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.46, 0.11, 0.29, 0.3)) end
+		if fonecolor9 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.41, 0.19, 0.63, 0.3)) end
+		if fonecolor10 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.40, 0.57, 0.01, 0.3)) end
+		if fonecolor11 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.07, 0.07, 0.09, 0.3)) end
+		if fonecolor12 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.00, 0.28, 0.28, 0.3)) end
+		if fonecolor13 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.30, 0.33, 0.95, 0.3)) end
+		if fonecolor14 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(1.0, 0.84, 0.37, 0.3)) end
+		if fonecolor15 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.026, 0.597, 0.000, 0.3)) end
+		if fonecolor16 == true then imgui.PushStyleColor(imgui.Col.WindowBg, imgui.ImVec4(0.06, 0.53, 0.98, 0.3)) end
+		if imgui.Begin("FishRod2##54gtdfg5ge", win_state['statsinformerfish'], imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoSavedSettings) then
+			infobarstats()
+			imgui.End()
+		end
+		imgui.PopStyleColor()
 	end
 
 	if win_state['informer'].v then -- окно информера
@@ -13264,7 +13595,7 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13301,6 +13632,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13328,7 +13661,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13365,6 +13699,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13392,7 +13728,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13429,6 +13766,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13456,7 +13795,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13493,6 +13833,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13519,7 +13861,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13556,6 +13899,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13582,7 +13927,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13619,6 +13965,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13645,7 +13993,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13682,6 +14031,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13708,7 +14059,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13745,6 +14097,140 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
+		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['settingsfish'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['videoset2'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		
+		
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
+		win_state['dial'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['helpfish'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['videoset2'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		
+		
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['bandit'].v = false
 		win_state['lovec'].v = false
@@ -13771,7 +14257,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13808,6 +14295,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
 		win_state['bandit'].v = false
@@ -13835,7 +14324,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13872,6 +14362,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
 		win_state['bandit'].v = false
@@ -13899,7 +14391,8 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
+		
 		win_state['btcsettingsv2'].v = false
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
@@ -13936,6 +14429,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
 		win_state['bandit'].v = false
@@ -13964,7 +14459,7 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
@@ -14000,6 +14495,75 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
+		win_state['dial'].v = false
+		win_state['rulstat'].v = false
+		win_state['bandit'].v = false
+		win_state['lovec'].v = false
+    end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['itogibtc'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['btcsettingsv2'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['gamer'].v = false
+		win_state['videoset2'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
 		win_state['bandit'].v = false
@@ -14028,7 +14592,7 @@ function onWindowMessage(m, p)
 		win_state['housenumber'].v = false
 		win_state['housenumberredak'].v = false
 		win_state['housenumberredakv2'].v = false
-		win_state['shemafunksv2'].v = false
+		
 		win_state['housenumberv2'].v = false
 		win_state['shemainst'].v = false
 		win_state['kartinst'].v = false
@@ -14064,6 +14628,8 @@ function onWindowMessage(m, p)
 		win_state['googlewin'].v = false
 		win_state['support'].v = false
 		win_state['messanger'].v = false
+		win_state['settingsfish'].v = false
+		win_state['helpfish'].v = false
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
 		win_state['bandit'].v = false
@@ -14368,6 +14934,22 @@ end
 	
 	if color == 1118842111 and text:match('Сделка прошла успешно!') and tradecalc.v then
 	win_state['calc'].v = false 
+	end
+
+	if text:match('%[Рыбалка%]{ffffff} Вы поймали') and markeholot.v and fishlovlyav2.v then 
+	markfish = true fishmark = true
+	end
+	if text:match('%[Рыбалка%] {ffffff}Вы поймали') and markeholot.v and fishlovlyav2.v then 
+	markfish = true fishmark = true
+	end
+	if text:match('%[Рыбалка%]{ffffff} Подсечка не удалась, так как в данном месте рыба клюет на другую наживку.') and markeholot.v and fishlovlyav2.v then 
+	markfish = true fishmark = true
+	end
+	if text:match('%[Ошибка%] {ffffff}Вы уже забросили удочку') and delyved.v then return false end
+	if text:match('Вы не полицейский и не состоите в ТСР') and delyved.v then return false end
+	if text:match('Вы успешно продали Рыба (.*) за %$(%d+)') and obmenrodfish.v then 
+	fishmoney = tonumber(text:match('за %$(%d+)'))
+	moneyfish = moneyfish + fishmoney
 	end
 
 	if text:match('%[Ошибка%] {ffffff}У вас нет этой наживки.') and fishlovlya.v and fishrodv1 == true and not fishydo.v then 
@@ -15959,6 +16541,8 @@ end
 	fishrodv24 = false
 	fishrodv25 = false
 	end
+	
+	
 	if text:match('%[Ошибка%] {ffffff}У вас уже установлена эта наживка.') and fishlovlya.v then 
 	lua_thread.create(function()
 	wait(zadervkafish.v)
@@ -15989,11 +16573,19 @@ end
 	closeDialog()
 		end)
 	end
+
 	if text:match('%[Рыбалка%]{ffffff} Вы поймали рыбу') and statafish.v then 
 	fishses = fishses + 1
 	cfg.infofishkol.fishkol = cfg.infofishkol.fishkol + 1
 	inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
+	
+	if text:match("Вам был добавлен предмет 'Ларец рыболова'") and color == -65281 and statafish.v then 
+	larecses = larecses + 1
+	cfg.infofishkol.lareckol = cfg.infofishkol.lareckol + 1
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	
 	if text:match('%[Рыбалка%] {ffffff}Вы поймали') and statafish.v then 
 	itemses = itemses + 1
 	cfg.infofishkol.itemkol = cfg.infofishkol.itemkol + 1
@@ -16273,7 +16865,7 @@ end
 		lua_thread.create(function()
             wait(228)
             sampSendChat('/key')
-			wait(500)
+			wait(1000)
 			sampSendChat('/engine')
         end)
     end
@@ -16913,8 +17505,11 @@ function load_settings() -- загрузка настроек
 	smisf = imgui.ImBool(ini.settings.smisf)
 	windowsstyle = imgui.ImBool(ini.settings.windowsstyle)
 	
+	btcitog = imgui.ImInt(ini.settings.btcitog)
+	
 	zadervkafish = imgui.ImInt(ini.settings.zadervkafish)
 	zadervkafishtime = imgui.ImInt(ini.settings.zadervkafishtime)
+	zadervkafishlovec = imgui.ImInt(ini.settings.zadervkafishlovec)
 	zadervkafishklava = imgui.ImInt(ini.settings.zadervkafishklava)
 	zadervkafishclick = imgui.ImInt(ini.settings.zadervkafishclick)
 	zadervkaeholot = imgui.ImInt(ini.settings.zadervkaeholot)
@@ -16922,6 +17517,7 @@ function load_settings() -- загрузка настроек
 	infofish = imgui.ImBool(ini.settings.infofish)
 	saveinfofish = imgui.ImBool(ini.settings.saveinfofish)
 	statafish = imgui.ImBool(ini.settings.statafish)
+	klavafish = imgui.ImBool(ini.settings.klavafish)
 	fishydo = imgui.ImBool(ini.settings.fishydo)
 	fishbaitv1 = imgui.ImBool(ini.settings.fishbaitv1)
 	fishbaitv2 = imgui.ImBool(ini.settings.fishbaitv2)
@@ -16949,6 +17545,14 @@ function load_settings() -- загрузка настроек
 	fishbaitv24 = imgui.ImBool(ini.settings.fishbaitv24)
 	fishbaitv25 = imgui.ImBool(ini.settings.fishbaitv25)
 	fishklavaN = imgui.ImBool(ini.settings.fishklavaN)
+	delyved = imgui.ImBool(ini.settings.delyved)
+	markeholot = imgui.ImBool(ini.settings.markeholot)
+	statsfish = imgui.ImBool(ini.settings.statsfish)
+	assistantfish2 = imgui.ImBool(ini.settings.assistantfish2)
+	asfishX4 = ini.assistantfish2.asfishX4
+	asfishY4 = ini.assistantfish2.asfishY4
+	infofishX4 = ini.settings.infofishX4
+	infofishY4 = ini.settings.infofishY4
 	
 	panel = imgui.ImBool(ini.settings.panel)
 	panel2 = imgui.ImBool(ini.settings.panel2)
@@ -17296,6 +17900,8 @@ function load_settings() -- загрузка настроек
 	adredak7 = imgui.ImBuffer(u8(ini.settings.adredak7), 1000)
 	adredak8 = imgui.ImBuffer(u8(ini.settings.adredak8), 1000)
 	adredak9 = imgui.ImBuffer(u8(ini.settings.adredak9), 1000)
+	houseone = imgui.ImBuffer(u8(ini.settings.houseone), 100000)
+	housetwo = imgui.ImBuffer(u8(ini.settings.housetwo), 100000)
 	inputfindvk = imgui.ImBuffer(u8(ini.settings.inputfindvk), 1000)
 	inputfindvk2 = imgui.ImBuffer(u8(ini.settings.inputfindvk2), 1000)
 	inputfindvk3 = imgui.ImBuffer(u8(ini.settings.inputfindvk3), 1000)
@@ -18937,14 +19543,31 @@ end
 
 function eholotcheck()
 	while true do 
-	if checkeholot.v then
+	if checkeholot.v and markeholot.v == false then
 	  sampCloseCurrentDialogWithButton(0) 
 	  wait(200)
 	  sampSendClickTextdraw(admmp)
 	  wait(500)
       activeeholot = true
       sampSendChat("/invent")
-      wait(zadervkaeholot.v*60000)
+      wait(zadervkaeholot.v*1000)
+    end
+	wait(0)
+	end
+end
+
+function eholotcheckv2()
+	while true do 
+	if markfish == true and fishmark == true then
+	  sampCloseCurrentDialogWithButton(0) 
+	  wait(100)
+	  sampSendClickTextdraw(admmp)
+	  wait(100)
+      activeeholotv2 = true
+	  wait(100)
+      sampSendChat("/invent")
+	  wait(100)
+	  fishmark = false
     end
 	wait(0)
 	end
@@ -18992,8 +19615,11 @@ end
 	closeDialog()
 	wait(zadervkasellfish.v)
 	end
-	obmenrodfish.v = false 
-	sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} С продажи рыбы вы заработали '..colorcm2..''..number_separator(moneyfish)..'{FFFFFF}$', -1)
+	obmenrodfish.v = false
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} С продажи рыбы вы заработали {F08080}"..number_separator(moneyfish).."$", -1)
+	cfg.infofishkol.moneykol = cfg.infofishkol.moneykol + moneyfish
+	saveSettings() 
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
 	moneyfish = 0
 end
 	wait(0)
@@ -22043,8 +22669,10 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	btcitog.v = btcitog.v + itogobtc
 	btcflash.v = false
 	itogobtc = 0
+	saveSettings()
 	end
 	
 	if btcflash.v and flashbtcvybor.v then 
@@ -24030,8 +24658,11 @@ while true do
 	end
 	wait(zadervkamaining.v)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	btcitog.v = btcitog.v + itogobtc
 	btcflash.v = false
 	itogobtc = 0
+	win_state['itogibtc'].v = true
+	saveSettings()
 	end
 	
 	if btc.v then 
@@ -24315,8 +24946,10 @@ while true do
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	btcitog.v = btcitog.v + itogobtc
 	btc.v = false
 	itogobtc = 0
+	saveSettings()
 	end
 	
 	if liquid.v then 
@@ -26844,6 +27477,46 @@ if pismo.v and not workpause then -- показываем информер и его перемещение
 		wait(0)
 		end
 	end
+	
+function informerperemstats()
+while true do
+if statsfish.v and not workpause then -- показываем информер и его перемещение
+			if not win_state['regst'].v then win_state['statsinformerfish'].v = true end
+			if mouseCoordfish6 then
+				showCursor(true, true)
+				infofishX4, infofishY4 = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					infofishX4 = math.floor(infofishX4)
+					infofishY4 = math.floor(infofishY4)
+					mouseCoordfish6 = false
+					showCursor(false, false)
+					win_state['fishmenu'].v = true
+					win_state['statsinformerfish'].v = true
+				end
+			end
+		else
+			win_state['statsinformerfish'].v = false
+		end
+
+		if assistantfish2.v and developMode == 1 and isPlayerSoldier then -- координатор и его перемещение
+			if not win_state['regst'].v then win_state['ass'].v = true end
+
+			if mouseCoordfish7 then
+				showCursor(true, true)
+				asfishX4, asfishY4 = getCursorPos()
+				if isKeyDown(VK_RETURN) then
+					asfishX4 = math.floor(asfishX4)
+					asfishY4 = math.floor(asfishY4)
+					mouseCoordfish7 = false
+					showCursor(false, false)
+				end
+			end
+		else
+			win_state['ass'].v = false
+		end
+		wait(0)
+		end
+	end
 
 function getStrByState(keyState) -- состояние клавиш для chatinfo
 	if keyState == 0 then
@@ -27562,6 +28235,7 @@ function notesmenu()
 						win_state['informervrem'].v = false
 						win_state['shahtainformer'].v = false
 						win_state['noteswin'].v = false
+						win_state['statsinformerfish'].v = false
 						mouseCoord6 = true
 					end
 				end
@@ -27684,6 +28358,7 @@ function kirkamenu()
 						win_state['informervrem'].v = false
 						win_state['pismoinformer'].v = false
 						win_state['kirkawin'].v = false
+						win_state['statsinformerfish'].v = false
 						mouseCoord5 = true 
 					end
 				end
@@ -28171,16 +28846,18 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/bandit - открыть меню 'Однорукий Бандит'.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/lovec - открыть меню 'Авто-ловля'.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/fishmenu - открыть меню с 'FishRod' (помощник для рыбалки)")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/scanfish - отсканировать количество наживок для авто-покупки.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/fishlovlya - активировать рыбалку вторым способом и включить Авто-проверку эхолота.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/killgraph - устанавливает минимальные настройки прорисовки, если ввести повторно - то вернет ваши значения.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/connect IP - перезайти на указанный сервер по IP.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/connectname NickName - перезайти на тот же сервер с указанным NickName.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/setweather [ID погоды] (от 0 до 50) - установить погоду на нужное значение.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/settime [время] (от 0 до 23) - установить игровое время на нужное значение.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/scanfish - отсканировать количество наживок для авто-покупки.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/tu - посмотреть тестовые обновления.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/calc - открыть калькулятор.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов] - предложить игроку аренду вашего т/с.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/phoneair - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/itogibtc - открыть меню с информацией о снятых BTC, где нужно залить жидкость или включить видеокарты.')
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -30405,7 +31082,7 @@ function funksmenuv2()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 	imgui.SetNextWindowSize(imgui.ImVec2(680, 330), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Прочие функции##4354234', win_state['shemafunksv2'], imgui.WindowFlags.NoResize)
-		imgui.Text('')
+		imgui.Text('')	
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты', pusk); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -30431,6 +31108,31 @@ function funksmenuv2()
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка между диалогами (мс)##545432123414',zadervkamaining,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 400 мс. Задержка влияет на скорость выбора действия в диалогах и их закрытие. Если не успевает - ставьте задержку больше, если кажется, что медленно - ставьте ниже.")
 		imgui.PopItemWidth()
+		imgui.End()
+	end
+	
+function itogibtcv2()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(805, 185), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Итоги снятия прибыли (/itogibtc)##4354grdghbe234', win_state['itogibtc'], imgui.WindowFlags.NoResize)
+		imgui.Text('')	
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'*BTC засчитываются в статистику при снятии любым досупным способом в скрипте. Чтобы информация появилась о домах, снимать')	
+		imgui.Text('') imgui.SameLine(13) imgui.Text(u8'BTC нужно через флешку.')	
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'За всё время BTC снято: '..number_separator(btcitog.v))
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Дома, в которых жидкости меньше 15%: '..houseone.v)
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Дома, в которых выключены видеокарты: '..housetwo.v)
+		imgui.Separator()
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Обнулить статистику', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Статистика успешно обнулена.", -1) 
+		btcitog.v = '0'
+		houseone.v = ''
+		housetwo.v = ''
+		saveSettings()
+		end
+	
 		imgui.End()
 	end
 	
@@ -30960,6 +31662,30 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'60. Фикс "Statistics" (добавлено, чтобы в статистику засчитывалась прибавка льна и хлопка по +12)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'61. В "Майнинг" - "Прочие функции" добавлена возможность выбрать способ снятия BTC (по 1 дому или сразу со всех домов)')
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[07.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'62. В "/fishmenu" стандартные задержки переделаны под рабочие и беспалевные значения.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'63. Фикс счётчика заработка при продаже рыбы.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'64. В статистику по рыбалке добавлен подсчёт полученных ларцов рыбалова за сессию и всё время.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'65. В статистику добавлен подсчёт заработка с продажи рыбы.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'66. Задержка на "Авто-проверку эхолота" переделана в секунды.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'67. Все задержки и прочие настройки в "/fishmenu", отправлены в раздел "Настройки".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'68. В "/fishmenu" добавлено "Вывести статистику на экран" (вы можете вывести на экран всю статистику, включая информацию по')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'наживкам с эхолота)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'69. В "/fishmenu" добавлена возможность проверить эхолот на комбинацию клавиш ALT + E.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'70. Добавлена команда "/fishlovlya" (включить/выключить авто-ловлю 2 способом и авто-проверку эхолота)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'71. В "/fishmenu" добавлена возможность удалить уведомления по типу: Вы не состоите в ТСР и Вы уже забросили удочку.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'72. Теперь с включенным "Авто-проверка эхолота", если в секторе заканчивает рыба, то проверка эхолота и ловля рыбы останавливается.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'73. В "/fishmenu" - "Настройки" добавлена возможность включить "Авто-проверку эхолота" проверяться по времени или после поимки')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'рыбы/предметов.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'74. В "/fishmenu" добавлена задержка для нажатия на N для подсечки.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'75. В "/fishmenu" добавлена инструкция по использованию скрипта.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'76. Фикс "FastKey" (не всегда заводился транспорт после того, как скрипт вставил ключи)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'77. Меню "Прочие функции" в Майнинге, которое открывается на клавиши, больше не закрывается на ESC.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'78. Добавлена команда "/itogibtc", которая открывает меню, в котором можно отследить, сколько вы сняли биткоинов, в каком доме')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'нужно залить жидкость или включить видеокарты.')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'79. В "/lovec" добавлен рендер 3D текста для поиск яблочных, сливовых и кокосовых деревьев.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'80. В "/lovec" добавлен рендер на оленей.')
 		imgui.End()
 		end
 	
@@ -32108,18 +32834,14 @@ end
 
 function sampev.onDisplayGameText(style, tm, text)
 
-	if text:match('+(.+)%$') and obmenrodfish.v then 
-	fishmoney = tonumber(text:match('+(.+)%$'))
-	moneyfish = moneyfish + fishmoney
-	end
 	if text:find('PRESS N') and fishlovlya.v then 
 	lua_thread.create(function()
 	if fishklavaN.v then 
 	setGameKeyState(10, 1)
-	wait(0)
+	wait(zadervkafishlovec.v)
 	setGameKeyState(10, 0)
 	else
-	wait(200)
+	wait(zadervkafishlovec.v)
 	sendKey(128)
 			end
 		end)
@@ -32128,10 +32850,10 @@ function sampev.onDisplayGameText(style, tm, text)
 	lua_thread.create(function()
 	if fishklavaN.v then 
 	setGameKeyState(10, 1)
-	wait(0)
+	wait(zadervkafishlovec.v)
 	setGameKeyState(10, 0)
 	else
-	wait(200)
+	wait(zadervkafishlovec.v)
 	sendKey(128)
 			end
 		end)
@@ -32140,10 +32862,10 @@ function sampev.onDisplayGameText(style, tm, text)
 	lua_thread.create(function()
 	if fishklavaN.v then 
 	setGameKeyState(10, 1)
-	wait(0)
+	wait(zadervkafishlovec.v)
 	setGameKeyState(10, 0)
 	else
-	wait(200)
+	wait(zadervkafishlovec.v)
 	sendKey(128)
 			end
 		end)
@@ -36402,6 +37124,7 @@ function settingosnova()
 						win_state['informer'].v = false
 						win_state['informervrem'].v = false
 						win_state['pismoinformer'].v = false
+						win_state['statsinformerfish'].v = false
 						mouseCoord8 = true 
 					end
 					imgui.Text('-----------------------------------------------------------------------------')
@@ -36722,6 +37445,7 @@ function settingosnova()
 						win_state['main'].v = false
 						win_state['shahtainformer'].v = false
 						win_state['pismoinformer'].v = false
+						win_state['statsinformerfish'].v = false
 						mouseCoord = true 
 					end
 				end
@@ -37693,6 +38417,12 @@ function settingosnova()
 		cfg3.backup.zadervkasellfishv2 = zadervkasellfish.v
 		cfg3.backup.infofishv2 = infofish.v
 		cfg3.backup.saveinfofishv2 = saveinfofish.v
+		
+		cfg3.backup.markeholotv2 = markeholot.v
+		cfg3.backup.statsfishv2 = statsfish.v
+		cfg3.backup.assistantfish2v2 = assistantfish2.v
+		cfg3.backup.zadervkafishlovecv2 = zadervkafishlovec.v
+		
 		cfg3.backup.statafishv2 = statafish.v
 		cfg3.backup.fishydov2 = fishydo.v
 		cfg3.backup.fishbaitv1v2 = fishbaitv1.v
@@ -38439,6 +39169,12 @@ function settingosnova()
 		 zadervkasellfish.v = cfg3.backup.zadervkasellfishv2 
 		 infofish.v = cfg3.backup.infofishv2 
 		saveinfofish.v = cfg3.backup.saveinfofishv2
+		
+		markeholot.v = cfg3.backup.markeholotv2
+		statsfish.v = cfg3.backup.statsfishv2
+		assistantfish2.v = cfg3.backup.assistantfish2v2
+		zadervkafishlovec.v = cfg3.backup.zadervkafishlovecv2
+		
 		 statafish.v = cfg3.backup.statafishv2 
 		fishydo.v = cfg3.backup.fishydov2
 		 fishbaitv1.v = cfg3.backup.fishbaitv1v2 
@@ -38506,3 +39242,14 @@ function phoneair()
 	sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Вы успешно перевели телефон в режим '..colorcm2..'"'..phonetext..'"{FFFFFF}.', -1) 
 	end)
 end
+
+function infobarstats()
+		if statsfish.v then 
+		imgui.Text(u8'Рыбы поймано: | За сессию: '..fishses..u8' шт | За всё время: '..cfg.infofishkol.fishkol..u8' шт')
+		imgui.Text(u8'Предметов поймано: | За сессию: '..itemses..u8' шт | За всё время: '..cfg.infofishkol.itemkol..u8' шт')
+		imgui.Text(u8'Ларцов получено: | За сессию: '..larecses..u8' шт | За всё время: '..cfg.infofishkol.lareckol..u8' шт')
+		imgui.Text(u8'Всего рыбы продано на сумму в '..number_separator(cfg.infofishkol.moneykol)..u8'$')
+		imgui.Separator()
+		imgui.TextColoredRGB(''..fishinfo)
+		end
+	end
