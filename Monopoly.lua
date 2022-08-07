@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.27')
+script_version('3.4.28')
 
 use = false
 close = false
