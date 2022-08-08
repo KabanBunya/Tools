@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.1.3')
+script_version('1.1.4')
 
 local use = false
 local close = false
@@ -17,6 +17,7 @@ local close5 = false
 local boolshar = false
 local houserespawn = false
 local isNext = false
+closefind = false
 local fontsize = nil
 fontsizev2 = nil
 fontsizev3 = nil
@@ -26,7 +27,7 @@ delplayer = false
 begauto = false
 local npc, infnpc = {}, {}
 fastclickmouse = {}
-local admmp = 2108
+local admmp = 2111
 checkingvip = false
 onecheck = true
 local updateid
@@ -5556,6 +5557,15 @@ end
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
+
+	if closefind == false and data.text == 'Яakp®¶©' then 
+	lua_thread.create(function()
+	admmp = id - 1
+	closefind = true
+	wait(10000)
+	closefind = false
+	end)
+end
 	
 	if id == 2067 and data.text == 'your progress' and autoshar.v and not boolshar then
 		boolshar = true
@@ -18107,6 +18117,8 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'или смене местоположени€ их в диалоге))')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'22.07.2022')
 			imgui.Text('') imgui.SameLine() imgui.Text(u8'5. ‘икс "Skup Menu v2" (не провер€лись и не выставл€лись товары)')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'08.08.2022')
+			imgui.Text('') imgui.SameLine() imgui.Text(u8'6. ѕереписана система закрыти€ инвентар€ дл€ открыти€ €щика пандоры.')
 			imgui.End()
 		end
 	
