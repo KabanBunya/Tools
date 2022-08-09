@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.28')
+script_version('3.4.29')
 
 use = false
 close = false
@@ -37,6 +37,7 @@ findrul = false
 local fa_font = nil
 delplayer = false
 begauto = false
+housecheck = false
 local npc, infnpc = {}, {}
 local admmp = 2111
 statuszidkost1v2 = 0
@@ -1287,6 +1288,7 @@ local cfg3 = inicfg.load({
 		antilomkav2 = false,
 		antispawnv2 = false,
 		napominalkav2 = false,
+		statasavev2 = false,
 		flashbtcvybv2 = false,
 		flashbtcvyb2v2 = false,
 		flashbtcvyb3v2 = false,
@@ -2054,6 +2056,7 @@ local SET = {
 		antilomka = false,
 		antispawn = false,
 		napominalka = false,
+		statasave = false,
 		
 		flashbtcvyb = false,
 		flashbtcvyb2 = false,
@@ -6137,6 +6140,7 @@ function saveSettings(args, key)
 	ini.settings.antilomka = antilomka.v
 	ini.settings.antispawn = antispawn.v
 	ini.settings.napominalka = napominalka.v
+	ini.settings.statasave = statasave.v
 	
 	ini.settings.flashbtcvyb = flashbtcvyb.v
 	ini.settings.flashbtcvyb2 = flashbtcvyb2.v
@@ -7070,12 +7074,12 @@ end
 		end
 	end
 	
-	if btcflash.v and dialogId == 25182 and statrbtc == false then 
+	if btcflash.v and dialogId == 25182 and statasave.v and statrbtc == false then 
 	houseone.v = ''
 	housetwo.v = ''
 	statrbtc = true
 	end
-	if btcflash.v and dialogId == 25182 then
+	if btcflash.v and dialogId == 25182 and housecheck == false and statasave.v then
 	statuszidkost1v2 = tonumber(text:match('Полка №1 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost2v2 = tonumber(text:match('Полка №2 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
 	statuszidkost3v2 = tonumber(text:match('Полка №3 |%s+%{......%}%W+%s+%d+%p%d+%s+BTC%s+%d+%s+уровень%s+(%d+%p%d+)%A'))
@@ -7085,13 +7089,13 @@ end
 	statuspusk3v2 = text:find('Полка №3 | {F78181}На паузе')
 	statuspusk4v2 = text:find('Полка №4 | {F78181}На паузе')
 	end
-	if btcflash.v and dialogId == 25182 then
+	if btcflash.v and dialogId == 25182 and housecheck == false and statasave.v then
 	if statuszidkost1v2 < 15 or statuszidkost2v2 < 15 or statuszidkost3v2 < 15 or statuszidkost4v2 < 15 then
 		itogohat = title:match('№(%d+)')
 		houseone.v = ''..houseone.v..', '..itogohat
 	end
 end
-	if btcflash.v and dialogId == 25182 then
+	if btcflash.v and dialogId == 25182 and housecheck == false and statasave.v then
 	if statuspuskv2 or statuspusk2v2 or statuspusk3v2 or statuspusk4v2 then
 		itogohatv2 = title:match('№(%d+)')
 		housetwo.v = ''..housetwo.v..', '..itogohatv2
@@ -18166,6 +18170,7 @@ function load_settings() -- загрузка настроек
 	antilomka = imgui.ImBool(ini.settings.antilomka)
 	antispawn = imgui.ImBool(ini.settings.antispawn)
 	napominalka = imgui.ImBool(ini.settings.napominalka)
+	statasave = imgui.ImBool(ini.settings.statasave)
 	
 	flashbtcvyb = imgui.ImBool(ini.settings.flashbtcvyb)
 	flashbtcvyb2 = imgui.ImBool(ini.settings.flashbtcvyb2)
@@ -22507,6 +22512,7 @@ while true do
 	end
 	if btcflash.v and flashbtcvybor.v == false then 
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -22669,10 +22675,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	if statasave.v then 
 	btcitog.v = btcitog.v + itogobtc
-	btcflash.v = false
-	itogobtc = 0
 	saveSettings()
+	end
+	btcflash.v = false
+	housecheck = false
+	itogobtc = 0
 	end
 	
 	if btcflash.v and flashbtcvybor.v then 
@@ -22680,6 +22689,7 @@ while true do
 	sampSendDialogResponse(7238, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -22840,11 +22850,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb2.v then 
 	sampSendDialogResponse(7238, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23005,11 +23017,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb3.v then 
 	sampSendDialogResponse(7238, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23170,11 +23184,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb4.v then 
 	sampSendDialogResponse(7238, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23335,11 +23351,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb5.v then 
 	sampSendDialogResponse(7238, 1 , 4, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23500,11 +23518,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb6.v then 
 	sampSendDialogResponse(7238, 1 , 5, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23665,11 +23685,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb7.v then 
 	sampSendDialogResponse(7238, 1 , 6, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23830,11 +23852,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb8.v then 
 	sampSendDialogResponse(7238, 1 , 7, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -23995,11 +24019,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb9.v then 
 	sampSendDialogResponse(7238, 1 , 8, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -24160,11 +24186,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb10.v then 
 	sampSendDialogResponse(7238, 1 , 9, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -24325,11 +24353,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb11.v then 
 	sampSendDialogResponse(7238, 1 , 10, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -24490,11 +24520,13 @@ while true do
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	housecheck = false
 	end
 	if flashbtcvyb12.v then 
 	sampSendDialogResponse(7238, 1 , 11, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 1, -1)
+	housecheck = true
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 1, -1)
 	wait(zadervkamaining.v)
@@ -24658,11 +24690,16 @@ while true do
 	end
 	wait(zadervkamaining.v)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	if statasave.v then 
 	btcitog.v = btcitog.v + itogobtc
+	saveSettings()
+	end
 	btcflash.v = false
 	itogobtc = 0
+	housecheck = false
+	if statasave.v then
 	win_state['itogibtc'].v = true
-	saveSettings()
+	end
 	end
 	
 	if btc.v then 
@@ -24946,7 +24983,9 @@ while true do
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно вывели "..colorcm2..""..itogobtc.."{FFFFFF} BTC! Функция выключилась автоматический.", -1)
+	if statasave.v then 
 	btcitog.v = btcitog.v + itogobtc
+	end
 	btc.v = false
 	itogobtc = 0
 	saveSettings()
@@ -30969,6 +31008,9 @@ function funksmenu()
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты с флешки', puskflash2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Вести статистику в /itogibtc', statasave); imgui.SameLine(); imgui.TextQuestion(u8"Статистику можно посмотреть командой /itogibtc. Там показано сколько биткоинов за всё время вы сняли и в каких домах нужно залить жидкость или включить видеокарты. Если скрипт крашится при снятии BTC с флешки - то выключите данную функцию.")
+		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
 		imgui.Text('') imgui.SameLine()	if imgui.CustomButton(fa.ICON_HOME..u8(" Перезайти в дом"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumber'].v = not win_state['housenumber'].v end
 		imgui.PushItemWidth(422)
@@ -31101,6 +31143,9 @@ function funksmenuv2()
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты с флешки', puskflash2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
 		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Авто-покупка Дистилированной воды', water); imgui.SameLine(); imgui.TextQuestion(u8"В 24/7 вам нужно открыть меню покупки(нажать на N у кассы - купить) и активировать данную функцию. Чтобы перестать скупать воду, выключите данную функцию или перезапустите скрипт. Если не работает - значит сменился ID текстдрава и вам нужно его поменять. Узнать ID текстдрава и изменить его вы сможете в 'Параметры' - 'Для разработчиков'.")
+		imgui.SameLine(400)
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Вести статистику в /itogibtc', statasave); imgui.SameLine(); imgui.TextQuestion(u8"Статистику можно посмотреть командой /itogibtc. Там показано сколько биткоинов за всё время вы сняли и в каких домах нужно залить жидкость или включить видеокарты. Если скрипт крашится при снятии BTC с флешки - то выключите данную функцию.")
+		
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Напоминание', napominalka); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в назначенную вами дату придет уведомление о том, что пора забрать биткоины и обслужить ваши видеокарты.")
 		imgui.Text('') imgui.SameLine()	if imgui.CustomButton(fa.ICON_HOME..u8(" Перезайти в дом"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['housenumberv2'].v = not win_state['housenumberv2'].v end
 		imgui.PushItemWidth(422)
@@ -31686,6 +31731,9 @@ function tupupdate()
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'79. В "/lovec" добавлен рендер 3D текста для поиск яблочных, сливовых и кокосовых деревьев.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'80. В "/lovec" добавлен рендер на оленей.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[09.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'81. Фикс "/itogibtc" (дублировались множества раз номера домов, в которых нужно было сменить жидкость или включить видеокарты)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'82. В "Майнинг" - "Прочие функции" добавлена возможность включить или выключить введение статистики в "/itogibtc".')
 		imgui.End()
 		end
 	
@@ -38297,6 +38345,7 @@ function settingosnova()
 		cfg3.backup.antilomkav2 = antilomka.v
 		cfg3.backup.antispawnv2 = antispawn.v
 		cfg3.backup.napominalkav2 = napominalka.v
+		cfg3.backup.statasavev2 = statasave.v
 		cfg3.backup.chatcalcv2 = chatcalc.v
 		cfg3.backup.tradecalcv2 = tradecalc.v
 		cfg3.backup.pismov2 = pismo.v
@@ -39049,6 +39098,7 @@ function settingosnova()
 		 antilomka.v  =  cfg3.backup.antilomkav2 
 		 antispawn.v  =  cfg3.backup.antispawnv2 
 		 napominalka.v  =  cfg3.backup.napominalkav2 
+		 statasave.v  =  cfg3.backup.statasavev2 
 		 chatcalc.v  =  cfg3.backup.chatcalcv2 
 		 tradecalc.v =   cfg3.backup.tradecalcv2 
 		  pismo.v =   cfg3.backup.pismov2
