@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.29')
+script_version('3.4.30')
 
 use = false
 close = false
@@ -1228,6 +1228,7 @@ local cfg3 = inicfg.load({
 		timecoutv2 = false,
 		gangzonesv2 = false,
 		rydav2 = false,
+		vyborrydav2 = false,
 		zonesv2 = false,
 		screentimev2 = false,
 		assistantv2 = false,
@@ -1342,6 +1343,7 @@ local cfg3 = inicfg.load({
 		zadervkajumpv2 = 2,
 		zadervkashahtav2 = 200,
 		zadervkamainingv2 = 400,
+		zadervkamainingzidkv2 = 51,
 		zadervkacallv2 = 300,
 		zadervkasetvideov2 = 1000,
 		zadervkasetvideo2v2 = 500,
@@ -1996,6 +1998,7 @@ local SET = {
 		timecout = false,
 		gangzones = false,
 		ryda = false,
+		vyborryda = false,
 		zones = false,
 		screentime = false,
 		assistant = false,
@@ -2112,6 +2115,7 @@ local SET = {
 		zadervkajump = 2,
 		zadervkashahta = 200,
 		zadervkamaining = 400,
+		zadervkamainingzidk = 51,
 		zadervkacall = 300,
 		zadervkasetvideo = 1000,
 		zadervkasetvideo2 = 500,
@@ -6192,6 +6196,7 @@ function saveSettings(args, key)
 	ini.settings.zadervkajump = zadervkajump.v
 	ini.settings.zadervkashahta = zadervkashahta.v
 	ini.settings.zadervkamaining = zadervkamaining.v
+	ini.settings.zadervkamainingzidk = zadervkamainingzidk.v
 	ini.settings.zadervkacall = zadervkacall.v
 	ini.settings.zadervkalovly = zadervkalovly.v
 	ini.settings.zadervkaclick = zadervkaclick.v
@@ -6268,6 +6273,7 @@ function saveSettings(args, key)
 	ini.settings.timecout = timecout.v
 	ini.settings.gangzones = gangzones.v
 	ini.settings.ryda = ryda.v
+	ini.settings.vyborryda = vyborryda.v
 	ini.settings.zones = zones.v
 	ini.settings.screentime = screentime.v
 	ini.settings.chatInfo = chatInfo.v
@@ -17439,6 +17445,7 @@ function load_settings() -- загрузка настроек
 	zones = imgui.ImBool(ini.settings.zones)
 	screentime = imgui.ImBool(ini.settings.screentime)
 	ryda = imgui.ImBool(ini.settings.ryda)
+	vyborryda = imgui.ImBool(ini.settings.vyborryda)
 	assistant = imgui.ImBool(ini.settings.assistant)
 	assistant1 = imgui.ImBool(ini.settings.assistant1)
 	assistant2 = imgui.ImBool(ini.settings.assistant2)
@@ -18038,6 +18045,7 @@ function load_settings() -- загрузка настроек
 	zadervkajump = imgui.ImInt(ini.settings.zadervkajump)
 	zadervkashahta = imgui.ImInt(ini.settings.zadervkashahta)
 	zadervkamaining = imgui.ImInt(ini.settings.zadervkamaining)
+	zadervkamainingzidk = imgui.ImInt(ini.settings.zadervkamainingzidk)
 	zadervkacall = imgui.ImInt(ini.settings.zadervkacall)
 	zadervkalovly = imgui.ImInt(ini.settings.zadervkalovly)
 	zadervkaclick = imgui.ImInt(ini.settings.zadervkaclick)
@@ -25002,7 +25010,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25020,7 +25028,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25038,7 +25046,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25056,7 +25064,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25082,7 +25090,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25100,7 +25108,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25118,7 +25126,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25136,7 +25144,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25162,7 +25170,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25180,7 +25188,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25198,7 +25206,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25216,7 +25224,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25242,7 +25250,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25260,7 +25268,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25278,7 +25286,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25296,7 +25304,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25322,7 +25330,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25340,7 +25348,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25358,7 +25366,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25376,7 +25384,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25405,7 +25413,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25423,7 +25431,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25441,7 +25449,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25459,7 +25467,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25485,7 +25493,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25503,7 +25511,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25521,7 +25529,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25539,7 +25547,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25565,7 +25573,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25583,7 +25591,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25601,7 +25609,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25619,7 +25627,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25645,7 +25653,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25663,7 +25671,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25681,7 +25689,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25699,7 +25707,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25725,7 +25733,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost1 < 51 then 
+	if statuszidkost1 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25743,7 +25751,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost2 < 51 then 
+	if statuszidkost2 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 1, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25761,7 +25769,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost3 < 51 then 
+	if statuszidkost3 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 2, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -25779,7 +25787,7 @@ while true do
     wait(200)
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(zadervkamaining.v)
-	if statuszidkost4 < 51 then 
+	if statuszidkost4 < zadervkamainingzidk.v then 
 	sampSendDialogResponse(25243, 1 , 3, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 2, -1)
@@ -27119,9 +27127,14 @@ while true do
 	local x, y, z = getCharCoordinates(PLAYER_PED)
 	local result, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "{73B461}Для добычи ископаемого")
 	if autoryda.v and result then
+	if vyborryda.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(zadervkashahta.v)
     setVirtualKeyDown(key.VK_MENU, false)
+	else
+	sendKey(1024)
+	wait(zadervkashahta.v)
+			end
 		end
 	wait(0)
 	end
@@ -27132,9 +27145,14 @@ while true do
 	local x, y, z = getCharCoordinates(PLAYER_PED)
 	local resultv2, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "{73B461}Для сбора урожая")
 	if autolen.v and resultv2 then
+	if vyborryda.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
     wait(zadervkashahta.v)
     setVirtualKeyDown(key.VK_MENU, false)
+	else
+	sendKey(1024)
+	wait(zadervkashahta.v)
+			end
 		end
 	wait(0)
 	end
@@ -28380,13 +28398,16 @@ function winprofilemenu()
 function kirkamenu()
 	local sw, sh = getScreenResolution() 
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(675, 385), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(675, 420), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_USER..u8' Statistics ', win_state['kirkawin'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_PENCIL..u8' Редактировать цены на ресурсы', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['shahtamenu'].v = not win_state['shahtamenu'].v end
+				imgui.Separator()
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Нажимать ALT через синхронизацию")); imgui.SameLine(); imgui.ToggleButton(u8'##statafdoggfhbk654hy98', vyborryda) imgui.SameLine(); imgui.Text(u8("Нажимать ALT через клавиши")); imgui.SameLine(); imgui.TextQuestion(u8"Нажатие ALT через синхронизацию - это значит, что клавиша будет нажиматься не через клавиатуру, а через синхронизацию с сервером, т.е игру можно спокойно свернуть, писать в чат и у вас не будет зажиматься всё время клавиша 'ALT' при выкапывании руды или сборе ресурсов, но есть шанс кика античитом. Нажатие ALT через клавиши - это значит то, что у вас через клавиатуру всегда будет нажиматься клавиша ALT и если случайно нажать клавишу, TAB например, то игра свернется.");
 				imgui.PushItemWidth(235)
 				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Автоальт на руде', autoryda) imgui.SameLine() imgui.Checkbox(u8'Автоальт на ферме', autolen) imgui.SameLine() imgui.SliderInt(u8'Задержка на Автоальт##545434',zadervkashahta,1, 1000)
 				imgui.PopItemWidth()
+				imgui.Separator()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить статистику на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить статистику на экране', ryda) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране всегда будет отображаться статистика выбранных предметов и вашего заработка. Также можно менять цены на каждый предмет. Информация об аренде - это информация о том, на сколько часов вы сдавали ваш транспорт в аренду и сколько на этом заработали. Сменить цвет окна статистики можно в 'Параметры' - 'Персонализация'.");
 				if ryda.v then
 					imgui.SameLine()
@@ -28427,6 +28448,7 @@ function kirkamenu()
 				autoryda.v = false
 				autolen.v = false
 				ryda.v = false
+				vyborryda.v = false
 				infkamen.v = true
 				inflen.v = true
 				infchlopok.v = true
@@ -31017,6 +31039,8 @@ function funksmenu()
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Дата срабатывания напоминания ##90', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка между диалогами (мс)##545432123414',zadervkamaining,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 400 мс. Задержка влияет на скорость выбора действия в диалогах и их закрытие. Если не успевает - ставьте задержку больше, если кажется, что медленно - ставьте ниже.")
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Заливка жидкости (%)##5454321254ygfhfg3414',zadervkamainingzidk,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"По умолчанию заливка жидкости происходит, если жидкости в видеокарте меньше 51%. Измените значение на своё, если вас не устраивает данное значение.")
+		
 		imgui.PopItemWidth()
 		imgui.End()
 	end
@@ -31122,7 +31146,7 @@ function funksmenuv2()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(680, 330), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 360), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Прочие функции##4354234', win_state['shemafunksv2'], imgui.WindowFlags.NoResize)
 		imgui.Text('')	
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -31152,6 +31176,8 @@ function funksmenuv2()
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Дата срабатывания напоминания ##90', napominalkadata); imgui.SameLine(); imgui.TextQuestion(u8"Дату нужно указать в формате - 'день.месяц' (Пример: 01.07).")
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка между диалогами (мс)##545432123414',zadervkamaining,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 400 мс. Задержка влияет на скорость выбора действия в диалогах и их закрытие. Если не успевает - ставьте задержку больше, если кажется, что медленно - ставьте ниже.")
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Заливка жидкости (%)##5454321254ygfhfg3414',zadervkamainingzidk,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"По умолчанию заливка жидкости происходит, если жидкости в видеокарте меньше 51%. Измените значение на своё, если вас не устраивает данное значение.")
+		
 		imgui.PopItemWidth()
 		imgui.End()
 	end
@@ -31734,6 +31760,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[09.08.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'81. Фикс "/itogibtc" (дублировались множества раз номера домов, в которых нужно было сменить жидкость или включить видеокарты)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'82. В "Майнинг" - "Прочие функции" добавлена возможность включить или выключить введение статистики в "/itogibtc".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[13.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'83. Фикс сбивов диалога проверки эхолота в "FishRod", если эхолот проверяется после поимки рыбы.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'84. В "Statistics" добавлен выбор нажатия клавиш (через синхронизацию или клавиши)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'85. В "Майнинг" - "Прочие функции" добавлена возможность изменить значение жидкости, при которой будет заливаться жидкость в')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'видеокарты.')
 		imgui.End()
 		end
 	
@@ -36391,7 +36422,7 @@ end
 
 function fishlovec()
 	while true do 
-	if fishlovlyav2.v and fishbaitv1.v then 
+	if fishlovlyav2.v and fishbaitv1.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36405,7 +36436,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv2.v then 
+	if fishlovlyav2.v and fishbaitv2.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36419,7 +36450,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv3.v then 
+	if fishlovlyav2.v and fishbaitv3.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36433,7 +36464,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv4.v then 
+	if fishlovlyav2.v and fishbaitv4.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36447,7 +36478,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv5.v then 
+	if fishlovlyav2.v and fishbaitv5.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36461,7 +36492,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv6.v then 
+	if fishlovlyav2.v and fishbaitv6.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36475,7 +36506,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv7.v then 
+	if fishlovlyav2.v and fishbaitv7.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36489,7 +36520,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv8.v then 
+	if fishlovlyav2.v and fishbaitv8.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36503,7 +36534,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv9.v then 
+	if fishlovlyav2.v and fishbaitv9.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36517,7 +36548,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv10.v then 
+	if fishlovlyav2.v and fishbaitv10.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36531,7 +36562,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv11.v then 
+	if fishlovlyav2.v and fishbaitv11.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36545,7 +36576,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv12.v then 
+	if fishlovlyav2.v and fishbaitv12.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36559,7 +36590,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv13.v then 
+	if fishlovlyav2.v and fishbaitv13.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36573,7 +36604,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv14.v then 
+	if fishlovlyav2.v and fishbaitv14.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36587,7 +36618,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv15.v then 
+	if fishlovlyav2.v and fishbaitv15.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36601,7 +36632,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv16.v then 
+	if fishlovlyav2.v and fishbaitv16.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36615,7 +36646,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv17.v then 
+	if fishlovlyav2.v and fishbaitv17.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36629,7 +36660,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv18.v then 
+	if fishlovlyav2.v and fishbaitv18.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36643,7 +36674,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv19.v then 
+	if fishlovlyav2.v and fishbaitv19.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36657,7 +36688,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv20.v then 
+	if fishlovlyav2.v and fishbaitv20.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36671,7 +36702,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv21.v then 
+	if fishlovlyav2.v and fishbaitv21.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36685,7 +36716,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv22.v then 
+	if fishlovlyav2.v and fishbaitv22.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36699,7 +36730,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv23.v then 
+	if fishlovlyav2.v and fishbaitv23.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36713,7 +36744,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv24.v then 
+	if fishlovlyav2.v and fishbaitv24.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -36727,7 +36758,7 @@ function fishlovec()
 	closeDialog()
 	wait(zadervkafishtime.v*1000)
 	end
-	if fishlovlyav2.v and fishbaitv25.v then 
+	if fishlovlyav2.v and fishbaitv25.v and markfish == false and fishmark == false then 
 	sampSendChat('/fishrod')
 	wait(zadervkafish.v)
 	sampSendDialogResponse(25285, 1 , 6, -1)
@@ -38287,6 +38318,7 @@ function settingosnova()
 		cfg3.backup.timecoutv2 = timecout.v
 		cfg3.backup.gangzonesv2 = gangzones.v
 		cfg3.backup.rydav2 = ryda.v
+		cfg3.backup.vyborrydav2 = vyborryda.v
 		cfg3.backup.zonesv2 = zones.v
 		cfg3.backup.screentimev2 = screentime.v
 		cfg3.backup.assistantv2 = assistant.v
@@ -38387,6 +38419,7 @@ function settingosnova()
 		cfg3.backup.zadervkajumpv2 = zadervkajump.v
 		cfg3.backup.zadervkashahtav2 = zadervkashahta.v
 		cfg3.backup.zadervkamainingv2 = zadervkamaining.v
+		cfg3.backup.zadervkamainingzidkv2 = zadervkamainingzidk.v
 		cfg3.backup.zadervkacallv2 = zadervkacall.v
 		cfg3.backup.zadervkasetvideov2 = zadervkasetvideo.v
 		cfg3.backup.zadervkasetvideo2v2 = zadervkasetvideo2.v
@@ -39040,6 +39073,7 @@ function settingosnova()
 		  timecout.v =  cfg3.backup.timecoutv2
 		 gangzones.v =  cfg3.backup.gangzonesv2 
 		 ryda.v  = cfg3.backup.rydav2 
+		 vyborryda.v  = cfg3.backup.vyborrydav2 
 		 zones.v =  cfg3.backup.zonesv2 
 		 screentime.v =  cfg3.backup.screentimev2 
 		 assistant.v =  cfg3.backup.assistantv2 
@@ -39140,6 +39174,7 @@ function settingosnova()
 		 zadervkajump.v = cfg3.backup.zadervkajumpv2 
 		 zadervkashahta.v = cfg3.backup.zadervkashahtav2 
 		 zadervkamaining.v = cfg3.backup.zadervkamainingv2 
+		 zadervkamainingzidk.v = cfg3.backup.zadervkamainingzidkv2 
 		 zadervkacall.v = cfg3.backup.zadervkacallv2 
 		 zadervkasetvideo.v = cfg3.backup.zadervkasetvideov2 
 		 zadervkasetvideo2.v = cfg3.backup.zadervkasetvideo2v2 
