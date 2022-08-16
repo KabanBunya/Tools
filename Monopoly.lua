@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.30')
+script_version('3.4.31')
 
 use = false
 close = false
@@ -1239,6 +1239,7 @@ local cfg3 = inicfg.load({
 		enable_tagv2 = false,
 		chatInfov2 = false,
 		flashbtcvyborv2 = false,
+		onkartv2 = false,
 		raskladkav2 = false,
 		recongenv2 = false,
 		reconclosedv2 = false,
@@ -1344,6 +1345,7 @@ local cfg3 = inicfg.load({
 		zadervkashahtav2 = 200,
 		zadervkamainingv2 = 400,
 		zadervkamainingzidkv2 = 51,
+		zadervkamainingzidkyrv2 = 15,
 		zadervkacallv2 = 300,
 		zadervkasetvideov2 = 1000,
 		zadervkasetvideo2v2 = 500,
@@ -2009,6 +2011,7 @@ local SET = {
 		enable_tag = false,
 		chatInfo = false,
 		flashbtcvybor = false,
+		onkart = false,
 		raskladka = false,
 		recongen = false,
 		reconclosed = false,
@@ -2116,6 +2119,7 @@ local SET = {
 		zadervkashahta = 200,
 		zadervkamaining = 400,
 		zadervkamainingzidk = 51,
+		zadervkamainingzidkyr = 15,
 		zadervkacall = 300,
 		zadervkasetvideo = 1000,
 		zadervkasetvideo2 = 500,
@@ -2403,6 +2407,9 @@ win_state['winprofile'] = imgui.ImBool(false)
 win_state['piar'] = imgui.ImBool(false)
 win_state['skupv2'] = imgui.ImBool(false)
 win_state['skupv3'] = imgui.ImBool(false)
+win_state['skupv4'] = imgui.ImBool(false)
+win_state['skupv5'] = imgui.ImBool(false)
+win_state['skupv6'] = imgui.ImBool(false)
 win_state['skup'] = imgui.ImBool(false)
 win_state['skup2'] = imgui.ImBool(false)
 win_state['oscripte'] = imgui.ImBool(false)
@@ -2635,6 +2642,7 @@ hlam = imgui.ImInt(1)
 local strinter = imgui.ImInt(2)
 strinterv2 = imgui.ImInt(2)
 isBuyProcess = false
+isBuyProcessv2 = false
 rbut = imgui.ImInt(1)
 findBuf = imgui.ImBuffer(124)
 findBufInt = imgui.ImInt(0)
@@ -2644,6 +2652,13 @@ _nameini = "Mono\\CentralBuy"
 colorskup = "{7cfc00}"
 isEn = 0
 inicfg.load(itemsskup, _nameini)
+
+itemsskupv2 = ({})
+inputsskupv2 = {}
+_nameiniv2 = "Mono\\CentralBuy2"
+colorskupv2 = "{7cfc00}"
+isEnv2 = 0
+inicfg.load(itemsskupv2, _nameiniv2) 
 
 isSellProcess = false
 rbutsell = imgui.ImInt(1)
@@ -4412,6 +4427,12 @@ function mainmenu()
 			win_state['piar'].v = not win_state['piar'].v
 		elseif win_state['skupv2'].v then
 			win_state['skupv2'].v = not win_state['skupv2'].v
+		elseif win_state['skupv5'].v then
+			win_state['skupv5'].v = not win_state['skupv5'].v
+		elseif win_state['skupv6'].v then
+			win_state['skupv6'].v = not win_state['skupv6'].v
+		elseif win_state['skupv4'].v then
+			win_state['skupv4'].v = not win_state['skupv4'].v
 		elseif win_state['skupv3'].v then
 			win_state['skupv3'].v = not win_state['skupv3'].v
 		elseif win_state['skup'].v then
@@ -5051,8 +5072,12 @@ function main()
 	end)
 	sampRegisterChatCommand("statarul", show_rulstat)
 	sampRegisterChatCommand("scanfish", function() if FishEn == 0 then lua_thread.create(function() FishEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Начинаю сканирование наживки, секунду.", -1) wait(300) sampSendChat('/fishrod') wait(300) sampSendDialogResponse(25285, 1 , 6, -1) end) end end)
+	
 	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
-	sampRegisterChatCommand("cstreset", function() itemsskup = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu' успешно обнулён.", -1) end)
+	sampRegisterChatCommand("cst2", function() if isEnv2 == 0 then isEnv2 = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEnv2 = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
+	sampRegisterChatCommand("cstreset", function() itemsskup = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu' - 'Пресет №1' успешно обнулён.", -1) end)
+	sampRegisterChatCommand("cstreset2", function() itemsskupv2 = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu' - 'Пресет №2' успешно обнулён.", -1) end)
+	
 	sampRegisterChatCommand("cstsell", function() if isEnsell == 0 then isEnsell = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Выставить товар на продажу'{FFFFFF}.", -1) itemssell = ({}) else isEnsell = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
 	if pricecr.v then sampRegisterChatCommand('price', get_price) end
 	if priceab.v then sampRegisterChatCommand('carprice', function(searchv21)
@@ -6197,6 +6222,7 @@ function saveSettings(args, key)
 	ini.settings.zadervkashahta = zadervkashahta.v
 	ini.settings.zadervkamaining = zadervkamaining.v
 	ini.settings.zadervkamainingzidk = zadervkamainingzidk.v
+	ini.settings.zadervkamainingzidkyr = zadervkamainingzidkyr.v
 	ini.settings.zadervkacall = zadervkacall.v
 	ini.settings.zadervkalovly = zadervkalovly.v
 	ini.settings.zadervkaclick = zadervkaclick.v
@@ -6278,6 +6304,7 @@ function saveSettings(args, key)
 	ini.settings.screentime = screentime.v
 	ini.settings.chatInfo = chatInfo.v
 	ini.settings.flashbtcvybor = flashbtcvybor.v
+	ini.settings.onkart = onkart.v
 	ini.settings.raskladka = raskladka.v
 	ini.settings.recongen = recongen.v
 	ini.settings.reconclosed = reconclosed.v
@@ -7043,6 +7070,19 @@ end
 		return false
 	end
 	
+	if dialogId == 3060 and isEndv2 ~= 0 and isBuyProcessv2 then return false end
+	if dialogId == 3040 and isEndv2 ~= 0 and isBuyProcessv2 then return false end
+	if dialogId == 3050 and isEnv2 == 1 then
+		lua_thread.create(checkPagev2, text)
+		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
+		return false
+	end
+	if dialogId == 3050 and isEnv2 == 2 then
+		lua_thread.create(pageWritev2, text)
+		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
+		return false
+	end
+	
 	if dialogId == 3060 and isEndsell ~= 0 and isBuyProcesssell then return false end
 	if dialogId == 3040 and isEndsell ~= 0 and isBuyProcesssell then return false end
 	if dialogId == 3050 and isEnsell == 1 then
@@ -7096,7 +7136,7 @@ end
 	statuspusk4v2 = text:find('Полка №4 | {F78181}На паузе')
 	end
 	if btcflash.v and dialogId == 25182 and housecheck == false and statasave.v then
-	if statuszidkost1v2 < 15 or statuszidkost2v2 < 15 or statuszidkost3v2 < 15 or statuszidkost4v2 < 15 then
+	if statuszidkost1v2 < zadervkamainingzidkyr.v or statuszidkost2v2 < zadervkamainingzidkyr.v or statuszidkost3v2 < zadervkamainingzidkyr.v or statuszidkost4v2 < zadervkamainingzidkyr.v then
 		itogohat = title:match('№(%d+)')
 		houseone.v = ''..houseone.v..', '..itogohat
 	end
@@ -11053,6 +11093,9 @@ function imgui.OnDrawFrame()
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -11510,7 +11553,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winmessage, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
 	end
 	if panel18.v then 
-	if imgui.ImageButton(wintelegav2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+	if imgui.ImageButton(wintelegav2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 	end
 	if panel19.v then 
 	if imgui.ImageButton(winbitkoinv2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['koinwinokno'].v = not win_state['koinwinokno'].v end
@@ -11570,7 +11613,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winmessage2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
 	end
 	if panelv218.v then 
-	if imgui.ImageButton(wintelega2v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+	if imgui.ImageButton(wintelega2v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 	end
 	if panelv219.v then 
 	if imgui.ImageButton(winbitkoin2v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['koinwinokno'].v = not win_state['koinwinokno'].v end
@@ -11630,7 +11673,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winmessage3, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
 	end
 	if panelv318.v then 
-	if imgui.ImageButton(wintelega3v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+	if imgui.ImageButton(wintelega3v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 	end
 	if panelv319.v then 
 	if imgui.ImageButton(winbitkoin3v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['koinwinokno'].v = not win_state['koinwinokno'].v end
@@ -11690,7 +11733,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winmessage4, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
 	end
 	if panelv418.v then 
-	if imgui.ImageButton(wintelega4v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+	if imgui.ImageButton(wintelega4v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 	end
 	if panelv419.v then 
 	if imgui.ImageButton(winbitkoin4v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['koinwinokno'].v = not win_state['koinwinokno'].v end
@@ -11750,7 +11793,7 @@ function imgui.OnDrawFrame()
 	if imgui.ImageButton(winmessage5, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v end
 	end
 	if panelv518.v then 
-	if imgui.ImageButton(wintelega5v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+	if imgui.ImageButton(wintelega5v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 	end
 	if panelv519.v then 
 	if imgui.ImageButton(winbitkoin5v2, imgui.ImVec2(40, 40), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['koinwinokno'].v = not win_state['koinwinokno'].v end
@@ -11935,7 +11978,7 @@ function imgui.OnDrawFrame()
 	imgui.SameLine(740)
 	if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v end
 	imgui.SameLine(820)
-	if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+	if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 	imgui.SameLine(900)
 	if imgui.ImageButton(winpingpong, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then pong = not pong win_state['main'].v = false win_state['pravilapong'].v = true end
 	
@@ -12127,7 +12170,7 @@ end
 				imgui.SameLine(270)
 				if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(355)
-				if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+				if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv4'].v = not win_state['skupv4'].v end
 				imgui.SameLine(440)
 				if imgui.ImageButton(winpingpong, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then pong = not pong win_state['windowspusk'].v = false win_state['main'].v = false win_state['pravilapong'].v = true end
 				
@@ -12446,6 +12489,17 @@ end
 		imgui.End()
 	end
 	
+	if win_state['skupv4'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(300, 110), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8"Skup Menu | by Devil`s | доработал Bunya##4353465454563", win_state['skupv4'], imgui.WindowFlags.NoResize)
+		imgui.Text('')
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8"Пресет №1", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+		imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8"Пресет №2", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then win_state['skupv5'].v = not win_state['skupv5'].v end
+		
+		imgui.End()
+	end
+	
 	if win_state['skupv2'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
@@ -12575,6 +12629,139 @@ end
 		if getPlayerMoney() < mon then colorskup = "{ff2400}" else colorskup = "{7cfc00}" end
 		imgui.Text('') imgui.SameLine() imgui.Text(u8("Всего будет потрачено: "..comma_value(mon).." вирт"))
 		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Ваши вирты: "..colorskup..comma_value(getPlayerMoney()).." вирт")
+		imgui.End()
+	end
+	
+	
+	if win_state['skupv5'].v then
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
+		imgui.Begin(u8"Skup Menu | by Devil`s | доработал Bunya##43534464563", win_state['skupv5'], imgui.WindowFlags.NoResize)
+		
+		if #itemsskupv2 ~= 0 then
+				imgui.Text('')
+				imgui.SetCursorPosX(60)
+				imgui.Text(u8"Все загруженные предметы (обновить /cst2 | обнулить /cstreset2):")
+				imgui.SameLine()
+				imgui.SetCursorPosX(630)
+				imgui.Text(u8"Выбранные предметы:")
+
+				imgui.Text('') imgui.SameLine() imgui.BeginChild("##202020", imgui.ImVec2(500, 450))
+					imgui.Text('') imgui.SameLine() imgui.RadioButton(u8"Искать по названию предмета", rbut, 1)
+					imgui.Text('') imgui.SameLine() imgui.RadioButton(u8"Искать по номеру предмета", rbut, 2)
+					if rbut.v == 1 then imgui.Text('') imgui.SameLine() imgui.InputText(u8'Поиск по названию', findBuf) end
+					if rbut.v == 2 then imgui.Text('') imgui.SameLine() imgui.InputInt(u8'Поиск по номеру', findBufInt) end
+					for i=1, #itemsskupv2 do
+						local isFoundedv2 = false
+						if rbut.v == 1 then
+							local pat1 = string.rlower(itemsskupv2[i][1])
+							local pat2 = string.rlower(u8:decode(findBuf.v))
+							if pat1:find(pat2, 0, true) then
+								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then stablev2(i) end
+								imgui.SameLine()
+								imgui.Text(u8(itemsskupv2[i][1]))
+								isFoundedv2 = true
+							end
+						end
+						if rbut.v == 2 then
+							if tostring(i):match(findBufInt.v, 0, true) then
+								imgui.Text('') imgui.SameLine() if imgui.CustomButton(tostring(i), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then stablev2(i) end
+								imgui.SameLine()
+								imgui.Text(u8(itemsskupv2[i][1]))
+								isFoundedv2 = true
+							end
+						end
+					end
+				imgui.EndChild()
+				imgui.SameLine()
+
+				imgui.BeginChild("##42", imgui.ImVec2(360, 450))
+				imgui.SetCursorPosX(65)
+				if imgui.CustomButton(u8"Очистить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(225, 25)) then for i=1, #itemsskupv2 do itemsskupv2[i][4] = false end inicfg.save(itemsskupv2, _nameiniv2) end
+					for i=1, #itemsskupv2 do
+						if itemsskupv2[i][4] then
+							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then itemsskupv2[i][4] = false inicfg.save(itemsskupv2, _nameiniv2) end
+							imgui.SameLine()
+							imgui.Text(u8(" "..itemsskupv2[i][1]))
+						end
+					end
+				imgui.EndChild()
+				imgui.SetCursorPosX(300)
+				if imgui.CustomButton(u8"Продолжить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then win_state['skupv5'].v = false win_state['skupv6'].v = true inputsskupv2 = {}
+					for i=1, #itemsskupv2 do
+						if itemsskupv2[i][4] then table.insert(inputsskupv2, {imgui.ImInt(itemsskupv2[i][2]), imgui.ImInt(itemsskupv2[i][3]), i, false, imgui.ImBool(itemsskupv2[i][5])}) end
+					end
+				end
+			else imgui.Text('') imgui.Text('') imgui.SameLine() imgui.Text(u8"К сожалению, у вас не загружены предметы! Чтобы загрузить напишите '/cst2'. Затем нажмите в лавке 'Выставить товар на покупку'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"Задержка на загрузку и поиск товаров составляет: ")
+				imgui.PushItemWidth(200)
+				imgui.SameLine() imgui.SliderInt(u8'мс ##55235767896',delayintv2,10, 10000)
+				imgui.PopItemWidth()
+					imgui.Text('')
+					imgui.SetCursorPosX(350)
+					if imgui.CustomButton(u8'Ок, понял', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(150, 25)) then win_state['skupv5'].v = false end
+			end
+		imgui.End()
+	end
+	if win_state['skupv6'].v then
+		local isWarning = false
+		imgui.SetNextWindowSize(imgui.ImVec2(740, 550), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.Begin(u8"Окно скупа предметов##45645653543", win_state['skupv6'], imgui.WindowFlags.NoResize)
+			imgui.Text('') 
+			imgui.Text('') imgui.SameLine() imgui.BeginChild("##73", imgui.ImVec2(500, 450))
+				for i=1, #inputsskupv2 do
+						if itemsskupv2[inputsskupv2[i][3]][4] then
+							imgui.Separator()
+								imgui.Text(u8(" Предмет: "..itemsskupv2[inputsskupv2[i][3]][1]))
+								imgui.Checkbox(u8(" Единичный предмет ["..i.."]"), inputsskupv2[i][5])
+								if not inputsskupv2[i][5].v then imgui.InputInt(u8(" Кол-во ".."["..i.."]"), inputsskupv2[i][1]) end
+								imgui.InputInt(u8(" Стоимость ".."["..i.."]"), inputsskupv2[i][2])
+								if inputsskupv2[i][2].v < 10 then imgui.TextColoredRGB("{FF2400}Минимальная цена товара 10$!") isWarning = true end
+							imgui.Separator()
+						end
+				end
+			imgui.EndChild()
+			imgui.SameLine()
+			imgui.BeginGroup()
+				if imgui.CustomButton(u8"Вернуться к выбору", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 75)) then win_state['skupv6'].v = false win_state['skupv5'].v = true end
+				if imgui.CustomButton(u8"Начать закупку", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 75)) then if isEnv2 == 1 then isEnv2 = 0 else isEnv2 = 1 for i=1, #inputsskupv2 do itemsskupv2[inputsskupv2[i][3]][2] = inputsskupv2[i][1].v itemsskupv2[inputsskupv2[i][3]][3] = inputsskupv2[i][2].v itemsskupv2[inputsskupv2[i][3]][5] = inputsskupv2[i][5].v inicfg.save(itemsskupv2, _nameiniv2) end end end
+				if imgui.CustomButton(u8"Сохранить настройки", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(218, 0)) then saveSettings() sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) for i=1, #inputsskupv2 do itemsskupv2[inputsskupv2[i][3]][2] = inputsskupv2[i][1].v itemsskupv2[inputsskupv2[i][3]][3] = inputsskupv2[i][2].v itemsskupv2[inputsskupv2[i][3]][5] = inputsskupv2[i][5].v inicfg.save(itemsskupv2, _nameiniv2) end end
+				
+				if isEnv2 == 1 then if isWarning then imgui.TextColoredRGB("{ff2400}Проверьте цены!") else imgui.TextColoredRGB('{7cfc00}Нажми "Добавить товар на покупку"!') end end
+				imgui.PushItemWidth(100)
+				imgui.SliderInt(u8'Задержка (мс) ##55235212767896',delayintv2,10, 10000)
+				imgui.TextColoredRGB("1 секунда = 1000 миллисекунд")
+				if imgui.Checkbox(u8'Удалять игроков в радиусе', delplayeractive) then
+				delplayer = not delplayer
+				for _, handle in ipairs(getAllChars()) do
+				if doesCharExist(handle) then
+					local _, id = sampGetPlayerIdByCharHandle(handle)
+					if id ~= myid then
+						emul_rpc('onPlayerStreamOut', { id })
+						npc[#npc + 1] = id
+					end
+				end
+			end
+			if not delplayer then
+				for i = 1, #npc do
+					send_player_stream(npc[i], infnpc[npc[i]])
+					npc[i] = nil
+				end
+			end
+		end
+	imgui.SameLine()
+	imgui.TextQuestion(u8"Функция удаляет всех игроков в радиусе. Очень полезно при скупе т.к падает шанс краша игры. Чтобы вернуть игроков - выключите функцию и зайдите в инту, затем выйдите из неё. Или можно просто перезайти в игру.")
+		
+			imgui.EndGroup()
+		local mon = 0
+		for i=1, #inputsskupv2 do
+				if inputsskupv2[i][5].v then mon = mon + inputsskupv2[i][2].v else
+				mon = mon + (inputsskupv2[i][1].v * inputsskupv2[i][2].v) end
+		end
+		if getPlayerMoney() < mon then colorskupv2 = "{ff2400}" else colorskupv2 = "{7cfc00}" end
+		imgui.Text('') imgui.SameLine() imgui.Text(u8("Всего будет потрачено: "..comma_value(mon).." вирт"))
+		imgui.Text('') imgui.SameLine() imgui.TextColoredRGB("Ваши вирты: "..colorskupv2..comma_value(getPlayerMoney()).." вирт")
 		imgui.End()
 	end
 	
@@ -13628,6 +13815,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -13695,6 +13885,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -13762,6 +13955,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -13829,6 +14025,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -13895,6 +14094,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -13961,6 +14163,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14027,6 +14232,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14093,6 +14301,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14159,6 +14370,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14225,6 +14439,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14291,6 +14508,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14358,6 +14578,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14425,6 +14648,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14491,6 +14717,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14558,6 +14787,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -14624,6 +14856,9 @@ function onWindowMessage(m, p)
 		win_state['piar'].v = false
 		win_state['skupv2'].v = false
 		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
 		win_state['skup'].v = false
 		win_state['skup2'].v = false
 		win_state['oscripte'].v = false
@@ -18046,6 +18281,7 @@ function load_settings() -- загрузка настроек
 	zadervkashahta = imgui.ImInt(ini.settings.zadervkashahta)
 	zadervkamaining = imgui.ImInt(ini.settings.zadervkamaining)
 	zadervkamainingzidk = imgui.ImInt(ini.settings.zadervkamainingzidk)
+	zadervkamainingzidkyr = imgui.ImInt(ini.settings.zadervkamainingzidkyr)
 	zadervkacall = imgui.ImInt(ini.settings.zadervkacall)
 	zadervkalovly = imgui.ImInt(ini.settings.zadervkalovly)
 	zadervkaclick = imgui.ImInt(ini.settings.zadervkaclick)
@@ -18216,6 +18452,7 @@ function load_settings() -- загрузка настроек
 	autobeg = imgui.ImBool(ini.settings.autobeg)
 	chatInfo = imgui.ImBool(ini.settings.chatInfo)
 	flashbtcvybor = imgui.ImBool(ini.settings.flashbtcvybor)
+	onkart = imgui.ImBool(ini.settings.onkart)
 	raskladka = imgui.ImBool(ini.settings.raskladka)
 	recongen = imgui.ImBool(ini.settings.recongen)
 	reconclosed = imgui.ImBool(ini.settings.reconclosed)
@@ -25805,7 +26042,10 @@ while true do
 	superliquid.v = false
 	end
 	
-	if puskflash.v then 
+	if puskflash.v and onkart.v then 
+	if flashbtcvyb.v then 
+	sampSendDialogResponse(7238, 1 , 0, -1)
+	wait(zadervkamaining.v)
 	sampSendDialogResponse(25182, 1 , 0, -1)
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
@@ -25989,6 +26229,2262 @@ while true do
 	end
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb2.v then 
+	sampSendDialogResponse(7238, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb3.v then 
+	sampSendDialogResponse(7238, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb4.v then 
+	sampSendDialogResponse(7238, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb5.v then 
+	sampSendDialogResponse(7238, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb6.v then 
+	sampSendDialogResponse(7238, 1 , 5, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb7.v then 
+	sampSendDialogResponse(7238, 1 , 6, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb8.v then 
+	sampSendDialogResponse(7238, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb9.v then 
+	sampSendDialogResponse(7238, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb10.v then 
+	sampSendDialogResponse(7238, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb11.v then 
+	sampSendDialogResponse(7238, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	if flashbtcvyb12.v then 
+	sampSendDialogResponse(7238, 1 , 11, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	end
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы успешно запустили видеокарты. Функция выключилась автоматический.", -1)
+	puskflash.v = false
+		end
+	
+	if puskflash.v and onkart.v == false then 
+	sampSendDialogResponse(25182, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 1, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 2, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 3, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 4, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 7, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 8, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 9, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 10, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 13, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 14, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 15, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 16, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 19, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 20, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 21, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 22, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk then
+	sampSendDialogResponse(25182, 1 , 25, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk2 then
+	sampSendDialogResponse(25182, 1 , 26, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk3 then
+	sampSendDialogResponse(25182, 1 , 27, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
+	else
+	end
+	wait(zadervkamaining.v)
+	if statuspusk4 then
+	sampSendDialogResponse(25182, 1 , 28, -1)
+	wait(zadervkamaining.v)
+	sampSendDialogResponse(25244, 1 , 0, -1)
+	else
+	end
 	wait(zadervkamaining.v)
 	sampCloseCurrentDialogWithButton(0)
 	wait(zadervkamaining.v)
@@ -31020,7 +33516,7 @@ function funksmenu()
 		imgui.SameLine()	
 		if imgui.CustomButton(u8("Настроить способы"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(123, 0)) then win_state['btcsettings'].v = not win_state['btcsettings'].v end
 		imgui.SameLine(400)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты с флешки', puskflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты с флешки', puskflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. Если у вас включено 'Включать видеокарты по 1 дому', то перед включением видеокарт, вы должны находиться в меню с выбором видеокарт. Если включено 'Включать видеокарты во всех домах', то перед включением функционала зайдите в меню выбора дома.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты', pusk2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -31040,6 +33536,7 @@ function funksmenu()
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка между диалогами (мс)##545432123414',zadervkamaining,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 400 мс. Задержка влияет на скорость выбора действия в диалогах и их закрытие. Если не успевает - ставьте задержку больше, если кажется, что медленно - ставьте ниже.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Заливка жидкости (%)##5454321254ygfhfg3414',zadervkamainingzidk,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"По умолчанию заливка жидкости происходит, если жидкости в видеокарте меньше 51%. Измените значение на своё, если вас не устраивает данное значение.")
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Заливка жидкости в /itogibtc (%)##5454321254ygfhfg43gf3414',zadervkamainingzidkyr,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"По умолчанию в /itogibtc пишется номер дома, в котором нужно залить жидкость, если жидкости в доме в видеокартах меньше 15% Теперь вы можете изменить значение на своё.")
 		
 		imgui.PopItemWidth()
 		imgui.End()
@@ -31146,7 +33643,7 @@ function funksmenuv2()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(680, 360), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 380), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Прочие функции##4354234', win_state['shemafunksv2'], imgui.WindowFlags.NoResize)
 		imgui.Text('')	
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -31157,7 +33654,7 @@ function funksmenuv2()
 		if imgui.CustomButton(u8("Настроить способы"), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(123, 0)) then win_state['btcsettingsv2'].v = not win_state['btcsettingsv2'].v end
 		
 		imgui.SameLine(400)
-		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты с флешки', puskflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. При активаций функции, вы должны находиться в меню, где показаны все видеокарты дома, с флешки.")
+		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Запустить видеокарты с флешки', puskflash); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме запускает видеокарты, которые находятся в выключенном состояний. Если у вас включено 'Включать видеокарты по 1 дому', то перед включением видеокарт, вы должны находиться в меню с выбором видеокарт. Если включено 'Включать видеокарты во всех домах', то перед включением функционала зайдите в меню выбора дома.")
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Залить охлаждающую жидкость', liquid); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме зальет охлаждающую жидкость в видеокарты, если жидкости меньше 51%. При активаций функции, вы должны стоять у полки с видеокартами.")
 		imgui.SameLine(400)
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Остановить видеокарты', pusk2); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме останавливает видеокарты, которые находятся в включенном состояний. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -31177,6 +33674,7 @@ function funksmenuv2()
 		imgui.Text('') imgui.SameLine() imgui.InputText(u8'Задержка для майнинг функций ##91', kdpusk); imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 10 секунд. Задержка влияет на запуск видеокарт, заливку жидкости, сбор биткоинов и так далее.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка между диалогами (мс)##545432123414',zadervkamaining,10, 1000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка по умолчанию - 400 мс. Задержка влияет на скорость выбора действия в диалогах и их закрытие. Если не успевает - ставьте задержку больше, если кажется, что медленно - ставьте ниже.")
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Заливка жидкости (%)##5454321254ygfhfg3414',zadervkamainingzidk,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"По умолчанию заливка жидкости происходит, если жидкости в видеокарте меньше 51%. Измените значение на своё, если вас не устраивает данное значение.")
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Заливка жидкости в /itogibtc (%)##5454321254ygfhfg43gf3414',zadervkamainingzidkyr,1, 100) imgui.SameLine(); imgui.TextQuestion(u8"По умолчанию в /itogibtc пишется номер дома, в котором нужно залить жидкость, если жидкости в доме в видеокартах меньше 15% Теперь вы можете изменить значение на своё.")
 		
 		imgui.PopItemWidth()
 		imgui.End()
@@ -31193,7 +33691,7 @@ function itogibtcv2()
 		imgui.Text('') imgui.SameLine(13) imgui.Text(u8'BTC нужно через флешку.')	
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'За всё время BTC снято: '..number_separator(btcitog.v))
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Дома, в которых жидкости меньше 15%: '..houseone.v)
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Дома, в которых жидкости меньше '..zadervkamainingzidkyr.v..'%: '..houseone.v)
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'Дома, в которых выключены видеокарты: '..housetwo.v)
 		imgui.Separator()
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8' Обнулить статистику', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
@@ -31211,11 +33709,12 @@ function settingsbtcv2()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(680, 250), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 270), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Настройка способов снятия прибыли##435423456y45ybg4g54', win_state['btcsettingsv2'], imgui.WindowFlags.NoResize)
 		imgui.Text('')
 		
 		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Забирать прибыль (BTC) с флешки по 1 дому")); imgui.SameLine(); imgui.ToggleButton(u8'', flashbtcvybor); imgui.SameLine(); imgui.Text(u8("Забирать прибыль (BTC) с флешки сразу со всех домов"))		
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включать видеокарты с флешки по 1 дому")); imgui.SameLine(); imgui.ToggleButton(u8'##rbg45ygft', onkart); imgui.SameLine(); imgui.Text(u8("Включать видеокарты с флешки сразу во всех домах"))		
 
 		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename.v), flashbtcvyb)
 		imgui.SameLine(250)
@@ -31243,6 +33742,7 @@ function settingsbtcv2()
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
 		flashbtcvybor.v = false
+		onkart.v = false
 		flashbtcvyb.v = false
 		flashbtcvyb2.v = false
 		flashbtcvyb3.v = false
@@ -31269,6 +33769,7 @@ function settingsbtc()
 		imgui.Text('')
 		
 		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Забирать прибыль (BTC) с флешки по 1 дому")); imgui.SameLine(); imgui.ToggleButton(u8'', flashbtcvybor); imgui.SameLine(); imgui.Text(u8("Забирать прибыль (BTC) с флешки сразу со всех домов"))		
+		imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Включать видеокарты с флешки по 1 дому")); imgui.SameLine(); imgui.ToggleButton(u8'##rbg45ygft', onkart); imgui.SameLine(); imgui.Text(u8("Включать видеокарты с флешки сразу во всех домах"))		
 
 		imgui.Text('') imgui.SameLine() imgui.Checkbox((inputhousename.v), flashbtcvyb)
 		imgui.SameLine(250)
@@ -31296,6 +33797,7 @@ function settingsbtc()
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 		imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-7, 0)) then
 		flashbtcvybor.v = false
+		onkart.v = false
 		flashbtcvyb.v = false
 		flashbtcvyb2.v = false
 		flashbtcvyb3.v = false
@@ -31765,6 +34267,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'84. В "Statistics" добавлен выбор нажатия клавиш (через синхронизацию или клавиши)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'85. В "Майнинг" - "Прочие функции" добавлена возможность изменить значение жидкости, при которой будет заливаться жидкость в')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'видеокарты.')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[16.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'86. В "Майнинг" - "Прочие функции" добавлена возможность отрегулировать, при каких значениях жидкости, номер дома появится в')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'/itogibtc.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'87. В "Майнинг" - "Прочие функции" добавлена возможность запускать выключенные видеокарты сразу во всех домах.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'88. В "Skup Menu" добавлена возможность настроить 2 пресета товаров для скупки.')
+		
 		imgui.End()
 		end
 	
@@ -36290,6 +38799,61 @@ function pageWrite(menu)
 	if not isNext then isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemsskup, _nameini) sampSendDialogResponse(3050, 0) isBuyProcess = false end
 end
 
+
+function stablev2(n)
+	if itemsskupv2[n][4] then itemsskupv2[n][4] = false else itemsskupv2[n][4] = true end
+	inicfg.save(itemsskupv2, _nameiniv2)
+end
+
+function buyProcessv2(n)
+	isBuyProcessv2 = true
+	if inputsskupv2[n][5].v == true then sampSendDialogResponse(3060, 1, 0, inputsskupv2[n][2].v)
+	else sampSendDialogResponse(3060, 1, 0, inputsskupv2[n][1].v.." "..inputsskupv2[n][2].v) end
+	wait(1000)
+	inputsskupv2[n][4] = 1
+	local isEndv2 = true
+	for i=1, #inputsskupv2 do
+		if inputsskupv2[i][4] == false then isEndv2 = false end
+	end
+	if not isEndv2 then sampSendDialogResponse(3040, 1, 2) else sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Выбранные вами товары успешно выставлены на скупку.", -1) isBuyProcessv2 = false isEnv2 = 0 win_state['skupv5'].v = true win_state['skupv6'].v = false sampShowDialog(1235, "Выставление", "{7cfc00}Предметы выставлены, можете закрывать окно", "Ок") end
+end
+
+function checkPagev2(menu)
+		local cleanedv2 = menu
+		local haveExitv2 = false
+		local t = {}
+		for line in cleanedv2:gmatch("(.-)\n") do t[#t+1] = line:gsub("\r","") end
+		local isFoundedv2 = false
+		for i=1, #t do
+			for n=1, #inputsskupv2 do
+				if t[i]:find(itemsskupv2[inputsskupv2[n][3]][1], 0, true) and inputsskupv2[n][4] == false then sampSendDialogResponse(3050, 1, i - 2) isFoundedv2 = true wait(delayintv2.v) buyProcessv2(n) break end
+			end
+			if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) haveExitv2 = true end
+			if isFoundedv2 then break end
+		end
+end
+
+function pageWritev2(menu)
+	isBuyProcessv2 = true
+	local cleanedv2 = menu
+	local t = {}
+	local isNextv2 = false
+	for line in cleanedv2:gmatch("(.-)\n") do t[#t+1] = line:gsub("\r","") end
+	for i=1, #t do
+		local itemskupv2 = t[i]:match("%{777777%}(.+)%s%{B6B425%}")
+		if itemskupv2 ~= "Название" and itemskupv2 ~= nil then
+			local isFoundedv2 = false
+			for n=1, #itemsskupv2 do
+				if itemsskupv2[n][1] == itemskupv2 then isFoundedv2 = true end
+			end
+			if not isFoundedv2 then table.insert(itemsskupv2, {itemskupv2, 0, 0, false, false}) end
+		end
+		if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNextv2 = true end
+	end
+	if not isNextv2 then isEnv2 = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemsskupv2, _nameiniv2) sampSendDialogResponse(3050, 0) isBuyProcessv2 = false end
+end
+
+
 function stablesell(n)
 	if itemssell[n][4] then itemssell[n][4] = false else itemssell[n][4] = true end
 	inicfg.save(itemssell, _nameinisell)
@@ -37687,6 +40251,7 @@ function settingosnova()
 				maincfg.comboheathotkeys4.autodronev8 = VK_Q
 				chatInfo.v = false
 				flashbtcvybor.v = false
+				onkart.v = false
 				keyT.v = false
 				antiafk.v = false
 				launcher.v = false
@@ -38327,6 +40892,7 @@ function settingosnova()
 		cfg3.backup.assistant8v2 = assistant8.v
 		cfg3.backup.chatInfov2 = chatInfo.v
 		cfg3.backup.flashbtcvyborv2 = flashbtcvybor.v
+		cfg3.backup.onkartv2 = onkart.v
 		cfg3.backup.raskladkav2 = raskladka.v
 		cfg3.backup.recongenv2 = recongen.v
 		cfg3.backup.reconclosedv2 = reconclosed.v
@@ -38420,6 +40986,7 @@ function settingosnova()
 		cfg3.backup.zadervkashahtav2 = zadervkashahta.v
 		cfg3.backup.zadervkamainingv2 = zadervkamaining.v
 		cfg3.backup.zadervkamainingzidkv2 = zadervkamainingzidk.v
+		cfg3.backup.zadervkamainingzidkyrv2 = zadervkamainingzidkyr.v
 		cfg3.backup.zadervkacallv2 = zadervkacall.v
 		cfg3.backup.zadervkasetvideov2 = zadervkasetvideo.v
 		cfg3.backup.zadervkasetvideo2v2 = zadervkasetvideo2.v
@@ -39082,6 +41649,7 @@ function settingosnova()
 		 assistant8.v =  cfg3.backup.assistant8v2 
 		 chatInfo.v =  cfg3.backup.chatInfov2 
 		 flashbtcvybor.v =  cfg3.backup.flashbtcvyborv2 
+		 onkart.v =  cfg3.backup.onkartv2 
 		 raskladka.v =  cfg3.backup.raskladkav2 
 		 recongen.v =  cfg3.backup.recongenv2 
 		 reconclosed.v =  cfg3.backup.reconclosedv2 
@@ -39175,6 +41743,7 @@ function settingosnova()
 		 zadervkashahta.v = cfg3.backup.zadervkashahtav2 
 		 zadervkamaining.v = cfg3.backup.zadervkamainingv2 
 		 zadervkamainingzidk.v = cfg3.backup.zadervkamainingzidkv2 
+		 zadervkamainingzidkyr.v = cfg3.backup.zadervkamainingzidkyrv2 
 		 zadervkacall.v = cfg3.backup.zadervkacallv2 
 		 zadervkasetvideo.v = cfg3.backup.zadervkasetvideov2 
 		 zadervkasetvideo2.v = cfg3.backup.zadervkasetvideo2v2 
