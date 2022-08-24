@@ -1,20 +1,20 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.31')
+script_version('3.4.32')
 
 use = false
 close = false
 use1 = false
 use2 = false
 use3 = false
-local use4 = false
-local use5 = false
-local close1 = false
-local close2 = false
-local close3 = false
-local close4 = false
-local close5 = false
+use4 = false
+use5 = false
+close1 = false
+close2 = false
+close3 = false
+close4 = false
+close5 = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
@@ -23,6 +23,7 @@ phonetext = 'nill'
 local fontsize = nil
 local updateid
 serverclosed = true
+workcal = false
 fontsizev2 = nil
 fontsizev3 = nil
 carid = 0
@@ -511,6 +512,538 @@ local LocalSerial = ffi.new("unsigned long[1]", 0)
 ffi.C.GetVolumeInformationA(nil, nil, 0, LocalSerial, nil, nil, nil, 0)
 LocalSerial = LocalSerial[0]
 
+local Arizona = {
+    Vehicle = {
+        [612] = {def = 560, name = 'Mercedes GT63s AMG'},
+        [613] = {def = 579, name = 'Mercedes G63 AMG'},
+        [614] = {def = 436, name = 'Audi RS6'},
+        [662] = {def = 579, name = 'BMW X5'},
+        [663] = {def = 541, name = 'Chevrolet Crovvete'},
+        [665] = {def = 560, name = 'Chevrolet Cruze'},
+        [666] = {def = 490, name = 'Lexus LX'},
+        [667] = {def = 503, name = 'Porsche 911'},
+        [668] = {def = 579, name = 'Porsche Cayenne'},
+        [699] = {def = 411, name = 'Bentley'},
+        [793] = {def = 451, name = 'BMW M8'},
+        [794] = {def = 560, name = 'Mercedes E63s'},
+        [909] = {def = 555, name = 'Mercedes S63 Coupe AMG'},
+        [965] = {def = 579, name = 'Volkswagen Touareg'},
+        [1194] = {def = 579, name = 'Lamborghini Urus'},
+        [1195] = {def = 400, name = 'Audi Q8'},
+        [1196] = {def = 475, name = 'Dodge Challenger'},
+        [1197] = {def = 451, name = 'Acura NSX'},
+        [1198] = {def = 490, name = 'Volvo V60'},
+        [1199] = {def = 490, name = 'Range Rover'},
+        [1200] = {def = 561, name = 'Honda Civic Type-R'},
+        [1201] = {def = 550, name = 'Lexus Sport-S'},
+        [1202] = {def = 402, name = 'Ford Mustang'},
+        [1203] = {def = 579, name = 'Volvo XC90'},
+        [1204] = {def = 490, name = 'Jaguar F-pace'},
+        [1205] = {def = 445, name = 'Kia Optima'},
+        [3155] = {def = 503, name = 'BMW Z4 40i'},
+        [3156] = {def = 405, name = 'Mercedes-Benz S600'},
+        [3157] = {def = 475, name = 'BMW X5 E53'},
+        [3158] = {def = 562, name = 'Nissan GT-R'},
+        [3194] = {def = 522, name = 'Ducati Diavel'},
+        [3195] = {def = 522, name = 'Ducati Panigale'},
+        [3196] = {def = 522, name = 'Ducati Ducnaked'},
+        [3197] = {def = 522, name = 'Kawasaki Ninja ZX-10RR'},
+        [3198] = {def = 463, name = 'Western'},
+        [3199] = {def = 579, name = 'Rolls-Royce Cullinan'},
+        [3200] = {def = 401, name = 'Volkswagen Beetle'},
+        [3201] = {def = 411, name = 'Bugatti Divo'},
+        [3202] = {def = 541, name = 'Bugatti Chiron'},
+        [3203] = {def = 589, name = 'Fiat 500'},
+        [3204] = {def = 490, name = 'Mercedes-Benz GLS 2020'},
+        [3205] = {def = 579, name = 'Mercedes-Benz G65 AMG'},
+        [3206] = {def = 411, name = 'Lamborghini Aventador'},
+        [3207] = {def = 490, name = 'Range Rover SVA'},
+        [3208] = {def = 405, name = 'BMW 530i'},
+        [3209] = {def = 540, name = 'Mercedes-Benz S600'},
+        [3210] = {def = 560, name = 'Tesla Model X'},
+        [3211] = {def = 458, name = 'Nissan Leaf'},
+        [3212] = {def = 559, name = 'Nissan Silvia'},
+        [3213] = {def = 445, name = 'Subaru Forester XT'},
+        [3215] = {def = 529, name = 'Subaru Legacy'},
+        [3216] = {def = 560, name = 'Hyundai Sonata'},
+        [3217] = {def = 547, name = 'BMW 750i'},
+        [3218] = {def = 445, name = 'Mercedes-Benz E 55 AMG'},
+        [3219] = {def = 445, name = 'Mercedes-Benz 500E'},
+        [3220] = {def = 451, name = 'Storm'},
+        [3222] = {def = 451, name = 'McQueen'},
+        [3223] = {def = 525, name = 'Mater'},
+        [3224] = {def = 563, name = 'Buckingham'},
+        [3232] = {def = 579, name = 'Infinity FX50'},
+        [3233] = {def = 579, name = 'Lexus RX 450h'},
+        [3234] = {def = 400, name = 'Kia Sportage'},
+        [3235] = {def = 589, name = 'Volkswagen Golf R'},
+        [3236] = {def = 411, name = 'Audi R8'},
+        [3237] = {def = 426, name = 'Camry Camry XV40'},
+        [3238] = {def = 560, name = 'Camry Camry XV70'},
+        [3239] = {def = 540, name = 'BMW M5 E60'},
+        [3240] = {def = 560, name = 'BMW M5 F90'},
+        [3245] = {def = 445, name = 'Mercedes-Maybach S 650'},
+        [3247] = {def = 555, name = 'Mercedes-Benz AMG GT'},
+        [3248] = {def = 529, name = 'Porsche Panamera'},
+        [3251] = {def = 551, name = 'Volkswagen Passat'},
+        [3254] = {def = 445, name = 'Chevrolet Corvette'},
+        [3266] = {def = 543, name = 'Dodge RAM'},
+        [3348] = {def = 603, name = 'Ford Mustang Shelby GT500'},
+        [3974] = {def = 474, name = 'Aston Martin DB5'},
+        [4542] = {def = 503, name = 'BMW M3 GTR'},
+        [4543] = {def = 402, name = 'Chevrolet Camaro'},
+        [4544] = {def = 477, name = 'Mazda RX7'},
+        [4545] = {def = 451, name = 'Mazda RX8'},
+        [4546] = {def = 503, name = 'Mitsubishi Eclipse'},
+        [4547] = {def = 518, name = 'Ford Mustang 289'},
+        [4548] = {def = 562, name = 'Nissan 350Z'},
+        [4574] = {def = 411, name = 'BMW 760Li'},
+        [4775] = {def = 562, name = 'Aston Martin One-77'},
+        [4776] = {def = 415, name = 'Bentley Mulliner Bacalar'},
+        [4777] = {def = 415, name = 'Bentley Bentayga'},
+        [4778] = {def = 445, name = 'BMW M4'},
+        [4779] = {def = 426, name = 'BMW I8'},
+        [4780] = {def = 603, name = 'GTS AMG'},
+        [4781] = {def = 562, name = 'Honda Integra'},
+        [4782] = {def = 400, name = 'M3g20'},
+        [4783] = {def = 415, name = 'Mercedes S-Class (W223)'},
+        [4784] = {def = 400, name = 'Ford Raptor F-150'},
+        [4785] = {def = 562, name = 'Frj50'},
+        [4786] = {def = 415, name = 'Mercedes-Benz SLR McLa'},
+        [4787] = {def = 415, name = 'Subaru BRZ'},
+        [4788] = {def = 562, name = 'LADA Vesta SW Cross'},
+        [4789] = {def = 411, name = 'Porsche Taycan'},
+        [4790] = {def = 562, name = 'Twfer'},
+        [4791] = {def = 400, name = 'UAZ Patriot'},
+        [4792] = {def = 400, name = 'VOLGA'},
+        [4793] = {def = 411, name = 'Mercedes-Benz X-Class'},
+        [4794] = {def = 589, name = 'Xfrr2012'},
+        [4795] = {def = 540, name = 'RCBARON'},
+        [4796] = {def = 579, name = 'DODDCAR'},
+        [4797] = {def = 541, name = 'CRTSRT'},
+        [4798] = {def = 556, name = 'Ford Explorer'},
+        [4799] = {def = 400, name = 'Ford F-150'},
+        [4800] = {def = 400, name = 'Dltplan'},
+        [4801] = {def = 562, name = 'Sea Shark'},
+        [4802] = {def = 562, name = 'Lamborghini Police'},
+        [4803] = {def = 400, name = 'Ferrari Police'},
+        [6604] = {def = 415, name = 'Audi A6'},
+        [6605] = {def = 411, name = 'Audi Q7'},
+        [6606] = {def = 400, name = 'BMW M6'},
+        [6607] = {def = 562, name = 'BMW MX'},
+        [6608] = {def = 415, name = 'Mercedes-Benz CLS 46'},
+        [6609] = {def = 415, name = 'Mercedes-Benz CLS 43'},
+        [6610] = {def = 562, name = 'Haval'},
+        [6611] = {def = 411, name = 'Toyota LC 200'},
+        [6612] = {def = 562, name = 'Lincoln'},
+        [6613] = {def = 400, name = 'Porsche Macan Turbo'},
+        [6614] = {def = 400, name = 'Matiz Daewoo'},
+        [6615] = {def = 411, name = 'Mercedes-Benz G 63'},
+        [6616] = {def = 426, name = 'Mercedes-Benz E 63'},
+        [6617] = {def = 540, name = 'Monster 1'},
+        [6618] = {def = 579, name = 'Monster 2'},
+        [6619] = {def = 541, name = 'Monster 3'},
+        [6620] = {def = 556, name = 'Monster 4'},
+        [6621] = {def = 400, name = 'Toyota Prado'},
+        [6622] = {def = 400, name = 'Toyota Rav 4'},
+        [6623] = {def = 411, name = 'Toyota Supra 90'},
+        [6624] = {def = 562, name = 'UAZ'},
+        [6625] = {def = 415, name = 'Volvo XC 90'},
+        [12713] = {def = 560, name = 'Mersgl'},
+        [12714] = {def = 411, name = 'Laguna'},
+        [12715] = {def = 421, name = 'Mercls'},
+        [12716] = {def = 560, name = 'Audirs5'},
+        [12717] = {def = 432, name = 'Cadesc'},
+        [12718] = {def = 434, name = 'Cybertr'},
+        [12719] = {def = 455, name = 'Modelc'},
+        [12720] = {def = 567, name = 'Fordgt'},
+        [12721] = {def = 574, name = 'Dviper'},
+        [12722] = {def = 544, name = 'Vwpolo'},
+        [12723] = {def = 566, name = 'Evoix'},
+        [12724] = {def = 521, name = 'Ttrs'},
+        [12725] = {def = 572, name = 'Actros'},
+        [12726] = {def = 488, name = 'Aus4'},
+        [12727] = {def = 467, name = 'Bmw4s'},
+        [12728] = {def = 432, name = 'Cadesc07'},
+        [12729] = {def = 433, name = 'Chaser'},
+        [12730] = {def = 544, name = 'Dacia'},
+        [12731] = {def = 411, name = 'Evox'},
+        [12732] = {def = 422, name = 'Impla64'},
+        [12733] = {def = 421, name = 'Impla67'},
+        [12734] = {def = 431, name = 'Kenwooth'},
+        [12735] = {def = 431, name = 'Kenwtrl'},
+        [12736] = {def = 474, name = 'Macmp4'},
+        [12737] = {def = 424, name = 'Mustm1'},
+        [12738] = {def = 467, name = 'Phantom'},
+        [12739] = {def = 413, name = 'Picup'},
+        [12740] = {def = 418, name = 'Volvotr'},
+        [12741] = {def = 425, name = 'Wrxsti'},
+        [12742] = {def = 427, name = 'Sherp'},
+        [12743] = {def = 429, name = 'Sanki'},
+        [14119] = {def = 560, name = 'A6 Carshering'},
+        [14120] = {def = 560, name = 'Cum Carsherig'},
+        [14121] = {def = 560, name = 'KIA Carshering'},
+        [14122] = {def = 560, name = 'MOD Carshering'},
+        [14123] = {def = 560, name = 'RAV4 Carshering'},
+        [14124] = {def = 562, name = 'Nissan GT-R 2017'},
+        [14767] = {def = 560, name = 'Mercedes-AMG Project One'},
+        [14768] = {def = 560, name = 'Aston Martin Valkyrie'},
+        [14769] = {def = 506, name = 'Chevrolet Aveo'},
+        [14857] = {def = 411, name = 'Bugatti Veyron'},
+        [14884] = {def = 568, name = 'Buggy'},
+        [14899] = {def = 506, name = 'Renault Duster'},
+        [14904] = {def = 506, name = 'Chevrolet Monza'},
+        [14905] = {def = 495, name = 'Mercedes-AMG G63EGQ'},
+        [14906] = {def = 434, name = 'Hot Wheels'},
+        [14907] = {def = 470, name = 'Hummer HX'},
+        [14908] = {def = 411, name = '00ri'},
+        [14909] = {def = 411, name = 'BMW M5 CS'},
+        [14910] = {def = 562, name = 'Lada Priora'},
+        [14911] = {def = 562, name = 'Quadra B TECH'},
+        [14912] = {def = 560, name = 'Tesla T-Zero'},
+        [14913] = {def = 561, name = 'Jilli Vision'},
+        [14914] = {def = 437, name = 'JugaBike'},
+        [14915] = {def = 437, name = 'IceBike'},
+        [14916] = {def = 510, name = 'BigoMike'},
+        [14917] = {def = 510, name = 'ExtraBike'},
+        [14918] = {def = 437, name = 'AutoBus 1E class'},
+        [14919] = {def = 437, name = 'AutoBus 2E class'},
+        [15085] = {def = 560, name = 'Dodge Charger'},
+        [15098] = {def = 560, name = 'BMW M1E26'},
+        [15099] = {def = 560, name = 'Lamborghini Countach'},
+        [15100] = {def = 473, name = 'Nagasaki Outlaw'},
+        [15101] = {def = 560, name = 'Koenigsegg Gemera'},
+        [15102] = {def = 560, name = 'KIA K7'},
+        [15103] = {def = 452, name = 'Sandvik Toro'},
+        [15104] = {def = 560, name = 'Lexus LX600'},
+        [15105] = {def = 560, name = 'Nissan Qashqai'},
+        [15106] = {def = 430, name = 'Toyota Predatorr'},
+        [15107] = {def = 560, name = 'Volkswagen Scirocco'},
+        [15108] = {def = 452, name = 'Longfin'},
+        [15109] = {def = 560, name = 'Toyota GR'},
+        [15110] = {def = 446, name = 'Wellcraft'},
+        [15111] = {def = 454, name = 'Yacht'},
+        [15112] = {def = 453, name = 'Boates'},
+        [15113] = {def = 429, name = 'Ferrari J50'},
+        [15114] = {def = 562, name = 'Mercedes SLR'},
+        [15115] = {def = 560, name = 'Subaru BRZ'},
+        [15116] = {def = 400, name = 'Lada Vesta SW Cross'},
+        [15117] = {def = 560, name = 'Porsche Taycan'},
+        [15118] = {def = 400, name = 'Ferrari Enzo'},
+        [15119] = {def = 560, name = 'Hyundai Santa Fe'},
+        [15295] = {def = 560, name = 'Range Rover Velar'},
+        [15326] = {def = 578, name = 'Mercedes-Benz MB 1620'},
+        [15327] = {def = 578, name = 'Copcarvg Policia MG TCGTABR'},
+        [15328] = {def = 578, name = 'Volkswage Constell 6x2'},
+        [15329] = {def = 519, name = 'Luxe Plane'},
+        [15330] = {def = 519, name = 'Buckingham Nimbus'},
+        [15331] = {def = 513, name = 'Opel Vectra'},
+        [15332] = {def = 515, name = 'Mercedes-Benz Arocs'},
+        [15333] = {def = 515, name = 'Iveco Stralis GTS'},
+        [15334] = {def = 403, name = 'MAN TGS 18.480 4x4 LPcars'},
+        [15335] = {def = 515, name = 'Volvo FH13 500'},
+        [15416] = {def = 416, name = 'VC - Ambulance'},
+        [15417] = {def = 429, name = 'VC - Banshee'},
+        [15418] = {def = 499, name = 'VC - Benson'},
+        [15419] = {def = 424, name = 'VC - Bloodring'},
+        [15420] = {def = 431, name = 'VC - Bus'},
+        [15421] = {def = 438, name = 'VC - Cabbie'},
+        [15422] = {def = 596, name = 'VC - Police Car'},
+        [15423] = {def = 496, name = 'VC - Deluxo'},
+        [15424] = {def = 490, name = 'VC - FBI Rancher'},
+        [15425] = {def = 455, name = 'VC - Flatbed'},
+        [15426] = {def = 549, name = 'VC - Idaho'},
+        [15427] = {def = 411, name = 'VC - Infernus'},
+        [15428] = {def = 409, name = 'VC - Love Fist'},
+        [15429] = {def = 470, name = 'VC - Patriot'},
+        [15430] = {def = 448, name = 'VC - Pizzaboy'},
+        [15431] = {def = 428, name = 'VC - Securicar'},
+        [15432] = {def = 405, name = 'VC - Sentinel'},
+        [15433] = {def = 533, name = 'VC - Stinger'},
+        [15434] = {def = 409, name = 'VC - Stretch'},
+        [15435] = {def = 420, name = 'VC - Taxi'},
+        [15436] = {def = 408, name = 'VC - Trash'},
+        [15485] = {def = 463, name = 'VC - Angel'},
+        [15486] = {def = 424, name = 'VC - BF Injection'},
+        [15487] = {def = 496, name = 'VC - Blista'},
+        [15488] = {def = 482, name = 'VC - Burrito'},
+        [15489] = {def = 421, name = 'VC - FBI Car'},
+        [15490] = {def = 503, name = 'VC - Hotring B'},
+        [15491] = {def = 475, name = 'VC - Sabre Turbo'},
+        [15492] = {def = 468, name = 'VC - Sanchez'},
+        [15493] = {def = 502, name = 'Ambulance Model S'},
+        [15494] = {def = 400, name = 'Ambulance Model X'},
+        [15495] = {def = 400, name = 'BMW iX 2021'},
+        [15496] = {def = 502, name = '2020 Mercedes-Benz EQC 400'},
+        [15497] = {def = 400, name = 'Audi R18 etron quattro 2014'},
+        [15498] = {def = 400, name = 'Jaguar I-Pace'},
+        [15499] = {def = 502, name = 'Polestar 1'},
+        [15500] = {def = 400, name = 'Polestar 1X'},
+        [15501] = {def = 424, name = 'Renault Twizy'},
+        [15502] = {def = 502, name = 'Polestar'},
+    },
+    Skin = {
+        [312] = {def = 100, name = 'UNK'},
+        [313] = {def = 105, name = 'UNK'},
+        [314] = {def = 109, name = 'UNK'},
+        [315] = {def = 42, name = 'UNK'},
+        [316] = {def = 123, name = 'UNK'},
+        [317] = {def = 212, name = 'UNK'},
+        [318] = {def = 256, name = 'UNK'},
+        [319] = {def = 280, name = 'UNK'},
+        [329] = {def = 282, name = 'UNK'},
+        [332] = {def = 106, name = 'UNK'},
+        [340] = {def = 103, name = 'UNK'},
+        [382] = {def = 94, name = 'UNK'},
+        [383] = {def = 85, name = 'UNK'},
+        [398] = {def = 129, name = 'UNK'},
+        [399] = {def = 143, name = 'UNK'},
+        [795] = {def = 200, name = 'UNK'},
+        [796] = {def = 100, name = 'UNK'},
+        [797] = {def = 100, name = 'UNK'},
+        [798] = {def = 123, name = 'UNK'},
+        [799] = {def = 100, name = 'UNK'},
+        [907] = {def = 130, name = 'UNK'},
+        [908] = {def = 100, name = 'UNK'},
+        [1206] = {def = 100, name = 'UNK'},
+        [1326] = {def = 140, name = 'UNK'},
+        [1573] = {def = 190, name = 'UNK'},
+        [1699] = {def = 100, name = 'UNK'},
+        [2883] = {def = 100, name = 'UNK'},
+        [2884] = {def = 100, name = 'UNK'},
+        [3136] = {def = 180, name = 'UNK'},
+        [3137] = {def = 100, name = 'UNK'},
+        [3138] = {def = 100, name = 'UNK'},
+        [3139] = {def = 220, name = 'UNK'},
+        [3140] = {def = 100, name = 'UNK'},
+        [3141] = {def = 100, name = 'UNK'},
+        [3142] = {def = 100, name = 'UNK'},
+        [3143] = {def = 147, name = 'UNK'},
+        [3144] = {def = 100, name = 'UNK'},
+        [3145] = {def = 163, name = 'UNK'},
+        [3146] = {def = 100, name = 'UNK'},
+        [3147] = {def = 100, name = 'UNK'},
+        [3148] = {def = 100, name = 'UNK'},
+        [3149] = {def = 100, name = 'UNK'},
+        [3150] = {def = 100, name = 'UNK'},
+        [3151] = {def = 100, name = 'UNK'},
+        [3152] = {def = 100, name = 'UNK'},
+        [3153] = {def = 100, name = 'UNK'},
+        [3154] = {def = 100, name = 'UNK'},
+        [3159] = {def = 100, name = 'UNK'},
+        [3160] = {def = 100, name = 'UNK'},
+        [3161] = {def = 100, name = 'UNK'},
+        [3162] = {def = 100, name = 'UNK'},
+        [3163] = {def = 100, name = 'UNK'},
+        [3164] = {def = 100, name = 'UNK'},
+        [3165] = {def = 100, name = 'UNK'},
+        [3166] = {def = 100, name = 'UNK'},
+        [3176] = {def = 100, name = 'UNK'},
+        [3177] = {def = 100, name = 'UNK'},
+        [3179] = {def = 100, name = 'UNK'},
+        [3180] = {def = 100, name = 'UNK'},
+        [3181] = {def = 100, name = 'UNK'},
+        [3182] = {def = 100, name = 'UNK'},
+        [3183] = {def = 100, name = 'UNK'},
+        [3184] = {def = 100, name = 'UNK'},
+        [3185] = {def = 100, name = 'UNK'},
+        [3186] = {def = 100, name = 'UNK'},
+        [3188] = {def = 100, name = 'UNK'},
+        [3189] = {def = 100, name = 'UNK'},
+        [3190] = {def = 100, name = 'UNK'},
+        [3191] = {def = 100, name = 'UNK'},
+        [3192] = {def = 100, name = 'UNK'},
+        [3225] = {def = 100, name = 'UNK'},
+        [3226] = {def = 100, name = 'UNK'},
+        [3227] = {def = 100, name = 'UNK'},
+        [3228] = {def = 100, name = 'UNK'},
+        [3229] = {def = 100, name = 'UNK'},
+        [3230] = {def = 100, name = 'UNK'},
+        [3231] = {def = 100, name = 'UNK'},
+        [3349] = {def = 100, name = 'UNK'},
+        [3416] = {def = 100, name = 'UNK'},
+        [3429] = {def = 100, name = 'UNK'},
+        [3610] = {def = 100, name = 'UNK'},
+        [3611] = {def = 100, name = 'UNK'},
+        [3784] = {def = 100, name = 'UNK'},
+        [3870] = {def = 100, name = 'UNK'},
+        [3871] = {def = 100, name = 'UNK'},
+        [3883] = {def = 100, name = 'UNK'},
+        [3889] = {def = 100, name = 'UNK'},
+        [4549] = {def = 100, name = 'UNK'},
+        [4763] = {def = 100, name = 'UNK'},
+        [4764] = {def = 100, name = 'UNK'},
+        [4765] = {def = 100, name = 'UNK'},
+        [4766] = {def = 100, name = 'UNK'},
+        [4767] = {def = 100, name = 'UNK'},
+        [4768] = {def = 100, name = 'UNK'},
+        [4769] = {def = 100, name = 'UNK'},
+        [4770] = {def = 100, name = 'UNK'},
+        [4771] = {def = 100, name = 'UNK'},
+        [4772] = {def = 100, name = 'UNK'},
+        [4773] = {def = 100, name = 'UNK'},
+        [4804] = {def = 100, name = 'UNK'},
+        [4805] = {def = 100, name = 'UNK'},
+        [5085] = {def = 100, name = 'UNK'},
+        [5090] = {def = 100, name = 'UNK'},
+        [5091] = {def = 100, name = 'UNK'},
+        [5092] = {def = 100, name = 'UNK'},
+        [5093] = {def = 100, name = 'UNK'},
+        [5094] = {def = 100, name = 'UNK'},
+        [5095] = {def = 100, name = 'UNK'},
+        [5096] = {def = 100, name = 'UNK'},
+        [5097] = {def = 100, name = 'UNK'},
+        [5098] = {def = 100, name = 'UNK'},
+        [5099] = {def = 100, name = 'UNK'},
+        [5100] = {def = 100, name = 'UNK'},
+        [5101] = {def = 100, name = 'UNK'},
+        [5102] = {def = 100, name = 'UNK'},
+        [5103] = {def = 100, name = 'UNK'},
+        [5104] = {def = 100, name = 'UNK'},
+        [5376] = {def = 100, name = 'UNK'},
+        [5377] = {def = 100, name = 'UNK'},
+        [5378] = {def = 100, name = 'UNK'},
+        [5379] = {def = 100, name = 'UNK'},
+        [5380] = {def = 100, name = 'UNK'},
+        [6014] = {def = 100, name = 'UNK'},
+        [6015] = {def = 100, name = 'UNK'},
+        [6016] = {def = 100, name = 'UNK'},
+        [6017] = {def = 100, name = 'UNK'},
+        [6018] = {def = 100, name = 'UNK'},
+        [6019] = {def = 100, name = 'UNK'},
+        [6020] = {def = 100, name = 'UNK'},
+        [6021] = {def = 100, name = 'UNK'},
+        [6022] = {def = 100, name = 'UNK'},
+        [6023] = {def = 100, name = 'UNK'},
+        [6024] = {def = 100, name = 'UNK'},
+        [6025] = {def = 100, name = 'UNK'},
+        [6026] = {def = 100, name = 'UNK'},
+        [6027] = {def = 100, name = 'UNK'},
+        [6028] = {def = 100, name = 'UNK'},
+        [6029] = {def = 100, name = 'UNK'},
+        [6030] = {def = 100, name = 'UNK'},
+        [6031] = {def = 100, name = 'UNK'},
+        [6032] = {def = 100, name = 'UNK'},
+        [12700] = {def = 100, name = 'UNK'},
+        [12701] = {def = 100, name = 'UNK'},
+        [12702] = {def = 100, name = 'UNK'},
+        [12703] = {def = 100, name = 'UNK'},
+        [12704] = {def = 100, name = 'UNK'},
+        [12705] = {def = 100, name = 'UNK'},
+        [12706] = {def = 100, name = 'UNK'},
+        [12707] = {def = 100, name = 'UNK'},
+        [12708] = {def = 100, name = 'UNK'},
+        [12709] = {def = 100, name = 'UNK'},
+        [12710] = {def = 100, name = 'UNK'},
+        [12711] = {def = 100, name = 'UNK'},
+        [12712] = {def = 100, name = 'UNK'},
+        [15010] = {def = 100, name = 'UNK'},
+        [15011] = {def = 100, name = 'UNK'},
+        [15012] = {def = 100, name = 'UNK'},
+        [15013] = {def = 100, name = 'UNK'},
+        [15014] = {def = 100, name = 'UNK'},
+        [15015] = {def = 100, name = 'UNK'},
+        [15016] = {def = 100, name = 'UNK'},
+        [15017] = {def = 100, name = 'UNK'},
+        [15018] = {def = 100, name = 'UNK'},
+        [15019] = {def = 100, name = 'UNK'},
+        [15021] = {def = 100, name = 'UNK'},
+        [15022] = {def = 100, name = 'UNK'},
+        [15023] = {def = 100, name = 'UNK'},
+        [15024] = {def = 100, name = 'UNK'},
+        [15065] = {def = 100, name = 'UNK'},
+        [15066] = {def = 100, name = 'UNK'},
+        [15067] = {def = 100, name = 'UNK'},
+        [15068] = {def = 100, name = 'UNK'},
+        [15069] = {def = 100, name = 'UNK'},
+        [15070] = {def = 100, name = 'UNK'},
+        [15071] = {def = 100, name = 'UNK'},
+        [15072] = {def = 100, name = 'UNK'},
+        [15073] = {def = 100, name = 'UNK'},
+        [15074] = {def = 100, name = 'UNK'},
+        [15075] = {def = 100, name = 'UNK'},
+        [15076] = {def = 100, name = 'UNK'},
+        [15077] = {def = 100, name = 'UNK'},
+        [15078] = {def = 100, name = 'UNK'},
+        [15079] = {def = 100, name = 'UNK'},
+        [15080] = {def = 100, name = 'UNK'},
+        [15081] = {def = 100, name = 'UNK'},
+        [15082] = {def = 100, name = 'UNK'},
+        [15083] = {def = 100, name = 'UNK'},
+        [15084] = {def = 100, name = 'UNK'},
+        [15086] = {def = 100, name = 'UNK'},
+        [15087] = {def = 100, name = 'UNK'},
+        [15088] = {def = 100, name = 'UNK'},
+        [15089] = {def = 100, name = 'UNK'},
+        [15090] = {def = 100, name = 'UNK'},
+        [15091] = {def = 100, name = 'UNK'},
+        [15092] = {def = 100, name = 'UNK'},
+        [15093] = {def = 100, name = 'UNK'},
+        [15094] = {def = 100, name = 'UNK'},
+        [15095] = {def = 100, name = 'UNK'},
+        [15096] = {def = 100, name = 'UNK'},
+        [15097] = {def = 100, name = 'UNK'},
+        [15296] = {def = 100, name = 'UNK'},
+        [15297] = {def = 100, name = 'UNK'},
+        [15298] = {def = 100, name = 'UNK'},
+        [15299] = {def = 100, name = 'UNK'},
+        [15300] = {def = 100, name = 'UNK'},
+        [15301] = {def = 100, name = 'UNK'},
+        [15302] = {def = 100, name = 'UNK'},
+        [15303] = {def = 100, name = 'UNK'},
+        [15304] = {def = 100, name = 'UNK'},
+        [15305] = {def = 100, name = 'UNK'},
+        [15306] = {def = 100, name = 'UNK'},
+        [15307] = {def = 100, name = 'UNK'},
+        [15308] = {def = 100, name = 'UNK'},
+        [15309] = {def = 100, name = 'UNK'},
+        [15310] = {def = 100, name = 'UNK'},
+        [15311] = {def = 100, name = 'UNK'},
+        [15312] = {def = 100, name = 'UNK'},
+        [15313] = {def = 100, name = 'UNK'},
+        [15314] = {def = 100, name = 'UNK'},
+        [15315] = {def = 100, name = 'UNK'},
+        [15316] = {def = 100, name = 'UNK'},
+        [15317] = {def = 100, name = 'UNK'},
+        [15318] = {def = 100, name = 'UNK'},
+        [15319] = {def = 100, name = 'UNK'},
+        [15320] = {def = 100, name = 'UNK'},
+        [15321] = {def = 100, name = 'UNK'},
+        [15322] = {def = 100, name = 'UNK'},
+        [15323] = {def = 100, name = 'UNK'},
+        [15324] = {def = 100, name = 'UNK'},
+        [15325] = {def = 100, name = 'UNK'},
+        [15458] = {def = 100, name = 'UNK'},
+        [15459] = {def = 100, name = 'UNK'},
+        [15460] = {def = 100, name = 'UNK'},
+        [15461] = {def = 100, name = 'UNK'},
+        [15462] = {def = 100, name = 'UNK'},
+        [15463] = {def = 100, name = 'UNK'},
+        [15464] = {def = 100, name = 'UNK'},
+        [15465] = {def = 100, name = 'UNK'},
+        [15466] = {def = 100, name = 'UNK'},
+        [15467] = {def = 100, name = 'UNK'},
+        [15468] = {def = 100, name = 'UNK'},
+        [15469] = {def = 100, name = 'UNK'},
+        [15470] = {def = 100, name = 'UNK'},
+        [15471] = {def = 100, name = 'UNK'},
+        [15472] = {def = 100, name = 'UNK'},
+        [15473] = {def = 100, name = 'UNK'},
+        [15474] = {def = 100, name = 'UNK'},
+        [15475] = {def = 100, name = 'UNK'},
+        [15476] = {def = 100, name = 'UNK'},
+        [15477] = {def = 100, name = 'UNK'},
+        [15478] = {def = 100, name = 'UNK'},
+        [15479] = {def = 100, name = 'UNK'},
+        [15480] = {def = 100, name = 'UNK'},
+        [15481] = {def = 100, name = 'UNK'},
+        [15482] = {def = 100, name = 'UNK'},
+        [15483] = {def = 100, name = 'UNK'},
+        [15484] = {def = 100, name = 'UNK'},
+    }
+}
+local Pool = { Vehs = {}, Peds = {} }
+
 local BuffSize = 32
 local KeyboardLayoutName = ffi.new("char[?]", BuffSize)
 local LocalInfo = ffi.new("char[?]", BuffSize)
@@ -686,14 +1219,12 @@ local cfg = inicfg.load({
 	},
 	settingcall = {
         lastcall ='2222',
-		Usercall ='none',
-		PhoneColorcall ='none'
+		Usercall ='none'
     }
 }, 'Mono\\mini-games.ini')	
 
 lastcall = cfg.settingcall.lastcall
 Userastcall = cfg.settingcall.Usercall
-PhoneColorcall = cfg.settingcall.PhoneColorcall
 
 local cfg3 = inicfg.load({
     backup = {
@@ -1027,6 +1558,7 @@ local cfg3 = inicfg.load({
 		dialogclosev3v2 = false,
 		dialogclosev4v2 = false,
 		vipresendv2 = false,
+		addyvedv2 = true,
 		autorydav2 = false,
 		autolenv2 = false,
 		versiontochv2 = true,
@@ -1042,9 +1574,12 @@ local cfg3 = inicfg.load({
 		autoopl6v2 = false,
 		lockv2 = false,
 		autonarkov2 = false,
+		novrv2 = false,
 		autobufferv2 = false,
 		autorelogv2 = false,
 		autobufferyvedv2 = false,
+		blockweatherv2 = false,
+        blocktimev2 = false,
 		igrokv2v2 = 'nill',
 		igrokv22v2 = 'nill',
 		autokamenv2 = '8000',
@@ -1263,8 +1798,6 @@ local cfg3 = inicfg.load({
 		keyTv2 = false,
 		antiafkv2 = false,
 		launcherv2 = false,
-		launcherpcv2 = false,
-		launchermv2 = false,
 		deaglev2 = false,
 		awpv2 = false,
 		m4v2 = false,
@@ -1797,6 +2330,7 @@ local SET = {
 		dialogclosev3 = false,
 		dialogclosev4 = false,
 		vipresend = false,
+		addyved = true,
 		autoryda = false,
 		autolen = false,
 		versiontoch = true,
@@ -1812,9 +2346,12 @@ local SET = {
 		autoopl6 = false,
 		lock = false,
 		autonarko = false,
+		novr = false,
 		autobuffer = false,
 		autorelog = false,
 		autobufferyved = false,
+		blockweather = false,
+        blocktime = false,
 		igrokv2 = 'nill',
 		igrokv22 = 'nill',
 		autokamen = '8000',
@@ -2035,8 +2572,6 @@ local SET = {
 		keyT = false,
 		antiafk = false,
 		launcher = false,
-		launcherpc = false,
-		launcherm = false,
 		deagle = false,
 		awp = false,
 		m4 = false,
@@ -2636,6 +3171,7 @@ searchn = imgui.ImBuffer(256)
 specOtr = imgui.ImBuffer(256) 
 weather = imgui.ImInt(-1) 
 gametime = imgui.ImInt(-1) 
+
 binddelay = imgui.ImInt(3) 
 local checked_radio = imgui.ImInt(1)
 hlam = imgui.ImInt(1)
@@ -5070,6 +5606,7 @@ function main()
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Отказано, включите возможность изменять прорисовку в настройках.", -1)
 		end
 	end)
+	
 	sampRegisterChatCommand("statarul", show_rulstat)
 	sampRegisterChatCommand("scanfish", function() if FishEn == 0 then lua_thread.create(function() FishEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Начинаю сканирование наживки, секунду.", -1) wait(300) sampSendChat('/fishrod') wait(300) sampSendDialogResponse(25285, 1 , 6, -1) end) end end)
 	
@@ -5156,8 +5693,36 @@ end
         AutoReboot = import 'moonloader\\AutoRebootControlSAMP.lua'
         AutoReboot.getfilename()
     end  
+	
+	if blockweather.v then 
+	weather.v = 14
+	end
+	if blocktime.v then 
+	gametime.v = 15
+	end
+	
 	while true do
 		wait(0)
+		
+			if blockweather.v == true and weather.v ~= memory.read(0xC81320, 2, true) then gotofunc("SetWeather") end
+			if blocktime.v == true and gametime.v ~= memory.read(0xB70153, 1, true) then gotofunc("SetTime") end
+		
+			if launcher.v then 
+			selfX, selfY, selfZ = getCharCoordinates(PLAYER_PED)
+            for k, v in ipairs(getAllVehicles()) do
+                if isCarOnScreen(v) then
+                    local result, id = sampGetVehicleIdByCarHandle(v)
+                    if result and Pool.Vehs[id] and launcher.v then
+                        local x, y, z = getCarCoordinates(v)
+                        local dist = getDistanceBetweenCoords3d(selfX, selfY, selfZ, x, y, z)
+                        if dist <= 20 and launcher.v then
+                            local rX, rY = convert3DCoordsToScreen(x, y, z)
+                            renderFontDrawText(font, Pool.Vehs[id].Name..' ('..Pool.Vehs[id].ServerModel..')', rX - renderGetFontDrawTextLength(font,Pool.Vehs[id].Name..' ('..Pool.Vehs[id].ServerModel..')'), rY, 0xFFffffff)
+                        end
+                    end
+                end
+            end
+		end
 		
 		if sampGetCurrentServerAddress() == "80.66.82.147" and pricecr.v then 
 		scancr = 3
@@ -6153,8 +6718,6 @@ function saveSettings(args, key)
 	ini.settings.shotgun = shotgun.v
 	ini.settings.rifle = rifle.v
 	ini.settings.knife = knife.v
-	ini.settings.launcherpc = launcherpc.v
-	ini.settings.launcherm = launcherm.v
 	ini.settings.chatauto = chatauto.v
 	ini.settings.givemedist = givemedist.v
 	ini.settings.chatmessage = chatmessage.v
@@ -6851,6 +7414,7 @@ function saveSettings(args, key)
 	ini.settings.dialogclosev3 = dialogclosev3.v
 	ini.settings.dialogclosev4 = dialogclosev4.v
 	ini.settings.vipresend = vipresend.v
+	ini.settings.addyved = addyved.v
 	ini.settings.autoryda = autoryda.v
 	ini.settings.autolen = autolen.v
 	ini.settings.versiontoch = versiontoch.v
@@ -6866,9 +7430,13 @@ function saveSettings(args, key)
 	ini.settings.autopaybtc = autopaybtc.v
 	ini.settings.lock = lock.v
 	ini.settings.autonarko = autonarko.v
+	ini.settings.novr = novr.v
 	ini.settings.autobuffer = autobuffer.v
 	ini.settings.autorelog = autorelog.v
 	ini.settings.autobufferyved = autobufferyved.v
+	
+	ini.settings.blockweather = blockweather.v
+	ini.settings.blocktime = blocktime.v
 
 	ini.assistant.asX = asX
 	ini.assistant.asY = asY
@@ -7113,7 +7681,6 @@ end
 	end
 		return false
 	end
-	if dialogId == 1000 and workcal then return false end
 	for line in text:gmatch("[^\n]+") do
 	if line:find('PIN-код принят!') and autopin.v then
 		closeDialog()
@@ -7481,6 +8048,9 @@ end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
   if dialogId == 25473 and vipaddad.v then return false end
+  
+  if dialogId == 25627 and novr.v then sampSendDialogResponse(25627, 0, nil, -1) return false end
+  
   if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
   if houserespawn == true and dialogId == 1781 then return false end
@@ -7717,6 +8287,19 @@ end
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
+
+	if data.text == 'ADD_VIP' and addyved.v == true then 
+	lua_thread.create(function() -- Нужен для цыкла (while на 3-й строке)
+	wait(1000)
+    sampShowDialog(6406, "{ff1000}Важное уведомление!", '{FFFFFF}Рекомендуем вам выключить значок "ADD VIP" на экране!\nИначе некоторый функционал скриптов может не работать.\nВыключить его можно в "/settings" - "Отображение статуса ADD VIP".\n\n{42aaff}Чтобы данное уведомление больше не показывалось - нажмите на кнопку{ffffff}.', "Ок, понял.")
+    while sampIsDialogActive(6406) do wait(100) end -- ждёт пока вы ответите на диалог
+    local result, button, _, input = sampHasDialogRespond(6406)
+	if button == 1 then
+    addyved.v = false 
+	saveSettings()
+			end
+		end)
+	end
 
 	if id == 2104 and data.text == '_' and vkconnect.v and phonemaster.v then 
 	vk_requestv5('['..nazvanie.v..'] Вам кто-то звонит! Выберите одно из предложенных действий.')
@@ -7966,71 +8549,6 @@ end
 	if id == 2067 and data.text == 'your progress' and autoshar.v and not boolshar then
 		boolshar = true
 		lua_thread.create(ballon, id)
-	end
-	
-	if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 271  then bcal = id end--айфон х
-	if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 261  then bcal = id end--гугл пиксель
-	if math.floor(data.position.x) == 31 and math.floor(data.position.y) == 268  then bcal = id end--самсунг
-	if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 272  then bcal = id end--cяоми
-
-	if PhoneColorcall == 'Xiaomi Mi 8' then
-		if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 272  then bcal = id end
-		if math.floor(data.position.x) == 33 and math.floor(data.position.y) == 185  then num1 = id end
-		if math.floor(data.position.x) == 52 and math.floor(data.position.y) == 185  then num2 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 185  then num3 = id end
-		if math.floor(data.position.x) == 33 and math.floor(data.position.y) == 206  then num4 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 206  then num5 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 206  then num6 = id end
-		if math.floor(data.position.x) == 33 and math.floor(data.position.y) == 227  then num7 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 226  then num8 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 226  then num9 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 247  then num0 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 268  then bcal2 = id end
-	end
-
-
-	if PhoneColorcall == 'IPhone X' then
-		if math.floor(data.position.x) == 33 and math.floor(data.position.y) == 185  then num1 = id end
-		if math.floor(data.position.x) == 52 and math.floor(data.position.y) == 185  then num2 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 185  then num3 = id end
-		if math.floor(data.position.x) == 33 and math.floor(data.position.y) == 206  then num4 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 206  then num5 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 206  then num6 = id end
-		if math.floor(data.position.x) == 33 and math.floor(data.position.y) == 227  then num7 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 226  then num8 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 226  then num9 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 247  then num0 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 268  then bcal2 = id end
-	end
-
-
-	if PhoneColorcall == 'Samsung Galaxy' then
-		if math.floor(data.position.x) == 34 and math.floor(data.position.y) == 188  then num1 = id end
-		if math.floor(data.position.x) == 53 and math.floor(data.position.y) == 188  then num2 = id end
-		if math.floor(data.position.x) == 71 and math.floor(data.position.y) == 188  then num3 = id end
-		if math.floor(data.position.x) == 34 and math.floor(data.position.y) == 209  then num4 = id end
-		if math.floor(data.position.x) == 53 and math.floor(data.position.y) == 209  then num5 = id end
-		if math.floor(data.position.x) == 71 and math.floor(data.position.y) == 209  then num6 = id end
-		if math.floor(data.position.x) == 34 and math.floor(data.position.y) == 230  then num7 = id end
-		if math.floor(data.position.x) == 53 and math.floor(data.position.y) == 230  then num8 = id end
-		if math.floor(data.position.x) == 71 and math.floor(data.position.y) == 230  then num9 = id end
-		if math.floor(data.position.x) == 53 and math.floor(data.position.y) == 251  then num0 = id end
-		if math.floor(data.position.x) == 53 and math.floor(data.position.y) == 271  then bcal2 = id end
-	end
-
-
-	if PhoneColorcall == 'Google Pixel 3' then
-		if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 191  then num1 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 191  then num2 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 191  then num3 = id end
-		if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 213  then num4 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 213  then num5 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 213  then num6 = id end
-		if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 233  then num7 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 233  then num8 = id end
-		if math.floor(data.position.x) == 70 and math.floor(data.position.y) == 233  then num9 = id end
-		if math.floor(data.position.x) == 51 and math.floor(data.position.y) == 254  then num0 = id end
-		if math.floor(data.position.x) == 32 and math.floor(data.position.y) == 254  then bcal2 = id end
 	end
 
 	if ostanovka.v then 
@@ -10938,12 +11456,6 @@ function recongenmenu()
 	wait(zadervkarecon.v * 1000)
 	sampSetGamestate(1)
 end)
-end
-
-function sampev.onSendClientJoin(Ver, mod, nick, response, authKey, clientver, unk)
-	if launcherpc.v then clientver = 'Arizona PC' end
-	if launcherm.v then clientver = 'arizona-mobile' end
-	return {Ver, mod, nick, response, authKey, clientver, unk}
 end
 
 function imgui.ToggleButton(str_id, bool)
@@ -17452,35 +17964,6 @@ end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	
-	if workcal and text:match('(.*) достал%(а%) (.*) (.*) из кармана') then
-		Usercall,PhoneColorcall,Phonecall =  text:match('(.*) достал%(а%) (.*) (.*) из кармана')
-		if PhoneColorcall:match('IPhone') then
-			PhoneColorcall = 'IPhone X'	
-			cfg.settingcall.PhoneColorcall = PhoneColorcall
-			inicfg.save(cfg, 'Mono\\mini-games.ini')
-		end
-		if PhoneColorcall:match('Xiaomi Mi') then
-			PhoneColorcall = 'Xiaomi Mi 8'
-			cfg.settingcall.PhoneColorcall = PhoneColorcall
-			inicfg.save(cfg, 'Mono\\mini-games.ini')
-		end
-		if PhoneColorcall:match('Google Pixel') then
-			PhoneColorcall = 'Google Pixel 3'
-			cfg.settingcall.PhoneColorcall = PhoneColorcall
-			inicfg.save(cfg, 'Mono\\mini-games.ini')
-		end
-		if PhoneColorcall:match('Samsung Galaxy') then
-			PhoneColorcall = 'Samsung Galaxy'
-			cfg.settingcall.PhoneColorcall = PhoneColorcall
-			inicfg.save(cfg, 'Mono\\mini-games.ini')
-		end
-		if Usercall == userNick then
-			if PhoneColorcall ~= Modelcall then
-				Modelcall = PhoneColorcall
-		end
-	end
-	return false
-end
 	if workcal and (text:match("%{FFFFFF%}Номера телефонов государственных служб:")or text:match('%{FFFFFF%}Проверить баланс телефона')or text:match('%{FFFFFF%}Служба точного времени')or text:match('%{FFFFFF%}Полицейский участок')or text:match('%{FFFFFF%}Скорая помощь')or text:match('%{FFFFFF%}Такси')or text:match('%{FFFFFF%}Механик')or text:match('%{FFFFFF%}Справочная центрального банка')or text:match('%{FFFFFF%}Служба по вопросам жилой недвижимости') )then 
 		return false
 	end
@@ -17514,29 +17997,10 @@ end
 		local numbercall = text:match("^{......}%a+_%a+%[%d+%]:    {......}(%d+)$")
 		lua_thread.create(function()
 			sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Начинаю звонить по номеру "..colorcm2..""..numbercall, -1)
+			wait(zadervkacall.v)
+			sampSendChat('/call '..numbercall)
 			wait(500)
-			sampSendChat("/phone ") 
-			wait(zadervkacall.v)
-			sampSendDialogResponse(1000, 1, 0, -1)
-			wait(zadervkacall.v)
-			closeDialog()
-			wait(zadervkacall.v)
-			sampSendClickTextdraw(bcal)
-			wait(zadervkacall.v)
-			local numbers = numberToTable(numbercall)
-			for i = 1, #numbers do
-				 
-					if numbers[i] == 1 then dr =num1 end if numbers[i] == 2 then dr = num2  end if numbers[i] == 3 then dr = num3 end if numbers[i] == 4 then dr = num4  end if numbers[i] == 5 then dr = num5 end if numbers[i] == 6 then dr = num6  end if numbers[i] == 7 then dr = num7  end if numbers[i] == 8 then dr = num8 end if numbers[i] == 9 then dr = num9  end if numbers[i] == 0 then dr = num0  end 
-				 
-				wait(zadervkacall.v)
-				sampSendClickTextdraw(dr)
-				if i==7 then
-					
-				end	
-			end
-			wait(zadervkacall.v)
-					sampSendClickTextdraw(bcal2)
-					workcal = false
+			workcal = false
 		end)
 		return false
 	end
@@ -18071,6 +18535,7 @@ function load_settings() -- загрузка настроек
 	dialogclosev3 = imgui.ImBool(ini.settings.dialogclosev3)
 	dialogclosev4 = imgui.ImBool(ini.settings.dialogclosev4)
 	vipresend = imgui.ImBool(ini.settings.vipresend)
+	addyved = imgui.ImBool(ini.settings.addyved)
 	autoryda = imgui.ImBool(ini.settings.autoryda)
 	autolen = imgui.ImBool(ini.settings.autolen)
 	versiontoch = imgui.ImBool(ini.settings.versiontoch)
@@ -18086,9 +18551,13 @@ function load_settings() -- загрузка настроек
 	autopaybtc = imgui.ImBool(ini.settings.autopaybtc)
 	lock = imgui.ImBool(ini.settings.lock)
 	autonarko = imgui.ImBool(ini.settings.autonarko)
+	novr = imgui.ImBool(ini.settings.novr)
 	autobuffer = imgui.ImBool(ini.settings.autobuffer)
 	autorelog = imgui.ImBool(ini.settings.autorelog)
 	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
+	
+	blockweather = imgui.ImBool(ini.settings.blockweather)
+	blocktime = imgui.ImBool(ini.settings.blocktime)
 
 	autokamen = imgui.ImBuffer(u8(ini.settings.autokamen), 256)
 	autolenf = imgui.ImBuffer(u8(ini.settings.autolenf), 256)
@@ -18398,8 +18867,6 @@ function load_settings() -- загрузка настроек
 	shotgun = imgui.ImBool(ini.settings.shotgun)
 	rifle = imgui.ImBool(ini.settings.rifle)
 	knife = imgui.ImBool(ini.settings.knife)
-	launcherpc = imgui.ImBool(ini.settings.launcherpc)
-	launcherm = imgui.ImBool(ini.settings.launcherm)
 	chatauto = imgui.ImBool(ini.settings.chatauto)
 	givemedist = imgui.ImBool(ini.settings.givemedist)
 	chatmessage = imgui.ImBool(ini.settings.chatmessage)
@@ -34274,6 +34741,15 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'87. В "Майнинг" - "Прочие функции" добавлена возможность запускать выключенные видеокарты сразу во всех домах.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'88. В "Skup Menu" добавлена возможность настроить 2 пресета товаров для скупки.')
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[24.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'89. Переписана система звонка /call.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'90. Улучшен "Эмулятор Лаунчера" (теперь видны машины и скины, но выглядят они стандартно, модпака нет). Взято у chapo.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'91. Увеличена задержка на перевод телефона в спящий режим.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'92. В "Таймцикл" добавлена возможность блокировки смены погоды и времени сервером от Gorskin.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'93. В "Параметры" - "Модификации" добавлена возможность убрать диалог с вопросом о рекламе при отправке сообщения в')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'VIP чат (в диалоге нажимается "нет" и сообщение отправляется бесплатно)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'94. Теперь, если вы включите значок с ADD VIP - вам вылезет уведомление, что его нужно выключить т.к некоторый функционал из-за')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'него не работает.')
 		imgui.End()
 		end
 	
@@ -37760,8 +38236,8 @@ function makeStringForCombo(arr)
 	return u8(str .. '\0')
 end
 
-function sampev.onPlayerStreamIn(playerId, team, model, position, rotation, color, fightingStyle)
-	infnpc[playerId] = { team, model, position, rotation, color, fightingStyle }
+function sampev.onPlayerStreamIn(playerId, team, skin, position, rotation, color, fightingStyle)
+	infnpc[playerId] = { team, skin, position, rotation, color, fightingStyle }
 	if delplayer then
 		for _, handle in ipairs(getAllChars()) do
 		  if doesCharExist(handle) then
@@ -37772,6 +38248,40 @@ function sampev.onPlayerStreamIn(playerId, team, model, position, rotation, colo
 		  end
 		end
 		npc[#npc + 1] = playerId
+	end
+	 if launcher.v then 
+	 if skin > 311 and Arizona.Skin[skin] then
+        Pool.Vehs[playerId] = {
+            ServerModel = Arizona.Skin[skin].def,
+            Name = Arizona.Skin[skin].name
+        }
+        return {playerId, team, Arizona.Skin[skin].def, position, rotation, color, fightingStyle}
+		end
+	end
+end
+
+function sampev.onPlayerStreamOut(playerId)
+	if launcher.v then 
+    if Pool.Peds[playerId] then Pool.Peds[playerId] = nil end
+	end
+end
+
+function sampev.onVehicleStreamIn(vehId, data)
+	if launcher.v then 
+    if data.type > 611 and Arizona.Vehicle[data.type] then
+        Pool.Vehs[vehId] = {
+            ServerModel = data.type,
+            Name = Arizona.Vehicle[data.type].name
+        }
+        data.type = Arizona.Vehicle[data.type].def or 560
+        return {vehId, data}
+		end
+	end
+end
+
+function sampev.onVehicleStreamOut(vehId)
+	if launcher.v then 
+    if Pool.Vehs[vehId] then Pool.Vehs[vehId] = nil end 
 	end
 end
 
@@ -38937,6 +39447,18 @@ function gotofunc(fnc)
             end
         end
 	end
+	if fnc == "SetTime" or fnc == "all" then
+        local bs = raknetNewBitStream()
+        raknetBitStreamWriteInt8(bs, gametime.v)
+        raknetEmulRpcReceiveBitStream(29, bs)
+        raknetDeleteBitStream(bs)
+	end
+    if fnc == "SetWeather" or fnc == "all" then
+        local bs = raknetNewBitStream()
+        raknetBitStreamWriteInt8(bs, weather.v)
+        raknetEmulRpcReceiveBitStream(152, bs)
+        raknetDeleteBitStream(bs)
+	end
 end
 
 function sampGetVersion()
@@ -39624,15 +40146,7 @@ function settingosnova()
 						sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Анти-Афк успешно загружен! Перезайдите полностью в игру, чтобы он заработал.", -1)
                     end
 				imgui.Text('-----------------------------------------------------------------------------')
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит и 10.000$ в час. После включения данной функций нужно перезайти в игру. Новых машин не видно, нужен другой обход с модпаком.")
-				if launcher.v then
-				imgui.Text('-----------------------------------------------------------------------------')
-				if launcherpc.v then launcherm.v = false end
-				if launcherm.v then launcherpc.v = false end
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("PC")); imgui.SameLine(); imgui.ToggleButton(u8'PC', launcherpc); imgui.SameLine(); 
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Mobile")); imgui.SameLine(); imgui.ToggleButton(u8'Mobile', launcherm)
-				imgui.Text('-----------------------------------------------------------------------------')
-				end
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Эмулятор лаунчера")); imgui.SameLine(); imgui.ToggleButton(u8'Эмулятор лаунчера', launcher); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вы сможете открывать сундуки с рулетками, получать увеличенный депозит, 10.000$ в час и видеть все кастомные скины и транспорт, только в стандартном виде (модпака нет). После включения данной функции - нужно перезайти в игру. Взято у chapo.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто Байк и Мото")); imgui.SameLine(); imgui.ToggleButton(u8'Авто Байк и Мото', autobike); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то вам больше не надо будет нажимать W на велосипеде и не нужно будет нажимать стрелочку на мотоцикле. Просто зажимаете Левый Shift и едите.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто бег")); imgui.SameLine(); imgui.ToggleButton(u8'Авто бег', autobeg); imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на комбинацию клавиш 'W + 1' активируется авто-бег. Чтобы перестать бежать, нужно нажать 'W + 2'.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Запоминание диалогов")); imgui.SameLine(); imgui.ToggleButton(u8'Запоминание диалогов', ndr) imgui.SameLine(); imgui.TextQuestion(u8"Функция запоминает последний выбранный вами пункт или введенные данные в диалоге.")
@@ -39700,6 +40214,8 @@ function settingosnova()
 				end
 				
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("VIP-Resend")); imgui.SameLine(); imgui.ToggleButton(u8'VIP-Resend', vipresend) imgui.SameLine() imgui.TextQuestion(u8"Функция отправляет повторно ваше сообщение в VIP чат, если оно не отправилось из-за кд. Функционал взят у Cosmo.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог с вопросом о рекламе в VIP")); imgui.SameLine(); imgui.ToggleButton(u8'Убирать диалог с вопросом о рекламе в VIP', novr) imgui.SameLine() imgui.TextQuestion(u8"Функция убирает диалог, в котором вас спрашивают, реклама ли это и нажимает 'нет', чтобы у вас не списывались за это деньги.")
+				
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Отходить от места спавна")); imgui.SameLine(); imgui.ToggleButton(u8'Отходить от места спавна', antispawn); imgui.SameLine(); imgui.TextQuestion(u8"Персонаж после спавна сделает указанное количество прыжков вперед, чтобы отойти от места спавна. Совершать прыжки персонаж будет только один раз после захода на сервер.")
 				imgui.PushItemWidth(150)
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); if antispawn.v then imgui.SliderInt(u8'Кол-во прыжков',zadervkajump,1, 10) end
@@ -40128,6 +40644,8 @@ function settingosnova()
 				if weatheroff.v and gametime.v == -1 then gametime.v = readMemory(0xB70153, 1, true) end
 				imgui.Text('') imgui.SameLine() imgui.SliderInt(u8"ID погоды", weather, 0, 50)
 				imgui.Text('') imgui.SameLine() imgui.SliderInt(u8"Игровой час", gametime, 0, 23)
+				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Блокировать изменение погоды сервером', blockweather)
+				imgui.SameLine() imgui.Checkbox(u8'Блокировать изменение времени сервером', blocktime)
 			end
 			
 			 if imgui.CollapsingHeader(u8"FPS UP") then
@@ -40136,7 +40654,7 @@ function settingosnova()
                             sampAddChatMessage(givemedist.v and ''..colorcm..'['..nazvanie.v..']{FFFFFF} Возможность менять прорисовку '..colorcm2..'включена' or ''..colorcm..'['..nazvanie.v..'] {FFFFFF}Возможность менять прорисовку '..colorcm2..'выключена', -1)
                             gotofunc("GivemeDist")
                         end
-						imgui.SameLine(); imgui.TextQuestion(u8"Внимание! Функция может конфликтовать с похожими скриптами по функционалу в формате cleo, asi и lua. На лаунчере работает только дальность лодов и видимость ников. Если захотите отключить функционал, то перед выключением верните ползунок с дальностью прорисовки на значение '25' или перезайдите в игру.")
+						imgui.SameLine(); imgui.TextQuestion(u8"Внимание! Функция может конфликтовать с похожими скриптами по функционалу в формате cleo, asi и lua. На лаунчере работает только дальность лодов и видимость ников (есть серверная команда /fogdist). Если захотите отключить функционал, то перед выключением верните ползунок с дальностью прорисовки ников на значение '25' или перезайдите в игру.")
                         if givemedist.v then
                            imgui.Text('') imgui.SameLine() imgui.Text(u8"Дальность прорисовки:")
                             imgui.PushItemWidth(625)
@@ -40255,8 +40773,6 @@ function settingosnova()
 				keyT.v = false
 				antiafk.v = false
 				launcher.v = false
-				launcherpc.v = false
-				launcherm.v = false
 				autobike.v = false
 				autobeg.v = false
 				ndr.v = false
@@ -40680,6 +41196,7 @@ function settingosnova()
 		cfg3.backup.dialogclosev3v2 = dialogclosev3.v
 		cfg3.backup.dialogclosev4v2 = dialogclosev4.v
 		cfg3.backup.vipresendv2 = vipresend.v
+		cfg3.backup.addyvedv2 = addyved.v
 		cfg3.backup.autorydav2 = autoryda.v
 		cfg3.backup.autolenv2 = autolen.v
 		cfg3.backup.versiontochv2 = versiontoch.v
@@ -40695,9 +41212,12 @@ function settingosnova()
 		cfg3.backup.autoopl6v2 = autoopl6.v
 		cfg3.backup.lockv2 = lock.v
 		cfg3.backup.autonarkov2 = autonarko.v
+		cfg3.backup.novrv2 = novr.v
 		cfg3.backup.autobufferv2 = autobuffer.v
 		cfg3.backup.autorelogv2 = autorelog.v
 		cfg3.backup.autobufferyvedv2 = autobufferyved.v
+		cfg3.backup.blockweatherv2 = blockweather.v
+		cfg3.backup.blocktimev2 = blocktime.v
 		cfg3.backup.igrokv2v2 = igrokv2.v
 		cfg3.backup.igrokv22v2 = igrokv22.v
 		cfg3.backup.autokamenv2 = autokamen.v
@@ -40916,8 +41436,6 @@ function settingosnova()
 		cfg3.backup.keyTv2 = keyT.v
 		cfg3.backup.antiafkv2 = antiafk.v
 		cfg3.backup.launcherv2 = launcher.v
-		cfg3.backup.launcherpcv2 = launcherpc.v
-		cfg3.backup.launchermv2 = launcherm.v
 		cfg3.backup.deaglev2 = deagle.v
 		cfg3.backup.awpv2 = awp.v
 		cfg3.backup.m4v2 = m4.v
@@ -41435,6 +41953,7 @@ function settingosnova()
 		 dialogclosev3.v =  cfg3.backup.dialogclosev3v2
 		 dialogclosev4.v =  cfg3.backup.dialogclosev4v2
 		 vipresend.v =  cfg3.backup.vipresendv2 
+		 addyved.v =  cfg3.backup.addyvedv2 
 		 autoryda.v =  cfg3.backup.autorydav2 
 		 autolen.v =  cfg3.backup.autolenv2 
 		 versiontoch.v =  cfg3.backup.versiontochv2 
@@ -41450,9 +41969,14 @@ function settingosnova()
 		 autoopl6.v =  cfg3.backup.autoopl6v2 
 		  lock.v =  cfg3.backup.lockv2
 		  autonarko.v =  cfg3.backup.autonarkov2
+		  novr.v =  cfg3.backup.novrv2
 		 autobuffer.v =  cfg3.backup.autobufferv2 
 		 autorelog.v =  cfg3.backup.autorelogv2 
 		 autobufferyved.v =  cfg3.backup.autobufferyvedv2 
+		 
+		 blockweather.v =  cfg3.backup.blockweatherv2 
+		 blocktime.v =  cfg3.backup.blocktimev2 
+		 
 		 igrokv2.v =  cfg3.backup.igrokv2v2 
 		 igrokv22.v =  cfg3.backup.igrokv22v2 
 		 
@@ -41673,8 +42197,6 @@ function settingosnova()
 		 keyT.v  =  cfg3.backup.keyTv2 
 		 antiafk.v  =  cfg3.backup.antiafkv2 
 		 launcher.v  =  cfg3.backup.launcherv2 
-		 launcherpc.v  =  cfg3.backup.launcherpcv2 
-		 launcherm.v  =  cfg3.backup.launchermv2 
 		 deagle.v  =  cfg3.backup.deaglev2 
 		 awp.v  =  cfg3.backup.awpv2 
 		 m4.v  =  cfg3.backup.m4v2 
@@ -41886,9 +42408,9 @@ function phoneair()
 	sampSendDialogResponse(1000, 1, 0, -1)
 	wait(200)
 	sampSendClickTextdraw(2112)
-	wait(200)
+	wait(500)
 	sampSendDialogResponse(966, 1, 10, -1)
-	wait(200)
+	wait(1000)
 	sampCloseCurrentDialogWithButton(0)
 	wait(200)
 	sampSendChat('/phone')
@@ -41907,3 +42429,18 @@ function infobarstats()
 		imgui.TextColoredRGB(''..fishinfo)
 		end
 	end
+	
+function sampev.onSendClientJoin(ver, mod, nick, response, authkey, clientver, unk)
+	if launcher.v then 
+    return {ver, mod, nick, response, authkey, 'Arizona PC' or clientver, unk}
+	end
+end
+
+function onReceiveRpc(id, bs)
+	if id == 29 and blocktime.v then
+		return false
+	end
+    if id == 152 and blockweather.v then
+        return false
+    end
+end
