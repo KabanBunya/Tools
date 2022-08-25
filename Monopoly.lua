@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.32')
+script_version('3.4.33')
 
 use = false
 close = false
@@ -255,7 +255,7 @@ local dif_colors = {
 	0xFF03fcfc, 0xFF02f563, 0xFFFFFF00, 0xFFFF0000
 }
 
-bike = {[481] = true, [509] = true, [510] = true, [14914] = true, [14915] = true, [14916] = true, [14917] = true}
+bike = {[481] = true, [509] = true, [510] = true, [14914] = true, [14915] = true, [14916] = true, [14917] = true, [15882] = true}
 moto = {[448] = true, [461] = true, [462] = true, [463] = true, [468] = true, [471] = true, [521] = true, [522] = true, [523] = true, [581] = true, [586] = true, [3197] = true, [3194] = true, [3195] = true, [3196] = true, [3198] = true}
 
 package.path = ".\\?\\init.lua;" .. package.path
@@ -15487,7 +15487,7 @@ end
 
 function fixprice()
 	lua_thread.create(function()
-		wait(10000)
+		wait(120000)
 		sampSendChat('/invent')
 		end)
 	end
@@ -34750,6 +34750,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'VIP чат (в диалоге нажимается "нет" и сообщение отправляется бесплатно)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'94. Теперь, если вы включите значок с ADD VIP - вам вылезет уведомление, что его нужно выключить т.к некоторый функционал из-за')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'него не работает.')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[25.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'95. В "Автобайк" добавлен скейт.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'96. Открытие инвентаря, если у вас проверялись сундуки и вы перезашли или включено "Всегда проверять", произойдет через 2 минуты')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'(было 10 секунд)')
 		imgui.End()
 		end
 	
