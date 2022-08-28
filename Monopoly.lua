@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.34')
+script_version('3.4.35')
 
 use = false
 close = false
@@ -8928,7 +8928,7 @@ end
       if close28 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		sampSendClickTextdraw(rulrun2)
-		wait(zadervkasetrou3.v)
+		wait(2000)
 		if inventoff.v then 
 		sampSendChat('/invent')
 		else
@@ -9109,7 +9109,7 @@ end
       if close28 and otkrytie.v then
         wait(zadervkasetrou3.v)
 		sampSendClickTextdraw(rulrun2)
-		wait(zadervkasetrou3.v)
+		wait(2000)
 		if inventoff.v then 
 		sampSendChat('/invent')
 		else
@@ -9276,7 +9276,7 @@ end
 		sampSendClickTextdraw(rulrun)
 		wait(60000)
 		sampSendClickTextdraw(rulrun2)
-		 wait(zadervkasetrou7.v)
+		wait(2000)
 		if inventoff.v then 
 		sampSendChat('/invent')
 		else
@@ -9414,7 +9414,7 @@ end
 		sampSendClickTextdraw(rulrun)
 		wait(60000)
 		sampSendClickTextdraw(rulrun2)
-		
+		wait(2000)
 		if inventoff.v then 
 		sampSendChat('/invent')
 		else
@@ -35247,7 +35247,7 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'97. В "Roulette Tools" добавлен сундук 8-й годовщины (открывается только 1 или 2 способом)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'98. В "Умный реконнект" добавлена возможность перезайти на сервер, если сервер закрыл соединение (через 30 минут).')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'99. В "/lovec" добавлена возможность включить рендер 3D текста на все объекты.')
-		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'100. Подправлены задержки для сундука 8-й годовщины.')
 		imgui.End()
 		end
 	
