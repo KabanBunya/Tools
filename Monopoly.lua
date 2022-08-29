@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.35')
+script_version('3.4.36')
 
 use = false
 close = false
@@ -23,6 +23,7 @@ phonetext = 'nill'
 local fontsize = nil
 local updateid
 serverclosed = true
+reconon = false
 workcal = false
 fontsizev2 = nil
 fontsizev3 = nil
@@ -6025,23 +6026,29 @@ end
 		
         if chatstring == "You are banned from this server." and recongen.v and reconbanned.v then
         sampDisconnectWithReason(false)
+			reconon = true
             wait(zadervkarecon.v * 1000) -- задержка
+			reconon = false
             sampSetGamestate(1)
 		end
 		
 		if chatstring == "Wrong server password." and recongen.v and reconpassword.v then
+		reconon = true
         sampDisconnectWithReason(false)
             wait(zadervkareconrestart.v * 60000) -- задержка
+			reconon = false
             sampSetGamestate(1)
 		end
 		
 		if chatstring == "Use /quit to exit or press ESC and select Quit Game" and recongen.v and reconname.v then
+		reconon = true
         sampDisconnectWithReason(false)
             wait(zadervkarecon.v * 1000)
+			reconon = false
             sampSetGamestate(1)
 		end
 		
-		if recongen.v and reconnameclose.v then
+		if recongen.v and reconnameclose.v and reconon == false then
 		if chatstring == "Server closed the connection." or chatstring == "Сервер закрыл соединение." then
         sampDisconnectWithReason(false)
             wait(1800000) -- задержка
@@ -11654,18 +11661,22 @@ end
 
 function recongeniusis()
 	lua_thread.create(function()
+	reconon = true
 	wait(100)
 	sampDisconnectWithReason(quit)
 	wait(zadervkareconrestart.v * 60000)
+	reconon = false
 	sampSetGamestate(1)
 end)
 end
 
 function recongenmenu()
 	lua_thread.create(function()
+	reconon = true
 	wait(100)
 	sampDisconnectWithReason(quit)
 	wait(zadervkarecon.v * 1000)
+	reconon = false
 	sampSetGamestate(1)
 end)
 end
@@ -15877,8 +15888,10 @@ end
 
 	if color == -10270721 and text:match("%[Ошибка%] {FFFFFF}Данный аккаунт уже авторизирован!") and recongen.v and reconname.v then
 	lua_thread.create(function()
+	reconon = true
         sampDisconnectWithReason(false)
             wait(zadervkarecon.v * 1000)
+			reconon = false
             sampSetGamestate(1)
 		end)
 	end
@@ -17562,6 +17575,11 @@ end
 	cfg.infofishkol.itemkol = cfg.infofishkol.itemkol + 1
 	inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
+	
+	if vkconnect.v and sellinfo.v and color == -1104335361 and text:match('%[Ошибка%] {ffffff}Крутить рулетку можно 1 раз в 30 минут') then if yashik5.v or checked_test101.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
+	if tgconnect.v and sellinfotg.v and color == -1104335361 and text:match('%[Ошибка%] {ffffff}Крутить рулетку можно 1 раз в 30 минут') then if yashik5.v or checked_test101.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
+	
+	
 	
 	if vkconnect.v and sellid.v and text:match('%[(%d+)%] (.*) | Уровень:') then vk_requestv2(''..text) end
 	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if yashik.v or yashik1.v or yashik2.v or yashik4.v or yashik5.v or yashik3.v or checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test101.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
@@ -35248,6 +35266,12 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'98. В "Умный реконнект" добавлена возможность перезайти на сервер, если сервер закрыл соединение (через 30 минут).')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'99. В "/lovec" добавлена возможность включить рендер 3D текста на все объекты.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'100. Подправлены задержки для сундука 8-й годовщины.')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'101. Фикс "Умного Реконнекта" (при включенной функции "перезаходить, если сервер закрыл соединение через 30 минут",')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'при любом вылете перезаходил 30 минут)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'102. В "VK Connect" и "TG Connect" в "Уведомлять об открытии сундуков" добавлено уведомление с сундука 8-й годовщины.')
+
 		imgui.End()
 		end
 	
