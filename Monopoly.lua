@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.4.36')
+script_version('3.4.37')
 
 use = false
 close = false
@@ -20,6 +20,7 @@ local houserespawn = false
 local samprulstop = true
 airphone = false
 phonetext = 'nill'
+MAX_SAMP_MARKERS = 63
 local fontsize = nil
 local updateid
 serverclosed = true
@@ -1929,6 +1930,7 @@ local cfg3 = inicfg.load({
 		zadervkarulv2 = 180,
 		zadervkadoprulv2 = 0,
 		zadervkarulv2v2 = 180,
+		zadervkaprokrutv2 = 500,
 		zadervkatreev2 = 10,
 		slotazrulv2 = 1,
 		slotpodarokrulv2 = 1,
@@ -2708,6 +2710,7 @@ local SET = {
 		zadervkarul = 180,
 		zadervkadoprul = 0,
 		zadervkarulv2 = 180,
+		zadervkaprokrut = 500,
 		zadervkatree = 10,
 		slotazrul = 1,
 		slotpodarokrul = 1,
@@ -6873,6 +6876,7 @@ function saveSettings(args, key)
 	ini.settings.zadervkarul = zadervkarul.v
 	ini.settings.zadervkadoprul = zadervkadoprul.v
 	ini.settings.zadervkarulv2 = zadervkarulv2.v
+	ini.settings.zadervkaprokrut = zadervkaprokrut.v
 	ini.settings.zadervkatree = zadervkatree.v
 	ini.settings.slotazrul = slotazrul.v
 	ini.settings.slotpodarokrul = slotpodarokrul.v
@@ -17704,11 +17708,21 @@ end
 		lastrradiozv, lastrradioID = text:match('%[R%]%s(.+)%s%a+_%a+%[(%d+)%]: .+')
 	elseif text:match("^Этот транспорт зарегистрирован на жителя {9ACD32}" ..userNick) and lock.v then
 		sampSendChat('/lock')
-	elseif text:find("Вам был добавлен предмет") and color == -65281 and samprulstop == true then
+	end	
+	
+	if text:find("Вам был добавлен предмет") and color == -65281 and samprulstop == true then
+		lua_thread.create(function()
+		wait(zadervkaprokrut.v)
 		krytim = true
-	elseif text:find('%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!') and samprulstop == true then
-		krytim = true
+		end)
 	end
+	if text:find('%[Подсказка%] %{FFFFFF%}Вы получили (.+)%$(%d+)!') and samprulstop == true then
+		lua_thread.create(function()
+		wait(zadervkaprokrut.v)
+		krytim = true
+		end)
+	end
+	
 	local x, y, z = getCharCoordinates(PLAYER_PED)
 	local resultbank, _, _, _, _, _, _, _, _, _ = Search3Dtext(x, y, z, 3, "Касса")
 	if text:match("Банковский чек") and resultbank and autopay.v then
@@ -19032,6 +19046,7 @@ function load_settings() -- загрузка настроек
 	zadervkarul = imgui.ImInt(ini.settings.zadervkarul)
 	zadervkadoprul = imgui.ImInt(ini.settings.zadervkadoprul)
 	zadervkarulv2 = imgui.ImInt(ini.settings.zadervkarulv2)
+	zadervkaprokrut = imgui.ImInt(ini.settings.zadervkaprokrut)
 	zadervkatree = imgui.ImInt(ini.settings.zadervkatree)
 	slotazrul = imgui.ImInt(ini.settings.slotazrul)
 	slotpodarokrul = imgui.ImInt(ini.settings.slotpodarokrul)
@@ -31515,6 +31530,11 @@ function yashikisroulette()
 			checked_test12.v = false
 			checked_test11.v = false
 		end
+		
+		
+		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (в мс) ##484yhgfh',zadervkaprokrut,10, 10000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка для открытия рулеток. Если не открывает все рулетки и останавливается - увеличьте задержку. Если крутит рулетки медленно - уменьшите задержку. По умолчанию установлено на 500 мс.")
+			
+		
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать обычный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать обычный сундук', yashik) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
 			imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Всегда открывать донатный сундук")); imgui.SameLine(); imgui.ToggleButton(u8'Всегда открывать донатный сундук', yashik1) imgui.SameLine(); imgui.TextQuestion(u8"Функция открытия сундука работает даже после перезахода в игру и открывает через указанное вами время данный сундук. Вам больше не нужно будет заходить в меню, чтобы активировать открытие нужных вам сундуков т.к будет активироваться автоматический. Не рекомендуется использовать при активной игре и использовании инвентаря. Также инвентарь должен быть на английском языке.")
@@ -31595,6 +31615,7 @@ function yashikisroulette()
 			zadervkarul.v = '180'
 			zadervkadoprul.v = '0'
 			zadervkarulv2.v = '180'
+			zadervkaprokrut.v = '500'
 			zadervkatree.v = '10'
 			slotazrul.v = '1'
 			slotpodarokrul.v = '1'
@@ -35271,6 +35292,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'101. Фикс "Умного Реконнекта" (при включенной функции "перезаходить, если сервер закрыл соединение через 30 минут",')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'при любом вылете перезаходил 30 минут)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'102. В "VK Connect" и "TG Connect" в "Уведомлять об открытии сундуков" добавлено уведомление с сундука 8-й годовщины.')
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.08.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'103. В "Roulette Tools" добавлена возможность настроить задержку на прокрутку рулеток.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'104. Добавлен фикс краша при использовании эмулятора лаунчера от Heroku.')
 
 		imgui.End()
 		end
@@ -42071,6 +42096,7 @@ function settingosnova()
         cfg3.backup.lodv2v2 = lodv2.v
 		cfg3.backup.zadervkafermav2 = zadervkaferma.v
 		cfg3.backup.zadervkarulv2 = zadervkarul.v
+		cfg3.backup.zadervkaprokrutv2 = zadervkaprokrut.v
 		cfg3.backup.zadervkadoprulv2 = zadervkadoprul.v
 		cfg3.backup.zadervkarulv2v2 = zadervkarulv2.v
 		cfg3.backup.zadervkatreev2 = zadervkatree.v
@@ -42834,6 +42860,7 @@ function settingosnova()
 		lodv2.v = cfg3.backup.lodv2v2
 		 zadervkaferma.v = cfg3.backup.zadervkafermav2 
 		 zadervkarul.v = cfg3.backup.zadervkarulv2 
+		  zadervkaprokrut.v = cfg3.backup.zadervkaprokrutv2 
 		 zadervkadoprul.v = cfg3.backup.zadervkadoprulv2 
 		 zadervkarulv2.v = cfg3.backup.zadervkarulv2v2 
 		 zadervkatree.v = cfg3.backup.zadervkatreev2 
@@ -42971,4 +42998,12 @@ function onReceiveRpc(id, bs)
     if id == 152 and blockweather.v then
         return false
     end
+end
+
+function sampev.onSetMapIcon(iconId, position, type, color, style)
+	if launcher.v then 
+    if type > MAX_SAMP_MARKERS then
+        return false
+		end
+	end
 end
