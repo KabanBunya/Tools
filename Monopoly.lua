@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5')
+script_version('3.5.1')
 
 use = false
 close = false
@@ -7581,6 +7581,8 @@ end
   
   if dialogId == 25627 and novr.v then sampSendDialogResponse(25627, 0, nil, -1) return false end
   if dialogId == 25627 and otmenadial == true then return false end
+  if dialogId == 25626 and novr.v then sampSendDialogResponse(25626, 0, nil, -1) return false end
+  if dialogId == 25626 and otmenadial == true then return false end
   
   if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
@@ -25589,6 +25591,8 @@ while true do
 	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	wait(300)
 	sampSendDialogResponse(25627, 1, 0, -1)
+	wait(100)
+	sampSendDialogResponse(25626, 1, 0, -1)
 	kdwait4 = math.random(5000, 15000)
 	if textpiar == true then novr.v = true textpiar = false end
 	otmenadial = false
@@ -30604,6 +30608,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'141. Обновлён список донатеров.')
 		imgui.EndChild()
 		end	
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'23.09.2022')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс функции "Убирать диалог с предложением о рекламе в VIP" (не скипался диалог, где цена за рекламу установлена 0$)')
 
 		imgui.End()
 		end
@@ -32001,6 +32008,8 @@ lua_thread.create(function()
 	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	wait(300)
 	sampSendDialogResponse(25627, 1, 0, -1)
+	wait(100)
+	sampSendDialogResponse(25626, 1, 0, -1)
 	if textpiar == true then novr.v = true textpiar = false end
 	otmenadial = false
 	end)
