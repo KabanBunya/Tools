@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.1')
+script_version('3.5.2')
 
 use = false
 close = false
@@ -7186,43 +7186,31 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	end
 end
 
-	if dialogId == 3060 and isEnd ~= 0 and isBuyProcess then return false end
-	if dialogId == 3040 and isEnd ~= 0 and isBuyProcess then return false end
 	if dialogId == 3050 and isEn == 1 then
 		lua_thread.create(checkPage, text)
 		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
-		return false
 	end
 	if dialogId == 3050 and isEn == 2 then
 		lua_thread.create(pageWrite, text)
 		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
-		return false
 	end
 	
-	if dialogId == 3060 and isEndv2 ~= 0 and isBuyProcessv2 then return false end
-	if dialogId == 3040 and isEndv2 ~= 0 and isBuyProcessv2 then return false end
 	if dialogId == 3050 and isEnv2 == 1 then
 		lua_thread.create(checkPagev2, text)
 		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
-		return false
 	end
 	if dialogId == 3050 and isEnv2 == 2 then
 		lua_thread.create(pageWritev2, text)
 		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
-		return false
 	end
 	
-	if dialogId == 3060 and isEndsell ~= 0 and isBuyProcesssell then return false end
-	if dialogId == 3040 and isEndsell ~= 0 and isBuyProcesssell then return false end
 	if dialogId == 3050 and isEnsell == 1 then
 		lua_thread.create(checkPagesell, text)
 		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
-		return false
 	end
 	if dialogId == 3050 and isEnsell == 2 then
 		lua_thread.create(pageWritesell, text)
 		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
-		return false
 	end
 
 	if ndr.v then
@@ -12102,7 +12090,7 @@ end
 	
 	if win_state['skupv2'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(885, 580), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8"Skup Menu | by Devil`s | доработал Bunya##4353464563", win_state['skupv2'], imgui.WindowFlags.NoResize)
 		
 		imgui.Text('')
@@ -12151,7 +12139,7 @@ end
 				if imgui.CustomButton(u8"Очистить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(225, 25)) then for i=1, #itemsskup do itemsskup[i][4] = false end inicfg.save(itemsskup, _nameini) end
 					for i=1, #itemsskup do
 						if itemsskup[i][4] then
-							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then itemsskup[i][4] = false inicfg.save(itemsskup, _nameini) end
+							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(45, 30)) then itemsskup[i][4] = false inicfg.save(itemsskup, _nameini) end
 							imgui.SameLine()
 							imgui.Text(u8(" "..itemsskup[i][1]))
 						end
@@ -12176,7 +12164,7 @@ end
 	end
 	if win_state['skupv3'].v then
 		local isWarning = false
-		imgui.SetNextWindowSize(imgui.ImVec2(740, 550), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(742, 550), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.Begin(u8"Окно скупа предметов##4564563543", win_state['skupv3'], imgui.WindowFlags.NoResize)
 			imgui.Text('') 
@@ -12239,7 +12227,7 @@ end
 	
 	if win_state['skupv5'].v then
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(885, 560), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(885, 580), imgui.Cond.FirstUseEver)
 		imgui.Begin(u8"Skup Menu | by Devil`s | доработал Bunya##43534464563", win_state['skupv5'], imgui.WindowFlags.NoResize)
 		
 		imgui.Text('')
@@ -12288,7 +12276,7 @@ end
 				if imgui.CustomButton(u8"Очистить", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(225, 25)) then for i=1, #itemsskupv2 do itemsskupv2[i][4] = false end inicfg.save(itemsskupv2, _nameiniv2) end
 					for i=1, #itemsskupv2 do
 						if itemsskupv2[i][4] then
-							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(40, 30)) then itemsskupv2[i][4] = false inicfg.save(itemsskupv2, _nameiniv2) end
+							imgui.Text('') imgui.SameLine() if imgui.CustomButton("#"..i, buttonclick, buttonvydel, buttonpol, imgui.ImVec2(45, 30)) then itemsskupv2[i][4] = false inicfg.save(itemsskupv2, _nameiniv2) end
 							imgui.SameLine()
 							imgui.Text(u8(" "..itemsskupv2[i][1]))
 						end
@@ -12313,7 +12301,7 @@ end
 	end
 	if win_state['skupv6'].v then
 		local isWarning = false
-		imgui.SetNextWindowSize(imgui.ImVec2(740, 550), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(742, 550), imgui.Cond.FirstUseEver)
 		imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
 		imgui.Begin(u8"Окно скупа предметов##45645653543", win_state['skupv6'], imgui.WindowFlags.NoResize)
 			imgui.Text('') 
@@ -27417,7 +27405,8 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/price - узнать среднюю цену на товар (предварительно нужно включить функцию 'Центральный рынок')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carprice - узнать среднюю цену на транспорт (предварительно нужно включить функцию 'Автобазар')")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/carab - обновить средние цены на транспорт (предварительно нужно включить функцию 'Автобазар')")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в 'Skup Menu'.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst - обновить список товаров в 'Skup Menu' пресет №1.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cst2 - обновить список товаров в 'Skup Menu' пресет №2.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstreset - обнулить список товаров в 'Skup Menu' пресет №1 (нужно при баге товаров или смене местоположения)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstreset2 - обнулить список товаров в 'Skup Menu' пресет №2 (нужно при баге товаров или смене местоположения)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/cstsell - обновить список товаров в Sell Menu.")
@@ -30611,7 +30600,11 @@ function tupupdate()
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'23.09.2022')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс функции "Убирать диалог с предложением о рекламе в VIP" (не скипался диалог, где цена за рекламу установлена 0$)')
-
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'26.09.2022')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Теперь при выставлении товара на продажу/скупку, вы видите все действия в диалогах, чтобы в случае ошибок, могли предоставить')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'фрапс и проблему пофиксили.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Подправлен интерфейс в "Skup Menu".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. В "Помощь" добавлено описание команды "/cst2".')
 		imgui.End()
 		end
 	
