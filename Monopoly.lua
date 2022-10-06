@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.2')
+script_version('3.5.3')
 
 use = false
 close = false
@@ -29,7 +29,9 @@ textpiar = false
 otmenadial = false
 fontsizev2 = nil
 fontsizev3 = nil
+viceip = 0
 carid = 0
+exitvice = 0
 itogohat = 0
 itogohatv2 = 0
 caridv2 = 0
@@ -1288,6 +1290,7 @@ local cfg3 = inicfg.load({
 		sellrultgv2 = false,
 		sellgolodtgv2 = false,
 		obkachetv2 = false,
+		vipobkachetv2 = false,
 		smilsv2 = true,
 		smilvv2 = false,
 		smisfv2 = false,
@@ -1752,6 +1755,9 @@ local cfg3 = inicfg.load({
 		igrokclock2v2 = '0',
 		idigroktelov2 = '0',
 		idigroktelo2v2 = '0',
+		
+		nickvicev2 = '', 
+		
 		timecoutv2 = false,
 		gangzonesv2 = false,
 		rydav2 = false,
@@ -1785,6 +1791,7 @@ local cfg3 = inicfg.load({
 		fastlockv2 = false,
 		fastkladv2 = false,
 		autosharv2 = false,
+		unbaghudv2 = false,
 		keyTv2 = false,
 		launcherv2 = false,
 		deaglev2 = false,
@@ -1991,6 +1998,7 @@ local SET = {
 		sellrultg = false,
 		sellgolodtg = false,
 		obkachet = false,
+		vipobkachet = false,
 		smils = true,
 		smilv = false,
 		smisf = false,
@@ -2457,6 +2465,9 @@ local SET = {
 		igrokclock2 = '0',
 		idigroktelo = '0',
 		idigroktelo2 = '0',
+		
+		nickvice = '',
+		
 		timecout = false,
 		gangzones = false,
 		ryda = false,
@@ -2490,6 +2501,7 @@ local SET = {
 		fastlock = false,
 		fastklad = false,
 		autoshar = false,
+		unbaghud = false,
 		keyT = false,
 		launcher = false,
 		deagle = false,
@@ -2712,7 +2724,9 @@ local maincfg = inicfg.load({--конфиг для хоткеев
 	fastinvfam = VK_E,
 	fastinv = VK_Q,
 	fastlocking = VK_L,
-	unbaginvent = VK_F9
+	unbaginvent = VK_F9,
+	hudunbag = VK_SUBTRACT,
+	vipob = VK_ADD
 	},
 	combohotkeys = {
 	autodrone = VK_1
@@ -2913,7 +2927,6 @@ local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
 checked_test100 = imgui.ImBool(false)
-checked_test101 = imgui.ImBool(false)
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
 local video2 = imgui.ImBool(false)
@@ -5291,6 +5304,10 @@ function main()
 		fastinv = { name = key.key_names[maincfg.hotkeys.fastinv], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /invite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /invite (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Invite"). По умолчанию установлена клавиша Q.' },
 		fastlocking = { name = key.key_names[maincfg.hotkeys.fastlocking], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /lock", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /lock (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Lock"). По умолчанию установлена клавиша L.' },
 		unbaginvent = { name = key.key_names[maincfg.hotkeys.unbaginvent], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для разбага инвентаря", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для того, чтобы легко и быстро разбагать инвентарь, в случае, если у вас в нём ничего не нажимается. По умолчанию установлена клавиша F9.' },
+		hudunbag = { name = key.key_names[maincfg.hotkeys.hudunbag], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для разбага худа", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для того, чтобы легко и быстро разбагать худ, в случае, если он у вас пропал. По умолчанию установлена клавиша NumPad-.' },
+		
+		vipob = { name = key.key_names[maincfg.hotkeys.vipob], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для отправки рекламы в /vr", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для того, чтобы отправить прописанную рекламу в "Piar Menu" в /vr. По умолчанию установлена клавиша NumPad+.' },
+		
 		fastarenda = { name = key.key_names[maincfg.hotkeys.fastarenda], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /arenda", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /arenda (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Arenda"). По умолчанию установлена клавиша H.' },
 		
 		}
@@ -5339,7 +5356,6 @@ function main()
 	lua_thread.create(useroulette3)
 	lua_thread.create(useroulette4)
 	lua_thread.create(useroulette5)
-	lua_thread.create(useroulette6)
 	lua_thread.create(kladik)
 	lua_thread.create(roulette)
 	lua_thread.create(piarad)
@@ -5373,6 +5389,9 @@ function main()
 	end
 	
 	sampRegisterChatCommand("phoneair", phoneair) -- очистка чата
+	
+	sampRegisterChatCommand("exitvice", viceexit)
+	
 	sampRegisterChatCommand("arenda", arendatc) -- очистка чата
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
 	sampRegisterChatCommand("drone", drone) -- дроны
@@ -5567,6 +5586,10 @@ end
 		
 		if not sampIsChatInputActive() and not sampIsDialogActive() and fastlock.v and isKeyJustPressed(maincfg.hotkeys.fastlocking) then sampSendChat('/lock') end
 		if not sampIsChatInputActive() and not sampIsDialogActive() and isKeyJustPressed(maincfg.hotkeys.unbaginvent) then fixpricecopia() end
+		
+		if not sampIsChatInputActive() and not sampIsDialogActive() and unbaghud.v and isKeyJustPressed(maincfg.hotkeys.hudunbag) then hudbag() end
+		
+		if not sampIsChatInputActive() and not sampIsDialogActive() and vipobkachet.v and isKeyJustPressed(maincfg.hotkeys.vipob) then adtravel4() end
 		if not sampIsChatInputActive() and klavafish.v and isKeyJustPressed(69) and isKeyJustPressed(18) then markfish = true fishmark = true end
 		
 		if windowsstyle.v == false then apply_custom_style2() end
@@ -6383,6 +6406,9 @@ function saveSettings(args, key)
 	ini.settings.igrokclock2 = igrokclock2.v
 	ini.settings.idigroktelo = idigroktelo.v
 	ini.settings.idigroktelo2 = idigroktelo2.v
+	
+	ini.settings.nickvice = nickvice.v
+	
 	ini.settings.chatcalc = chatcalc.v
 	ini.settings.tradecalc = tradecalc.v
 	ini.settings.pismo = pismo.v
@@ -6499,6 +6525,7 @@ function saveSettings(args, key)
 	ini.settings.fastlock = fastlock.v
 	ini.settings.fastklad = fastklad.v
 	ini.settings.autoshar = autoshar.v
+	ini.settings.unbaghud = unbaghud.v
 	ini.settings.infoX = infoX
 	ini.settings.infoY = infoY
 	ini.settings.infoX2 = infoX2
@@ -6744,6 +6771,7 @@ function saveSettings(args, key)
 	ini.settings.sellorgtg = sellorgtg.v
 	
 	ini.settings.obkachet = obkachet.v
+	ini.settings.vipobkachet = vipobkachet.v
 	ini.settings.smils = smils.v
 	ini.settings.smilv = smilv.v
 	ini.settings.smisf = smisf.v
@@ -7105,6 +7133,18 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+
+	if title:match('{BFBBBA}{FFFFFF}Клиент | {ae433d}Игра') and exitvice == 1 then
+	lua_thread.create(function()
+	sampSendDialogResponse(dialogId, 1, 1, -1)
+	exitvice = 2
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выход с сервера "Vice City" успешно выполнен! Через 2 минуты вы зайдете на основной сервер, ожидайте...', -1)
+	wait(1000)
+	sampDisconnectWithReason(false)
+    wait(120000)
+    sampSetGamestate(1)
+	end)
+end
 
 	if dialogId == 966 and airphone == true and text:match("{FFFFFF} Перевести телефон в режим 'В самолете'") then 
 	phonetext = 'Обычный'
@@ -7875,19 +7915,6 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	   end
 	end
 	
-	if data.modelId == 2923 and checked_test101.v and otkrytieymnoe.v then
-	 arztest88 = id + 1
-	 arztest8 = 1
-	 end
-	if id == arztest88 and checked_test101.v and otkrytieymnoe.v and data.text:match('(%d+)') then 
-	 if data.text:match('(%d+) sec') then 
-	 arztest8 = 1
-	 else
-	 arztest888 = data.text:match('(%d+)')
-	 arztest8 = tonumber(arztest888:match('(%d+)'))
-	   end
-	end
-	
 	if data.modelId == 1733 and checked_test10.v and otkrytieymnoe.v then
 	 arztest77 = id + 1
 	 arztest7 = 1
@@ -8255,41 +8282,6 @@ end
     end)
   end
   
-  if checked_test101.v and active28 and otkrytie.v then
-    lua_thread.create(function()
-      if data.modelId == 2923 then
-        wait(zadervkasetrou1.v)
-        sampSendClickTextdraw(id)
-        use28 = true
-      end
-      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use28 and otkrytie.v then
-        clickID = id + 1
-		wait(zadervkasetrou2.v)
-        sampSendClickTextdraw(clickID)
-        use28 = false
-		wait(1000)
-		sampSendClickTextdraw(rulrun)
-		wait(60000)
-        close28 = true
-      end
-      if close28 and otkrytie.v then
-        wait(zadervkasetrou3.v)
-		sampSendClickTextdraw(rulrun2)
-		wait(2000)
-		if inventoff.v then 
-		sampSendChat('/invent')
-		else
-		sampSendClickTextdraw(admmp)
-		end
-		wait(zadervkasetrou4.v)
-		sampCloseCurrentDialogWithButton(1)
-		ruletka()
-        close28 = false
-        active28 = false
-      end
-    end)
-  end
-  
 	if checked_test10.v and active5 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
@@ -8427,33 +8419,6 @@ end
 		
 		ruletka()
         active25 = false
-      end
-    end)
-  end
-  
-  if checked_test101.v and active28 and otkrytie2.v then
-    lua_thread.create(function()
-      if data.modelId == 2923 then
-        wait(zadervkasetrou5.v)
-        sampSendClickTextdraw(id)
-        wait(zadervkasetrou6.v)
-		sampSendClickTextdraw(2302)
-		wait(1000)
-		sampSendClickTextdraw(rulrun)
-		wait(60000)
-		sampSendClickTextdraw(rulrun2)
-		wait(2000)
-		if inventoff.v then 
-		sampSendChat('/invent')
-		else
-		sampSendClickTextdraw(admmp)
-		end
-		wait(zadervkasetrou9.v)
-		sampCloseCurrentDialogWithButton(1)
-		wait(zadervkasetrou10.v)
-		
-		ruletka()
-        active28 = false
       end
     end)
   end
@@ -14107,14 +14072,10 @@ end
 	inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	
-	if vkconnect.v and sellinfo.v and color == -1104335361 and text:match('%[Ошибка%] {ffffff}Крутить рулетку можно 1 раз в 30 минут') then if checked_test101.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
-	if tgconnect.v and sellinfotg.v and color == -1104335361 and text:match('%[Ошибка%] {ffffff}Крутить рулетку можно 1 раз в 30 минут') then if checked_test101.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
-	
-	
 	
 	if vkconnect.v and sellid.v and text:match('%[(%d+)%] (.*) | Уровень:') then vk_requestv2(''..text) end
-	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test101.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
-	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test101.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
+	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
+	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if vkconnect.v and sellrul.v and text:match('Вам был добавлен предмет') and color == -65281 then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		depozpd = tonumber(text:match("Депозит в банке: $(%d+)"))
@@ -14127,8 +14088,8 @@ end
     end
 	
 	if tgconnect.v and sellidtg.v and text:match('%[(%d+)%] (.*) | Уровень:') then sendTelegramNotification(''..text) end
-	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test101.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
-	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test101.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
+	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
+	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellrultg.v and text:match('Вам был добавлен предмет') and color == -65281 then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		depozpdtg = tonumber(text:match("Депозит в банке: $(%d+)"))
@@ -14264,9 +14225,6 @@ end
 		fixprice()
 	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test100.v then
-		fixprice()
-	end
-	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test101.v then
 		fixprice()
 	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test10.v then
@@ -14948,6 +14906,7 @@ function load_settings() -- загрузка настроек
 	sellviptg = imgui.ImBool(ini.settings.sellviptg)
 	sellorgtg = imgui.ImBool(ini.settings.sellorgtg)
 	obkachet = imgui.ImBool(ini.settings.obkachet)
+	vipobkachet = imgui.ImBool(ini.settings.vipobkachet)
 	smils = imgui.ImBool(ini.settings.smils)
 	smilv = imgui.ImBool(ini.settings.smilv)
 	smisf = imgui.ImBool(ini.settings.smisf)
@@ -15441,6 +15400,9 @@ function load_settings() -- загрузка настроек
 	igrokclock2 = imgui.ImBuffer(u8(ini.settings.igrokclock2), 2560)
 	idigroktelo = imgui.ImBuffer(u8(ini.settings.idigroktelo), 2560)
 	idigroktelo2 = imgui.ImBuffer(u8(ini.settings.idigroktelo2), 2560)
+	
+	nickvice = imgui.ImBuffer(u8(ini.settings.nickvice), 2560)
+	
 	timefix = imgui.ImInt(ini.settings.timefix)
 	combo_select = imgui.ImInt(ini.settings.combo_select)
 	combo_select2 = imgui.ImInt(ini.settings.combo_select2)
@@ -15612,6 +15574,7 @@ function load_settings() -- загрузка настроек
 	fastlock = imgui.ImBool(ini.settings.fastlock)
 	fastklad = imgui.ImBool(ini.settings.fastklad)
 	autoshar = imgui.ImBool(ini.settings.autoshar)
+	unbaghud = imgui.ImBool(ini.settings.unbaghud)
 	timecout = imgui.ImBool(ini.settings.timecout)
 	rtag = imgui.ImBuffer(u8(ini.settings.tag), 256)
 	enable_tag = imgui.ImBool(ini.settings.enable_tag)
@@ -17826,74 +17789,6 @@ while true do
 	end
 end
 
-function useroulette6()
-while true do 
-	if checked_test101.v and otkrytie.v and otkrytieymnoe.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  if inventoff.v then 
-		
-		else
-		sampSendClickTextdraw(admmp)
-		end
-	  wait(500)
-      active28 = true
-	  samprulstop = true
-	  if inventoff.v then 
-	  sampSendClickTextdraw(2107)
-		else
-		sampSendChat("/invent")
-		end
-      wait(1000)
-	  randomwaitv19 = math.random(0, zadervkadoprul.v)
-      wait((arztest8*60000) + 240000 + (randomwaitv19*1000))
-	end
-	if checked_test101.v and otkrytie2.v and otkrytieymnoe.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  if inventoff.v then 
-		
-		else
-		sampSendClickTextdraw(admmp)
-		end
-	  wait(500)
-      active28 = true
-	  samprulstop = true
-	  if inventoff.v then 
-	  sampSendClickTextdraw(2107)
-		else
-		sampSendChat("/invent")
-		end
-      wait(1000)
-      randomwaitv20 = math.random(0, zadervkadoprul.v)
-      wait((arztest8*60000) + 240000 + (randomwaitv20*1000))
-	end
-	wait(0)
-	end
-end
-
 function useroulette5()
 while true do 
 	if checked_test10.v and otkrytie.v and otkrytieymnoe.v then
@@ -18116,37 +18011,6 @@ while true do
       wait((zadervkarul.v + randomwaitv34)*1000)
 	end
 	
-	if checked_test101.v and otkrytie.v and not otkrytieymnoe.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  if inventoff.v then 
-		
-		else
-		sampSendClickTextdraw(admmp)
-		end
-	  wait(500)
-      active28 = true
-	  samprulstop = true
-	  if inventoff.v then 
-	  sampSendClickTextdraw(2107)
-		else
-		sampSendChat("/invent")
-		end
-	  randomwaitv34 = math.random(0, zadervkadoprul.v)
-      wait((zadervkarul.v + randomwaitv34)*1000)
-	end
-	
 	if checked_test10.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
@@ -18293,37 +18157,6 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
-	  if inventoff.v then 
-	  sampSendClickTextdraw(2107)
-		else
-		sampSendChat("/invent")
-		end
-      randomwaitv44 = math.random(0, zadervkadoprul.v)
-      wait((zadervkarul.v + randomwaitv44)*1000)
-	end
-	
-	if checked_test101.v and otkrytie2.v and not otkrytieymnoe.v then
-	  sampCloseCurrentDialogWithButton(0)
-	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
-	  if inventoff.v then 
-		
-		else
-		sampSendClickTextdraw(admmp)
-		end
-	  wait(500)
-      active28 = true
 	  samprulstop = true
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
@@ -22310,6 +22143,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -22498,6 +22333,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -22686,6 +22523,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -22874,6 +22713,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -23062,6 +22903,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -23250,6 +23093,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -23438,6 +23283,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -23626,6 +23473,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -23814,6 +23663,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -24002,6 +23853,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -24190,6 +24043,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -24378,6 +24233,8 @@ while true do
 	sampSendDialogResponse(25182, 1 , 28, -1)
 	wait(zadervkamaining.v)
 	sampSendDialogResponse(25244, 1 , 0, -1)
+	wait(zadervkamaining.v)
+	sampCloseCurrentDialogWithButton(0)
 	else
 	end
 	wait(zadervkamaining.v)
@@ -26479,7 +26336,7 @@ function rpredak()
 function yashikisroulette()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.55))
-	imgui.SetNextWindowSize(imgui.ImVec2(997, 560), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(997, 530), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_DROPBOX..u8' Roulette Tools', win_state['yashiki'], imgui.WindowFlags.NoResize)
 			imgui.Columns(2, _, false)
 			imgui.SetColumnWidth(-1, 495)
@@ -26618,15 +26475,13 @@ function yashikisroulette()
 			imgui.Checkbox(u8'Открывать донатный сундук', checked_test6) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Checkbox(u8'Открывать сундук "Тайник Лос-Сантоса"', checked_test100) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Checkbox(u8'Открывать сундук 8-й годовщины', checked_test101) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Работает только первый и второй способ открытия. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			
 			imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			
 			--imgui.PushItemWidth(150)
 			imgui.SliderInt(u8'Задержка (в секундах) ##47',zadervkarul,1, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на открытие сундуков. Если выбрано несколько сундуков, то сундуки начинают открываться по очереди. Например: Вы активировали функции - 'Открывать обычный сундук' и 'Открывать платиновый сундук'. Сначала пройдет проверка обычного сундука, через указанное вами время пройдет проверка платиного сундука и потом снова через указанное вами время пройдет проверка обычного сундука. По умолчанию - 3 минуты или 180 секунд.")
 			imgui.SliderInt(u8'Рандомная задержка ##477',zadervkadoprul,0, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Рандомная задержка для основной задержки для проверки сундуков (как для просто 'Открывать сундуки', так и для 'Всегда открывать сундуки'. 2 этих задержки складываются. Нужно для того, чтобы сундуки не проверялись ровно в одно и тоже время. Задержка прибавляется рандомно от 0 до указанного вами значения (например, ваша задержка составляет 120 секунд. Один раз ваш сундук проверится в 'Ваша задержка' + 100 секунд. Во 2 раз в 'Ваша задержка' + 10 секунд и так далее.) Измеряется в секундах, по умолчанию установлено на 0 секунд.")
 				--imgui.PopItemWidth()
-			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test101.v = true checked_test10.v = true end
+			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test10.v = true end
 			if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 			if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then
 			checked_test.v = false
@@ -26660,7 +26515,6 @@ function yashikisroulette()
 			checked_test7.v = false
 			checked_test10.v = false
 			checked_test100.v = false
-			checked_test101.v = false
 			sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", -1) saveSettings() end
 			imgui.End()
 			end
@@ -27423,6 +27277,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов] - предложить игроку аренду вашего т/с.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/phoneair - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/itogibtc - открыть меню с информацией о снятых BTC, где нужно залить жидкость или включить видеокарты.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -29867,7 +29722,7 @@ function funksmenuv2()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(680, 380), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(680, 360), imgui.Cond.FirstUseEver)
 	imgui.Begin(u8' Прочие функции##4354234', win_state['shemafunksv2'], imgui.WindowFlags.NoResize)
 		imgui.Text('')	
 		imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Забрать прибыль (BTC)', btc); imgui.SameLine(); imgui.TextQuestion(u8"Данная функция в автоматическом режиме заберет прибыль с видеокарт. При активаций функции, вы должны стоять у полки с видеокартами.")
@@ -30363,248 +30218,23 @@ function tupupdate()
 			imgui.Text('') imgui.SameLine(170) imgui.Text(u8'Посмотреть полный список обновления вы сможете в "Параметры" - "Обновления".')
 			--imgui.Text('') imgui.SameLine()	if imgui.CustomButton(u8'Перейти к списку обновления', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['main'].v = true win_state['nastroikawin'].v = true selected3 = 5 end
 			imgui.Separator()
-			
-			if imgui.CollapsingHeader(u8'Полный список обновления с версии 3.4 до 3.5.') then
-			imgui.BeginChild('##as2dasasdf324514535436254gfhgfht1r', imgui.ImVec2(720, 300), false)
-			imgui.Columns(2, _, false)
-			imgui.SetColumnWidth(-1, 800)
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.05.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "TG Connect" (иногда возникала ошибка подключения к TG.)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Уведомление о PD в TG/VK убрано на доработку (функция крашила скрипт или игру)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс отправки пустого сообщения в /fam /b и так далее в TG. (спасибо за помощь Алексею)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Фикс функционала "Поиск текста в чате" для VK и TG.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Исправлены ошибки в тексте в !help для TG.')
 		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[31.05.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Фикс краша с причиной "Takescreen".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Отредактировано описание команды !screen.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Устранены иероглифы вместо текста в меню у систем, которые работают от встроенного видеоядра в')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'процессоре.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Фикс интерфейса при установке белого цвета на рабочий стол (пропадало выделение рекламы и менюшки,')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'где расположены приложения в IPAD STYLE)')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[05.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'10. Фикс уведомления после кика с сервера (перестали приходить)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'11. Фикс некоторых уведомлений в чат от скрипта (не влазил текст в чат по символам)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'12. Фикс уведомления о PD в TG/VK (функция крашила скрипт или игру)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'13. В "Roulette Tools" добавлено "Не закрывать инвентарь после проверки сундука".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'14. Убран @all в TG при потере соединения.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'15. Добавлена клавиатура в TG.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'16. В VK и TG добавлена возможность отвечать на звонки, отклонять вызов и разговаривать по телефону.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В VK и TG добавлена возможность зайти в банковское меню через телефон.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[16.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'18. Устранена уязвимость в ТГ и ВК, когда другие люди могли отправлять на ваш аккаунт команды и писать')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'гадости в чат через вашего бота (я использовал стандартный код, который используют все. Получается такая')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'уязвимость есть у всех похожих скриптов) За находку уязвимости огромное спасибо Vladyslav Efli.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Единственный адекватный человек, который вместо хейта, нашел причину.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'19. В !help добавлено описание команды !pcoff и исправлены мелкие ошибки.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[19.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'20. В функцию "Убирать диалог с x4 после входа в игру" добавлено 2 способа закрытия диалога. Способ №1 -')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'закрывает диалог сразу после захода и не багает инвентарь (у некоторых юзеров есть проблема в том, что кикает')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'античит за флуд диалогами). Способ №2 - скрывает диалог, но данный способ багает инвентарь, поэтому, через 2')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'секунды после скрытия диалога, открывается /mm и закрывается (данный способ работает стабильно у всех)')	
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[20.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. Исправлены небольшие ошибки в VK и TG Connect.')	
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Обновлён список донатеров.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс "Обычного Реконнекта" под лаунчер и фикс перезахода в "Умном Реконнекте", если ваш аккаунт уже')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'авторизован.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[25.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Фикс "Не закрывать инвентарь после проверки сундука" (больше не перетаскивает сундуки)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. В "Roulette Tools" добавлена "Рандомная задержка" (прибавляет к основной задержке рандомное количество')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'секунд)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. В /lovec добавлена ловля билетов в аэропорту.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'27. Фикс флуда упоминания об "Сервер закрыл соединение" в VK и TG.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'28. Фикс "Roulette Tools" (рулетка останавливалась, если выпадали деньги)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'29. В "Roulette Tools" добавлено открытие инвентаря через 10 секунд после захода на сервер, если включено')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'"не закрывать инвентарь после проверки сундука" и выбраны сундуки для открытия.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.06.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'30. Фикс функции "Точки в числах" для Vice City.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'31. Адаптирована работа функционала "Центральный Рынок" под Vice City.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'32. В функционал "Центральный Рынок" добавлена конвентарция валюты из VC$ в SA$ от Стэнфорда и')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'показывается это в диалоге покупки и продажи. Включить или изменить курс можно в "Параметры" -')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'"Модификации" (баги, которые есть в скрипте Стэнфорда - я исправил)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[02.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'33. Фикс "Авто-пин" под Vice City (на вашем сервере банковский пароль вводится тот, который вы указали')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'в скрипте, а на Вайсе стандартный, а именно - "1234")')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'34. Фикс "Piar Menu" и добавлен выбор, в какой Радиоцентр отправить объявление.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'35. Фикс "AutoKey" (не вставлялись ключи из-за изменения строчки в чате)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'36. Фикс Autofill (смена текстдравов)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'37. Добавлена команда /cstreset - обнулить список товаров в Skup Menu (нужно при баге товаров или смене')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'местоположения их в диалоге)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'38. Подробнее описал, как работает функция "Перезапуск скрипта в случае краша" и что нужно делать, чтобы')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'не запускался скрипт 2 и более раз.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'39. В /lovec добавлена ловля фур для Vice City.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'40. Адаптация Autofill под Vice City.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[07.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'41. Фикс ловли фур.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[24.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'42. Если включен "Перезапуск скрипта после краша", то везде, где используется перезагрузка скрипта, скрипт')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'будет выгружаться, чтобы у вас не было двойного запуска.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'43. Переписана система "Autofill".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'44. В "Авто-изменения заданий на ферме" изменено количество с 200 на 500.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'45. Добавлена команда "/arenda [№ т.с в диалоге, ID игрока, цена за час, кол-во часов]" для быстрой сдачи')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'транспорта в аренду.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'46. В "Параметры" - "Модификации" добавлено "Fast Arenda" (открыть чат и написать команду /arenda с данными,')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'которые можно подредактировать под себя, правой кнопкой мыши + H по умолчанию)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'47. Добавлена команда "/phoneair" - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'на IPHONE)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'48. В "FPS UP" добавлена возможность изменить дальность видимости ников.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'49. Указал авторство некоторого функционала. Мог что-то пропустить - авторы могут отписать и я обязательно их')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'укажу.') 
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[27.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'50. Фикс "Ловли Фур" (больше не кикает античит после ловли фуры)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'51. В "Trade Menu" добавлен обмен зловещих монет на ларец кладоискателя.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'52. Фикс краша скрипта при использовании функционала "Майнинга", если диалог не успел открыться.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'53. После снятия BTC через флешку, диалог полностью не закрывается, а открывается меню с выбором дома.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'54. В "Майнинг" добавлена заливка супер охлаждающей жидкости.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'55. В "Майнинг" - "Перезаход между домами" добавлено еще 7 домов для перезахода.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.07.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'56. Фикс размеров кнопок в "Skup Menu" и сделана возможность установить задержку на 10 мс на выставление')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'товаров.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'57. В "Параметры" - "Модификации" добавлен функционал "Открывать "Майнинг функции" на клавиши" (быстрое')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'открытие меню на комбинацию ALT + Q для заливки жидкости, запуска видеокарт, перезахода между домами и')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'так далее)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'58. В "Майнинг" - "Прочие функции" - "Перезайти в дом" добавлена возможность изменить название дома.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'59. В "Statistics" добавлена возможность включить отслеживание заработка со сдачи транспорта в аренду.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'60. Фикс "Statistics" (добавлено, чтобы в статистику засчитывалась прибавка льна и хлопка по +12)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'61. В "Майнинг" - "Прочие функции" добавлена возможность выбрать способ снятия BTC (по 1 дому или сразу со')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'всех домов)')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[07.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'62. В "/fishmenu" стандартные задержки переделаны под рабочие и беспалевные значения.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'63. Фикс счётчика заработка при продаже рыбы.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'64. В статистику по рыбалке добавлен подсчёт полученных ларцов рыбалова за сессию и всё время.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'65. В статистику добавлен подсчёт заработка с продажи рыбы.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'66. Задержка на "Авто-проверку эхолота" переделана в секунды.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'67. Все задержки и прочие настройки в "/fishmenu", отправлены в раздел "Настройки".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'68. В "/fishmenu" добавлено "Вывести статистику на экран" (вы можете вывести на экран всю статистику,')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'включая информацию по наживкам с эхолота)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'69. В "/fishmenu" добавлена возможность проверить эхолот на комбинацию клавиш ALT + E.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'70. Добавлена команда "/fishlovlya" (включить/выключить авто-ловлю 2 способом и авто-проверку эхолота)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'71. В "/fishmenu" добавлена возможность удалить уведомления по типу: Вы не состоите в ТСР и Вы уже забросили')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'удочку.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'72. Теперь с включенным "Авто-проверка эхолота", если в секторе заканчивает рыба, то проверка эхолота и ловля')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'рыбы останавливается.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'73. В "/fishmenu" - "Настройки" добавлена возможность включить "Авто-проверку эхолота" проверяться по времени')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'или после поимки рыбы/предметов.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'74. В "/fishmenu" добавлена задержка для нажатия на N для подсечки.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'75. В "/fishmenu" добавлена инструкция по использованию скрипта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'76. Фикс "FastKey" (не всегда заводился транспорт после того, как скрипт вставил ключи)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'77. Меню "Прочие функции" в Майнинге, которое открывается на клавиши, больше не закрывается на ESC.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'78. Добавлена команда "/itogibtc", которая открывает меню, в котором можно отследить, сколько вы сняли')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'биткоинов, в каком доме нужно залить жидкость или включить видеокарты.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'79. В "/lovec" добавлен рендер 3D текста для поиск яблочных, сливовых и кокосовых деревьев.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'80. В "/lovec" добавлен рендер на оленей.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[09.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'81. Фикс "/itogibtc" (дублировались множества раз номера домов, в которых нужно было сменить жидкость или')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'включить видеокарты)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'82. В "Майнинг" - "Прочие функции" добавлена возможность включить или выключить введение статистики в')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'"/itogibtc".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[13.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'83. Фикс сбивов диалога проверки эхолота в "FishRod", если эхолот проверяется после поимки рыбы.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'84. В "Statistics" добавлен выбор нажатия клавиш (через синхронизацию или клавиши)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'85. В "Майнинг" - "Прочие функции" добавлена возможность изменить значение жидкости, при которой будет')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'заливаться жидкость в видеокарты.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[16.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'86. В "Майнинг" - "Прочие функции" добавлена возможность отрегулировать, при каких значениях жидкости, номер')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'дома появится в /itogibtc.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'87. В "Майнинг" - "Прочие функции" добавлена возможность запускать выключенные видеокарты сразу во всех')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'домах.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'88. В "Skup Menu" добавлена возможность настроить 2 пресета товаров для скупки.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[24.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'89. Переписана система звонка /call.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'90. Улучшен "Эмулятор Лаунчера" (теперь видны машины и скины, но выглядят они стандартно, модпака нет).')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'Взято у chapo.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'91. Увеличена задержка на перевод телефона в спящий режим.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'92. В "Таймцикл" добавлена возможность блокировки смены погоды и времени сервером от Gorskin.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'93. В "Параметры" - "Модификации" добавлена возможность убрать диалог с вопросом о рекламе при отправке')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'сообщения в VIP чат (в диалоге нажимается "нет" и сообщение отправляется бесплатно)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'94. Теперь, если вы включите значок с ADD VIP - вам вылезет уведомление, что его нужно выключить т.к')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'некоторый функционал из-за него не работает.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[25.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'95. В "Автобайк" добавлен скейт.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'96. Открытие инвентаря, если у вас проверялись сундуки и вы перезашли или включено "Всегда проверять",')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'произойдет через 2 минуты (было 10 секунд)')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'97. В "Roulette Tools" добавлен сундук 8-й годовщины (открывается только 1 или 2 способом)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'98. В "Умный реконнект" добавлена возможность перезайти на сервер, если сервер закрыл соединение')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'(через 30 минут).')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'99. В "/lovec" добавлена возможность включить рендер 3D текста на все объекты.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'100. Подправлены задержки для сундука 8-й годовщины.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'101. Фикс "Умного Реконнекта" (при включенной функции "перезаходить, если сервер закрыл соединение')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'через 30 минут", при любом вылете перезаходил 30 минут)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'102. В "VK Connect" и "TG Connect" в "Уведомлять об открытии сундуков" добавлено уведомление с')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'сундука 8-й годовщины.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.08.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'103. В "Roulette Tools" добавлена возможность настроить задержку на прокрутку рулеток.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'104. Добавлен фикс краша при использовании эмулятора лаунчера от Heroku.')
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[13.09.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'105. Из "Модификации" удалена функция "Отходить от места спавна после спавна персонажа".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'106. Из "FPS UP" удалена функция "Дальность видимости ников".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'107. Из "Roulette Tools" вырезан функционал "Всегда открывать сундуки".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'108. Из "Bank Menu" удален функционал "Пополнение депозита в PD".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'109. Из "Bank Menu" удален функционал "Продажа BTC в PD".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'110. Из "Statistics" удален функционал "Авто-альт" на руде и грядках.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'111. Из "Модификации" удален функционал "Анти-афк".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'112. Из "Модификации" удален функционал "Авто байк и мото".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'113. Из "Модификации" удалён функционал "Автобег".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'114. Из "Модификации" удален функционал "Авто-еда".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'115. Из "Модификации" удален функционал "Обычный реконнект".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'116. Из "Модификации" удален функционал "Анти-ломка".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'117. Из "Модификации" удален функционал "Авто-принятие наркотиков".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'118. Из "Модификации" удален функционал "Авто-изменение заданий на ферме".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'119. Из "Для разработчиков" удален "Продвинутый режим дрона" (с функцией ВХ)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'120. Убран функционал "Авто-игра в однорукого бандита".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'121. Удален весь функционал "/lovec".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'122. Из "Умный реконнект" убран перезаход, если сервер закрыл соединение (через 30 минут)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'123. Функционал "VK и TG Connect" передалан под слежку за аккаунтом и получение уведомлений')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'(управлять аккаунтом, отправлять сообщения в чат больше нельзя, является ботом)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'124. Функция "Авто-сбор шара, велосипеда и дельтаплана", подписана, что где то запрещено.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'125. Функционал "Trade Menu" подписан, что если юзера нет за ПК - то он может получить блокировку аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'126. Функционал "Toch Menu" подписан, что если юзера нет за ПК - то он может получить блокировку аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'127. Функционал "Roulette Tools" подписан, что если юзера нет за ПК - то он может получить блокировку аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'128. Функционал "Piar Menu" подписан, что если юзера нет за ПК - то он может получить блокировку аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'129. Функционал "Sell и Skup Menu", подписан, что где то запрещен.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'130. Функция "Удаление игроков в радиусе", подписана, что где то запрещена.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'131. Функция "Автологин", подписана, что запрещено использовать с авто-реконнектом.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'132. Функция "Визуальный скин", подписана, что запрещено использовать скины с бегом CJ.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'133. Функционал "VKoin" подписан, что если юзера нет за ПК - то он может получить блокировку аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'134. Функционал "Умный реконнект" подписан, что если юзера нет за ПК - то он может получить блокировку')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'135. Функция "Эмулятор лаунчера", подписана, что где то запрещена.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'136. Функционал "Майнинг" подписан, что если юзера нет за ПК - то он может получить блокировку аккаунта.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'137. Функционал "Авто-ловля рыбы" (/fishmenu) переделан в "Помощник для рыбалки" и удалено всё, что')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'запрещено (сама авто-рыбалка)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'138. В "Piar Menu" при пиаре в "/vr" в диалоге, теперь выбирается пункт, что это реклама.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'139. В "Помощь" добавлено описание команды "/cstreset" и "/cstreset2".')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'140. В "Модификации" добавлена возможность выключить ПК по времени.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'141. Обновлён список донатеров.')
-		imgui.EndChild()
-		end	
-		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'23.09.2022')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.09.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс функции "Убирать диалог с предложением о рекламе в VIP" (не скипался диалог, где цена за рекламу установлена 0$)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'26.09.2022')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.09.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Теперь при выставлении товара на продажу/скупку, вы видите все действия в диалогах, чтобы в случае ошибок, могли предоставить')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'фрапс и проблему пофиксили.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Подправлен интерфейс в "Skup Menu".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. В "Помощь" добавлено описание команды "/cst2".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.10.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Фикс пропуска домов в "Запустить видеокарты в выбранных домах".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Фикс размера окна в "Майнинг" - "Прочие функции".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Из "Roulette Tools" убран сундук 8-й годовщины.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'8. В "Piar Menu" добавлена возможность отправлять рекламу в /vr на клавишу.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. В "Параметры" - "Модификации" добавлена возможность разбагать худ на клавишу.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'10. Добавлена команда "/exitvice" (с помощью данной команды, вам не нужно ждать самолёт или кд в 5 минут на вылет. Введя команду,')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'выбрав сервер и введя NickName, вы через 2 минуты вернётесь на основной сервер за 300.000$)')
+		
 		imgui.End()
 		end
 	
@@ -30697,6 +30327,7 @@ function getArizonaName()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления в VK', addvk) imgui.SameLine(405) 
 	if imgui.CustomButton(fa.ICON_LIST..u8' Настройка отправки объявлений', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then win_state['vkmessage'].v = not win_state['vkmessage'].v end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Засчитывать объявления без активации Piar Menu функционала', obkachet)
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять рекламу в /vr на клавишу', vipobkachet) imgui.SameLine() imgui.TextQuestion(u8'В текстовом поле для рекламы напишите нужный текст, активируйте функционал и вы сможете на клавишу "NumPad+" отправлять рекламу в /vr. Сменить клавишу можно в "Параметры" - "Настройка клавиш".')
 	imgui.PopItemWidth()
 	imgui.PushItemWidth(460)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст обычного объявления', adredak)
@@ -30738,6 +30369,7 @@ function getArizonaName()
 	idvk.v = ''
 	groupvk.v = ''
 	obkachet.v = false
+	vipobkachet.v = false
 	smils.v = true
 	smilv.v = false
 	smisf.v = false
@@ -34974,6 +34606,7 @@ function settingosnova()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Установить метку кладов по нажатию клавиш")); imgui.SameLine(); imgui.ToggleButton(u8'Установить метку кладов по нажатию клавиш', fastklad); imgui.SameLine(); imgui.TextQuestion(u8"Для работы функции нужно иметь карту кладов из /donate и она должна лежать у вас на первой странице инвентаря. Поставить метку первого клада можно на нажатие клавиш Alt + 1, вторую метку клада на Alt + 2 и третью метку клада на Alt + 3. Менять клавиши временно нельзя.");
 				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-сбор шара, велосипеда и дельтаплана")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-сбор шара, велосипеда и дельтаплана', autoshar); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то вам больше не нужно будет нажимать кнопки для сборки указанного транспорта. На каких то серверах функция запрещена - уточняйте у Главной Администрации своего сервера. Функционал взят у vegas~.");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Разбагать худ на клавишу")); imgui.SameLine(); imgui.ToggleButton(u8'Разбагать худ на клавишу', unbaghud); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то на нажатие клавиши (по умолчанию 'NumPad-', сменить можно в 'Параметры' - 'Настройка клавиш'.), скрипт сменит худ на 'Обычный' и вернет потом обратно на 'San Andread CEF'.");
 				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Включить время на экране")); imgui.SameLine(); imgui.ToggleButton(u8'Включить время на экране', screentime) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то на экране у вас будет время, которое можно передвигать и изменять размер. Цвет времени можно изменить в 'Параметры' - 'Персонализация'.") 
 				if screentime.v then
@@ -35455,6 +35088,8 @@ function settingosnova()
 				maincfg.hotkeys.fastinv = VK_Q
 				maincfg.hotkeys.fastlocking = VK_L
 				maincfg.hotkeys.unbaginvent = VK_F9
+				maincfg.hotkeys.hudunbag = VK_SUBTRACT
+				maincfg.hotkeys.vipob = VK_ADD
 				maincfg.combohotkeys.autodrone = VK_1
 				maincfg.comboheathotkeys.autodronev2 = VK_C
 				maincfg.combohotkeys2.autodronev3 = VK_2
@@ -35502,6 +35137,7 @@ function settingosnova()
 				fastkey.v = false
 				fastlock.v = false
 				autoshar.v = false
+				unbaghud.v = false
 				carsis.v = false
 				activator.v = 'mono'
 				crfind.v = '233'
@@ -35604,6 +35240,7 @@ function settingosnova()
 		cfg3.backup.sellrultgv2 = sellrultg.v
 		cfg3.backup.sellgolodtgv2 = sellgolodtg.v
 		cfg3.backup.obkachetv2 = obkachet.v
+		cfg3.backup.vipobkachetv2 = vipobkachet.v
 		cfg3.backup.smilsv2 = smils.v
 		cfg3.backup.smilvv2 = smilv.v
 		cfg3.backup.smisfv2 = smisf.v
@@ -36070,6 +35707,9 @@ function settingosnova()
 		cfg3.backup.igrokclock2v2 = igrokclock2.v
 		cfg3.backup.idigroktelov2 = idigroktelo.v
 		cfg3.backup.idigroktelo2v2 = idigroktelo2.v
+		
+		cfg3.backup.nickvicev2 = nickvice.v
+		
 		cfg3.backup.timecoutv2 = timecout.v
 		cfg3.backup.gangzonesv2 = gangzones.v
 		cfg3.backup.rydav2 = ryda.v
@@ -36101,6 +35741,7 @@ function settingosnova()
 		cfg3.backup.fastlockv2 = fastlock.v
 		cfg3.backup.fastkladv2 = fastklad.v
 		cfg3.backup.autosharv2 = autoshar.v
+		cfg3.backup.unbaghudv2 = unbaghud.v
 		cfg3.backup.keyTv2 = keyT.v
 		cfg3.backup.launcherv2 = launcher.v
 		cfg3.backup.deaglev2 = deagle.v
@@ -36291,6 +35932,7 @@ function settingosnova()
 		 sellrultg.v =  cfg3.backup.sellrultgv2 
 		 sellgolodtg.v =  cfg3.backup.sellgolodtgv2 
 		 obkachet.v =  cfg3.backup.obkachetv2 
+		 vipobkachet.v =  cfg3.backup.vipobkachetv2 
 		 smils.v =  cfg3.backup.smilsv2 
 		 smilv.v =  cfg3.backup.smilvv2 
 		 smisf.v =  cfg3.backup.smisfv2 
@@ -36761,6 +36403,8 @@ function settingosnova()
 		 idigroktelo.v =  ''..cfg3.backup.idigroktelov2 
 		 idigroktelo2.v =  ''..cfg3.backup.idigroktelo2v2
 		 
+		 nickvice.v =  ''..cfg3.backup.nickvicev2
+		 
 		  timecout.v =  cfg3.backup.timecoutv2
 		 gangzones.v =  cfg3.backup.gangzonesv2 
 		 ryda.v  = cfg3.backup.rydav2 
@@ -36793,6 +36437,7 @@ function settingosnova()
 		 fastlock.v  =  cfg3.backup.fastlockv2 
 		 fastklad.v  =  cfg3.backup.fastkladv2 
 		 autoshar.v  =  cfg3.backup.autosharv2 
+		 unbaghud.v  =  cfg3.backup.unbaghudv2 
 		 keyT.v  =  cfg3.backup.keyTv2 
 		 launcher.v  =  cfg3.backup.launcherv2 
 		 deagle.v  =  cfg3.backup.deaglev2 
@@ -36971,6 +36616,11 @@ function infobarstats()
 	end
 	
 function sampev.onSendClientJoin(ver, mod, nick, response, authkey, clientver, unk)
+
+	if exitvice == 0 then end
+	if exitvice == 1 then return {ver, mod, nick, response, authkey, '0.3.7', unk} end
+	if exitvice == 2 then return {ver, mod, nick, response, authkey, 'Arizona PC', unk} end
+
 	if launcher.v then 
     return {ver, mod, nick, response, authkey, 'Arizona PC' or clientver, unk}
 	end
@@ -36991,4 +36641,397 @@ function sampev.onSetMapIcon(iconId, position, type, color, style)
         return false
 		end
 	end
+end
+
+function hudbag()
+	lua_thread.create(function()
+	sampSendChat('/settings')
+	wait(300)
+	sampSendDialogResponse(154, 1, 14, -1)
+	wait(300)
+	sampSendDialogResponse(153, 1, 1, -1)
+	wait(300)
+	sampSendDialogResponse(1610, 1, 0, -1)
+	wait(300)
+	sampSendDialogResponse(1610, 1, 5, -1)
+	wait(300)
+	sampCloseCurrentDialogWithButton(0)
+	wait(300)
+	sampCloseCurrentDialogWithButton(0)
+	wait(300)
+	sampCloseCurrentDialogWithButton(0)
+	end)
+end
+
+function exitvicefunc()
+	sampProcessChatInput('/connect '..viceip)
+	sampProcessChatInput('/connectname '..nickvice.v)
+	exitvice = 1
+end
+
+function viceexit()
+	lua_thread.create(function()
+    sampShowDialog(7506, "{ff1000}Выход с Vice City", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+	while sampIsDialogActive(7506) do wait(100) end -- ждёт пока вы ответите на диалог
+    local _, button, list = sampHasDialogRespond(7506)
+	if button == 1 then
+	
+		if list == 0 then
+		viceip = '185.169.134.3'
+		sampShowDialog(7401, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7401) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7401)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Phoenix" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Phoenix" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 1 then
+		viceip = '185.169.134.4'
+		sampShowDialog(7402, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7402) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7402)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Tucson" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Tucson" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 2 then
+		viceip = '185.169.134.43'
+		sampShowDialog(7403, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7403) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7403)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Scottdale" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Scottdale" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 3 then
+		viceip = '185.169.134.44'
+		sampShowDialog(7404, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7404) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7404)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Chandler" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Chandler" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 4 then
+		viceip = '185.169.134.45'
+		sampShowDialog(7405, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7405) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7405)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Brainburg" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Brainburg" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 5 then
+		viceip = '185.169.134.5'
+		sampShowDialog(7406, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7406) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7406)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Saint Rose" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Saint Rose" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 6 then
+		viceip = '185.169.134.59'
+		sampShowDialog(7407, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7407) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7407)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Mesa" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Mesa" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 7 then
+		viceip = '185.169.134.61'
+		sampShowDialog(7408, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7408) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7408)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Red Rock" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Red Rock" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 8 then
+		viceip = '185.169.134.107'
+		sampShowDialog(7409, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7409) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7409)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Yuma" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Yuma" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 9 then
+		viceip = '185.169.134.109'
+		sampShowDialog(7410, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7410) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7410)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Surprise" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Surprise" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 10 then
+		viceip = '185.169.134.166'
+		sampShowDialog(7411, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7411) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7411)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Prescott" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Prescott" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 11 then
+		viceip = '185.169.134.171'
+		sampShowDialog(7412, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7412) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7412)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Glendale" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Glendale" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 12 then
+		viceip = '185.169.134.172'
+		sampShowDialog(7413, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7413) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7413)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Kingman" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Kingman" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 13 then
+		viceip = '185.169.134.173'
+		sampShowDialog(7414, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7414) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7414)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Winslow" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Winslow" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 14 then
+		viceip = '185.169.134.174'
+		sampShowDialog(7415, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7415) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7415)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Payson" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Payson" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 15 then
+		viceip = '80.66.82.191'
+		sampShowDialog(7416, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7416) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7416)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Gilbert" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Gilbert" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 16 then
+		viceip = '80.66.82.190'
+		sampShowDialog(7417, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7417) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7417)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Show-Low" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Show-Low" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 17 then
+		viceip = '80.66.82.188'
+		sampShowDialog(7418, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7418) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7418)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Casa Grande" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Casa Grande" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 18 then
+		viceip = '80.66.82.168'
+		sampShowDialog(7419, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7419) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7419)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Page" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Page" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 19 then
+		viceip = '80.66.82.159'
+		sampShowDialog(7420, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7420) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7420)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Sun City" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Sun City" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 20 then
+		viceip = '80.66.82.200'
+		sampShowDialog(7421, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7421) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7421)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Queen Creek" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Queen Creek" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+			
+		if list == 21 then
+		viceip = '80.66.82.144'
+		sampShowDialog(7422, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7422) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7422)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Sedona" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Sedona" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
+		
+			
+	else 
+        
+			end
+		end)
+	
 end
