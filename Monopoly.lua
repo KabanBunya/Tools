@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.3')
+script_version('3.5.4')
 
 use = false
 close = false
@@ -5391,6 +5391,7 @@ function main()
 	sampRegisterChatCommand("phoneair", phoneair) -- очистка чата
 	
 	sampRegisterChatCommand("exitvice", viceexit)
+	sampRegisterChatCommand("vrv", viprek)
 	
 	sampRegisterChatCommand("arenda", arendatc) -- очистка чата
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
@@ -27278,6 +27279,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/phoneair - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/itogibtc - открыть меню с информацией о снятых BTC, где нужно залить жидкость или включить видеокарты.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vrv - отправить VIP сообщение как рекламу.')
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -30234,7 +30236,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'9. В "Параметры" - "Модификации" добавлена возможность разбагать худ на клавишу.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'10. Добавлена команда "/exitvice" (с помощью данной команды, вам не нужно ждать самолёт или кд в 5 минут на вылет. Введя команду,')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'выбрав сервер и введя NickName, вы через 2 минуты вернётесь на основной сервер за 300.000$)')
-		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[13.10.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'11. Добавлена команда "/vrv" - отправить сообщение в VIP чат как рекламу.')
 		imgui.End()
 		end
 	
@@ -36664,8 +36667,8 @@ function hudbag()
 end
 
 function exitvicefunc()
-	sampProcessChatInput('/connect '..viceip)
-	sampProcessChatInput('/connectname '..nickvice.v)
+	connect_cmd(viceip)
+	connect_cmdname(nickvice.v)
 	exitvice = 1
 end
 
@@ -37033,5 +37036,19 @@ function viceexit()
         
 			end
 		end)
-	
+end
+
+function viprek(arg)
+	lua_thread.create(function()
+	if novr.v == true then textpiar = true novr.v = false end
+	otmenadial = true
+	wait(100)
+	sampSendChat('/vr '..arg)
+	wait(300)
+	sampSendDialogResponse(25627, 1, 0, -1)
+	wait(100)
+	sampSendDialogResponse(25626, 1, 0, -1)
+	if textpiar == true then novr.v = true textpiar = false end
+	otmenadial = false
+	end)
 end
