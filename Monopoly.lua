@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.4')
+script_version('3.5.5')
 
 use = false
 close = false
@@ -30238,6 +30238,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'выбрав сервер и введя NickName, вы через 2 минуты вернётесь на основной сервер за 300.000$)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[13.10.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'11. Добавлена команда "/vrv" - отправить сообщение в VIP чат как рекламу.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[21.10.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'12. Фикс краша "/exitvice".')
 		imgui.End()
 		end
 	
@@ -36667,8 +36669,8 @@ function hudbag()
 end
 
 function exitvicefunc()
-	connect_cmd(viceip)
-	connect_cmdname(nickvice.v)
+	sampProcessChatInput('/connect '..viceip)
+	sampProcessChatInput('/connectname '..nickvice.v)
 	exitvice = 1
 end
 
