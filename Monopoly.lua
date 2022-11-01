@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.6')
+script_version('3.5.7')
 
 use = false
 close = false
@@ -30731,6 +30731,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'12. Фикс краша "/exitvice".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.10.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'13. В "Майнинг" - "Прочие функции" добавлена двойная заливка жидкости.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[01.11.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'14. В VK/TG Connect добавлена команда !stats (открыть игровую статистику (/stats)). Также вернулись кнопки на клавиатуре "OK" и "Cancel".')
 		imgui.End()
 		end
 	
@@ -32821,7 +32823,7 @@ function sendTelegramNotification(msg) -- функция для отправки сообщения юзеру
 	if tgconnect.v then 
     msg = msg:gsub('{......}', '') --тут типо убираем цвет
     msg = encodeUrl1(msg) -- ну тут мы закодируем строку
-	async_http_request2('https://api.telegram.org/bot' .. tokentgv2.v .. '/sendMessage?chat_id=' .. idtgv2.v .. '&reply_markup={"keyboard": [["Status", "Help", "KillInfo", "Restart"], ["Players in radius"]], "resize_keyboard": true}&text='..msg,'', function(result) end)
+	async_http_request2('https://api.telegram.org/bot' .. tokentgv2.v .. '/sendMessage?chat_id=' .. idtgv2.v .. '&reply_markup={"keyboard": [["Status", "Help", "KillInfo", "Restart"], ["Players in radius"], ["OK", "Cancel"]], "resize_keyboard": true}&text='..msg,'', function(result) end)
 	end
 end
 
@@ -32887,6 +32889,12 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
 							elseif text:match('^Players in radius') then
                                 sendTelegramNotification('Игроки в радиусе:')
 								sendigrokradiusTg()
+							elseif text:match('^OK') then
+                                sampSendDialogResponse(sampGetCurrentDialogId(), 1, -1, -1)
+								closeDialog()
+							elseif text:match('^Cancel') then
+                                sampSendDialogResponse(sampGetCurrentDialogId(), 0, -1, -1)
+								closeDialog()
 							elseif text:match('^!help') then
                                 sendHelpTg()
 							elseif text:match('^!status') then
@@ -32896,6 +32904,8 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
 							elseif text:match('^!pcoff') then
 								sendTelegramNotification('['..nazvanie.v..'] Компьютер будет выключен через 10 секунд!')
 								os.execute([[ "shutdown -s /f /t 10" ]])
+							elseif text:match('^!stats') then
+								sampSendChat('/stats')
 							elseif text:match('^!restart') then
 								sendrestartTg()
 							elseif text:match('^!igrokradius') then
@@ -32932,7 +32942,7 @@ function getOnline()
 end
 
 function sendHelp()
-	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n\n &#128204; Скриптовые команды:\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !pcoff - выключить компьютер через 10 секунд.\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics.')
+	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно.\n\n &#128204; Скриптовые команды:\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !pcoff - выключить компьютер через 10 секунд.\n &#128073; !stats - открыть игровую статистику (/stats).\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics.')
 end
 
 function sendhelpscreen()
@@ -32952,7 +32962,7 @@ function sendhelpscreen()
 end
 
 function sendHelpTg()
-	sendTelegramNotification('%F0%9F%93%8C Действия кнопок:\n\n%F0%9F%91%89 Status - проверка активен ли персонаж/на каком сервере находится.\n%F0%9F%91%89 KillInfo - вывести информацию с KillInfo.\n%F0%9F%91%89 Restart - перезагрузка скрипта.\n%F0%9F%91%89 Players in radius - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n\n%F0%9F%93%8C Скриптовые команды:\n%F0%9F%91%89 !pcoff - выключить компьютер через 10 секунд.\n%F0%9F%91%89 !restart - перезагрузка скрипта.\n%F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n%F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n%F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n%F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n%F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n%F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n%F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics.')
+	sendTelegramNotification('%F0%9F%93%8C Действия кнопок:\n\n%F0%9F%91%89 Status - проверка активен ли персонаж/на каком сервере находится.\n%F0%9F%91%89 KillInfo - вывести информацию с KillInfo.\n%F0%9F%91%89 Restart - перезагрузка скрипта.\n%F0%9F%91%89 Players in radius - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n%F0%9F%91%89 OK - подтверждение действия в диалоговом окне.\n%F0%9F%91%89 Cancel - закрыть активное диалоговое окно.\n\n%F0%9F%93%8C Скриптовые команды:\n%F0%9F%91%89 !pcoff - выключить компьютер через 10 секунд.\n%F0%9F%91%89 !stats - открыть игровую статистику (/stats).\n%F0%9F%91%89 !restart - перезагрузка скрипта.\n%F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n%F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n%F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n%F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n%F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n%F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n%F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics.')
 end
 
 function sendresetstatarul()
@@ -33346,6 +33356,12 @@ function longpollResolve(result)
 								sendigrokradius()
 						elseif pl.button == 'killinfoget' then
 								sendkillinfoget()
+						elseif pl.button == 'primary_dialog' then
+								sampSendDialogResponse(sampGetCurrentDialogId(), 1, -1, -1)
+								sampCloseCurrentDialogWithButton(0)
+						elseif pl.button == 'secondary_dialog' then
+								sampSendDialogResponse(sampGetCurrentDialogId(), 0, -1, -1)
+								sampCloseCurrentDialogWithButton(0)
 							end
 						end
 						return
@@ -33358,6 +33374,8 @@ function longpollResolve(result)
 					elseif text:match('^!pcoff') then
 						vk_requestv2('['..nazvanie.v..'] Компьютер будет выключен через 10 секунд!')
 						os.execute([[ "shutdown -s /f /t 10" ]])
+					elseif text:match('^!stats') then
+						sampSendChat('/stats')
 					elseif text:match('^!statarul') then
 						sendstatarul()
 					elseif text:match('^!screen') then
@@ -33497,6 +33515,20 @@ function vkKeyboard() --создает конкретную клавиатуру для бота VK, как сделать д
 	row[1].action.type = 'text'
 	row[1].action.payload = '{"button": "igrokradius"}'
 	row[1].action.label = 'Игроки в радиусе'
+	keyboard.buttons[3] = {} -- вторая строка кнопок
+	row = keyboard.buttons[3]
+	row[1] = {}
+	row[1].action = {}
+	row[1].color = 'negative'
+	row[1].action.type = 'text'
+	row[1].action.payload = '{"button": "primary_dialog"}'
+	row[1].action.label = 'Ok'
+	row[2] = {}
+	row[2].action = {}
+	row[2].color = 'negative'
+	row[2].action.type = 'text'
+    row[2].action.payload = '{"button": "secondary_dialog"}'
+	row[2].action.label = 'Cancel'
 	return encodeJson(keyboard)
 end
 
