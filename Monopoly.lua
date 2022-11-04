@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.7')
+script_version('3.5.8')
 
 use = false
 close = false
@@ -65,6 +65,7 @@ arztest5 = 1
 arztest6 = 1
 arztest7 = 1
 arztest8 = 1
+arztest9 = 1
 depozpdtg = 0
 luxorarenda = 0
 luxorarenda2 = 0
@@ -107,6 +108,8 @@ last_text = nil
 data_cost = {} 
 checkingvip = false
 callwork = false
+
+sampver = 0
 
 itemfindfish = {}
 rodfindfish = {}
@@ -2928,6 +2931,7 @@ local checked_test6 = imgui.ImBool(false)
 local checked_test7 = imgui.ImBool(false)
 local checked_test10 = imgui.ImBool(false)
 checked_test100 = imgui.ImBool(false)
+checked_test200 = imgui.ImBool(false)
 local video = imgui.ImBool(false)
 local video1 = imgui.ImBool(false)
 local video2 = imgui.ImBool(false)
@@ -5357,6 +5361,7 @@ function main()
 	lua_thread.create(useroulette3)
 	lua_thread.create(useroulette4)
 	lua_thread.create(useroulette5)
+	lua_thread.create(useroulette6)
 	lua_thread.create(kladik)
 	lua_thread.create(roulette)
 	lua_thread.create(piarad)
@@ -5390,6 +5395,8 @@ function main()
 	end
 	
 	sampRegisterChatCommand("phoneair", phoneair) -- очистка чата
+	
+	sampRegisterChatCommand("versamp", sampversion)
 	
 	sampRegisterChatCommand("exitvice", viceexit)
 	sampRegisterChatCommand("vrv", viprek)
@@ -7923,6 +7930,19 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	   end
 	end
 	
+	if data.modelId == 1333 and checked_test200.v and otkrytieymnoe.v then
+	 arztest99 = id + 1
+	 arztest9 = 1
+	 end
+	if id == arztest99 and checked_test200.v and otkrytieymnoe.v and data.text:match('(%d+)') then 
+	 if data.text:match('(%d+) sec') then 
+	 arztest9 = 1
+	 else
+	 arztest999 = data.text:match('(%d+)')
+	 arztest9 = tonumber(arztest999:match('(%d+)'))
+	   end
+	end
+	
 	if data.modelId == 1733 and checked_test10.v and otkrytieymnoe.v then
 	 arztest77 = id + 1
 	 arztest7 = 1
@@ -8290,6 +8310,36 @@ end
     end)
   end
   
+  if checked_test200.v and active299 and otkrytie.v then
+    lua_thread.create(function()
+      if data.modelId == 1333 then
+        wait(zadervkasetrou1.v)
+        sampSendClickTextdraw(id)
+        use299 = true
+      end
+      if data.text == 'USE' or data.text == 'ЕCМOЗТИOЛAПТ' and use299 and otkrytie.v then
+        clickID = id + 1
+		wait(zadervkasetrou2.v)
+        sampSendClickTextdraw(clickID)
+        use299 = false
+        close299 = true
+      end
+      if close299 and otkrytie.v then
+        wait(zadervkasetrou3.v)
+		if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
+		wait(zadervkasetrou4.v)
+		sampCloseCurrentDialogWithButton(1)
+		ruletka()
+        close299 = false
+        active299 = false
+      end
+    end)
+  end
+  
 	if checked_test10.v and active5 and otkrytie.v then
     lua_thread.create(function()
       if data.modelId == 1733 then
@@ -8427,6 +8477,29 @@ end
 		
 		ruletka()
         active25 = false
+      end
+    end)
+  end
+  
+  if checked_test200.v and active299 and otkrytie2.v then
+    lua_thread.create(function()
+      if data.modelId == 1333 then
+        wait(zadervkasetrou5.v)
+        sampSendClickTextdraw(id)
+        wait(zadervkasetrou6.v)
+		sampSendClickTextdraw(2302)
+        wait(zadervkasetrou7.v)
+		if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
+		wait(zadervkasetrou9.v)
+		sampCloseCurrentDialogWithButton(1)
+		wait(zadervkasetrou10.v)
+		
+		ruletka()
+        active299 = false
       end
     end)
   end
@@ -14082,8 +14155,8 @@ end
 	
 	
 	if vkconnect.v and sellid.v and text:match('%[(%d+)%] (.*) | Уровень:') then vk_requestv2(''..text) end
-	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
-	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
+	if vkconnect.v and sellinfo.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test200.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
+	if vkconnect.v and sellinfo.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test200.v or checked_test10.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if vkconnect.v and sellrul.v and text:match('Вам был добавлен предмет') and color == -65281 then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then vk_requestv2('['..nazvanie.v..'] '..text) end end
 	if text:find("Депозит в банке: $%d") and not text:find("говорит") and vkconnect.v and pdmaster.v then
 		depozpd = tonumber(text:match("Депозит в банке: $(%d+)"))
@@ -14096,8 +14169,8 @@ end
     end
 	
 	if tgconnect.v and sellidtg.v and text:match('%[(%d+)%] (.*) | Уровень:') then sendTelegramNotification(''..text) end
-	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
-	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
+	if tgconnect.v and sellinfotg.v and text:match('%[Ошибка%] {FFFFFF}Время после прошлого использования ещё не прошло!') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test200.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
+	if tgconnect.v and sellinfotg.v and text:match('Вы использовали') and text:find('и получили') then if checked_test5.v or checked_test6.v or checked_test7.v or checked_test100.v or checked_test200.v or checked_test10.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if tgconnect.v and sellrultg.v and text:match('Вам был добавлен предмет') and color == -65281 then if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test11.v or checked_test12.v or checked_test13.v or checked_test14.v then sendTelegramNotification('['..nazvanie.v..'] '..text) end end
 	if text:find("Депозит в банке: $%d") and not text:find("говорит") and tgconnect.v and pdmastertg.v then
 		depozpdtg = tonumber(text:match("Депозит в банке: $(%d+)"))
@@ -14233,6 +14306,9 @@ end
 		fixprice()
 	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test100.v then
+		fixprice()
+	end
+	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test200.v then
 		fixprice()
 	end
 	if text:match("{DC4747}На сервере есть инвентарь, используйте клавишу Y для работы с ним.") and inventoff.v and checked_test10.v then
@@ -17896,6 +17972,74 @@ while true do
 	end
 end
 
+function useroulette6()
+while true do 
+	if checked_test200.v and otkrytie.v and otkrytieymnoe.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
+	  wait(500)
+      active299 = true
+	  samprulstop = true
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
+      wait(1000)
+	  randomwaitv299 = math.random(0, zadervkadoprul.v)
+      wait((arztest9*60000) + 240000 + (randomwaitv299*1000))
+	end
+	if checked_test200.v and otkrytie2.v and otkrytieymnoe.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
+	  wait(500)
+      active299 = true
+	  samprulstop = true
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
+      wait(1000)
+      randomwaitv300 = math.random(0, zadervkadoprul.v)
+      wait((arztest9*60000) + 240000 + (randomwaitv300*1000))
+	end
+	wait(0)
+	end
+end
+
 function rouletteyashik()
 while true do 
 	if checked_test5.v and otkrytie.v and not otkrytieymnoe.v then
@@ -18017,6 +18161,37 @@ while true do
 		end
 	  randomwaitv34 = math.random(0, zadervkadoprul.v)
       wait((zadervkarul.v + randomwaitv34)*1000)
+	end
+	
+	if checked_test200.v and otkrytie.v and not otkrytieymnoe.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
+	  wait(500)
+      active299 = true
+	  samprulstop = true
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
+	  randomwaitv301 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv301)*1000)
 	end
 	
 	if checked_test10.v and otkrytie.v and not otkrytieymnoe.v then
@@ -18173,6 +18348,37 @@ while true do
 		end
       randomwaitv44 = math.random(0, zadervkadoprul.v)
       wait((zadervkarul.v + randomwaitv44)*1000)
+	end
+	
+	if checked_test200.v and otkrytie2.v and not otkrytieymnoe.v then
+	  sampCloseCurrentDialogWithButton(0)
+	  wait(200)
+	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
+	  samprulstop = false
+	  wait(30000)
+	  sampSendChat('/mm')
+	  wait(200)
+	  sampSendDialogResponse(722, 1, 13, _)
+	  wait(200)
+	  sampSendClickTextdraw(2167)
+	  wait(100)
+	  closeDialog()
+	  end
+	  if inventoff.v then 
+		
+		else
+		sampSendClickTextdraw(admmp)
+		end
+	  wait(500)
+      active299 = true
+	  samprulstop = true
+	  if inventoff.v then 
+	  sampSendClickTextdraw(2107)
+		else
+		sampSendChat("/invent")
+		end
+      randomwaitv302 = math.random(0, zadervkadoprul.v)
+      wait((zadervkarul.v + randomwaitv302)*1000)
 	end
 	
 	if checked_test10.v and otkrytie2.v and not otkrytieymnoe.v then
@@ -26966,13 +27172,14 @@ function yashikisroulette()
 			imgui.Checkbox(u8'Открывать донатный сундук', checked_test6) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Checkbox(u8'Открывать платиновый сундук', checked_test7) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Checkbox(u8'Открывать сундук "Тайник Лос-Сантоса"', checked_test100) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Checkbox(u8'Открывать сундук "Тайник Vice City"', checked_test200) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Checkbox(u8'Открывать сундук "Илона Маска"', checked_test10) imgui.SameLine(); imgui.TextQuestion(u8"Функция открывает через указанное вами время данный сундук. Также инвентарь должен быть на английском языке. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			
 			--imgui.PushItemWidth(150)
 			imgui.SliderInt(u8'Задержка (в секундах) ##47',zadervkarul,1, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Задержка на открытие сундуков. Если выбрано несколько сундуков, то сундуки начинают открываться по очереди. Например: Вы активировали функции - 'Открывать обычный сундук' и 'Открывать платиновый сундук'. Сначала пройдет проверка обычного сундука, через указанное вами время пройдет проверка платиного сундука и потом снова через указанное вами время пройдет проверка обычного сундука. По умолчанию - 3 минуты или 180 секунд.")
 			imgui.SliderInt(u8'Рандомная задержка ##477',zadervkadoprul,0, 3600) imgui.SameLine(); imgui.TextQuestion(u8"Рандомная задержка для основной задержки для проверки сундуков (как для просто 'Открывать сундуки', так и для 'Всегда открывать сундуки'. 2 этих задержки складываются. Нужно для того, чтобы сундуки не проверялись ровно в одно и тоже время. Задержка прибавляется рандомно от 0 до указанного вами значения (например, ваша задержка составляет 120 секунд. Один раз ваш сундук проверится в 'Ваша задержка' + 100 секунд. Во 2 раз в 'Ваша задержка' + 10 секунд и так далее.) Измеряется в секундах, по умолчанию установлено на 0 секунд.")
 				--imgui.PopItemWidth()
-			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test10.v = true end
+			if imgui.CustomButton(u8(' Выбрать все сундуки для открытия'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then checked_test5.v = true checked_test6.v = true  checked_test7.v = true checked_test100.v = true checked_test200.v = true checked_test10.v = true end
 			if imgui.CustomButton(fa.ICON_HDD_O..u8(' Сохранить настройки'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) saveSettings() end
 			if imgui.CustomButton(fa.ICON_REFRESH..u8(' Вернуть настройки по умолчанию'), buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-6, 0)) then
 			checked_test.v = false
@@ -27006,6 +27213,7 @@ function yashikisroulette()
 			checked_test7.v = false
 			checked_test10.v = false
 			checked_test100.v = false
+			checked_test200.v = false
 			sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки возвращены по умолчанию.", -1) saveSettings() end
 			imgui.End()
 			end
@@ -27770,6 +27978,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/itogibtc - открыть меню с информацией о снятых BTC, где нужно залить жидкость или включить видеокарты.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vrv - отправить VIP сообщение как рекламу.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/versamp - изменить версию SAMP (сборка, лаунчер, мобильный лаунчер).')
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -30733,6 +30942,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'13. В "Майнинг" - "Прочие функции" добавлена двойная заливка жидкости.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[01.11.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'14. В VK/TG Connect добавлена команда !stats (открыть игровую статистику (/stats)). Также вернулись кнопки на клавиатуре "OK" и "Cancel".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.11.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'15. Добавлена команда "/versamp" (изменить версию SAMP на сборку, лаунчер, мобильный лаунчер)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'16. В VK/TG Connect добавлена команда "!quit" (выйти из игры через /q)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Параметры" - "Модификации" - "Эмулятор лаунчера" изменен способ эмуляции с ПК на Мобаил.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'18. В "Roulette Tools" добавлен сундук "Тайник Vice City".')
 		imgui.End()
 		end
 	
@@ -32906,6 +33120,8 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
 								os.execute([[ "shutdown -s /f /t 10" ]])
 							elseif text:match('^!stats') then
 								sampSendChat('/stats')
+							elseif text:match('^!quit') then
+								sampSendChat('/q')
 							elseif text:match('^!restart') then
 								sendrestartTg()
 							elseif text:match('^!igrokradius') then
@@ -32942,7 +33158,7 @@ function getOnline()
 end
 
 function sendHelp()
-	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно.\n\n &#128204; Скриптовые команды:\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !pcoff - выключить компьютер через 10 секунд.\n &#128073; !stats - открыть игровую статистику (/stats).\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics.')
+	vk_requestv2('&#128204; Действия кнопок:\n\n &#128073; &#128202; - проверка активен ли персонаж/на каком сервере находится.\n &#128073; &#128299; - вывести информацию с KillInfo.\n &#128073; &#128171; - перезагрузка скрипта.\n &#128073; Игроки в радиусе - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n &#128073; Ok - подтверждение действия в диалоговом окне.\n &#128073; Cancel - закрыть активное диалоговое окно.\n\n &#128204; Скриптовые команды:\n &#128073; !status - вывести в VK ваш ник, сервер и онлаин на данный момент.\n &#128073; !pcoff - выключить компьютер через 10 секунд.\n &#128073; !stats - открыть игровую статистику (/stats).\n &#128073; !quit - выйти из игры через /q.\n &#128073; !screen - сделать скриншот и отправить его в VK (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Чтобы узнать, что нужно делать в случае, если команда не работает или крашит скрипт, напишите команду "!helpscreen".\n &#128073; !showdialog - включить или отключить отправку диалогов в VK.\n &#128073; !statarul - вывести в VK информацию с Roulette Statistics.\n &#128073; !resetstatarul - обнулить статистику в Roulette Statistics.')
 end
 
 function sendhelpscreen()
@@ -32962,7 +33178,7 @@ function sendhelpscreen()
 end
 
 function sendHelpTg()
-	sendTelegramNotification('%F0%9F%93%8C Действия кнопок:\n\n%F0%9F%91%89 Status - проверка активен ли персонаж/на каком сервере находится.\n%F0%9F%91%89 KillInfo - вывести информацию с KillInfo.\n%F0%9F%91%89 Restart - перезагрузка скрипта.\n%F0%9F%91%89 Players in radius - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n%F0%9F%91%89 OK - подтверждение действия в диалоговом окне.\n%F0%9F%91%89 Cancel - закрыть активное диалоговое окно.\n\n%F0%9F%93%8C Скриптовые команды:\n%F0%9F%91%89 !pcoff - выключить компьютер через 10 секунд.\n%F0%9F%91%89 !stats - открыть игровую статистику (/stats).\n%F0%9F%91%89 !restart - перезагрузка скрипта.\n%F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n%F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n%F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n%F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n%F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n%F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n%F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics.')
+	sendTelegramNotification('%F0%9F%93%8C Действия кнопок:\n\n%F0%9F%91%89 Status - проверка активен ли персонаж/на каком сервере находится.\n%F0%9F%91%89 KillInfo - вывести информацию с KillInfo.\n%F0%9F%91%89 Restart - перезагрузка скрипта.\n%F0%9F%91%89 Players in radius - после нажатия на кнопку, вам напишутся ники игроков, которые находятся возле вас.\n%F0%9F%91%89 OK - подтверждение действия в диалоговом окне.\n%F0%9F%91%89 Cancel - закрыть активное диалоговое окно.\n\n%F0%9F%93%8C Скриптовые команды:\n%F0%9F%91%89 !pcoff - выключить компьютер через 10 секунд.\n%F0%9F%91%89 !stats - открыть игровую статистику (/stats).\n%F0%9F%91%89 !quit - выйти из игры через /q.\n%F0%9F%91%89 !restart - перезагрузка скрипта.\n%F0%9F%91%89 !igrokradius - после ввода команды, вам напишутся ники игроков, которые находятся возле вас. \n%F0%9F%91%89 !killinfoget - вывести информацию с KillInfo.\n%F0%9F%91%89 !status - вывести в TG ваш ник, сервер и онлаин на данный момент.\n%F0%9F%91%89 !screen - сделать скриншот и отправить его в TG (работает следующим образом: если игра свёрнута - произойдет краш скрипта, если игра на весь экран - придёт просто белый скриншот. Чтобы сработало идеально - нужно сделать игру в оконный режим и растянуть на весь экран (на лаунчере можно просто в настройках лаунчера включить оконный режим)). Также проверьте, что у вас установлены все нужные библиотеки. Скачать их можно в скрипте в разделе "Telegram Connect" или в архиве скрипта на форуме.\n%F0%9F%91%89 !showdialog - включить или отключить отправку диалогов в TG.\n%F0%9F%91%89 !statarul - вывести в TG информацию с Roulette Statistics.\n%F0%9F%91%89 !resetstatarul - обнулить статистику в Roulette Statistics.')
 end
 
 function sendresetstatarul()
@@ -33376,6 +33592,8 @@ function longpollResolve(result)
 						os.execute([[ "shutdown -s /f /t 10" ]])
 					elseif text:match('^!stats') then
 						sampSendChat('/stats')
+					elseif text:match('^!quit') then
+						sampSendChat('/q')
 					elseif text:match('^!statarul') then
 						sendstatarul()
 					elseif text:match('^!screen') then
@@ -37148,9 +37366,14 @@ function sampev.onSendClientJoin(ver, mod, nick, response, authkey, clientver, u
 	if exitvice == 0 then end
 	if exitvice == 1 then return {ver, mod, nick, response, authkey, '0.3.7', unk} end
 	if exitvice == 2 then return {ver, mod, nick, response, authkey, 'Arizona PC', unk} end
+	
+	if sampver == 0 then end
+	if sampver == 1 then return {ver, mod, nick, response, authkey, '0.3.7', unk} end
+	if sampver == 2 then return {ver, mod, nick, response, authkey, 'Arizona PC', unk} end
+	if sampver == 3 then return {ver, mod, nick, response, authkey, 'arizona-mobile', unk} end
 
 	if launcher.v then 
-    return {ver, mod, nick, response, authkey, 'Arizona PC' or clientver, unk}
+    return {ver, mod, nick, response, authkey, 'arizona-mobile' or clientver, unk}
 	end
 end
 
@@ -37575,5 +37798,32 @@ function viprek(arg)
 	sampSendDialogResponse(25626, 1, 0, -1)
 	if textpiar == true then novr.v = true textpiar = false end
 	otmenadial = false
+	end)
+end
+
+function sampversion()
+	lua_thread.create(function()
+    sampShowDialog(8374, "{ff1000}Изменить версию SAMP", "1. 0.3.7\n2. Arizona Launcher\n3. Arizona Mobile", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+	while sampIsDialogActive(8374) do wait(100) end -- ждёт пока вы ответите на диалог
+    local _, button, list = sampHasDialogRespond(8374)
+	if button == 1 then
+		if list == 0 then
+			sampver = 1
+			sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняю перезаход под версию "0.3.7"!', -1)
+			sampProcessChatInput('/recon 1')
+		end
+		if list == 1 then
+			sampver = 2
+			sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняю перезаход под версию "Arizona Launcher"!', -1)
+			sampProcessChatInput('/recon 1')
+		end
+		if list == 2 then
+			sampver = 3
+			sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняю перезаход под версию "Arizona Mobile"!', -1)
+			sampProcessChatInput('/recon 1')
+		end
+	else
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Вы закрыли диалог.', -1)
+		end
 	end)
 end
