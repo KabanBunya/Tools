@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.8')
+script_version('3.5.9')
 
 use = false
 close = false
@@ -25,8 +25,8 @@ local fontsize = nil
 local updateid
 serverclosed = true
 workcal = false
-textpiar = false
 otmenadial = false
+otmenadial2 = false
 fontsizev2 = nil
 fontsizev3 = nil
 viceip = 0
@@ -1574,7 +1574,6 @@ local cfg3 = inicfg.load({
 		autoopl5v2 = false,
 		autoopl6v2 = false,
 		lockv2 = false,
-		novrv2 = false,
 		autobufferv2 = false,
 		autorelogv2 = false,
 		timerpcoffv2 = false,
@@ -2282,7 +2281,6 @@ local SET = {
 		autoopl5 = false,
 		autoopl6 = false,
 		lock = false,
-		novr = false,
 		autobuffer = false,
 		autorelog = false,
 		timerpcoff = false,
@@ -5400,6 +5398,7 @@ function main()
 	
 	sampRegisterChatCommand("exitvice", viceexit)
 	sampRegisterChatCommand("vrv", viprek)
+	sampRegisterChatCommand("vr", viprek2)
 	
 	sampRegisterChatCommand("arenda", arendatc) -- очистка чата
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
@@ -7068,7 +7067,6 @@ function saveSettings(args, key)
 	ini.settings.autoopl5 = autoopl5.v
 	ini.settings.autoopl6 = autoopl6.v
 	ini.settings.lock = lock.v
-	ini.settings.novr = novr.v
 	ini.settings.autobuffer = autobuffer.v
 	ini.settings.autorelog = autorelog.v
 	ini.settings.timerpcoff = timerpcoff.v
@@ -7622,10 +7620,11 @@ end
   if dialogId == 15379 and vipaddad.v then return false end
   if dialogId == 25473 and vipaddad.v then return false end
   
-  if dialogId == 25627 and novr.v then sampSendDialogResponse(25627, 0, nil, -1) return false end
-  if dialogId == 25627 and otmenadial == true then return false end
-  if dialogId == 25626 and novr.v then sampSendDialogResponse(25626, 0, nil, -1) return false end
-  if dialogId == 25626 and otmenadial == true then return false end
+  if dialogId == 25627 and otmenadial == true then sampSendDialogResponse(25627, 1, -1, -1) otmenadial = false return false end
+  if dialogId == 25626 and otmenadial == true then sampSendDialogResponse(25626, 1, -1, -1) otmenadial = false return false end
+  
+  if dialogId == 25627 and otmenadial2 == true then sampSendDialogResponse(25627, 0, -1, -1) otmenadial2 = false return false end
+  if dialogId == 25626 and otmenadial2 == true then sampSendDialogResponse(25626, 0, -1, -1) otmenadial2 = false return false end
   
   if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
@@ -15294,7 +15293,6 @@ function load_settings() -- загрузка настроек
 	autoopl5 = imgui.ImBool(ini.settings.autoopl5)
 	autoopl6 = imgui.ImBool(ini.settings.autoopl6)
 	lock = imgui.ImBool(ini.settings.lock)
-	novr = imgui.ImBool(ini.settings.novr)
 	autobuffer = imgui.ImBool(ini.settings.autobuffer)
 	autorelog = imgui.ImBool(ini.settings.autorelog)
 	timerpcoff = imgui.ImBool(ini.settings.timerpcoff)
@@ -26128,16 +26126,9 @@ function piarad4()
 while true do
 	if vraddad.v then
 	otmenadial = true
-	if novr.v == true then textpiar = true novr.v = false end
-	wait(100)
-	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	wait(300)
-	sampSendDialogResponse(25627, 1, 0, -1)
-	wait(100)
-	sampSendDialogResponse(25626, 1, 0, -1)
+	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	kdwait4 = math.random(5000, 15000)
-	if textpiar == true then novr.v = true textpiar = false end
-	otmenadial = false
 	wait((vradsec.v*1000) + kdwait4)
 	end
 		wait(0)
@@ -30947,6 +30938,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'16. В VK/TG Connect добавлена команда "!quit" (выйти из игры через /q)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'17. В "Параметры" - "Модификации" - "Эмулятор лаунчера" изменен способ эмуляции с ПК на Мобаил.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'18. В "Roulette Tools" добавлен сундук "Тайник Vice City".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[08.11.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'19. Из "Параметры" - "Модификации" убрано "Убирать диалог с вопросом о рекламе", но сделано: отправление сообщения через "Piar Menu"')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'или "/vrv", отправляется как реклама. Если вы напишите "/vr text", то отправка текста будет обычным сообщением.')
 		imgui.End()
 		end
 	
@@ -32339,16 +32333,9 @@ end
 
 function adtravel4()
 lua_thread.create(function()
-	if novr.v == true then textpiar = true novr.v = false end
 	otmenadial = true
-	wait(100)
-	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	wait(300)
-	sampSendDialogResponse(25627, 1, 0, -1)
-	wait(100)
-	sampSendDialogResponse(25626, 1, 0, -1)
-	if textpiar == true then novr.v = true textpiar = false end
-	otmenadial = false
+	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	end)
 end
 
@@ -35300,7 +35287,6 @@ function settingosnova()
 				end
 				
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("VIP-Resend")); imgui.SameLine(); imgui.ToggleButton(u8'VIP-Resend', vipresend) imgui.SameLine() imgui.TextQuestion(u8"Функция отправляет повторно ваше сообщение в VIP чат, если оно не отправилось из-за кд. Функционал взят у Cosmo.")
-				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Убирать диалог с вопросом о рекламе в VIP")); imgui.SameLine(); imgui.ToggleButton(u8'Убирать диалог с вопросом о рекламе в VIP', novr) imgui.SameLine() imgui.TextQuestion(u8"Функция убирает диалог, в котором вас спрашивают, реклама ли это и нажимает 'нет', чтобы у вас не списывались за это деньги.")
 				
 				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто-очистка памяти стрима")); imgui.SameLine(); imgui.ToggleButton(u8'Авто-очистка памяти стрима', autobuffer) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то когда память стрима заполняется до 400 мегабаит, скрипт очистит память стрима. Для чего это нужно? При засорении памяти стрима, игра начинает лагать и в итоге крашит. Функция будет чистить память стрима и уменьшится шанс краша игры.")
 				if autobuffer.v then 
@@ -36267,7 +36253,6 @@ function settingosnova()
 		cfg3.backup.autoopl5v2 = autoopl5.v
 		cfg3.backup.autoopl6v2 = autoopl6.v
 		cfg3.backup.lockv2 = lock.v
-		cfg3.backup.novrv2 = novr.v
 		cfg3.backup.autobufferv2 = autobuffer.v
 		cfg3.backup.autorelogv2 = autorelog.v
 		cfg3.backup.timerpcoffv2 = timerpcoff.v
@@ -36959,7 +36944,6 @@ function settingosnova()
 		 autoopl5.v =  cfg3.backup.autoopl5v2 
 		 autoopl6.v =  cfg3.backup.autoopl6v2 
 		  lock.v =  cfg3.backup.lockv2
-		  novr.v =  cfg3.backup.novrv2
 		 autobuffer.v =  cfg3.backup.autobufferv2 
 		 autorelog.v =  cfg3.backup.autorelogv2 
 		 timerpcoff.v =  cfg3.backup.timerpcoffv2 
@@ -37788,16 +37772,17 @@ end
 
 function viprek(arg)
 	lua_thread.create(function()
-	if novr.v == true then textpiar = true novr.v = false end
 	otmenadial = true
-	wait(100)
-	sampSendChat('/vr '..arg)
 	wait(300)
-	sampSendDialogResponse(25627, 1, 0, -1)
-	wait(100)
-	sampSendDialogResponse(25626, 1, 0, -1)
-	if textpiar == true then novr.v = true textpiar = false end
-	otmenadial = false
+	sampSendChat('/vr '..arg)
+	end)
+end
+
+function viprek2(arg)
+	lua_thread.create(function()
+	otmenadial2 = true
+	wait(300)
+	sampSendChat('/vr '..arg)
 	end)
 end
 
