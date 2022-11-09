@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.9')
+script_version('3.5.10')
 
 use = false
 close = false
@@ -21,6 +21,8 @@ local samprulstop = true
 airphone = false
 phonetext = 'nill'
 MAX_SAMP_MARKERS = 63
+monopolyfam = 0
+monopolygetfam = false
 local fontsize = nil
 local updateid
 serverclosed = true
@@ -1577,6 +1579,7 @@ local cfg3 = inicfg.load({
 		autobufferv2 = false,
 		autorelogv2 = false,
 		timerpcoffv2 = false,
+		novrv2 = false,
 		autobufferyvedv2 = false,
 		blockweatherv2 = false,
         blocktimev2 = false,
@@ -2284,6 +2287,7 @@ local SET = {
 		autobuffer = false,
 		autorelog = false,
 		timerpcoff = false,
+		novr = false,
 		autobufferyved = false,
 		blockweather = false,
         blocktime = false,
@@ -5398,7 +5402,8 @@ function main()
 	
 	sampRegisterChatCommand("exitvice", viceexit)
 	sampRegisterChatCommand("vrv", viprek)
-	sampRegisterChatCommand("vr", viprek2)
+	
+	if novr.v == true then sampRegisterChatCommand("vr", viprek2) end
 	
 	sampRegisterChatCommand("arenda", arendatc) -- очистка чата
 	sampRegisterChatCommand("cc", ClearChat) -- очистка чата
@@ -5407,6 +5412,7 @@ function main()
 	sampRegisterChatCommand(activator.v, mainmenu) -- меню скрипта
 	sampRegisterChatCommand('afind', afind) -- регистрируем команду
 	sampRegisterChatCommand('sfind', sfind) -- регистрируем команду
+	sampRegisterChatCommand('getfam', famget) -- регистрируем команду
 	sampRegisterChatCommand('setweather', weatherset) -- регистрируем команду
 	sampRegisterChatCommand('settime', timeset) -- регистрируем команду
 	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
@@ -7070,6 +7076,7 @@ function saveSettings(args, key)
 	ini.settings.autobuffer = autobuffer.v
 	ini.settings.autorelog = autorelog.v
 	ini.settings.timerpcoff = timerpcoff.v
+	ini.settings.novr = novr.v
 	ini.settings.autobufferyved = autobufferyved.v
 	
 	ini.settings.blockweather = blockweather.v
@@ -10556,6 +10563,23 @@ function afind(arg)
 			notf.addNotification("["..nazvanie.v.."]: Указан неверный ID", 3, 3) -- при введении неверного ID уведомление
 		end
 	end
+end
+
+function famget(arg)
+	lua_thread.create(function()
+	if arg == '' then
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Введите фамилию!", -1)
+	else
+		if arg then
+			sampSendChat('/id '..arg)
+			monopolygetfam = true
+			wait(1000)
+			sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Игроков с фамилией "'..arg..'" в сети: '..colorcm..''..monopolyfam..'{FFFFFF}.', -1)
+			monopolyfam = 0
+			monopolygetfam = false
+			end
+		end
+	end)
 end
 
 function sfind()
@@ -14097,6 +14121,11 @@ function podklchat()
 	end
 
 function sampev.onServerMessage(color, text)
+	
+	if text:match('%[(%d+)%] (.*) | Уровень:') and monopolygetfam == true then 
+	monopolyfam = monopolyfam + 1
+	return false
+	end
 
 	if text:match('%[Информация%] {ffffff}Вы передали (.*) в аренду игроку (.*) на (%d+)ч за (%d+)') then 
 	if infarenda.v or infzparenda.v then
@@ -15296,6 +15325,7 @@ function load_settings() -- загрузка настроек
 	autobuffer = imgui.ImBool(ini.settings.autobuffer)
 	autorelog = imgui.ImBool(ini.settings.autorelog)
 	timerpcoff = imgui.ImBool(ini.settings.timerpcoff)
+	novr = imgui.ImBool(ini.settings.novr)
 	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
 	
 	blockweather = imgui.ImBool(ini.settings.blockweather)
@@ -27970,6 +28000,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vrv - отправить VIP сообщение как рекламу.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/versamp - изменить версию SAMP (сборка, лаунчер, мобильный лаунчер).')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/getfam [Family] - узнать, сколько игроков в сети с указанной фамилией.')
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -30941,6 +30972,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[08.11.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'19. Из "Параметры" - "Модификации" убрано "Убирать диалог с вопросом о рекламе", но сделано: отправление сообщения через "Piar Menu"')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'или "/vrv", отправляется как реклама. Если вы напишите "/vr text", то отправка текста будет обычным сообщением.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[09.11.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'20. Добавлена команда "/getfam [Family]" (узнать, сколько игроков в сети с указанной фамилией).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. В "Параметры" - "Модификации" добавлено "Отправлять в "/vr" обычное сообщение" (при вводе команды "/vr [text]", ваш текст в VIP')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'чат будет отправлять как обычное сообщение. Для отправления рекламы, используйте "/vrv" или "Piar Menu").')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Фикс команды "!quit" в TG/VK Connect.')
 		imgui.End()
 		end
 	
@@ -33108,7 +33144,7 @@ function processing_telegram_messages(result) -- функция проверОчки того что отп
 							elseif text:match('^!stats') then
 								sampSendChat('/stats')
 							elseif text:match('^!quit') then
-								sampSendChat('/q')
+								sampProcessChatInput('/q')
 							elseif text:match('^!restart') then
 								sendrestartTg()
 							elseif text:match('^!igrokradius') then
@@ -33580,7 +33616,7 @@ function longpollResolve(result)
 					elseif text:match('^!stats') then
 						sampSendChat('/stats')
 					elseif text:match('^!quit') then
-						sampSendChat('/q')
+						sampProcessChatInput('/q')
 					elseif text:match('^!statarul') then
 						sendstatarul()
 					elseif text:match('^!screen') then
@@ -35315,6 +35351,8 @@ function settingosnova()
 				imgui.Text('') imgui.SameLine() imgui.InputText(u8'Время выключения ПК ##9007', timepcoff); imgui.SameLine(); imgui.TextQuestion(u8"Время нужно указать в формате - 'час:минута:секунда' (Пример: 05:00:00).")
 				imgui.PopItemWidth()
 				end
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Отправлять в "/vr" обычное сообщение')); imgui.SameLine(); imgui.ToggleButton(u8'Отправлять в "/vr" обычное сообщение', novr) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при вводе команды '/vr [text]', ваш текст в VIP чат будет отправлять как обычное сообщение. Для отправления рекламы, используйте '/vrv' или 'Piar Menu'. Чтобы функционал заработал - перезапустите скрипт.")
+				
 				
 				imgui.NextColumn()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Авто закрытие дверей(/lock)")); imgui.SameLine(); imgui.ToggleButton(u8'Авто закрытие дверей(/lock)', lock) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то после того, как вы сели в автомобиль, скрипт закроет ваш автомобиль командой /lock.")
@@ -36256,6 +36294,7 @@ function settingosnova()
 		cfg3.backup.autobufferv2 = autobuffer.v
 		cfg3.backup.autorelogv2 = autorelog.v
 		cfg3.backup.timerpcoffv2 = timerpcoff.v
+		cfg3.backup.novrv2 = novr.v
 		cfg3.backup.autobufferyvedv2 = autobufferyved.v
 		cfg3.backup.blockweatherv2 = blockweather.v
 		cfg3.backup.blocktimev2 = blocktime.v
@@ -36947,6 +36986,7 @@ function settingosnova()
 		 autobuffer.v =  cfg3.backup.autobufferv2 
 		 autorelog.v =  cfg3.backup.autorelogv2 
 		 timerpcoff.v =  cfg3.backup.timerpcoffv2 
+		 novr.v =  cfg3.backup.novrv2 
 		 autobufferyved.v =  cfg3.backup.autobufferyvedv2 
 		 
 		 blockweather.v =  cfg3.backup.blockweatherv2 
