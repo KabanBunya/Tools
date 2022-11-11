@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.10')
+script_version('3.5.11')
 
 use = false
 close = false
@@ -14124,7 +14124,6 @@ function sampev.onServerMessage(color, text)
 	
 	if text:match('%[(%d+)%] (.*) | Уровень:') and monopolygetfam == true then 
 	monopolyfam = monopolyfam + 1
-	return false
 	end
 
 	if text:match('%[Информация%] {ffffff}Вы передали (.*) в аренду игроку (.*) на (%d+)ч за (%d+)') then 
@@ -30977,6 +30976,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'21. В "Параметры" - "Модификации" добавлено "Отправлять в "/vr" обычное сообщение" (при вводе команды "/vr [text]", ваш текст в VIP')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'чат будет отправлять как обычное сообщение. Для отправления рекламы, используйте "/vrv" или "Piar Menu").')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Фикс команды "!quit" в TG/VK Connect.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[11.11.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс команды "/getfam".')
 		imgui.End()
 		end
 	
