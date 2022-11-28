@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.12')
+script_version('3.5.13')
 
 use = false
 close = false
@@ -10614,6 +10614,15 @@ function recongeniusis()
 end)
 end
 
+function recongeniusisv10()
+	lua_thread.create(function()
+	wait(120000)
+	sampDisconnectWithReason(quit)
+	wait(zadervkareconrestart.v * 60000)
+	sampSetGamestate(1)
+end)
+end
+
 function recongenmenu()
 	lua_thread.create(function()
 	wait(100)
@@ -14505,6 +14514,11 @@ end
 			notf.addNotification("Вам удалось улучшить скин или аксессуар, поздравляем!", 3, 2)
 			return false
 	end
+	
+	if color == -1104335361 and text:find("Технический рестарт через 02 минут. Советуем завершить текущую сессию") and recongen.v and reconrestart.v then
+		recongeniusisv10()
+	end
+	
 	if color == -10270721 and text:find("Сработала защита от реконнекта! Попробуйте переподключиться через (%d+) секунд") and recongen.v and reconsave.v then
 		recongenmenu()
 	end
@@ -17197,8 +17211,6 @@ function roulettetime()
 	if string.find(today_time, '01:00') and checked_test12.v then samprulstop = true ruletka() end
 	if string.find(today_time, '01:00') and checked_test13.v then samprulstop = true ruletka() end
 	if string.find(today_time, '01:00') and checked_test14.v then samprulstop = true ruletka() end
-	
-	if string.find(today_time_off, '05:01:00') and recongen.v and reconrestart.v then recongeniusis() end
 	
 	if string.find(today_time_off, timepcoff.v) and timerpcoff.v then os.execute([[ "shutdown -s /f /t 10" ]]) end
 	
