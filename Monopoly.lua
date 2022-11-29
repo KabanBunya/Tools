@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.13')
+script_version('3.5.14')
 
 use = false
 close = false
@@ -7618,20 +7618,21 @@ end
   if dialogId == 25013 and serverclick.v then return false end
   if dialogId == 25013 and kvpcclick.v then return false end
   if dialogId == 25013 and datasclick.v then return false end
+  
   if dialogId == 15346 and addad.v then return false end
   if dialogId == 15347 and addad.v then return false end
   if dialogId == 15379 and addad.v then return false end
-  if dialogId == 25473 and addad.v then return false end
+  if dialogId == 25475 and addad.v then return false end
   if dialogId == 15346 and vipaddad.v then return false end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
-  if dialogId == 25473 and vipaddad.v then return false end
+  if dialogId == 25475 and vipaddad.v then return false end
   
-  if dialogId == 25627 and otmenadial == true then sampSendDialogResponse(25627, 1, -1, -1) otmenadial = false return false end
-  if dialogId == 25626 and otmenadial == true then sampSendDialogResponse(25626, 1, -1, -1) otmenadial = false return false end
+  if dialogId == 25628 and otmenadial == true then sampSendDialogResponse(25628, 1, -1, -1) otmenadial = false return false end
+  if dialogId == 25629 and otmenadial == true then sampSendDialogResponse(25629, 1, -1, -1) otmenadial = false return false end
   
-  if dialogId == 25627 and otmenadial2 == true then sampSendDialogResponse(25627, 0, -1, -1) otmenadial2 = false return false end
-  if dialogId == 25626 and otmenadial2 == true then sampSendDialogResponse(25626, 0, -1, -1) otmenadial2 = false return false end
+  if dialogId == 25628 and otmenadial2 == true then sampSendDialogResponse(25628, 0, -1, -1) otmenadial2 = false return false end
+  if dialogId == 25629 and otmenadial2 == true then sampSendDialogResponse(25629, 0, -1, -1) otmenadial2 = false return false end
   
   if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
@@ -14532,13 +14533,13 @@ end
 		sampSendChat(u8:decode ('/ad '..adredak.v))
 		wait(300)
 		if smils.v then 
-		sampSendDialogResponse(25473, 1, 0, -1)
+		sampSendDialogResponse(25475, 1, 0, -1)
 		end
 		if smilv.v then 
-		sampSendDialogResponse(25473, 1, 1, -1)
+		sampSendDialogResponse(25475, 1, 1, -1)
 		end
 		if smisf.v then 
-		sampSendDialogResponse(25473, 1, 2, -1)
+		sampSendDialogResponse(25475, 1, 2, -1)
 		end
 		wait(300)
 		sampSendDialogResponse(15346, 1, 0, -1)
@@ -14558,13 +14559,13 @@ end
 		sampSendChat(u8:decode ('/ad '..adredak2.v))
 		wait(300)
 		if smils.v then 
-		sampSendDialogResponse(25473, 1, 0, -1)
+		sampSendDialogResponse(25475, 1, 0, -1)
 		end
 		if smilv.v then 
-		sampSendDialogResponse(25473, 1, 1, -1)
+		sampSendDialogResponse(25475, 1, 1, -1)
 		end
 		if smisf.v then 
-		sampSendDialogResponse(25473, 1, 2, -1)
+		sampSendDialogResponse(25475, 1, 2, -1)
 		end
 		wait(300)
 		sampSendDialogResponse(15346, 1, 1, -1)
@@ -26096,13 +26097,13 @@ while true do
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	if smils.v then 
-	sampSendDialogResponse(25473, 1, 0, -1)
+	sampSendDialogResponse(25475, 1, 0, -1)
 	end
 	if smilv.v then 
-	sampSendDialogResponse(25473, 1, 1, -1)
+	sampSendDialogResponse(25475, 1, 1, -1)
 	end
 	if smisf.v then 
-	sampSendDialogResponse(25473, 1, 2, -1)
+	sampSendDialogResponse(25475, 1, 2, -1)
 	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
@@ -26127,13 +26128,13 @@ while true do
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
 	if smils.v then 
-	sampSendDialogResponse(25473, 1, 0, -1)
+	sampSendDialogResponse(25475, 1, 0, -1)
 	end
 	if smilv.v then 
-	sampSendDialogResponse(25473, 1, 1, -1)
+	sampSendDialogResponse(25475, 1, 1, -1)
 	end
 	if smisf.v then 
-	sampSendDialogResponse(25473, 1, 2, -1)
+	sampSendDialogResponse(25475, 1, 2, -1)
 	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
@@ -30991,6 +30992,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Фикс команды "/getfam".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.11.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Фикс перезахода после рестарта (изменён триггер на определенное время, чтобы не пропускать PD)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.11.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.End()
 		end
 	
@@ -32349,6 +32352,16 @@ lua_thread.create(function()
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
+	if smils.v then 
+	sampSendDialogResponse(25475, 1, 0, -1)
+	end
+	if smilv.v then 
+	sampSendDialogResponse(25475, 1, 1, -1)
+	end
+	if smisf.v then 
+	sampSendDialogResponse(25475, 1, 2, -1)
+	end
+	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
 	sampSendDialogResponse(15347, 1, 0, -1)
@@ -32364,6 +32377,16 @@ lua_thread.create(function()
 	closeDialog()
 	wait(100)
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
+	wait(300)
+	if smils.v then 
+	sampSendDialogResponse(25475, 1, 0, -1)
+	end
+	if smilv.v then 
+	sampSendDialogResponse(25475, 1, 1, -1)
+	end
+	if smisf.v then 
+	sampSendDialogResponse(25475, 1, 2, -1)
+	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
