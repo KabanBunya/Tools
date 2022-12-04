@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.14')
+script_version('3.5.15')
 
 use = false
 close = false
@@ -32,8 +32,10 @@ otmenadial2 = false
 fontsizev2 = nil
 fontsizev3 = nil
 viceip = 0
+viceipvc = 0
 carid = 0
 exitvice = 0
+exitvicevc = 0
 itogohat = 0
 itogohatv2 = 0
 caridv2 = 0
@@ -1761,7 +1763,8 @@ local cfg3 = inicfg.load({
 		idigroktelov2 = '0',
 		idigroktelo2v2 = '0',
 		
-		nickvicev2 = '', 
+		nickvicev2 = '',
+		nickvicevcv2 = '',
 		
 		timecoutv2 = false,
 		gangzonesv2 = false,
@@ -2472,6 +2475,7 @@ local SET = {
 		idigroktelo2 = '0',
 		
 		nickvice = '',
+		nickvicevc = '',
 		
 		timecout = false,
 		gangzones = false,
@@ -5416,6 +5420,9 @@ function main()
 	sampRegisterChatCommand('setweather', weatherset) -- регистрируем команду
 	sampRegisterChatCommand('settime', timeset) -- регистрируем команду
 	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
+	
+	sampRegisterChatCommand('reconvc', recongeniusvc) -- регистрируем команду
+	
 	sampRegisterChatCommand('tu', testupdate) -- регистрируем команду
 	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
 	sampRegisterChatCommand('pmc', pmchat) -- регистрируем команду
@@ -6422,6 +6429,7 @@ function saveSettings(args, key)
 	ini.settings.idigroktelo2 = idigroktelo2.v
 	
 	ini.settings.nickvice = nickvice.v
+	ini.settings.nickvicevc = nickvicevc.v
 	
 	ini.settings.chatcalc = chatcalc.v
 	ini.settings.tradecalc = tradecalc.v
@@ -7147,6 +7155,13 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+
+	if title:match('{BFBBBA}{FFFFFF}Клиент | {ae433d}Игра') and exitvicevc == 1 then
+	lua_thread.create(function()
+	sampSendDialogResponse(dialogId, 1, 0, -1)
+	exitvicevc = 2
+	end)
+end
 
 	if title:match('{BFBBBA}{FFFFFF}Клиент | {ae433d}Игра') and exitvice == 1 then
 	lua_thread.create(function()
@@ -15525,6 +15540,7 @@ function load_settings() -- загрузка настроек
 	idigroktelo2 = imgui.ImBuffer(u8(ini.settings.idigroktelo2), 2560)
 	
 	nickvice = imgui.ImBuffer(u8(ini.settings.nickvice), 2560)
+	nickvicevc = imgui.ImBuffer(u8(ini.settings.nickvicevc), 2560)
 	
 	timefix = imgui.ImInt(ini.settings.timefix)
 	combo_select = imgui.ImInt(ini.settings.combo_select)
@@ -27972,13 +27988,14 @@ function helpmenu()
 			imgui.Separator()
 			imgui.Columns(2, _,false)
 			imgui.SetColumnWidth(-1, 800)
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/reload - Перезагрузка скрипта.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/сс - Очистка чата.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/drone - Получить картинку с дрона на территории.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/afind - Автопоиск игрока через /find.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/sfind - Отключение автопоиска.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon - Перезайти на сервер через 30 секунд.")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon [время] - Перезайти на сервер через указанное время(в секундах).")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/reload - перезагрузка скрипта.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/сс - очистка чата.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/drone - получить картинку с дрона на территории.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/afind - автопоиск игрока через /find.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/sfind - отключение автопоиска.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon - перезайти на сервер через 30 секунд.")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon [время] - перезайти на сервер через указанное время(в секундах).")
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc - перезайти на сервер "Vice City", находясь на данном сервере.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/strobes - включение/отключение стробоскопов (перед использованием включите фары у транспорта на ctrl или /lights.)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call [id] - позвонить на указанный ID.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call last - позвонить на номер, на который вы звонили в последний раз.")
@@ -30994,6 +31011,8 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Фикс перезахода после рестарта (изменён триггер на определенное время, чтобы не пропускать PD)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.11.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')
 		imgui.End()
 		end
 	
@@ -36516,6 +36535,7 @@ function settingosnova()
 		cfg3.backup.idigroktelo2v2 = idigroktelo2.v
 		
 		cfg3.backup.nickvicev2 = nickvice.v
+		cfg3.backup.nickvicevcv2 = nickvicevc.v
 		
 		cfg3.backup.timecoutv2 = timecout.v
 		cfg3.backup.gangzonesv2 = gangzones.v
@@ -37211,6 +37231,7 @@ function settingosnova()
 		 idigroktelo2.v =  ''..cfg3.backup.idigroktelo2v2
 		 
 		 nickvice.v =  ''..cfg3.backup.nickvicev2
+		 nickvicevc.v =  ''..cfg3.backup.nickvicevcv2
 		 
 		  timecout.v =  cfg3.backup.timecoutv2
 		 gangzones.v =  cfg3.backup.gangzonesv2 
@@ -37479,6 +37500,12 @@ function exitvicefunc()
 	sampProcessChatInput('/connect '..viceip)
 	sampProcessChatInput('/connectname '..nickvice.v)
 	exitvice = 1
+end
+
+function exitvicefuncvc()
+	sampProcessChatInput('/connect '..viceipvc)
+	sampProcessChatInput('/connectname '..nickvicevc.v)
+	exitvicevc = 1
 end
 
 function viceexit()
@@ -37837,6 +37864,372 @@ function viceexit()
 			else
 				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Sedona" под ником '..nickvice.v..".", -1)
 				exitvicefunc()
+				end
+			end
+		
+			
+	else 
+        
+			end
+		end)
+end
+
+function recongeniusvc()
+	lua_thread.create(function()
+    sampShowDialog(8506, "{ff1000}Перезаход на Vice City (выберите ваш сервер)", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+	while sampIsDialogActive(8506) do wait(100) end -- ждёт пока вы ответите на диалог
+    local _, button, list = sampHasDialogRespond(8506)
+	if button == 1 then
+	
+		if list == 0 then
+		viceipvc = '185.169.134.3'
+		sampShowDialog(8401, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8401) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8401)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 1 then
+		viceipvc = '185.169.134.4'
+		sampShowDialog(8402, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8402) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8402)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 2 then
+		viceipvc = '185.169.134.43'
+		sampShowDialog(8403, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8403) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8403)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 3 then
+		viceipvc = '185.169.134.44'
+		sampShowDialog(8404, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8404) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8404)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 4 then
+		viceipvc = '185.169.134.45'
+		sampShowDialog(8405, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8405) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8405)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 5 then
+		viceipvc = '185.169.134.5'
+		sampShowDialog(8406, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8406) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8406)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 6 then
+		viceipvc = '185.169.134.59'
+		sampShowDialog(8407, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8407) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8407)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 7 then
+		viceipvc = '185.169.134.61'
+		sampShowDialog(8408, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8408) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8408)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 8 then
+		viceipvc = '185.169.134.107'
+		sampShowDialog(8409, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8409) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8409)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 9 then
+		viceipvc = '185.169.134.109'
+		sampShowDialog(8410, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8410) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8410)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 10 then
+		viceipvc = '185.169.134.166'
+		sampShowDialog(8411, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8411) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8411)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 11 then
+		viceipvc = '185.169.134.171'
+		sampShowDialog(8412, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8412) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8412)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 12 then
+		viceipvc = '185.169.134.172'
+		sampShowDialog(8413, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8413) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8413)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 13 then
+		viceipvc = '185.169.134.173'
+		sampShowDialog(8414, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8414) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8414)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 14 then
+		viceipvc = '185.169.134.174'
+		sampShowDialog(8415, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8415) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8415)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 15 then
+		viceipvc = '80.66.82.191'
+		sampShowDialog(8416, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8416) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8416)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 16 then
+		viceipvc = '80.66.82.190'
+		sampShowDialog(8417, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8417) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8417)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 17 then
+		viceipvc = '80.66.82.188'
+		sampShowDialog(8418, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8418) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8418)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 18 then
+		viceipvc = '80.66.82.168'
+		sampShowDialog(8419, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8419) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8419)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 19 then
+		viceipvc = '80.66.82.159'
+		sampShowDialog(8420, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8420) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8420)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 20 then
+		viceipvc = '80.66.82.200'
+		sampShowDialog(8421, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8421) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8421)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
+			
+		if list == 21 then
+		viceipvc = '80.66.82.144'
+		sampShowDialog(8422, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8422) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8422)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
 				end
 			end
 		
