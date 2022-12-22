@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.15')
+script_version('3.5.16')
 
 use = false
 close = false
@@ -29,6 +29,7 @@ serverclosed = true
 workcal = false
 otmenadial = false
 otmenadial2 = false
+clikaem = false
 fontsizev2 = nil
 fontsizev3 = nil
 viceip = 0
@@ -227,6 +228,32 @@ lastcall = 0
 
 krytim = true
 
+local servers = {
+   [01] = '185.169.134.3',
+   [02] = '185.169.134.4',
+   [03] = '185.169.134.43',
+   [04] = '185.169.134.44',
+   [05] = '185.169.134.45',
+   [06] = '185.169.134.5',
+   [07] = '185.169.134.59',
+   [08] = '185.169.134.61',
+   [09] = '185.169.134.107',
+   [10] = '185.169.134.109',
+   [11] = '185.169.134.166',
+   [12] = '185.169.134.171',
+   [13] = '185.169.134.172',
+   [14] = '185.169.134.173',
+   [15] = '185.169.134.174',
+   [16] = '80.66.82.191',
+   [17] = '80.66.82.190',
+   [18] = '80.66.82.188',
+   [19] = '80.66.82.168',
+   [20] = '80.66.82.159',
+   [21] = '80.66.82.200',
+   [22] = '80.66.82.144',
+   [23] = '80.66.82.132'
+}
+
 local keysphone = {
 	[1] = 2108,
 	[2] = 2106,
@@ -338,6 +365,7 @@ encoding.default = 'CP1251'
 u8 = encoding.UTF8
 
 ffi.cdef[[
+	bool SetCursorPos(int X, int Y);
     typedef unsigned long DWORD;
 
     struct d3ddeviceVTBL {
@@ -1582,6 +1610,7 @@ local cfg3 = inicfg.load({
 		autorelogv2 = false,
 		timerpcoffv2 = false,
 		novrv2 = false,
+		nohungryv2 = false,
 		autobufferyvedv2 = false,
 		blockweatherv2 = false,
         blocktimev2 = false,
@@ -2291,6 +2320,7 @@ local SET = {
 		autorelog = false,
 		timerpcoff = false,
 		novr = false,
+		nohungry = false,
 		autobufferyved = false,
 		blockweather = false,
         blocktime = false,
@@ -2513,6 +2543,7 @@ local SET = {
 		unbaghud = false,
 		keyT = false,
 		launcher = false,
+		modevice = false,
 		deagle = false,
 		awp = false,
 		m4 = false,
@@ -2885,6 +2916,7 @@ checked_test = imgui.ImBool(false)
 checked_test2 = imgui.ImBool(false)
 checked_test3 = imgui.ImBool(false)
 checked_test4 = imgui.ImBool(false)
+cliker = imgui.ImBool(false)
 checked_test11 = imgui.ImBool(false)
 checked_test12 = imgui.ImBool(false)
 checked_test13 = imgui.ImBool(false)
@@ -2991,6 +3023,18 @@ local checktochilki2 = false
 local checked_box = imgui.ImBool(false)
 local checked_box2 = imgui.ImBool(false)
 local checked_box3 = imgui.ImBool(false)
+local checked_box4 = imgui.ImBool(false)
+
+colour1 = imgui.ImBool(false)
+colour2 = imgui.ImBool(false)
+colour3 = imgui.ImBool(false)
+colour4 = imgui.ImBool(false)
+colour5 = imgui.ImBool(false)
+colour6 = imgui.ImBool(false)
+colour7 = imgui.ImBool(false)
+colour8 = imgui.ImBool(false)
+colour9 = imgui.ImBool(false)
+
 testbox = imgui.ImBool(false)
 testbox2 = imgui.ImBool(false)
 testbox3 = imgui.ImBool(false)
@@ -5402,6 +5446,15 @@ function main()
 	
 	sampRegisterChatCommand("phoneair", phoneair) -- очистка чата
 	
+	sampRegisterChatCommand("vicemode", function() 
+	if modevice.v == false then modevice.v = true sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы включили авто-определение сервера и ника для команд '/reconvc' и '/exitvice'.", -1)
+	saveSettings()
+	else
+	modevice.v = false sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы включили ручной выбор сервера и ника для команд '/reconvc' и '/exitvice'.", -1) 
+	saveSettings()
+		end
+	end)
+	
 	sampRegisterChatCommand("versamp", sampversion)
 	
 	sampRegisterChatCommand("exitvice", viceexit)
@@ -5602,6 +5655,17 @@ end
 		if not sampIsChatInputActive() and fastklad.v and isKeyJustPressed(51) and isKeyJustPressed(18) then activeklad3() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys.autodrone)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys.autodronev2)) then drone() end
 		if not sampIsChatInputActive() and isKeyJustPressed(u8:decode(maincfg.combohotkeys3.autodronev5)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys3.autodronev6)) then thisScript():unload() end
+		
+		if cliker.v and isKeyJustPressed(65) and isKeyJustPressed(18) then clikaem = true sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Авто-кликер активирован! Выключить его можно комбинацией "Alt + S".', -1) end
+		if clikaem == true then 
+		clickx, clicky = getCursorPos()
+		ffi.C.SetCursorPos(clickx, clicky) -- координаты x, y
+        setVirtualKeyDown(key.VK_LBUTTON, true)
+		wait(100)
+		setVirtualKeyDown(key.VK_LBUTTON, false)
+		wait(200)
+		end
+		if cliker.v and isKeyJustPressed(83) and isKeyJustPressed(18) then clikaem = false sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Авто-кликер деактивирован! Включить его снова можно комбинацией "Alt + A".', -1) end
 		
 		if not sampIsChatInputActive() and minerfast.v and isKeyJustPressed(u8:decode(maincfg.combohotkeys4.autodronev7)) and isKeyJustPressed(u8:decode(maincfg.comboheathotkeys4.autodronev8)) then win_state['itogibtc'].v = false win_state['btcsettingsv2'].v = false win_state['housenumberv2'].v = false win_state['housenumberredakv2'].v = false win_state['shemafunksv2'].v = not win_state['shemafunksv2'].v end
 		
@@ -6385,6 +6449,7 @@ function saveSettings(args, key)
 	ini.settings.assistant8 = assistant8.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
+	ini.settings.modevice = modevice.v
 	ini.settings.deagle = deagle.v
 	ini.settings.awp = awp.v
 	ini.settings.m4 = m4.v
@@ -7085,6 +7150,7 @@ function saveSettings(args, key)
 	ini.settings.autorelog = autorelog.v
 	ini.settings.timerpcoff = timerpcoff.v
 	ini.settings.novr = novr.v
+	ini.settings.nohungry = nohungry.v
 	ini.settings.autobufferyved = autobufferyved.v
 	
 	ini.settings.blockweather = blockweather.v
@@ -7885,6 +7951,157 @@ end
 end
 
 function sampev.onShowTextDraw(id, data, textdrawId)
+
+	if vkconnect.v and sellgolod.v and data.text:find('You are hungry!') then vk_requestv2('['..nazvanie.v..'] Вы голодны! Вам необходимо поесть.') end
+	if vkconnect.v and sellgolod.v and data.text:find('You are very hungry!') then vk_requestv2('['..nazvanie.v..'] Вы очень голодны! Вам необходимо срочно поесть.') end
+	if tgconnect.v and sellgolodtg.v and data.text:find('You are hungry!') then sendTelegramNotification('['..nazvanie.v..'] Вы голодны! Вам необходимо поесть.') end
+	if tgconnect.v and sellgolodtg.v and data.text:find('You are very hungry!') then sendTelegramNotification('['..nazvanie.v..'] Вы очень голодны! Вам необходимо срочно поесть.') end
+	
+	if nohungry.v and data.text:find('You are hungry!') then return false end
+	if nohungry.v and data.text:find('You are very hungry!') then return false end
+
+	if data.text == "stone + 1" then
+		kamensession = kamensession + 1
+		kamenitog = kamensession * autokamen.v
+		cfg.shahta.kamentime = cfg.shahta.kamentime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "stone + 2" then
+		kamensession = kamensession + 2
+		kamenitog = kamensession * autokamen.v
+		cfg.shahta.kamentime = cfg.shahta.kamentime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "stone + 3" then
+		kamensession = kamensession + 3
+		kamenitog = kamensession * autokamen.v
+		cfg.shahta.kamentime = cfg.shahta.kamentime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if data.text == "metal + 1" then
+		metalsession = metalsession + 1
+		metalitog = metalsession * autometal.v
+		cfg.shahta.metaltime = cfg.shahta.metaltime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "metal + 2" then
+		metalsession = metalsession + 2
+		metalitog = metalsession * autometal.v
+		cfg.shahta.metaltime = cfg.shahta.metaltime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "metal + 3" then
+		metalsession = metalsession + 3
+		metalitog = metalsession * autometal.v
+		cfg.shahta.metaltime = cfg.shahta.metaltime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if data.text == "bronze + 1" then
+		bronzasession = bronzasession + 1
+		bronzaitog = bronzasession * autobronza.v
+		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "bronze + 2" then
+		bronzasession = bronzasession + 2
+		bronzaitog = bronzasession * autobronza.v
+		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "bronze + 3" then
+		bronzasession = bronzasession + 3
+		bronzaitog = bronzasession * autobronza.v
+		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if data.text == "silver + 1" then
+		silversession = silversession + 1
+		silveritog = silversession * autosilver.v
+		cfg.shahta.silvertime = cfg.shahta.silvertime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "silver + 2" then
+		silversession = silversession + 2
+		silveritog = silversession * autosilver.v
+		cfg.shahta.silvertime = cfg.shahta.silvertime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "silver + 3" then
+		silversession = silversession + 3
+		silveritog = silversession * autosilver.v
+		cfg.shahta.silvertime = cfg.shahta.silvertime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if data.text == "gold + 1" then
+		goldsession = goldsession + 1
+		golditog = goldsession * autogold.v
+		cfg.shahta.goldtime = cfg.shahta.goldtime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "gold + 2" then
+		goldsession = goldsession + 2
+		golditog = goldsession * autogold.v
+		cfg.shahta.goldtime = cfg.shahta.goldtime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "gold + 3" then
+		goldsession = goldsession + 3
+		golditog = goldsession * autogold.v
+		cfg.shahta.goldtime = cfg.shahta.goldtime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end	
+	if data.text == "linen + 1" then
+		lensession = lensession + 1
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "linen + 2" then
+		lensession = lensession + 2
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "linen + 3" then
+		lensession = lensession + 3
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "linen + 14" then
+		lensession = lensession + 14
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 14
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "linen + 7" then
+		lensession = lensession + 7
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 7
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "linen + 12" then
+		lensession = lensession + 12
+		lenitog = lensession * autolenf.v
+		cfg.shahta.lentime = cfg.shahta.lentime + 12
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if data.text == "cotton + 1" then
+		chlopoksession = chlopoksession + 1
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 1
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "cotton + 2" then
+		chlopoksession = chlopoksession + 2
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 2
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "cotton + 3" then
+		chlopoksession = chlopoksession + 3
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 3
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "cotton + 7" then 
+		chlopoksession = chlopoksession + 7
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 7
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "cotton + 14" then
+		chlopoksession = chlopoksession + 14
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 14
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	elseif data.text == "cotton + 12" then
+		chlopoksession = chlopoksession + 12
+		chlopokitog = chlopoksession * autocotton.v
+		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 12
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
 
 	if data.text == 'ADD_VIP' and addyved.v == true then 
 	lua_thread.create(function() -- Нужен для цыкла (while на 3-й строке)
@@ -13107,7 +13324,14 @@ function infobarshahta()
 		if infzp.v then imgui.Text(u8(" • Заработано (шахта): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsession))) imgui.SameLine(235) imgui.Text(u8(number_separator(""..cfg.shahta.zptime))) end
 		if infzpferma.v then imgui.Text(u8(" • Заработано (ферма): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsessionferma))) imgui.SameLine(235) imgui.Text(u8(number_separator(""..cfg.shahta.zptimeferma))) end
 		if infzparenda.v then imgui.Text(u8(" • Заработано (аренда): ")) imgui.SameLine(145) imgui.Text(u8(number_separator(""..zpsessionarenda))) imgui.SameLine(235) imgui.Text(u8(number_separator(""..cfg.shahta.zptimearenda))) end
-	
+		sborsession = kamensession + metalsession + bronzasession + silversession + goldsession
+		sborsessionferma = lensession + chlopoksession
+		zpsession = kamenitog + metalitog + bronzaitog + silveritog + golditog
+		zpsessionferma = lenitog + chlopokitog
+		cfg.shahta.zptime = (cfg.shahta.kamentime*autokamen.v) + (cfg.shahta.metaltime*autometal.v) + (cfg.shahta.bronzatime*autobronza.v) + (cfg.shahta.silvertime*autosilver.v) + (cfg.shahta.goldtime*autogold.v)
+		cfg.shahta.sbortime = cfg.shahta.kamentime + cfg.shahta.metaltime + cfg.shahta.bronzatime + cfg.shahta.silvertime + cfg.shahta.goldtime
+		cfg.shahta.zptimeferma = (cfg.shahta.lentime*autolenf.v) + (cfg.shahta.chlopoktime*autocotton.v)
+		cfg.shahta.sbortimeferma = cfg.shahta.lentime + cfg.shahta.chlopoktime
 	end
 	
 function infobarpismo()
@@ -14492,6 +14716,62 @@ end
 			inventory()
 	end
 end
+
+	
+	if text:match('%[Перекраска%]{ffffff} Вы успешно перекрасили аксессуар') and checked_box4.v then notf.addNotification("Вам удалось перекрасить аксессуар, поздравляем!", 3, 2) checked_box4.v = false end
+
+	if text:match('%[Перекраска%]{ffffff} Вам не удалось перекрасить аксессуар') and checked_box4.v then
+	if colour1.v or colour2.v or colour3.v or colour4.v or colour5.v or colour6.v or colour7.v or colour8.v or colour9.v then 
+	lua_thread.create(function()
+	notf.addNotification("Вам не удалось перекрасить аксессуар!", 3, 3)
+	wait(1500)
+	sampSendClickTextdraw(2098)
+	wait(700)
+	sampSendClickTextdraw(2119)
+	wait(700)
+	sampSendClickTextdraw(2120)
+	wait(700)
+	sampSendClickTextdraw(2121)
+	wait(700)
+	sampSendClickTextdraw(2122)
+	wait(700)
+	sampSendClickTextdraw(2123) 
+	wait(700)
+	sampSendClickTextdraw(2124)
+	wait(700)
+	if colour1.v then 
+	sampSendClickTextdraw(2079)
+	end 
+	if colour2.v then 
+	sampSendClickTextdraw(2080)
+	end 
+	if colour3.v then 
+	sampSendClickTextdraw(2081)
+	end 
+	if colour4.v then 
+	sampSendClickTextdraw(2082)
+	end 
+	if colour5.v then 
+	sampSendClickTextdraw(2083)
+	end 
+	if colour6.v then 
+	sampSendClickTextdraw(2084)
+	end 
+	if colour7.v then 
+	sampSendClickTextdraw(2085)
+	end 
+	if colour8.v then 
+	sampSendClickTextdraw(2086)
+	end 
+	if colour9.v then 
+	sampSendClickTextdraw(2087)
+	end 
+	wait(700)
+	sampSendClickTextdraw(2077)
+		end)
+	end
+end
+
 	if text:find('Увы, вам не удалось улучшить предмет') and checked_box2.v then
 		checktochilki1 = true
 		inventory()
@@ -15352,6 +15632,7 @@ function load_settings() -- загрузка настроек
 	autorelog = imgui.ImBool(ini.settings.autorelog)
 	timerpcoff = imgui.ImBool(ini.settings.timerpcoff)
 	novr = imgui.ImBool(ini.settings.novr)
+	nohungry = imgui.ImBool(ini.settings.nohungry)
 	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
 	
 	blockweather = imgui.ImBool(ini.settings.blockweather)
@@ -15647,6 +15928,7 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
+	modevice = imgui.ImBool(ini.settings.modevice)
 	deagle = imgui.ImBool(ini.settings.deagle)
 	awp = imgui.ImBool(ini.settings.awp)
 	m4 = imgui.ImBool(ini.settings.m4)
@@ -27111,6 +27393,8 @@ function yashikisroulette()
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки', checked_test3) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме золотые рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать платиновые рулетки', checked_test4) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме платиновые рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Text('')
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать авто-кликер мыши', cliker) imgui.SameLine(); imgui.TextQuestion(u8"Функция создана для облегчения открытия ларцов. Включите функцию, наведите на нужный ларец и нажмите комбинацию клавиш 'Alt + A'. Когда вы захотите остановить кликер, нажмите 'Alt + S'. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать бронзовые рулетки с обновлением слота', checked_test11) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать бронзовые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать серебряные рулетки с обновлением слота', checked_test12) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать серебряные рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки с обновлением слота', checked_test13) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать золотые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
@@ -27441,7 +27725,7 @@ function notesmenu()
 function tochmenu()
 			local sw, sh = getScreenResolution() 
 			imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-			imgui.SetNextWindowSize(imgui.ImVec2(625, 205), imgui.Cond.FirstUseEver)
+			imgui.SetNextWindowSize(imgui.ImVec2(625, 325), imgui.Cond.FirstUseEver)
 			imgui.Begin(fa.ICON_DIAMOND..u8' Toch Menu | by vegas~ | доработал Bunya', win_state['tochilki'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				imgui.Separator()
@@ -27486,6 +27770,20 @@ function tochmenu()
 				imgui.RadioButton('+11', checked_radio, 11)
 				imgui.SameLine()
 				imgui.RadioButton('+12', checked_radio, 12)
+				imgui.Separator()
+				imgui.Text('') imgui.SameLine(230) imgui.Text(u8'Покраска аксессуаров.') imgui.SameLine(); imgui.TextQuestion(u8"Перед включением функционала, положите красители, точильные камни и аксессуар в первые 3 ячейки второй страницы. Включите 'Начать процесс покраски', выберите нужный цвет и нажмите 'Paint'. После первой покраски, скрипт сам продолжит процесс.")
+				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Начать процесс покраски")); imgui.SameLine(); imgui.ToggleButton(u8'Начать процесс покраски', checked_box4) 
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'Выберите нужный цвет:')
+				imgui.Separator()
+				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Белый', colour1)
+				imgui.SameLine() imgui.Checkbox(u8'Красный', colour2)
+				imgui.SameLine() imgui.Checkbox(u8'Оранжевый', colour3)
+				imgui.SameLine() imgui.Checkbox(u8'Золотой', colour4)
+				imgui.SameLine() imgui.Checkbox(u8'Желтый', colour5)
+				imgui.SameLine() imgui.Checkbox(u8'Зеленый', colour6)
+				imgui.SameLine() imgui.Checkbox(u8'Голубой', colour7)
+				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Синий', colour8)
+				imgui.SameLine(81) imgui.Checkbox(u8'Фиолетовый', colour9)
 				imgui.Separator()
 				imgui.End()
 			end
@@ -27995,7 +28293,6 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/sfind - отключение автопоиска.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon - перезайти на сервер через 30 секунд.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/recon [время] - перезайти на сервер через указанное время(в секундах).")
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc - перезайти на сервер "Vice City", находясь на данном сервере.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/strobes - включение/отключение стробоскопов (перед использованием включите фары у транспорта на ctrl или /lights.)")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call [id] - позвонить на указанный ID.")
 				imgui.Text('') imgui.SameLine() imgui.Text(u8"/call last - позвонить на номер, на который вы звонили в последний раз.")
@@ -28025,10 +28322,15 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов] - предложить игроку аренду вашего т/с.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/phoneair - поменять режим в телефоне на "В самолёте" или "Обычный" (работает только на IPHONE)')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/itogibtc - открыть меню с информацией о снятых BTC, где нужно залить жидкость или включить видеокарты.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vrv - отправить VIP сообщение как рекламу.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/versamp - изменить версию SAMP (сборка, лаунчер, мобильный лаунчер).')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/getfam [Family] - узнать, сколько игроков в сети с указанной фамилией.')
+				imgui.Separator()
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc - перезайти на сервер "Vice City", находясь на данном сервере.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vicemode - включить/выключить авто-определение сервера и ника для команд "/reconvc" и "exitvice" от VRush.')
+				
+				
 		end
 		imgui.EndChild()
         imgui.EndGroup()
@@ -30969,7 +31271,7 @@ function tupupdate()
 			--imgui.Text('') imgui.SameLine()	if imgui.CustomButton(u8'Перейти к списку обновления', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then win_state['main'].v = true win_state['nastroikawin'].v = true selected3 = 5 end
 			imgui.Separator()
 		
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.09.2022]')
+		--[[imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.09.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс функции "Убирать диалог с предложением о рекламе в VIP" (не скипался диалог, где цена за рекламу установлена 0$)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.09.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Теперь при выставлении товара на продажу/скупку, вы видите все действия в диалогах, чтобы в случае ошибок, могли предоставить')
@@ -31012,7 +31314,14 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.11.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[22.12.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс статистики на ферме и шахте (не засчитывалось из-за перехода текста на текстдравы)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Фикс отправления в VK и TG уведомление о голоде (не отправлялось из-за перехода текста на текстдравы)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. В "Roulette Tools" добавлен авто-кликер мыши (функционал нужен для открытия ларцов)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Добавлена команда "/vicemode" (включить/выключить авто-определение сервера и ника для команд "/reconvc" и "exitvice" от VRush)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. В "Toch Menu" добавлена возможность покраски аксессуаров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. В "Параметры" - "Модификации" добавлена возможность убрать надпись "You hungry".')
 		imgui.End()
 		end
 	
@@ -32166,158 +32475,6 @@ function Search3Dtext(x, y, z, radius, patern)
 end
 
 function sampev.onDisplayGameText(style, tm, text)
-
-	if vkconnect.v and sellgolod.v and text:find('You are hungry!') then vk_requestv2('['..nazvanie.v..'] Вы голодны! Вам необходимо поесть.') end
-	if vkconnect.v and sellgolod.v and text:find('You are very hungry!') then vk_requestv2('['..nazvanie.v..'] Вы очень голодны! Вам необходимо срочно поесть.') end
-	
-	if tgconnect.v and sellgolodtg.v and text:find('You are hungry!') then sendTelegramNotification('['..nazvanie.v..'] Вы голодны! Вам необходимо поесть.') end
-	if tgconnect.v and sellgolodtg.v and text:find('You are very hungry!') then sendTelegramNotification('['..nazvanie.v..'] Вы очень голодны! Вам необходимо срочно поесть.') end
-
-	if text == "stone + 1" then
-		kamensession = kamensession + 1
-		kamenitog = kamensession * autokamen.v
-		cfg.shahta.kamentime = cfg.shahta.kamentime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "stone + 2" then
-		kamensession = kamensession + 2
-		kamenitog = kamensession * autokamen.v
-		cfg.shahta.kamentime = cfg.shahta.kamentime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "stone + 3" then
-		kamensession = kamensession + 3
-		kamenitog = kamensession * autokamen.v
-		cfg.shahta.kamentime = cfg.shahta.kamentime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
-	
-	if text == "linen + 1" then
-		lensession = lensession + 1
-		lenitog = lensession * autolenf.v
-		cfg.shahta.lentime = cfg.shahta.lentime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "linen + 2" then
-		lensession = lensession + 2
-		lenitog = lensession * autolenf.v
-		cfg.shahta.lentime = cfg.shahta.lentime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "linen + 3" then
-		lensession = lensession + 3
-		lenitog = lensession * autolenf.v
-		cfg.shahta.lentime = cfg.shahta.lentime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "linen + 14" then
-		lensession = lensession + 14
-		lenitog = lensession * autolenf.v
-		cfg.shahta.lentime = cfg.shahta.lentime + 14
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "linen + 7" then
-		lensession = lensession + 7
-		lenitog = lensession * autolenf.v
-		cfg.shahta.lentime = cfg.shahta.lentime + 7
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "linen + 12" then
-		lensession = lensession + 12
-		lenitog = lensession * autolenf.v
-		cfg.shahta.lentime = cfg.shahta.lentime + 12
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
-	
-	if text == "cotton + 1" then
-		chlopoksession = chlopoksession + 1
-		chlopokitog = chlopoksession * autocotton.v
-		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "cotton + 2" then
-		chlopoksession = chlopoksession + 2
-		chlopokitog = chlopoksession * autocotton.v
-		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "cotton + 3" then
-		chlopoksession = chlopoksession + 3
-		chlopokitog = chlopoksession * autocotton.v
-		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "cotton + 7" then
-		chlopoksession = chlopoksession + 7
-		chlopokitog = chlopoksession * autocotton.v
-		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 7
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "cotton + 14" then
-		chlopoksession = chlopoksession + 14
-		chlopokitog = chlopoksession * autocotton.v
-		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 14
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "cotton + 12" then
-		chlopoksession = chlopoksession + 12
-		chlopokitog = chlopoksession * autocotton.v
-		cfg.shahta.chlopoktime = cfg.shahta.chlopoktime + 12
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
-	
-	if text == "metal + 1" then
-		metalsession = metalsession + 1
-		metalitog = metalsession * autometal.v
-		cfg.shahta.metaltime = cfg.shahta.metaltime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "metal + 2" then
-		metalsession = metalsession + 2
-		metalitog = metalsession * autometal.v
-		cfg.shahta.metaltime = cfg.shahta.metaltime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "metal + 3" then
-		metalsession = metalsession + 3
-		metalitog = metalsession * autometal.v
-		cfg.shahta.metaltime = cfg.shahta.metaltime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
-	if text == "bronze + 1" then
-		bronzasession = bronzasession + 1
-		bronzaitog = bronzasession * autobronza.v
-		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "bronze + 2" then
-		bronzasession = bronzasession + 2
-		bronzaitog = bronzasession * autobronza.v
-		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "bronze + 3" then
-		bronzasession = bronzasession + 3
-		bronzaitog = bronzasession * autobronza.v
-		cfg.shahta.bronzatime = cfg.shahta.bronzatime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
-	if text == "silver + 1" then
-		silversession = silversession + 1
-		silveritog = silversession * autosilver.v
-		cfg.shahta.silvertime = cfg.shahta.silvertime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "silver + 2" then
-		silversession = silversession + 2
-		silveritog = silversession * autosilver.v
-		cfg.shahta.silvertime = cfg.shahta.silvertime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "silver + 3" then
-		silversession = silversession + 3
-		silveritog = silversession * autosilver.v
-		cfg.shahta.silvertime = cfg.shahta.silvertime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end
-	if text == "gold + 1" then
-		goldsession = goldsession + 1
-		golditog = goldsession * autogold.v
-		cfg.shahta.goldtime = cfg.shahta.goldtime + 1
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "gold + 2" then
-		goldsession = goldsession + 2
-		golditog = goldsession * autogold.v
-		cfg.shahta.goldtime = cfg.shahta.goldtime + 2
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	elseif text == "gold + 3" then
-		goldsession = goldsession + 3
-		golditog = goldsession * autogold.v
-		cfg.shahta.goldtime = cfg.shahta.goldtime + 3
-		inicfg.save(cfg, 'Mono\\mini-games.ini')
-	end	
 	if text:find('+20 AZ') and podarki.v then 
 		azpodarki = azpodarki + 20
 		itogopodarkov = itogopodarkov + 20
@@ -32344,20 +32501,6 @@ function sampev.onDisplayGameText(style, tm, text)
 		moneypodarki = moneypodarki + 50000
 		itogopodarkov = itogopodarkov + 20
 	end
-	sborsession = kamensession + metalsession + bronzasession + silversession + goldsession
-	
-	sborsessionferma = lensession + chlopoksession
-	
-	zpsession = kamenitog + metalitog + bronzaitog + silveritog + golditog
-	zpsessionferma = lenitog + chlopokitog
-	cfg.shahta.zptime = (cfg.shahta.kamentime*autokamen.v) + (cfg.shahta.metaltime*autometal.v) + (cfg.shahta.bronzatime*autobronza.v) + (cfg.shahta.silvertime*autosilver.v) + (cfg.shahta.goldtime*autogold.v)
-	cfg.shahta.sbortime = cfg.shahta.kamentime + cfg.shahta.metaltime + cfg.shahta.bronzatime + cfg.shahta.silvertime + cfg.shahta.goldtime
-	
-	cfg.shahta.zptimeferma = (cfg.shahta.lentime*autolenf.v) + (cfg.shahta.chlopoktime*autocotton.v)
-	
-	cfg.shahta.sbortimeferma = cfg.shahta.lentime + cfg.shahta.chlopoktime
-	
-	inicfg.save(cfg, 'Mono\\mini-games.ini')
 end
 
 function imgui.VerticalSeparator()
@@ -35408,6 +35551,7 @@ function settingosnova()
 				imgui.PopItemWidth()
 				end
 				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Отправлять в "/vr" обычное сообщение')); imgui.SameLine(); imgui.ToggleButton(u8'Отправлять в "/vr" обычное сообщение', novr) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при вводе команды '/vr [text]', ваш текст в VIP чат будет отправлять как обычное сообщение. Для отправления рекламы, используйте '/vrv' или 'Piar Menu'. Чтобы функционал заработал - перезапустите скрипт.")
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Убирать надпись на экране "You hungry"')); imgui.SameLine(); imgui.ToggleButton(u8'Убирать текст на экране "You hungry"', nohungry) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране больше не будет появляться надпись о том, что вы голодны.")
 				
 				
 				imgui.NextColumn()
@@ -36351,6 +36495,7 @@ function settingosnova()
 		cfg3.backup.autorelogv2 = autorelog.v
 		cfg3.backup.timerpcoffv2 = timerpcoff.v
 		cfg3.backup.novrv2 = novr.v
+		cfg3.backup.nohungryv2 = nohungry.v
 		cfg3.backup.autobufferyvedv2 = autobufferyved.v
 		cfg3.backup.blockweatherv2 = blockweather.v
 		cfg3.backup.blocktimev2 = blocktime.v
@@ -37044,6 +37189,7 @@ function settingosnova()
 		 autorelog.v =  cfg3.backup.autorelogv2 
 		 timerpcoff.v =  cfg3.backup.timerpcoffv2 
 		 novr.v =  cfg3.backup.novrv2 
+		 nohungry.v =  cfg3.backup.nohungryv2 
 		 autobufferyved.v =  cfg3.backup.autobufferyvedv2 
 		 
 		 blockweather.v =  cfg3.backup.blockweatherv2 
@@ -37509,8 +37655,10 @@ function exitvicefuncvc()
 end
 
 function viceexit()
+	if modevice.v == true then reconnectvc(1) exitvice = 1
+	else
 	lua_thread.create(function()
-    sampShowDialog(7506, "{ff1000}Выход с Vice City", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+    sampShowDialog(7506, "{ff1000}Выход с Vice City (сменить способ '/vicemode')", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
 	while sampIsDialogActive(7506) do wait(100) end -- ждёт пока вы ответите на диалог
     local _, button, list = sampHasDialogRespond(7506)
 	if button == 1 then
@@ -37872,11 +38020,14 @@ function viceexit()
         
 			end
 		end)
+	end
 end
 
 function recongeniusvc()
+	if modevice.v == true then reconnectvc(1) exitvicevc = 1
+	else
 	lua_thread.create(function()
-    sampShowDialog(8506, "{ff1000}Перезаход на Vice City (выберите ваш сервер)", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+    sampShowDialog(8506, "{ff1000}Перезаход на Vice City (сменить способ '/vicemode')", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
 	while sampIsDialogActive(8506) do wait(100) end -- ждёт пока вы ответите на диалог
     local _, button, list = sampHasDialogRespond(8506)
 	if button == 1 then
@@ -38238,6 +38389,7 @@ function recongeniusvc()
         
 			end
 		end)
+	end
 end
 
 function viprek(arg)
@@ -38281,4 +38433,15 @@ function sampversion()
 		sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Вы закрыли диалог.', -1)
 		end
 	end)
+end
+
+function reconnectvc(sec)
+	lua_thread.create(function()
+      nickvc = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
+      servvc, newnickvc = nickvc:match('%[(%d+)%](%S+)')
+      sampSetGamestate(4)
+      sampSetLocalPlayerName(newnickvc)
+      wait(tonumber(sec) * 1000)
+      sampConnectToServer(servers[tonumber(servvc)], '7777')
+   end)
 end
