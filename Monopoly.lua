@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.16')
+script_version('3.5.17')
 
 use = false
 close = false
@@ -22,6 +22,7 @@ airphone = false
 phonetext = 'nill'
 MAX_SAMP_MARKERS = 63
 monopolyfam = 0
+vriddial = 0
 monopolygetfam = false
 local fontsize = nil
 local updateid
@@ -1595,7 +1596,6 @@ local cfg3 = inicfg.load({
 		dialogclosev3v2 = false,
 		dialogclosev4v2 = false,
 		vipresendv2 = false,
-		addyvedv2 = true,
 		versiontochv2 = true,
 		autopinv2 = false,
 		autooplv2 = false,
@@ -2305,7 +2305,6 @@ local SET = {
 		dialogclosev3 = false,
 		dialogclosev4 = false,
 		vipresend = false,
-		addyved = true,
 		versiontoch = true,
 		autopin = false,
 		autoopl = false,
@@ -7135,7 +7134,6 @@ function saveSettings(args, key)
 	ini.settings.dialogclosev3 = dialogclosev3.v
 	ini.settings.dialogclosev4 = dialogclosev4.v
 	ini.settings.vipresend = vipresend.v
-	ini.settings.addyved = addyved.v
 	ini.settings.versiontoch = versiontoch.v
 	ini.settings.autopin = autopin.v
 	ini.settings.autoopl = autoopl.v
@@ -7221,6 +7219,14 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+
+	if title:match('{BFBBBA}') then 
+	for line in text:gmatch("[^\n]+") do
+	if line:match('{ffffff}Ваше сообщение является рекламой?') then
+		vriddial = dialogId
+		end
+	end
+end
 
 	if title:match('{BFBBBA}{FFFFFF}Клиент | {ae433d}Игра') and exitvicevc == 1 then
 	lua_thread.create(function()
@@ -7703,17 +7709,17 @@ end
   if dialogId == 15346 and addad.v then return false end
   if dialogId == 15347 and addad.v then return false end
   if dialogId == 15379 and addad.v then return false end
-  if dialogId == 25475 and addad.v then return false end
+  if dialogId == 25476 and addad.v then return false end
   if dialogId == 15346 and vipaddad.v then return false end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
-  if dialogId == 25475 and vipaddad.v then return false end
+  if dialogId == 25476 and vipaddad.v then return false end
   
-  if dialogId == 25628 and otmenadial == true then sampSendDialogResponse(25628, 1, -1, -1) otmenadial = false return false end
-  if dialogId == 25629 and otmenadial == true then sampSendDialogResponse(25629, 1, -1, -1) otmenadial = false return false end
+  if dialogId == vriddial and otmenadial == true then sampSendDialogResponse(vriddial, 1, -1, -1) otmenadial = false return false end
+  if dialogId == vriddial and otmenadial == true then sampSendDialogResponse(vriddial, 1, -1, -1) otmenadial = false return false end
   
-  if dialogId == 25628 and otmenadial2 == true then sampSendDialogResponse(25628, 0, -1, -1) otmenadial2 = false return false end
-  if dialogId == 25629 and otmenadial2 == true then sampSendDialogResponse(25629, 0, -1, -1) otmenadial2 = false return false end
+  if dialogId == vriddial and otmenadial2 == true then sampSendDialogResponse(vriddial, 0, -1, -1) otmenadial2 = false return false end
+  if dialogId == vriddial and otmenadial2 == true then sampSendDialogResponse(vriddial, 0, -1, -1) otmenadial2 = false return false end
   
   if dialogId == 15330 and dialogclose.v and dialogclosev3.v then sampSendDialogResponse(dialogId, 0, nil, nil) return false end
   if dialogId == 15330 and dialogclose.v and dialogclosev4.v then return false end
@@ -8103,17 +8109,9 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 
-	if data.text == 'ADD_VIP' and addyved.v == true then 
-	lua_thread.create(function() -- Нужен для цыкла (while на 3-й строке)
-	wait(1000)
-    sampShowDialog(6406, "{ff1000}Важное уведомление!", '{FFFFFF}Рекомендуем вам выключить значок "ADD VIP" на экране!\nИначе некоторый функционал скриптов может не работать.\nВыключить его можно в "/settings" - "Отображение статуса ADD VIP".\n\n{42aaff}Чтобы данное уведомление больше не показывалось - нажмите на кнопку{ffffff}.', "Ок, понял.")
-    while sampIsDialogActive(6406) do wait(100) end -- ждёт пока вы ответите на диалог
-    local result, button, _, input = sampHasDialogRespond(6406)
-	if button == 1 then
-    addyved.v = false 
-	saveSettings()
-			end
-		end)
+	if data.text == 'ADD_VIP' then 
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} У вас включен значок "ADD VIP" на экране и половина функционала может не работать!', -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Рекомендуется его выключить в /settings - "Отображение статуса ADD VIP".', -1)
 	end
 
 	if data.text == 'TRADE' and tradecalc.v then 
@@ -14828,13 +14826,13 @@ end
 		sampSendChat(u8:decode ('/ad '..adredak.v))
 		wait(300)
 		if smils.v then 
-		sampSendDialogResponse(25475, 1, 0, -1)
+		sampSendDialogResponse(25476, 1, 0, -1)
 		end
 		if smilv.v then 
-		sampSendDialogResponse(25475, 1, 1, -1)
+		sampSendDialogResponse(25476, 1, 1, -1)
 		end
 		if smisf.v then 
-		sampSendDialogResponse(25475, 1, 2, -1)
+		sampSendDialogResponse(25476, 1, 2, -1)
 		end
 		wait(300)
 		sampSendDialogResponse(15346, 1, 0, -1)
@@ -14854,13 +14852,13 @@ end
 		sampSendChat(u8:decode ('/ad '..adredak2.v))
 		wait(300)
 		if smils.v then 
-		sampSendDialogResponse(25475, 1, 0, -1)
+		sampSendDialogResponse(25476, 1, 0, -1)
 		end
 		if smilv.v then 
-		sampSendDialogResponse(25475, 1, 1, -1)
+		sampSendDialogResponse(25476, 1, 1, -1)
 		end
 		if smisf.v then 
-		sampSendDialogResponse(25475, 1, 2, -1)
+		sampSendDialogResponse(25476, 1, 2, -1)
 		end
 		wait(300)
 		sampSendDialogResponse(15346, 1, 1, -1)
@@ -15617,7 +15615,6 @@ function load_settings() -- загрузка настроек
 	dialogclosev3 = imgui.ImBool(ini.settings.dialogclosev3)
 	dialogclosev4 = imgui.ImBool(ini.settings.dialogclosev4)
 	vipresend = imgui.ImBool(ini.settings.vipresend)
-	addyved = imgui.ImBool(ini.settings.addyved)
 	versiontoch = imgui.ImBool(ini.settings.versiontoch)
 	autopin = imgui.ImBool(ini.settings.autopin)
 	autoopl = imgui.ImBool(ini.settings.autoopl)
@@ -26395,13 +26392,13 @@ while true do
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	if smils.v then 
-	sampSendDialogResponse(25475, 1, 0, -1)
+	sampSendDialogResponse(25476, 1, 0, -1)
 	end
 	if smilv.v then 
-	sampSendDialogResponse(25475, 1, 1, -1)
+	sampSendDialogResponse(25476, 1, 1, -1)
 	end
 	if smisf.v then 
-	sampSendDialogResponse(25475, 1, 2, -1)
+	sampSendDialogResponse(25476, 1, 2, -1)
 	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
@@ -26426,13 +26423,13 @@ while true do
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
 	if smils.v then 
-	sampSendDialogResponse(25475, 1, 0, -1)
+	sampSendDialogResponse(25476, 1, 0, -1)
 	end
 	if smilv.v then 
-	sampSendDialogResponse(25475, 1, 1, -1)
+	sampSendDialogResponse(25476, 1, 1, -1)
 	end
 	if smisf.v then 
-	sampSendDialogResponse(25475, 1, 2, -1)
+	sampSendDialogResponse(25476, 1, 2, -1)
 	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
@@ -31315,13 +31312,19 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.12.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Если у вас включен значок с "ADD VIP", скрипт вам будет писать о том, что его нужно выключить.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс рекламы в /ad (изменили ID диалога)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Переписана система показа диалога с рекламой в /vr (теперь смена ID диалога не сломает функционал)')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[22.12.2022]')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс статистики на ферме и шахте (не засчитывалось из-за перехода текста на текстдравы)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'2. Фикс отправления в VK и TG уведомление о голоде (не отправлялось из-за перехода текста на текстдравы)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'3. В "Roulette Tools" добавлен авто-кликер мыши (функционал нужен для открытия ларцов)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'4. Добавлена команда "/vicemode" (включить/выключить авто-определение сервера и ника для команд "/reconvc" и "exitvice" от VRush)')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'5. В "Toch Menu" добавлена возможность покраски аксессуаров.')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'6. В "Параметры" - "Модификации" добавлена возможность убрать надпись "You hungry".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс статистики на ферме и шахте (не засчитывалось из-за перехода текста на текстдравы)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс отправления в VK и TG уведомление о голоде (не отправлялось из-за перехода текста на текстдравы)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Roulette Tools" добавлен авто-кликер мыши (функционал нужен для открытия ларцов)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Добавлена команда "/vicemode" (включить/выключить авто-определение сервера и ника для команд "/reconvc" и "exitvice" от VRush)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Toch Menu" добавлена возможность покраски аксессуаров.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Параметры" - "Модификации" добавлена возможность убрать надпись "You hungry".')
 		imgui.End()
 		end
 	
@@ -32515,13 +32518,13 @@ lua_thread.create(function()
 	sampSendChat(u8:decode ('/ad '..adredak.v))
 	wait(300)
 	if smils.v then 
-	sampSendDialogResponse(25475, 1, 0, -1)
+	sampSendDialogResponse(25476, 1, 0, -1)
 	end
 	if smilv.v then 
-	sampSendDialogResponse(25475, 1, 1, -1)
+	sampSendDialogResponse(25476, 1, 1, -1)
 	end
 	if smisf.v then 
-	sampSendDialogResponse(25475, 1, 2, -1)
+	sampSendDialogResponse(25476, 1, 2, -1)
 	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
@@ -32541,13 +32544,13 @@ lua_thread.create(function()
 	sampSendChat(u8:decode ('/ad '..adredak2.v))
 	wait(300)
 	if smils.v then 
-	sampSendDialogResponse(25475, 1, 0, -1)
+	sampSendDialogResponse(25476, 1, 0, -1)
 	end
 	if smilv.v then 
-	sampSendDialogResponse(25475, 1, 1, -1)
+	sampSendDialogResponse(25476, 1, 1, -1)
 	end
 	if smisf.v then 
-	sampSendDialogResponse(25475, 1, 2, -1)
+	sampSendDialogResponse(25476, 1, 2, -1)
 	end
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
@@ -36480,7 +36483,6 @@ function settingosnova()
 		cfg3.backup.dialogclosev3v2 = dialogclosev3.v
 		cfg3.backup.dialogclosev4v2 = dialogclosev4.v
 		cfg3.backup.vipresendv2 = vipresend.v
-		cfg3.backup.addyvedv2 = addyved.v
 		cfg3.backup.versiontochv2 = versiontoch.v
 		cfg3.backup.autopinv2 = autopin.v
 		cfg3.backup.autooplv2 = autoopl.v
@@ -37174,7 +37176,6 @@ function settingosnova()
 		 dialogclosev3.v =  cfg3.backup.dialogclosev3v2
 		 dialogclosev4.v =  cfg3.backup.dialogclosev4v2
 		 vipresend.v =  cfg3.backup.vipresendv2 
-		 addyved.v =  cfg3.backup.addyvedv2 
 		 versiontoch.v =  cfg3.backup.versiontochv2 
 		 autopin.v =  cfg3.backup.autopinv2 
 		 autoopl.v  = cfg3.backup.autooplv2 
