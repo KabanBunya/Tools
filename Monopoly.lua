@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.17')
+script_version('3.5.18')
 
 use = false
 close = false
@@ -18,6 +18,8 @@ close5 = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
+checknick = '1'
+checknick2 = '0'
 airphone = false
 phonetext = 'nill'
 MAX_SAMP_MARKERS = 63
@@ -1611,6 +1613,8 @@ local cfg3 = inicfg.load({
 		timerpcoffv2 = false,
 		novrv2 = false,
 		nohungryv2 = false,
+		nosvetv2 = false,
+		accentv2 = false,
 		autobufferyvedv2 = false,
 		blockweatherv2 = false,
         blocktimev2 = false,
@@ -1626,6 +1630,7 @@ local cfg3 = inicfg.load({
 		kdpuskv2 = '10',
 		napominalkadatav2 = '01.07',
 		timepcoffv2 = '05:00:00',
+		accentinputv2 = 'Русский',
 		autopassv2 = '123456',
 		autopasspinv2 = '123456',
 		pismorealv2 = '1) ',
@@ -1634,18 +1639,24 @@ local cfg3 = inicfg.load({
 		pismoreal3v2 = '4) ',
 		pismoreal4v2 = '5) ',
 		adsecv2 = '60',
+		adsec2v2 = '60',
 		vipadsecv2 = '60',
 		famadsecv2 = '60',
 		vradsecv2 = '60',
+		vradsec2v2 = '60',
+		vradsec3v2 = '60',
 		aladsecv2 = '60',
 		jadsecv2 = '60',
 		rbadsecv2 = '60',
 		fbadsecv2 = '60',
 		sadsecv2 = '60',
 		adredakv2 = 'В 165 баре много девочек и пива.',
+		adredak112v2 = 'В 165 баре много девочек и пива.',
 		adredak2v2 = 'В 165 баре много девочек и пива.',
 		adredak3v2 = 'В 165 баре много девочек и пива.',
 		adredak4v2 = 'В 165 баре много девочек и пива.',
+		adredak42v2 = 'В 165 баре много девочек и пива.',
+		adredak43v2 = 'В 165 баре много девочек и пива.',
 		adredak5v2 = 'В 165 баре много девочек и пива.',
 		adredak6v2 = 'В 165 баре много девочек и пива.',
 		adredak7v2 = 'В 165 баре много девочек и пива.',
@@ -1821,6 +1832,7 @@ local cfg3 = inicfg.load({
 		tradefastv2 = false,
 		autofillv2 = false,
 		faminvfastv2 = false,
+		faminvfastlvlv2 = false,
 		arendafastv2 = false,
 		minerfastv2 = false, 
 		invfastv2 = false,
@@ -2320,6 +2332,8 @@ local SET = {
 		timerpcoff = false,
 		novr = false,
 		nohungry = false,
+		nosvet = false,
+		accent = false,
 		autobufferyved = false,
 		blockweather = false,
         blocktime = false,
@@ -2335,6 +2349,7 @@ local SET = {
 		kdpusk = '10',
 		napominalkadata = '01.07',
 		timepcoff = '05:00:00',
+		accentinput = 'Русский',
 		autopass = '123456',
 		autopasspin = '123456',
 		pismoreal = '1) ',
@@ -2343,18 +2358,24 @@ local SET = {
 		pismoreal3 = '4) ',
 		pismoreal4 = '5) ',
 		adsec = '60',
+		adsec2 = '60',
 		vipadsec = '60',
 		famadsec = '60',
 		vradsec = '60',
+		vradsec2 = '60',
+		vradsec3 = '60',
 		aladsec = '60',
 		jadsec = '60',
 		rbadsec = '60',
 		fbadsec = '60',
 		sadsec = '60',
 		adredak = 'В 165 баре много девочек и пива.',
+		adredak112 = 'В 165 баре много девочек и пива.',
 		adredak2 = 'В 165 баре много девочек и пива.',
 		adredak3 = 'В 165 баре много девочек и пива.',
 		adredak4 = 'В 165 баре много девочек и пива.',
+		adredak42 = 'В 165 баре много девочек и пива.',
+		adredak43 = 'В 165 баре много девочек и пива.',
 		adredak5 = 'В 165 баре много девочек и пива.',
 		adredak6 = 'В 165 баре много девочек и пива.',
 		adredak7 = 'В 165 баре много девочек и пива.',
@@ -2532,6 +2553,7 @@ local SET = {
 		tradefast = false,
 		autofill = false,
 		faminvfast = false,
+		faminvfastlvl = false,
 		arendafast = false,
 		minerfast = false,
 		invfast = false,
@@ -2761,6 +2783,7 @@ local maincfg = inicfg.load({--конфиг для хоткеев
 	fasttrade = VK_R,
 	fastarenda = VK_H,
 	fastinvfam = VK_E,
+	fastinvfamlvl = VK_K,
 	fastinv = VK_Q,
 	fastlocking = VK_L,
 	unbaginvent = VK_F9,
@@ -2942,6 +2965,7 @@ tradeaz = imgui.ImBool(false)
 local moneta = imgui.ImBool(false)
 local tochkamen = imgui.ImBool(false)
 monetaklad = imgui.ImBool(false)
+gurampt = imgui.ImBool(false)
 tradept = imgui.ImBool(false)
 payclick = imgui.ImBool(false)
 mouseclick = imgui.ImBool(false)
@@ -3006,9 +3030,12 @@ local video33 = imgui.ImBool(false)
 local video34 = imgui.ImBool(false)
 local video35 = imgui.ImBool(false)
 local addad = imgui.ImBool(false)
+local addad2 = imgui.ImBool(false)
 local vipaddad = imgui.ImBool(false)
 local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
+local vraddad2 = imgui.ImBool(false)
+local vraddad3 = imgui.ImBool(false)
 
 aladdad = imgui.ImBool(false)
 jaddad = imgui.ImBool(false)
@@ -5355,6 +5382,8 @@ function main()
 		autoklavareload = { name = key.key_names[maincfg.hotkeys.autoklavareload], edit = false, ticked = os.clock(), tickedState = false, sName = "Перезапуск скрипта на клавишу", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для перезагрузки скрипта. По умолчанию установлена клавиша F4.' },
 		fasttrade = { name = key.key_names[maincfg.hotkeys.fasttrade], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /trade", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /trade (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Trade"). По умолчанию установлена клавиша R.' },
 		fastinvfam = { name = key.key_names[maincfg.hotkeys.fastinvfam], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /faminvite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /faminvite (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Family Invite"). По умолчанию установлена клавиша E.' },
+		fastinvfamlvl = { name = key.key_names[maincfg.hotkeys.fastinvfamlvl], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для отображения информации об игроке", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления проверки информации об игроке (для работы функционала, в "Параметры" - "Модификации" нужно включить "Отображать информацию об игроке на клавиши"). По умолчанию установлена клавиша K.' },
+		
 		fastinv = { name = key.key_names[maincfg.hotkeys.fastinv], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /invite", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /invite (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Invite"). По умолчанию установлена клавиша Q.' },
 		fastlocking = { name = key.key_names[maincfg.hotkeys.fastlocking], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для /lock", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для отправления команды /lock (для работы функционала, в "Параметры" - "Модификации" нужно включить "Fast Lock"). По умолчанию установлена клавиша L.' },
 		unbaginvent = { name = key.key_names[maincfg.hotkeys.unbaginvent], edit = false, ticked = os.clock(), tickedState = false, sName = "Клавиша для разбага инвентаря", sQuestion = 'Нажмите на кнопку, а затем и на клавишу, чтобы установить свою клавишу для того, чтобы легко и быстро разбагать инвентарь, в случае, если у вас в нём ничего не нажимается. По умолчанию установлена клавиша F9.' },
@@ -5874,6 +5903,30 @@ end
 		if doesCharExist(pedtest) and faminvfast.v and isKeyJustPressed(maincfg.hotkeys.fastinvfam) and not sampIsChatInputActive() then
 			sampSendChat('/faminvite '..idtest)
 			end
+			
+		if doesCharExist(pedtest) and faminvfastlvl.v and isKeyJustPressed(maincfg.hotkeys.fastinvfamlvl) then
+			lua_thread.create(function()
+			if tonumber(idtest) then 
+					go = os.time()
+					checkingvip = true
+					sampSendChat('/vipplayers')
+					while checkingvip do 
+						wait(0) 
+						if tonumber(os.time() - go) > 5 then 
+							checkingvip = false
+							return
+						end 
+					end
+					local strVips = table.concat(tVips, ', ')
+					local nick = sampGetPlayerNickname(tonumber(idtest))
+					local lvlnick = sampGetPlayerScore(idtest)
+					tVips = {}
+			sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Информация об игроке: NickName: '..nick..' | ID: '..idtest..' | Уровень: '..lvlnick..' | VIP статус: '..(strVips:find(nick) and 'есть.' or 'отсутствует.'), -1)
+			end
+		end)
+	end	
+			
+			
 		if doesCharExist(pedtest) and arendafast.v and isKeyJustPressed(maincfg.hotkeys.fastarenda) and not sampIsChatInputActive() then
 			sampSetChatInputEnabled(true) 
 			sampSetChatInputText('/arenda 1, '..idtest..', 1000000, 1')
@@ -5996,7 +6049,7 @@ end
 
 		if keyT.v then -- чат на русскую Т
 			if(isKeyDown(key.VK_T) and wasKeyPressed(key.VK_T))then
-				if(not sampIsChatInputActive() and not sampIsDialogActive()) then
+				if(not sampIsChatInputActive() and not sampIsDialogActive() and not isSampfuncsConsoleActive()) then
 					sampSetChatInputEnabled(true)
 				end
 			end
@@ -6604,6 +6657,7 @@ function saveSettings(args, key)
 	ini.settings.tradefast = tradefast.v
 	ini.settings.autofill = autofill.v
 	ini.settings.faminvfast = faminvfast.v
+	ini.settings.faminvfastlvl = faminvfastlvl.v
 	ini.settings.arendafast = arendafast.v
 	ini.settings.minerfast = minerfast.v
 	ini.settings.fastkey = fastkey.v
@@ -6638,6 +6692,7 @@ function saveSettings(args, key)
 	ini.settings.kdpusk = u8:decode(kdpusk.v)
 	ini.settings.napominalkadata = u8:decode(napominalkadata.v)
 	ini.settings.timepcoff = u8:decode(timepcoff.v)
+	ini.settings.accentinput = u8:decode(accentinput.v)
 	ini.settings.autopass = u8:decode(autopass.v)
 	ini.settings.autoeuros = u8:decode(autoeuros.v)
 	ini.settings.autoeurosraz = u8:decode(autoeurosraz.v)
@@ -6738,18 +6793,24 @@ function saveSettings(args, key)
 	ini.settings.pismoreal3 = u8:decode(pismoreal3.v)
 	ini.settings.pismoreal4 = u8:decode(pismoreal4.v)
 	ini.settings.adsec = u8:decode(adsec.v)
+	ini.settings.adsec2 = u8:decode(adsec2.v)
 	ini.settings.vipadsec = u8:decode(vipadsec.v)
 	ini.settings.famadsec = u8:decode(famadsec.v)
 	ini.settings.vradsec = u8:decode(vradsec.v)
+	ini.settings.vradsec2 = u8:decode(vradsec2.v)
+	ini.settings.vradsec3 = u8:decode(vradsec3.v)
 	ini.settings.aladsec = u8:decode(aladsec.v)
 	ini.settings.jadsec = u8:decode(jadsec.v)
 	ini.settings.rbadsec = u8:decode(rbadsec.v)
 	ini.settings.fbadsec = u8:decode(fbadsec.v)
 	ini.settings.sadsec = u8:decode(sadsec.v)
 	ini.settings.adredak = u8:decode(adredak.v)
+	ini.settings.adredak112 = u8:decode(adredak112.v)
 	ini.settings.adredak2 = u8:decode(adredak2.v)
 	ini.settings.adredak3 = u8:decode(adredak3.v)
 	ini.settings.adredak4 = u8:decode(adredak4.v)
+	ini.settings.adredak42 = u8:decode(adredak42.v)
+	ini.settings.adredak43 = u8:decode(adredak43.v)
 	ini.settings.adredak5 = u8:decode(adredak5.v)
 	ini.settings.adredak6 = u8:decode(adredak6.v)
 	ini.settings.adredak7 = u8:decode(adredak7.v)
@@ -7149,6 +7210,8 @@ function saveSettings(args, key)
 	ini.settings.timerpcoff = timerpcoff.v
 	ini.settings.novr = novr.v
 	ini.settings.nohungry = nohungry.v
+	ini.settings.nosvet = nosvet.v
+	ini.settings.accent = accent.v
 	ini.settings.autobufferyved = autobufferyved.v
 	
 	ini.settings.blockweather = blockweather.v
@@ -7710,6 +7773,12 @@ end
   if dialogId == 15347 and addad.v then return false end
   if dialogId == 15379 and addad.v then return false end
   if dialogId == 25476 and addad.v then return false end
+  
+  if dialogId == 15346 and addad2.v then return false end
+  if dialogId == 15347 and addad2.v then return false end
+  if dialogId == 15379 and addad2.v then return false end
+  if dialogId == 25476 and addad2.v then return false end
+  
   if dialogId == 15346 and vipaddad.v then return false end
   if dialogId == 15347 and vipaddad.v then return false end
   if dialogId == 15379 and vipaddad.v then return false end
@@ -14844,6 +14913,32 @@ end
 		closeDialog()
 		end)
 	end
+	
+	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and addad2.v then 
+	lua_thread.create(function()
+		closeDialog()
+		wait(100)
+		sampSendChat(u8:decode ('/ad '..adredak112.v))
+		wait(300)
+		if smils.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if smilv.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if smisf.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+		wait(300)
+		sampSendDialogResponse(15346, 1, 0, -1)
+		wait(200)
+		sampSendDialogResponse(15347, 1, 0, -1)
+		wait(200)
+		sampSendDialogResponse(15379, 1, 0, -1)
+		wait(100)
+		closeDialog()
+		end)
+	end
 		
 	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and vipaddad.v then 
 	lua_thread.create(function()
@@ -14872,6 +14967,58 @@ end
 	end
 	
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
+		if os.date("%A") == 'Monday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.piarsh..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Tuesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh1 = cfg.adpred.piarsh1 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.piarsh1..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Wednesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh2 = cfg.adpred.piarsh2 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.piarsh2..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Thursday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh3 = cfg.adpred.piarsh3 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.piarsh3..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Friday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh4 = cfg.adpred.piarsh4 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.piarsh4..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Saturday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh5 = cfg.adpred.piarsh5 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.piarsh5..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Sunday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh6 = cfg.adpred.piarsh6 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.piarsh6..'\n'..yvedadd)
+			end
+		end
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad2.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
@@ -15630,6 +15777,8 @@ function load_settings() -- загрузка настроек
 	timerpcoff = imgui.ImBool(ini.settings.timerpcoff)
 	novr = imgui.ImBool(ini.settings.novr)
 	nohungry = imgui.ImBool(ini.settings.nohungry)
+	nosvet = imgui.ImBool(ini.settings.nosvet)
+	accent = imgui.ImBool(ini.settings.accent)
 	autobufferyved = imgui.ImBool(ini.settings.autobufferyved)
 	
 	blockweather = imgui.ImBool(ini.settings.blockweather)
@@ -15647,6 +15796,7 @@ function load_settings() -- загрузка настроек
 	kdpusk = imgui.ImBuffer(u8(ini.settings.kdpusk), 256)
 	napominalkadata = imgui.ImBuffer(u8(ini.settings.napominalkadata), 256)
 	timepcoff = imgui.ImBuffer(u8(ini.settings.timepcoff), 256)
+	accentinput = imgui.ImBuffer(u8(ini.settings.accentinput), 256)
 	autopass = imgui.ImBuffer(u8(ini.settings.autopass), 256)
 	autoeuros = imgui.ImBuffer(u8(ini.settings.autoeuros), 256)
 	autoeurosraz = imgui.ImBuffer(u8(ini.settings.autoeurosraz), 256)
@@ -15672,18 +15822,24 @@ function load_settings() -- загрузка настроек
 	pismoreal3 = imgui.ImBuffer(u8(ini.settings.pismoreal3), 2560)
 	pismoreal4 = imgui.ImBuffer(u8(ini.settings.pismoreal4), 2560)
 	adsec = imgui.ImBuffer(u8(ini.settings.adsec), 100)
+	adsec2 = imgui.ImBuffer(u8(ini.settings.adsec2), 100)
 	vipadsec = imgui.ImBuffer(u8(ini.settings.vipadsec), 100)
 	famadsec = imgui.ImBuffer(u8(ini.settings.famadsec), 100)
 	vradsec = imgui.ImBuffer(u8(ini.settings.vradsec), 100)
+	vradsec2 = imgui.ImBuffer(u8(ini.settings.vradsec2), 100)
+	vradsec3 = imgui.ImBuffer(u8(ini.settings.vradsec3), 100)
 	aladsec = imgui.ImBuffer(u8(ini.settings.aladsec), 100)
 	jadsec = imgui.ImBuffer(u8(ini.settings.jadsec), 100)
 	rbadsec = imgui.ImBuffer(u8(ini.settings.rbadsec), 100)
 	fbadsec = imgui.ImBuffer(u8(ini.settings.fbadsec), 100)
 	sadsec = imgui.ImBuffer(u8(ini.settings.sadsec), 100)
 	adredak = imgui.ImBuffer(u8(ini.settings.adredak), 1000)
+	adredak112 = imgui.ImBuffer(u8(ini.settings.adredak112), 1000)
 	adredak2 = imgui.ImBuffer(u8(ini.settings.adredak2), 1000)
 	adredak3 = imgui.ImBuffer(u8(ini.settings.adredak3), 1000)
 	adredak4 = imgui.ImBuffer(u8(ini.settings.adredak4), 1000)
+	adredak42 = imgui.ImBuffer(u8(ini.settings.adredak42), 1000)
+	adredak43 = imgui.ImBuffer(u8(ini.settings.adredak43), 1000)
 	adredak5 = imgui.ImBuffer(u8(ini.settings.adredak5), 1000)
 	adredak6 = imgui.ImBuffer(u8(ini.settings.adredak6), 1000)
 	adredak7 = imgui.ImBuffer(u8(ini.settings.adredak7), 1000)
@@ -15985,6 +16141,7 @@ function load_settings() -- загрузка настроек
 	tradefast = imgui.ImBool(ini.settings.tradefast)
 	autofill = imgui.ImBool(ini.settings.autofill)
 	faminvfast = imgui.ImBool(ini.settings.faminvfast)
+	faminvfastlvl = imgui.ImBool(ini.settings.faminvfastlvl)
 	arendafast = imgui.ImBool(ini.settings.arendafast)
 	minerfast = imgui.ImBool(ini.settings.minerfast)
 	invfast = imgui.ImBool(ini.settings.invfast)
@@ -19209,6 +19366,15 @@ while true do
     setVirtualKeyDown(key.VK_MENU, false)
 	wait(200)
 	sampSendDialogResponse(9542, 1 , 2, -1)
+	wait(100)
+	closeDialog()
+	end
+	if gurampt.v then 
+	setVirtualKeyDown(key.VK_MENU, true)
+    wait(200)
+    setVirtualKeyDown(key.VK_MENU, false)
+	wait(200)
+	sampSendDialogResponse(7625, 1 , 9, -1)
 	wait(100)
 	closeDialog()
 	end
@@ -26411,6 +26577,31 @@ while true do
 	kdwait = math.random(5000, 15000)
 	wait((adsec.v*1000) + kdwait)
 		end
+	if addad2.v then
+	closeDialog()
+	wait(100)
+	sampSendChat(u8:decode ('/ad '..adredak112.v))
+	wait(300)
+	if smils.v then 
+	sampSendDialogResponse(25476, 1, 0, -1)
+	end
+	if smilv.v then 
+	sampSendDialogResponse(25476, 1, 1, -1)
+	end
+	if smisf.v then 
+	sampSendDialogResponse(25476, 1, 2, -1)
+	end
+	wait(300)
+	sampSendDialogResponse(15346, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15379, 1, 0, -1)
+	wait(100)
+	closeDialog()
+	kdwait = math.random(5000, 15000)
+	wait((adsec2.v*1000) + kdwait)
+		end
 		wait(0)
 	end
 end
@@ -26466,6 +26657,20 @@ while true do
 	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	kdwait4 = math.random(5000, 15000)
 	wait((vradsec.v*1000) + kdwait4)
+	end
+	if vraddad2.v then
+	otmenadial = true
+	wait(300)
+	sampSendChat(u8:decode ('/vr '..adredak42.v))
+	kdwait4 = math.random(5000, 15000)
+	wait((vradsec2.v*1000) + kdwait4)
+	end
+	if vraddad3.v then
+	otmenadial = true
+	wait(300)
+	sampSendChat(u8:decode ('/vr '..adredak43.v))
+	kdwait4 = math.random(5000, 15000)
+	wait((vradsec3.v*1000) + kdwait4)
 	end
 		wait(0)
 	end
@@ -27550,7 +27755,7 @@ function yashikisroulette()
 function obmenmenu()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-	imgui.SetNextWindowSize(imgui.ImVec2(760, 190), imgui.Cond.FirstUseEver)
+	imgui.SetNextWindowSize(imgui.ImVec2(760, 215), imgui.Cond.FirstUseEver)
 	imgui.Begin(fa.ICON_EXCHANGE..u8' Trade Menu', win_state['obmentrade'], imgui.WindowFlags.NoResize)
 			imgui.Text('')
 			imgui.Separator()
@@ -27564,6 +27769,7 @@ function obmenmenu()
 			imgui.SameLine(380) imgui.Checkbox(u8'Обменять зловещие монеты на точильные камни', tochkamen); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять зловещие монеты на ларец кладоискателя', monetaklad); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Хагридом и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся зловещие монеты.")  
 			imgui.SameLine(380) imgui.Checkbox(u8'Обменять материалы на патроны (для Хитманов)', tradept); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать у маркера, где брать оружие на базе Хитманов, и активировать данную функцию. Функция остановится автоматический после того, как у вас закончатся материалы.")  
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Обменять 8.500$ на 100 патронов у Гурама', gurampt); imgui.SameLine(); imgui.TextQuestion(u8"Вам нужно встать перед Гурамом и активировать данную функцию. Выключите функцию вручную, когда купите нужное количество патронов.")  
 			
 			imgui.End()
 		end
@@ -27727,7 +27933,7 @@ function tochmenu()
 				imgui.Text('')
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'*Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'вашего аккаунта.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'вашего аккаунта. Чтобы начать процесс, включите функционал и начните первую заточку вручную.')
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8(" Брать камни и амулеты только с первой страницы")); imgui.SameLine(); imgui.ToggleButton(u8'', versiontoch); imgui.SameLine(); imgui.Text(u8(" Брать камни и амулеты на всех страницах"))
 				
@@ -31313,6 +31519,15 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[30.12.2022]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Toch Menu" указано, как запустить процесс заточки.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Trade Menu" добавлена возможность обмена 8.500$ на 100 патронов.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Параметры" - "Модификации" добавлена возможность выключить свечение от аксессуаров от Eupie.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Параметры" - "Модификации" добавлено возможность включить авто-акцент в обычный чат.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Piar Menu" добавлено еще 2 строки для пиара в /vr и 1 строка для пиара в /ad.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Теперь, если открыта консоль и включено "Открывать чат на T", при нажатий на "Т", чат не откроется.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Параметры" - "Модификации" добавлена функция "Узнать информацию об игроке на клавиши" (на ПКМ + K можно узнать информацию')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'об игроке, такую как: ник, ид, лвл и есть ли вип статус)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[29.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Если у вас включен значок с "ADD VIP", скрипт вам будет писать о том, что его нужно выключить.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс рекламы в /ad (изменили ID диалога)')
@@ -31377,9 +31592,15 @@ function getArizonaName()
 	end
 	imgui.PushItemWidth(50)
 	imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97', adsec)
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявление №1', addad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97', adsec)
 	imgui.SameLine()
-	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel() end
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить объявление №1 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel() end
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявление №2', addad2) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##971234235gfhgf', adsec2)
+	imgui.SameLine()
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить объявление №2 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel22() end
+	
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##98', vipadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить VIP объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel2() end
@@ -31392,9 +31613,20 @@ function getArizonaName()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /fam', famaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##199', famadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /fam сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel3() end
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr', vraddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200', vradsec)
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr №1', vraddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200', vradsec)
 	imgui.SameLine() 
-	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /vr сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel4() end
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /vr №1 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel4() end
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr №2', vraddad2) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##20002', vradsec2)
+	imgui.SameLine() 
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /vr №2 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel42() end
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr №3', vraddad3) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##20003', vradsec3)
+	imgui.SameLine() 
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /vr №3 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel43() end
+	
+	
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /s', saddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##2000', sadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /s сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel5() end
@@ -31417,13 +31649,16 @@ function getArizonaName()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления в VK', addvk) imgui.SameLine(405) 
 	if imgui.CustomButton(fa.ICON_LIST..u8' Настройка отправки объявлений', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then win_state['vkmessage'].v = not win_state['vkmessage'].v end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Засчитывать объявления без активации Piar Menu функционала', obkachet)
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять рекламу в /vr на клавишу', vipobkachet) imgui.SameLine() imgui.TextQuestion(u8'В текстовом поле для рекламы напишите нужный текст, активируйте функционал и вы сможете на клавишу "NumPad+" отправлять рекламу в /vr. Сменить клавишу можно в "Параметры" - "Настройка клавиш".')
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять рекламу в /vr на клавишу №1', vipobkachet) imgui.SameLine() imgui.TextQuestion(u8'В текстовом поле для рекламы напишите нужный текст, активируйте функционал и вы сможете на клавишу "NumPad+" отправлять рекламу в /vr. Сменить клавишу можно в "Параметры" - "Настройка клавиш".')
 	imgui.PopItemWidth()
 	imgui.PushItemWidth(460)
-	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст обычного объявления', adredak)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст объявления №1', adredak)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст объявления №2', adredak112)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст VIP объявления', adredak2)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /fam', adredak3)
-	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr', adredak4)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr №1', adredak4)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr №2', adredak42)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr №3', adredak43)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /s', adredak5)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /al', adredak6)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /j', adredak7)
@@ -31446,9 +31681,12 @@ function getArizonaName()
 	cfg.adpred.piarsh6 = 0 
 	cfg.adpred.vippiarsh6 = 0 
 	addad.v = false
+	addad2.v = false
 	vipaddad.v = false
 	famaddad.v = false
 	vraddad.v = false
+	vraddad2.v = false
+	vraddad3.v = false
 	aladdad.v = false
 	jaddad.v = false
 	rbaddad.v = false
@@ -31464,18 +31702,24 @@ function getArizonaName()
 	smilv.v = false
 	smisf.v = false
 	adredak.v = u8'В 165 баре много девочек и пива.'
+	adredak112.v = u8'В 165 баре много девочек и пива.'
 	adredak2.v = u8'В 165 баре много девочек и пива.'
 	adredak3.v = u8'В 165 баре много девочек и пива.'
 	adredak4.v = u8'В 165 баре много девочек и пива.'
+	adredak42.v = u8'В 165 баре много девочек и пива.'
+	adredak43.v = u8'В 165 баре много девочек и пива.'
 	adredak5.v = u8'В 165 баре много девочек и пива.'
 	adredak6.v = u8'В 165 баре много девочек и пива.'
 	adredak7.v = u8'В 165 баре много девочек и пива.'
 	adredak8.v = u8'В 165 баре много девочек и пива.'
 	adredak9.v = u8'В 165 баре много девочек и пива.'
 	adsec.v = '60'
+	adsec2.v = '60'
 	vipadsec.v = '60'
 	famadsec.v = '60'
 	vradsec.v = '60'
+	vradsec2.v = '60'
+	vradsec3.v = '60'
 	aladsec.v = '60'
 	jadsec.v = '60'
 	rbadsec.v = '60'
@@ -32537,6 +32781,32 @@ lua_thread.create(function()
 		end)
 	end
 	
+function adtravel22()
+lua_thread.create(function()
+	closeDialog()
+	wait(100)
+	sampSendChat(u8:decode ('/ad '..adredak112.v))
+	wait(300)
+	if smils.v then 
+	sampSendDialogResponse(25476, 1, 0, -1)
+	end
+	if smilv.v then 
+	sampSendDialogResponse(25476, 1, 1, -1)
+	end
+	if smisf.v then 
+	sampSendDialogResponse(25476, 1, 2, -1)
+	end
+	wait(300)
+	sampSendDialogResponse(15346, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15347, 1, 0, -1)
+	wait(200)
+	sampSendDialogResponse(15379, 1, 0, -1)
+	wait(100)
+	closeDialog()
+		end)
+	end
+	
 function adtravel2()
 lua_thread.create(function()
 	closeDialog()
@@ -32574,6 +32844,22 @@ lua_thread.create(function()
 	otmenadial = true
 	wait(300)
 	sampSendChat(u8:decode ('/vr '..adredak4.v))
+	end)
+end
+
+function adtravel42()
+lua_thread.create(function()
+	otmenadial = true
+	wait(300)
+	sampSendChat(u8:decode ('/vr '..adredak42.v))
+	end)
+end
+
+function adtravel43()
+lua_thread.create(function()
+	otmenadial = true
+	wait(300)
+	sampSendChat(u8:decode ('/vr '..adredak43.v))
 	end)
 end
 
@@ -35555,6 +35841,15 @@ function settingosnova()
 				end
 				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Отправлять в "/vr" обычное сообщение')); imgui.SameLine(); imgui.ToggleButton(u8'Отправлять в "/vr" обычное сообщение', novr) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то при вводе команды '/vr [text]', ваш текст в VIP чат будет отправлять как обычное сообщение. Для отправления рекламы, используйте '/vrv' или 'Piar Menu'. Чтобы функционал заработал - перезапустите скрипт.")
 				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Убирать надпись на экране "You hungry"')); imgui.SameLine(); imgui.ToggleButton(u8'Убирать текст на экране "You hungry"', nohungry) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то у вас на экране больше не будет появляться надпись о том, что вы голодны.")
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Убирать свечение аксессуаров')); imgui.SameLine(); imgui.ToggleButton(u8'Убирать свечение аксессуаров', nosvet) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то больше у вас на экране не будет свечения от аксессуаров с заточкой от Eupie. После включения функционала, необходимо перезайти на сервер.")
+				imgui.Text('') imgui.SameLine(8) imgui.AlignTextToFramePadding(); imgui.Text(u8('Авто-акцент в обычный чат')); imgui.SameLine(); imgui.ToggleButton(u8'Авто-акцент в обычный чат', accent) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то в обычном чате у вас будет в квадратных скобках подписываться акцент.")
+				if accent.v then 
+				imgui.Text('-----------------------------------------------------------------------------')
+				imgui.PushItemWidth(150)
+				imgui.Text('') imgui.SameLine() imgui.InputText(u8'Введите желаемый акцент', accentinput); imgui.SameLine(); imgui.TextQuestion(u8"Введите акцент, который будет писаться в обычном чате, например: 'Русский'.")
+				imgui.PopItemWidth()
+				imgui.Text('-----------------------------------------------------------------------------')
+				end
 				
 				
 				imgui.NextColumn()
@@ -35571,6 +35866,8 @@ function settingosnova()
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Trade")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Trade', tradefast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого трейда с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка R)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Family Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Family Invite', faminvfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в семью с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка E)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Invite")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Invite', invfast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстрого инваита в организацию с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка Q)");
+				imgui.AlignTextToFramePadding(); imgui.Text(u8("Отображать информацию об игроке на клавиши")); imgui.SameLine(); imgui.ToggleButton(u8'Отображать информацию об игроке на клавиши', faminvfastlvl); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро узнать информацию об игроке (ид, ник, лвл и наличие вип статуса) с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка K)");
+				
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Key")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Key', fastkey); imgui.SameLine(); imgui.TextQuestion(u8"Если функция включена, то после того, как вы заглушите транспортное средство - вы автоматический вытащите из него ключи. Также если вы попробуете завести транспорт,а в нём не будет ключей - скрипт пропишет /key и заведет транспортное средство.");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Lock")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Lock', fastlock); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность открытия или закрытия личного транспорта на кнопку, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка L)");
 				imgui.AlignTextToFramePadding(); imgui.Text(u8("Fast Arenda")); imgui.SameLine(); imgui.ToggleButton(u8'Fast Arenda', arendafast); imgui.SameLine(); imgui.TextQuestion(u8"Даёт возможность быстро отправить команду '/arenda [№ т.с в диалоге (1 строка = 0), ID игрока, цена за 1 час, кол-во часов]' игроку, т.к открывается чат и в чате появляется команда с заранее введенными данными, которые вы можете подредактировать под себя (нужный ID игрока введется автоматический) Отправить команду вы сможете с помощью прицеливания и кнопки, которую вы установили в 'Настройка клавиш' (по умолчанию кнопка H)");
@@ -36058,6 +36355,7 @@ function settingosnova()
 				maincfg.hotkeys.fasttrade = VK_R
 				maincfg.hotkeys.fastarenda = VK_H
 				maincfg.hotkeys.fastinvfam = VK_E
+				maincfg.hotkeys.fastinvfamlvl = VK_K
 				maincfg.hotkeys.fastinv = VK_Q
 				maincfg.hotkeys.fastlocking = VK_L
 				maincfg.hotkeys.unbaginvent = VK_F9
@@ -36104,6 +36402,7 @@ function settingosnova()
 				tradefast.v = false
 				autofill.v = false
 				faminvfast.v = false
+				faminvfastlvl.v = false
 				arendafast.v = false
 				minerfast.v = false
 				invfast.v = false
@@ -36498,6 +36797,8 @@ function settingosnova()
 		cfg3.backup.timerpcoffv2 = timerpcoff.v
 		cfg3.backup.novrv2 = novr.v
 		cfg3.backup.nohungryv2 = nohungry.v
+		cfg3.backup.nosvetv2 = nosvet.v
+		cfg3.backup.accentv2 = accent.v
 		cfg3.backup.autobufferyvedv2 = autobufferyved.v
 		cfg3.backup.blockweatherv2 = blockweather.v
 		cfg3.backup.blocktimev2 = blocktime.v
@@ -36513,6 +36814,7 @@ function settingosnova()
 		cfg3.backup.kdpuskv2 = kdpusk.v
 		cfg3.backup.napominalkadatav2 = napominalkadata.v
 		cfg3.backup.timepcoffv2 = timepcoff.v
+		cfg3.backup.accentinputv2 = accentinput.v
 		cfg3.backup.autopassv2 = autopass.v
 		cfg3.backup.autopasspinv2 = autopasspin.v
 		cfg3.backup.pismorealv2 = pismoreal.v
@@ -36521,18 +36823,24 @@ function settingosnova()
 		cfg3.backup.pismoreal3v2 = pismoreal3.v
 		cfg3.backup.pismoreal4v2 = pismoreal4.v
 		cfg3.backup.adsecv2 = adsec.v
+		cfg3.backup.adsec2v2 = adsec2.v
 		cfg3.backup.vipadsecv2 = vipadsec.v
 		cfg3.backup.famadsecv2 = famadsec.v
 		cfg3.backup.vradsecv2 = vradsec.v
+		cfg3.backup.vradsec2v2 = vradsec2.v
+		cfg3.backup.vradsec3v2 = vradsec3.v
 		cfg3.backup.aladsecv2 = aladsec.v
 		cfg3.backup.jadsecv2 = jadsec.v
 		cfg3.backup.rbadsecv2 = rbadsec.v
 		cfg3.backup.fbadsecv2 = fbadsec.v
 		cfg3.backup.sadsecv2 = sadsec.v
 		cfg3.backup.adredakv2 = adredak.v
+		cfg3.backup.adredak112v2 = adredak112.v
 		cfg3.backup.adredak2v2 = adredak2.v
 		cfg3.backup.adredak3v2 = adredak3.v
 		cfg3.backup.adredak4v2 = adredak4.v
+		cfg3.backup.adredak42v2 = adredak42.v
+		cfg3.backup.adredak43v2 = adredak43.v
 		cfg3.backup.adredak5v2 = adredak5.v
 		cfg3.backup.adredak6v2 = adredak6.v
 		cfg3.backup.adredak7v2 = adredak7.v
@@ -36708,6 +37016,7 @@ function settingosnova()
 		cfg3.backup.tradefastv2 = tradefast.v
 		cfg3.backup.autofillv2 = autofill.v
 		cfg3.backup.faminvfastv2 = faminvfast.v
+		cfg3.backup.faminvfastlvlv2 = faminvfastlvl.v
 		cfg3.backup.arendafastv2 = arendafast.v
 		cfg3.backup.minerfastv2 = minerfast.v
 		cfg3.backup.invfastv2 = invfast.v
@@ -37191,6 +37500,8 @@ function settingosnova()
 		 timerpcoff.v =  cfg3.backup.timerpcoffv2 
 		 novr.v =  cfg3.backup.novrv2 
 		 nohungry.v =  cfg3.backup.nohungryv2 
+		 nosvet.v =  cfg3.backup.nosvetv2 
+		 accent.v =  cfg3.backup.accentv2 
 		 autobufferyved.v =  cfg3.backup.autobufferyvedv2 
 		 
 		 blockweather.v =  cfg3.backup.blockweatherv2 
@@ -37209,6 +37520,7 @@ function settingosnova()
 		 kdpusk.v =  ''..cfg3.backup.kdpuskv2 
 		 napominalkadata.v =  ''..cfg3.backup.napominalkadatav2 
 		 timepcoff.v =  ''..cfg3.backup.timepcoffv2
+		 accentinput.v =  ''..cfg3.backup.accentinputv2
 		 autopass.v =  ''..cfg3.backup.autopassv2 
 		 autopasspin.v =  ''..cfg3.backup.autopasspinv2 
 		 pismoreal.v =  ''..cfg3.backup.pismorealv2 
@@ -37217,18 +37529,24 @@ function settingosnova()
 		 pismoreal3.v =  ''..cfg3.backup.pismoreal3v2 
 		 pismoreal4.v =  ''..cfg3.backup.pismoreal4v2 
 		 adsec.v = ''..cfg3.backup.adsecv2 
+		 adsec2.v = ''..cfg3.backup.adsec2v2 
 		 vipadsec.v =  ''..cfg3.backup.vipadsecv2 
 		 famadsec.v =  ''..cfg3.backup.famadsecv2 
 		 vradsec.v =  ''..cfg3.backup.vradsecv2 
+		 vradsec2.v =  ''..cfg3.backup.vradsec2v2 
+		 vradsec3.v =  ''..cfg3.backup.vradsec3v2 
 		 aladsec.v =  ''..cfg3.backup.aladsecv2 
 		 jadsec.v =  ''..cfg3.backup.jadsecv2 
 		 rbadsec.v =  ''..cfg3.backup.rbadsecv2 
 		 fbadsec.v =  ''..cfg3.backup.fbadsecv2 
 		 sadsec.v =  ''..cfg3.backup.sadsecv2 
 		 adredak.v =  ''..cfg3.backup.adredakv2 
+		 adredak112.v =  ''..cfg3.backup.adredak112v2 
 		 adredak2.v =  ''..cfg3.backup.adredak2v2 
 		 adredak3.v =  ''..cfg3.backup.adredak3v2 
 		 adredak4.v =  ''..cfg3.backup.adredak4v2 
+		 adredak42.v =  ''..cfg3.backup.adredak42v2 
+		 adredak43.v =  ''..cfg3.backup.adredak43v2 
 		 adredak5.v =  ''..cfg3.backup.adredak5v2 
 		 adredak6.v =  ''..cfg3.backup.adredak6v2 
 		 adredak7.v =  ''..cfg3.backup.adredak7v2 
@@ -37405,6 +37723,7 @@ function settingosnova()
 		 tradefast.v =  cfg3.backup.tradefastv2 
 		 autofill.v  =  cfg3.backup.autofillv2 
 		 faminvfast.v  =  cfg3.backup.faminvfastv2 
+		 faminvfastlvl.v  =  cfg3.backup.faminvfastlvlv2 
 		 arendafast.v  =  cfg3.backup.arendafastv2 
 		 minerfast.v  =  cfg3.backup.minerfastv2 
 		 invfast.v =   cfg3.backup.invfastv2 
@@ -38446,3 +38765,14 @@ function reconnectvc(sec)
       sampConnectToServer(servers[tonumber(servvc)], '7777')
    end)
 end
+
+function sampev.onSetPlayerAttachedObject(playerId, index, create, object)
+	if nosvet.v and object.modelId == 1276 then return false end
+end
+
+function sampev.onSendChat(message)
+    if accent.v then
+		return{'['..u8:decode(accentinput.v)..' Акцент]: '..message}
+    end
+end
+
