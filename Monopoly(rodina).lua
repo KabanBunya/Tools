@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.2')
+script_version('1.2.1')
 
 local use = false
 local close = false
@@ -869,17 +869,21 @@ local SET = {
 		pismoreal3 = '4) ',
 		pismoreal4 = '5) ',
 		adsec = '60',
+		adsec222 = '60',
 		vipadsec = '60',
 		famadsec = '60',
 		vradsec = '60',
+		vradsec222 = '60',
 		aladsec = '60',
 		jadsec = '60',
 		rtadsec = '60',
 		sadsec = '60',
 		adredak = 'В 165 баре много девочек и пива.',
+		adredak222 = 'В 165 баре много девочек и пива.',
 		adredak2 = 'В 165 баре много девочек и пива.',
 		adredak3 = 'В 165 баре много девочек и пива.',
 		adredak4 = 'В 165 баре много девочек и пива.',
+		adredak4222 = 'В 165 баре много девочек и пива.',
 		adredak5 = 'В 165 баре много девочек и пива.',
 		adredak6 = 'В 165 баре много девочек и пива.',
 		adredak7 = 'В 165 баре много девочек и пива.',
@@ -1328,9 +1332,11 @@ local video33 = imgui.ImBool(false)
 local video34 = imgui.ImBool(false)
 local video35 = imgui.ImBool(false)
 local addad = imgui.ImBool(false)
+local addad222 = imgui.ImBool(false)
 local vipaddad = imgui.ImBool(false)
 local famaddad = imgui.ImBool(false)
 local vraddad = imgui.ImBool(false)
+local vraddad222 = imgui.ImBool(false)
 local rtaddad = imgui.ImBool(false)
 aladdad = imgui.ImBool(false)
 jaddad = imgui.ImBool(false)
@@ -4714,17 +4720,21 @@ function saveSettings(args, key)
 	ini.settings.pismoreal3 = u8:decode(pismoreal3.v)
 	ini.settings.pismoreal4 = u8:decode(pismoreal4.v)
 	ini.settings.adsec = u8:decode(adsec.v)
+	ini.settings.adsec222 = u8:decode(adsec222.v)
 	ini.settings.vipadsec = u8:decode(vipadsec.v)
 	ini.settings.famadsec = u8:decode(famadsec.v)
 	ini.settings.vradsec = u8:decode(vradsec.v)
+	ini.settings.vradsec222 = u8:decode(vradsec222.v)
 	ini.settings.aladsec = u8:decode(aladsec.v)
 	ini.settings.jadsec = u8:decode(jadsec.v)
 	ini.settings.rtadsec = u8:decode(rtadsec.v)
 	ini.settings.sadsec = u8:decode(sadsec.v)
 	ini.settings.adredak = u8:decode(adredak.v)
+	ini.settings.adredak222 = u8:decode(adredak222.v)
 	ini.settings.adredak2 = u8:decode(adredak2.v)
 	ini.settings.adredak3 = u8:decode(adredak3.v)
 	ini.settings.adredak4 = u8:decode(adredak4.v)
+	ini.settings.adredak4222 = u8:decode(adredak4222.v)
 	ini.settings.adredak5 = u8:decode(adredak5.v)
 	ini.settings.adredak6 = u8:decode(adredak6.v)
 	ini.settings.adredak7 = u8:decode(adredak7.v)
@@ -5080,6 +5090,8 @@ end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 
+	print(dialogId, text)
+
 	if diaenable.v and vkconnect.v then
 		if style == 1 or style == 3 then
 			vk_requestv2('' .. title .. '\n' .. text .. '\n\n[______________]\n\n[' .. button1 .. '] | [' .. button2 .. ']' )
@@ -5115,22 +5127,22 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 	end
 end
 
-	if dialogId == 10010 and isEn == 2 and text:find(">") then isNext = true
+	if dialogId == 10 and isEn == 2 and text:find(">") then isNext = true
 	else
 	isNext = false
 	end
 
-	if dialogId == 10010 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10010, 1, 70) onecheck = false end
-	if dialogId == 10010 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10010, 1, 70) end) end
+	if dialogId == 10 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10, 1, 70) onecheck = false end
+	if dialogId == 10 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10, 1, 70) end) end
 
-	if dialogId == 10011 and isEnd ~= 0 and isBuyProcess then return false end
-	if dialogId == 10009 and isEnd ~= 0 and isBuyProcess then return false end
-	if dialogId == 10010 and isEn == 1 then
+	if dialogId == 11 and isEnd ~= 0 and isBuyProcess then return false end
+	if dialogId == 9 and isEnd ~= 0 and isBuyProcess then return false end
+	if dialogId == 10 and isEn == 1 then
 		lua_thread.create(checkPage, text)
 		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
 		return false
 	end
-	if dialogId == 10010 and isEn == 2 then
+	if dialogId == 10 and isEn == 2 then
 		lua_thread.create(pageWrite, text)
 		sampShowDialog(1234, "Проверка", "Предметы проверяются, подождите...", "Ждём...")
 		--return false
@@ -8175,7 +8187,7 @@ end
 				imgui.SameLine(270)
 				if imgui.ImageButton(wintelega, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skup'].v = not win_state['skup'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(355)
-				if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v end
+				if imgui.ImageButton(wintelegav2, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['skupv2'].v = not win_state['skupv2'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(440)
 				if imgui.ImageButton(winpingpong, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then pong = not pong win_state['windowspusk'].v = false win_state['main'].v = false win_state['pravilapong'].v = true end
 				
@@ -8229,7 +8241,7 @@ end
 				imgui.SameLine(355)
 				if imgui.ImageButton(winmessage, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['messanger'].v = not win_state['messanger'].v win_state['windowspusk'].v = false end
 				imgui.SameLine(440)
-				if imgui.ImageButton(winsupport, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['support'].v = not win_state['support'].v end
+				if imgui.ImageButton(winsupport, imgui.ImVec2(50, 50), imgui.ImVec2(0,0), imgui.ImVec2(1,1), imgui.ImVec4(1, 1, 1, 1)) then win_state['support'].v = not win_state['support'].v win_state['windowspusk'].v = false end
 				
 				imgui.Text('') imgui.SameLine(12) imgui.Text(u8"Trade Menu")
 				imgui.SameLine(100) 
@@ -9629,15 +9641,59 @@ function sampev.onServerMessage(color, text)
 	if text:find("Выберите дом для спавна") and houserespawn == true then return false end
 	if text:find("Вы установили дом местом спавна!") and houserespawn == true then return false end
 	
-	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and addad.v then 
-		sampSendChat(u8:decode ('/ad 1 '..adredak.v))
-	end
-		
-	if text:find('Вы отменили публикацию своего объявления. И теперь можете создать новое.') and vipaddad.v then 
-		sampSendChat(u8:decode ('/ad 2 '..adredak2.v))
-	end
-	
 	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
+		if os.date("%A") == 'Monday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Понедельник | Обычных объявлений отправлено: '..cfg.adpred.piarsh..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Tuesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh1 = cfg.adpred.piarsh1 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Вторник | Обычных объявлений отправлено: '..cfg.adpred.piarsh1..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Wednesday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh2 = cfg.adpred.piarsh2 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Среда | Обычных объявлений отправлено: '..cfg.adpred.piarsh2..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Thursday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh3 = cfg.adpred.piarsh3 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Четверг | Обычных объявлений отправлено: '..cfg.adpred.piarsh3..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Friday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh4 = cfg.adpred.piarsh4 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Пятница | Обычных объявлений отправлено: '..cfg.adpred.piarsh4..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Saturday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh5 = cfg.adpred.piarsh5 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Суббота | Обычных объявлений отправлено: '..cfg.adpred.piarsh5..'\n'..yvedadd)
+			end
+		end
+		if os.date("%A") == 'Sunday' then
+		yvedadd = text:match('.+')
+		cfg.adpred.piarsh6 = cfg.adpred.piarsh6 + 1
+		if addvk.v then 
+		vk_request(''..gameServer..' | '..userNick..'\n Воскресенье | Обычных объявлений отправлено: '..cfg.adpred.piarsh6..'\n'..yvedadd)
+			end
+		end
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad222.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
@@ -9881,7 +9937,7 @@ function sampev.onServerMessage(color, text)
 		motopodarki = motopodarki + 1
 	end
 	
-	if text:match('Вам добавлено: предмет "Bitcoin (BTC)" (%d+)') and btc.v then 
+	if text:match('Вам добавлено: предметов "Bitcoin (BTC)" (%d+)') and btc.v then 
 		lua_thread.create(function()
 		wait(10)
 		bitkoin = text:match('(%d+)')
@@ -10361,17 +10417,21 @@ function load_settings() -- загрузка настроек
 	pismoreal3 = imgui.ImBuffer(u8(ini.settings.pismoreal3), 2560)
 	pismoreal4 = imgui.ImBuffer(u8(ini.settings.pismoreal4), 2560)
 	adsec = imgui.ImBuffer(u8(ini.settings.adsec), 100)
+	adsec222 = imgui.ImBuffer(u8(ini.settings.adsec222), 100)
 	vipadsec = imgui.ImBuffer(u8(ini.settings.vipadsec), 100)
 	famadsec = imgui.ImBuffer(u8(ini.settings.famadsec), 100)
 	vradsec = imgui.ImBuffer(u8(ini.settings.vradsec), 100)
+	vradsec222 = imgui.ImBuffer(u8(ini.settings.vradsec222), 100)
 	aladsec = imgui.ImBuffer(u8(ini.settings.aladsec), 100)
 	jadsec = imgui.ImBuffer(u8(ini.settings.jadsec), 100)
 	rtadsec = imgui.ImBuffer(u8(ini.settings.rtadsec), 100)
 	sadsec = imgui.ImBuffer(u8(ini.settings.sadsec), 100)
 	adredak = imgui.ImBuffer(u8(ini.settings.adredak), 1000)
+	adredak222 = imgui.ImBuffer(u8(ini.settings.adredak222), 1000)
 	adredak2 = imgui.ImBuffer(u8(ini.settings.adredak2), 1000)
 	adredak3 = imgui.ImBuffer(u8(ini.settings.adredak3), 1000)
 	adredak4 = imgui.ImBuffer(u8(ini.settings.adredak4), 1000)
+	adredak4222 = imgui.ImBuffer(u8(ini.settings.adredak4222), 1000)
 	adredak5 = imgui.ImBuffer(u8(ini.settings.adredak5), 1000)
 	adredak6 = imgui.ImBuffer(u8(ini.settings.adredak6), 1000)
 	adredak7 = imgui.ImBuffer(u8(ini.settings.adredak7), 1000)
@@ -13672,6 +13732,10 @@ while true do
 	sampSendChat(u8:decode ('/ad 1 '..adredak.v))
 	wait(adsec.v*1000)
 		end
+	if addad222.v then
+	sampSendChat(u8:decode ('/ad 1 '..adredak222.v))
+	wait(adsec222.v*1000)
+		end
 		wait(0)
 	end
 end
@@ -13703,6 +13767,11 @@ while true do
 	wait(100)
 	sampSendChat(u8:decode ('/vr '..adredak4.v))
 	wait(vradsec.v*1000)
+	end
+	if vraddad222.v then
+	wait(100)
+	sampSendChat(u8:decode ('/vr '..adredak4222.v))
+	wait(vradsec222.v*1000)
 	end
 		wait(0)
 	end
@@ -17240,44 +17309,11 @@ function tupupdate()
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine(170) imgui.Text(u8'Посмотреть полный список обновления вы сможете в "Параметры" - "Обновления".')
 		imgui.Separator()
-		if imgui.CollapsingHeader(u8'Список обновления с версии 1.1 до 1.2') then
-				imgui.BeginChild('##as2dasasdf33541', imgui.ImVec2(740, 700), false)
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'1. Фикс "Skup Menu" (не проверялись и не выставлялись товары)')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'2. На рабочем столе написана подсказка, как убрать новые диалоги, чтобы работал функционал по типу "Skup Menu".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'[19.07.2022]')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'3. Фикс "Skup Menu v2" (не проверялись и не выставлялись товары)')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'4. В "Skup Menu v2" добавлена команда /cstreset (обнулить список товаров в Skup Menu v2 (нужно при баге товаров или')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'смене местоположения их в диалоге))')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'[22.07.2022]')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'5. Фикс "Skup Menu v2" (не проверялись и не выставлялись товары)')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'[08.08.2022]')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'6. Переписана система закрытия инвентаря для открытия ящика пандоры.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'[16.09.2022]')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'7. Устранены иероглифы вместо текста в меню у систем, которые работают от встроенного видеоядра в процессоре.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'8. Добавлена ссылка на рабочем столе на беседу в телеграм.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'9. Функционал "Roulette Tools" подписан, что запрещено использовать, когда юзера нет за ПК.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'10. Из "Bank Menu" удален функционал "Пополнение депозита каждый PD".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'11. Функционал "Piar Menu" подписан, что запрещено использовать, когда юзера нет за ПК.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'12. Удалён функционал "Skup Menu" первой версии (возможно, будет заменён на меню продажи товаров)')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'13. Функционал "Удаление игроков в радиусе" подписан, что где-то может быть запрещен.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'14. Функционал "Майнинг" подписан, что запрещено использовать, когда юзера нет за ПК.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'15. Из "Statisctics" удален функционал "Автоальт" на руде и ферме.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'16. Функционал "Trade Menu" подписан, что запрещено использовать, когда юзера нет за ПК.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'17. Функционал "/bandit" удалён.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'18. Функционал "Анти-афк" подписан, что где-то запрещен.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'19. Из "Модификации" удалён функционал "Авто Байк и Мото".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'20. Из "Модификации" удалён функционал "Автобег".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'21. Из "Модификации" удалён функционал "Авто-еда чипсами".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'22. Из "Модификации" удалён функционал "Обычный реконнект".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'23. Функционал "Умный Реконнект" подписан, что запрещено использовать, когда юзера нет за ПК.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'24. Из "Модификации" удалён функционал "Анти-ломка".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Из "Модификации" удалён функционал "Отходить от места спавна".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Из "Модификации" удалён функционал "Авто-принятие наркотиков".')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'27. В "VK и TG Connect" больше нельзя управлять аккаунтом, только следить за ним и получать уведомления.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'28. Из "Для разработчиков" удалён функционал "Продвинутый режим дрона" (с функцией ВХ)')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'29. Обновлён список донатеров.')
-			imgui.EndChild()
-		end
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'[12.01.2023]')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс подсчета биткоинов при их снятии с видеокарт.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Skup Menu" (смена ид диалогов)')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс, когда пуск не закрывался после открытия "Skup Menu".')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Piar Menu" добавлено по 1 строке для пиара в /ad и /vr.')
 			imgui.End()
 		end
 	
@@ -17331,18 +17367,31 @@ function getArizonaName()
 	end
 	imgui.PushItemWidth(50)
 	imgui.Separator()
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять обычные объявления', addad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97', adsec)
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления №1', addad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97', adsec)
 	imgui.SameLine()
-	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel() end
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить объявление №1 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel() end
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять объявления №2', addad222) imgui.SameLine(254) imgui.InputText(u8'Задержка(сек) ##97222', adsec222)
+	imgui.SameLine()
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить объявление №2 сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel222() end
+	
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять VIP объявления', vipaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##98', vipadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить VIP объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel2() end
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /fam', famaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##199', famadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /fam сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel3() end
-	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /vr', vraddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200', vradsec)
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст №1 в /vr', vraddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200', vradsec)
 	imgui.SameLine() 
-	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /vr сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel4() end
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст №1 в /vr сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel4() end
+	
+	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст №2 в /vr', vraddad222) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##200222', vradsec222)
+	imgui.SameLine() 
+	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст №2 в /vr сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel4222() end
+	
+	
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /s', saddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##2000', sadsec)
 	imgui.SameLine() 
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить текст в /s сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel5() end
@@ -17364,10 +17413,12 @@ function getArizonaName()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Засчитывать объявления без активации Piar Menu функционала', obkachet)
 	imgui.PopItemWidth()
 	imgui.PushItemWidth(460)
-	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст обычного объявления', adredak)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст объявления №1', adredak)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст объявления №2', adredak222)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст VIP объявления', adredak2)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /fam', adredak3)
-	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr', adredak4)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr №1', adredak4)
+	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /vr №2', adredak4222)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /s', adredak5)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /al', adredak6)
 	imgui.Text('') imgui.SameLine() imgui.InputText(u8'Текст в /j', adredak7)
@@ -17389,9 +17440,11 @@ function getArizonaName()
 	cfg.adpred.piarsh6 = 0 
 	cfg.adpred.vippiarsh6 = 0 
 	addad.v = false
+	addad222.v = false
 	vipaddad.v = false
 	famaddad.v = false
 	vraddad.v = false
+	vraddad222.v = false
 	rtaddad.v = false
 	aladdad.v = false
 	jaddad.v = false
@@ -17402,17 +17455,21 @@ function getArizonaName()
 	groupvk.v = ''
 	obkachet.v = false
 	adredak.v = u8'В 165 баре много девочек и пива.'
+	adredak222.v = u8'В 165 баре много девочек и пива.'
 	adredak2.v = u8'В 165 баре много девочек и пива.'
 	adredak3.v = u8'В 165 баре много девочек и пива.'
 	adredak4.v = u8'В 165 баре много девочек и пива.'
+	adredak4222.v = u8'В 165 баре много девочек и пива.'
 	adredak5.v = u8'В 165 баре много девочек и пива.'
 	adredak6.v = u8'В 165 баре много девочек и пива.'
 	adredak7.v = u8'В 165 баре много девочек и пива.'
 	adredak8.v = u8'В 165 баре много девочек и пива.'
 	adsec.v = '60'
+	adsec222.v = '60'
 	vipadsec.v = '60'
 	famadsec.v = '60'
 	vradsec.v = '60'
+	vradsec222.v = '60'
 	aladsec.v = '60'
 	jadsec.v = '60'
 	rtadsec.v = '60'
@@ -18466,71 +18523,43 @@ function imgui.VerticalSeparator()
 end	
 
 function adtravel()
-lua_thread.create(function()
-	closeDialog()
-	wait(100)
-	sampSendChat(u8:decode ('/ad '..adredak.v))
-	wait(300)
-	sampSendDialogResponse(15346, 1, 1, -1)
-	wait(200)
-	sampSendDialogResponse(15347, 1, 0, -1)
-	wait(200)
-	sampSendDialogResponse(15379, 1, 0, -1)
-	wait(100)
-	closeDialog()
-		end)
-	end
+	sampSendChat(u8:decode ('/ad 1 '..adredak.v))
+end
+	
+function adtravel222()
+	sampSendChat(u8:decode ('/ad 1 '..adredak222.v))
+end
 	
 function adtravel2()
-lua_thread.create(function()
-	closeDialog()
-	wait(100)
-	sampSendChat(u8:decode ('/ad '..adredak2.v))
-	wait(300)
-	sampSendDialogResponse(15346, 1, 2, -1)
-	wait(200)
-	sampSendDialogResponse(15347, 1, 0, -1)
-	wait(200)
-	sampSendDialogResponse(15379, 1, 0, -1)
-	wait(100)
-	closeDialog()
-	end)
+	sampSendChat(u8:decode ('/ad 2 '..adredak2.v))
 end
 
 function adtravel3()
-lua_thread.create(function()
 	sampSendChat(u8:decode ('/fam '..adredak3.v))
-	end)
 end
 
 function adtravel4()
-lua_thread.create(function()
 	sampSendChat(u8:decode ('/vr '..adredak4.v))
-	end)
+end
+
+function adtravel4222()
+	sampSendChat(u8:decode ('/vr '..adredak4222.v))
 end
 
 function adtravel5()
-lua_thread.create(function()
 	sampSendChat(u8:decode ('/s '..adredak5.v))
-	end)
 end
 
 function adtravel6()
-lua_thread.create(function()
 	sampSendChat(u8:decode ('/al '..adredak6.v))
-	end)
 end
 
 function adtravel7()
-lua_thread.create(function()
 	sampSendChat(u8:decode ('/j '..adredak7.v))
-	end)
 end
 
 function adtravel8()
-lua_thread.create(function()
 	sampSendChat(u8:decode ('/rt '..adredak8.v))
-	end)
 end
 
 function photo_load()
@@ -20574,15 +20603,15 @@ end
 
 function buyProcess(n)
 	isBuyProcess = true
-	if inputsskup[n][5].v == true then sampSendDialogResponse(10011, 1, 0, inputsskup[n][2].v)
-	else sampSendDialogResponse(10011, 1, 0, inputsskup[n][1].v.." "..inputsskup[n][2].v) end
+	if inputsskup[n][5].v == true then sampSendDialogResponse(11, 1, 0, inputsskup[n][2].v)
+	else sampSendDialogResponse(11, 1, 0, inputsskup[n][1].v.." "..inputsskup[n][2].v) end
 	wait(1000)
 	inputsskup[n][4] = 1
 	local isEnd = true
 	for i=1, #inputsskup do
 		if inputsskup[i][4] == false then isEnd = false end
 	end
-	if not isEnd then sendKey(1024) wait(delayintv2.v) sampSendDialogResponse(10009, 1, 1) else sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Выбранные вами товары успешно выставлены на скупку.", -1) isBuyProcess = false isEn = 0 win_state['skupv2'].v = true win_state['skupv3'].v = false sampShowDialog(1235, "Выставление", "{7cfc00}Предметы выставлены, можете закрывать окно", "Ок") end
+	if not isEnd then sendKey(1024) wait(delayintv2.v) sampSendDialogResponse(9, 1, 1) else sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Выбранные вами товары успешно выставлены на скупку.", -1) isBuyProcess = false isEn = 0 win_state['skupv2'].v = true win_state['skupv3'].v = false sampShowDialog(1235, "Выставление", "{7cfc00}Предметы выставлены, можете закрывать окно", "Ок") end
 end
 
 function checkPage(menu)
@@ -20593,9 +20622,9 @@ function checkPage(menu)
 		local isFounded = false
 		for i=1, #t do
 			for n=1, #inputsskup do
-				if t[i]:find(itemsskup[inputsskup[n][3]][1], 0, true) and inputsskup[n][4] == false then sampSendDialogResponse(10010, 1, i - 1) isFounded = true wait(delayintv2.v) buyProcess(n) break end
+				if t[i]:find(itemsskup[inputsskup[n][3]][1], 0, true) and inputsskup[n][4] == false then sampSendDialogResponse(10, 1, i - 1) isFounded = true wait(delayintv2.v) buyProcess(n) break end
 			end
-			if t[i]:find(">") then wait(delayintv2.v) sampSendDialogResponse(10010, 1, i - 1) haveExit = true end
+			if t[i]:find(">") then wait(delayintv2.v) sampSendDialogResponse(10, 1, i - 1) haveExit = true end
 			if isFounded then break end
 		end
 end
@@ -20614,9 +20643,9 @@ function pageWrite(menu)
 			end
 			if not isFounded then table.insert(itemsskup, {itemskup, 0, 0, false, false}) end
 		end
-		if t[i]:find(">") then wait(delayintv2.v) sampSendDialogResponse(10010, 1, i - 1) end
+		if t[i]:find(">") then wait(delayintv2.v) sampSendDialogResponse(10, 1, i - 1) end
 	end
-	if not isNext then isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemsskup, _nameini) sampSendDialogResponse(10010, 0) isBuyProcess = false onecheck = true end
+	if not isNext then isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemsskup, _nameini) sampSendDialogResponse(10, 0) isBuyProcess = false onecheck = true end
 end
 
 function boxingtest()
