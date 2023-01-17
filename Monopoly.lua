@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.19')
+script_version('3.5.20')
 
 use = false
 close = false
@@ -7289,6 +7289,13 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 		vriddial = dialogId
 		end
 	end
+end
+
+	if title:match('{BFBBBA}{FFFFFF}Клиент | {ae433d}Игра') then
+	lua_thread.create(function()
+	wait(15000)
+	sampSendDialogResponse(dialogId, 1, 0, -1)
+	end)
 end
 
 	if title:match('{BFBBBA}{FFFFFF}Клиент | {ae433d}Игра') and exitvicevc == 1 then
@@ -31519,6 +31526,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[17.01.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс автологин.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Если в течении 15 секунд, вы не выбираете "Подключение к Vice City" или "Вернуться на сервер", то скрипт автоматический')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'подключится к Vice-City.')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[01.01.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Майнинг функции" (смена ид диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс автологина (работает с новыми диалогами Аризоны и с "Эмуляцией Лаунчера", функционал автологина с новыми диалогами')
@@ -38792,6 +38804,21 @@ function onReceivePacket(ID, BS)
 			if(raknetBitStreamReadString(BS, raknetBitStreamReadInt32(BS)):match("window%.executeEvent%('event%.setActiveView', '%[\"Auth\"%]'%);")) then
 				lua_thread.create(function()
 					wait(200)
+					
+					local BITSTREAM = raknetNewBitStream()
+					raknetBitStreamWriteInt8(BITSTREAM, 220)
+					raknetBitStreamWriteInt8(BITSTREAM, 18)
+					raknetBitStreamWriteInt8(BITSTREAM, string.len("onActiveViewChanged|Auth"))
+					raknetBitStreamWriteInt8(BITSTREAM, 0)
+					raknetBitStreamWriteInt8(BITSTREAM, 0)
+					raknetBitStreamWriteInt8(BITSTREAM, 0)
+					raknetBitStreamWriteString(BITSTREAM, "onActiveViewChanged|Auth")
+					raknetBitStreamWriteInt32(BITSTREAM, 0)
+					raknetBitStreamWriteInt8(BITSTREAM, 0)
+					raknetBitStreamWriteInt8(BITSTREAM, 0)
+					raknetSendBitStreamEx(BITSTREAM, 1, 7, 1)
+					raknetDeleteBitStream(BITSTREAM)
+					
 					local BITSTREAM = raknetNewBitStream()
 					raknetBitStreamWriteInt8(BITSTREAM, 220)
 					raknetBitStreamWriteInt8(BITSTREAM, 18)
@@ -38800,12 +38827,13 @@ function onReceivePacket(ID, BS)
 					raknetBitStreamWriteInt8(BITSTREAM, 0)
 					raknetBitStreamWriteInt8(BITSTREAM, 0)
 					raknetBitStreamWriteString(BITSTREAM, string.format("authorization|%s|%s|0", userNicklogin, autopass.v))
-					raknetBitStreamWriteInt32(BITSTREAM, 1)
+					raknetBitStreamWriteInt32(BITSTREAM, 0)
 					raknetBitStreamWriteInt8(BITSTREAM, 0)
 					raknetBitStreamWriteInt8(BITSTREAM, 0)
 					raknetSendBitStreamEx(BITSTREAM, 1, 7, 1)
 					raknetDeleteBitStream(BITSTREAM)
-					sampAddChatMessage('Прошел регу!', -1)
+					
+					return false
 					end)
 				end
 			end
@@ -38815,7 +38843,7 @@ end
 
 function onSendRpc(ID, BS)
 	if autologin.v and launcher.v then
-	if(ID == 25) then 
+	if (ID == 25) then 
 		lua_thread.create(function()
 			wait(10)
 			
