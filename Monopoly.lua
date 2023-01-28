@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.20')
+script_version('3.5.21')
 
 use = false
 close = false
@@ -19,6 +19,7 @@ local boolshar = false
 local houserespawn = false
 local samprulstop = true
 checknick = '1'
+nodial = false
 checknick2 = '0'
 airphone = false
 phonetext = 'nill'
@@ -47,14 +48,15 @@ slotazfind = false
 slotpodarokfind = false
 statrbtc = false
 closefind = false
+closerulfind = false
 runfind = false
 runfind2 = false
-findrul = false
 local fa_font = nil
 delplayer = false
 housecheck = false
 local npc, infnpc = {}, {}
 local admmp = 2111
+rulmp = 2086
 local rulrun = 2133
 local rulrun2 = 2140
 statuszidkost1v2 = 0
@@ -7725,7 +7727,6 @@ end
 	
 	if dialogId == 9237 and checked_test144.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then
 	poiskrul = text:match('Стоимость: {BEB455}0 {FFFFFF}AZ')
-	findrul = true
 	end
 	if dialogId == 119 and autoopl.v then
 	sendchot5()
@@ -7826,9 +7827,9 @@ end
 		wait(200)
 		sampSendChat('/mm')
 		wait(200)
-		sampSendDialogResponse(722, 1, 13, _)
+		sampSendDialogResponse(722, 1, 12, _)
 		wait(200)
-		sampSendClickTextdraw(2167)
+		sampSendClickTextdraw(rulmp)
 		wait(100)
 		closeDialog()
       end
@@ -8304,6 +8305,15 @@ function sampev.onShowTextDraw(id, data, textdrawId)
 	end)
 end
 
+	if closerulfind == false and data.text == 'CLOSE' then 
+	lua_thread.create(function()
+	rulmp = id - 1
+	closerulfind = true
+	wait(10000)
+	closerulfind = false
+	end)
+end
+
 	if runfind == false and data.text == 'RUN' then 
 	lua_thread.create(function()
 	rulrun = id + 1
@@ -8367,7 +8377,7 @@ end
 	then slotruletka2 = false checked_test12.v = true end
 	end
 	
-	if data.modelId == 1274 and checked_test12.v and findrul == true and ostanovka3.v then 
+	if data.modelId == 1274 and checked_test12.v and ostanovka3.v then 
 	countaz = countaz + 1
 	if countaz > slotazrul.v then 
 	slotazfind = true
@@ -8377,7 +8387,7 @@ end
 		end
 	end
 	
-	if data.modelId == 1274 and checked_test13.v and findrul == true and ostanovka3.v then 
+	if data.modelId == 1274 and checked_test13.v and ostanovka3.v then 
 	countaz = countaz + 1
 	if countaz > slotazrul.v then 
 	slotazfind = true
@@ -8387,7 +8397,7 @@ end
 		end
 	end
 	
-	if data.modelId == 1274 and checked_test14.v and findrul == true and ostanovka3.v then 
+	if data.modelId == 1274 and checked_test14.v and ostanovka3.v then 
 	countaz = countaz + 1
 	if countaz > slotazrul.v then 
 	slotazfind = true
@@ -8397,8 +8407,8 @@ end
 		end
 	end
 	
-	if data.modelId == 19057 and checked_test11.v and findrul == true and ostanovka4.v then 
-	countpodarok = countpodarok + 1 / 2
+	if data.modelId == 19057 and checked_test11.v and ostanovka4.v then 
+	countpodarok = countpodarok + 1
 	if countpodarok > slotpodarokrul.v then 
 	slotpodarokfind = true
 	end
@@ -9791,52 +9801,46 @@ end
 	end)
 end
 
-function rul(respond)
-  nodial = true
-  sampSendChat('/mn')
-  sampSendDialogResponse(722, 1, 7, _)
-end
-
 function ruletka()
 	if checked_test.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	  end
 	if checked_test2.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	  end
 	if checked_test3.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	  end
 	if checked_test4.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	end
 	if checked_test11.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	end
 	if checked_test12.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	end
 	if checked_test13.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	end
 	if checked_test14.v then 
 		wait(500)
 		krytim = true
-		rul()
+		nodial = true
 	end
 end
 
@@ -9895,11 +9899,11 @@ function bitauto()
 	 wait(zadervkabtc.v)
 	 sendKey(128)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(25247, 1 , 1, -1)
+	 sampSendDialogResponse(25248, 1 , 1, -1)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(25250, 1, 0, u8:decode(autobit.v))
+	 sampSendDialogResponse(25251, 1, 0, u8:decode(autobit.v))
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(25251, 1 , 0, -1)
+	 sampSendDialogResponse(25252, 1 , 0, -1)
 	 wait(zadervkabtc.v)
 	 closeDialog()
 	 wait(zadervkabtc.v)
@@ -9919,11 +9923,11 @@ function sellbitauto()
 	 wait(zadervkabtc.v)
 	 sendKey(128)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(25247, 1 , 0, -1)
+	 sampSendDialogResponse(25248, 1 , 0, -1)
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(25248, 1, 0, u8:decode(autosellbit.v))
+	 sampSendDialogResponse(25249, 1, 0, u8:decode(autosellbit.v))
 	 wait(zadervkabtc.v)
-	 sampSendDialogResponse(25249, 1 , 0, -1)
+	 sampSendDialogResponse(25250, 1 , 0, -1)
 	 wait(zadervkabtc.v)
 	 closeDialog()
 	 wait(zadervkabtc.v)
@@ -11451,8 +11455,8 @@ function imgui.OnDrawFrame()
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB(""..colorlink.."push me") imgui.SameLine(200) imgui.Link('https://donate.qiwi.com/payin/Bunya','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Котофей (828 рублей) | Diego W. (666 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Reason (444 рубля) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Renegade (1.000 рублей) | Котофей (828 руб) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Diego W. (666 рублей) | Reason (444 рубля) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Громов (300 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Котиков (150 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Archi (100 рублей) |")
@@ -11924,8 +11928,8 @@ function imgui.OnDrawFrame()
 	if os.date("%d") == '03' or os.date("%d") == '06' or os.date("%d") == '09' or os.date("%d") == '12' or os.date("%d") == '15' or os.date("%d") == '18' or os.date("%d") == '21' or os.date("%d") == '24' or os.date("%d") == '27' or os.date("%d") == '30' then
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Игроки, которые поддержали автора скрипта:")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"Поддержать автора копеечкой - ") imgui.SameLine(200) imgui.TextColoredRGB(""..colorlink.."push me") imgui.SameLine(200) imgui.Link('https://donate.qiwi.com/payin/Bunya','push me')
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Котофей (828 рублей) | Diego W. (666 рублей) |")
-	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Reason (444 рубля) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Renegade (1.000 рублей) | Котофей (828 руб) | ")
+	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Diego W. (666 рублей) | Reason (444 рубля) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Nismo (333 рубля) | Громов (300 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Джузеп (300 рублей) | Котиков (150 рублей) |")
 	imgui.Text('') imgui.SameLine() imgui.Text(u8"| Benito (100 рублей) | Archi (100 рублей) |")
@@ -12246,7 +12250,7 @@ end
 				imgui.Text('') imgui.SameLine(90) imgui.Text(u8'F3 или установленная вами клавиша - закрывает все окна.')
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK скрипта (информация, помощь, предложения)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/mono_tools") end
 				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_VK..u8' Перейти в группу VK Monopoly (конкурсы, мероприятия, информация)', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://vk.com/monopolyfam") end
-				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Котофей (828 рублей))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://donate.qiwi.com/payin/Bunya") end
+				imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_GOOGLE_WALLET..u8' Поддержать автора скрипта копеечкой (Топ донатер - Renegade (1.000 рублей))', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-293, 0)) then os.execute("start https://donate.qiwi.com/payin/Bunya") end
 				
 				imgui.Separator()
 				imgui.Text('')
@@ -17726,7 +17730,7 @@ while true do
 	checked_test13.v = false
 	checked_test12.v = false
 	checked_test11.v = false
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(500)
@@ -17745,7 +17749,7 @@ while true do
 	checked_test13.v = false
 	checked_test12.v = false
 	checked_test11.v = false
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(500)
@@ -17764,7 +17768,7 @@ while true do
 	checked_test13.v = false
 	checked_test12.v = false
 	checked_test11.v = false
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(500)
@@ -17783,7 +17787,7 @@ while true do
 	checked_test13.v = false
 	checked_test12.v = false
 	checked_test11.v = false
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(500)
@@ -17803,7 +17807,7 @@ while true do
 	checked_test12.v = false
 	checked_test14.v = false
 	slotruletka = true
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(1000)
@@ -17817,14 +17821,12 @@ while true do
 	  wait(200)
 	  closeDialog()
 	  countpodarok = 0
-	  findrul = false
 	  else
 	  sampSendDialogResponse(9237, 0, -1, -1)
 	  wait(200)
 	  closeDialog()
 	  wait(100)
 	  countpodarok = 0
-	  findrul = false
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
@@ -17842,7 +17844,7 @@ while true do
 	checked_test11.v = false
 	checked_test14.v = false
 	slotruletka2 = true
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(1000)
@@ -17857,14 +17859,12 @@ while true do
 	  closeDialog()
 	  wait(100)
 	  countaz = 0
-	  findrul = false
 	  else
 	  sampSendDialogResponse(9237, 0, -1, -1)
 	  wait(200)
 	  closeDialog()
 	  wait(100)
 	  countaz = 0
-	  findrul = false
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
@@ -17881,7 +17881,7 @@ while true do
 	checked_test12.v = false
 	checked_test11.v = false
 	checked_test14.v = false
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(1000)
@@ -17896,14 +17896,12 @@ while true do
 	  closeDialog()
 	  wait(100)
 	  countaz = 0
-	  findrul = false
 	  else
 	  sampSendDialogResponse(9237, 0, -1, -1)
 	  wait(200)
 	  closeDialog()
 	  wait(100)
 	  countaz = 0
-	  findrul = false
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
@@ -17920,7 +17918,7 @@ while true do
 	checked_test13.v = false
 	checked_test12.v = false
 	checked_test11.v = false
-      rul()
+      nodial = true
 	  wait(111)
 	  closeDialog()
       wait(1000)
@@ -17935,14 +17933,12 @@ while true do
 	  closeDialog()
 	  wait(100)
 	  countaz = 0
-	  findrul = false
 	  else
 	  sampSendDialogResponse(9237, 0, -1, -1)
 	  wait(200)
 	  closeDialog()
 	  wait(100)
 	  countaz = 0
-	  findrul = false
 	  end
 	  wait(1500)
       sampSendClickTextdraw(2091)
@@ -17981,24 +17977,12 @@ while true do
 	if checked_test5.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0) 
 	  wait(200)
-	if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
 	  if inventoff.v then 
 		else
 		sampSendClickTextdraw(admmp)
 		end
 	  wait(500)
       active = true
-	  samprulstop = true
 	  if inventoff.v then 
 	    sampSendClickTextdraw(2107)
 		else
@@ -18009,19 +17993,8 @@ while true do
       wait((arztest3*60000) + 60000 + (randomwait*1000))
     end
 	if checked_test5.v and otkrytie2.v and otkrytieymnoe.v then
-	  sampCloseCurrentDialogWithButton(0)
+	  sampCloseCurrentDialogWithButton(0) 
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
 	  if inventoff.v then 
 		
 		else
@@ -18029,7 +18002,6 @@ while true do
 		end
 	  wait(500)
       active = true
-	  samprulstop = true
 	  if inventoff.v then 
 		sampSendClickTextdraw(2107)
 		else
@@ -18042,17 +18014,6 @@ while true do
 	if checked_test5.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
 	  if inventoff.v then 
 		
 		else
@@ -18060,7 +18021,6 @@ while true do
 		end
 	  wait(500)
       active = true
-	  samprulstop = true
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18079,17 +18039,6 @@ while true do
 	 if checked_test6.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
 	  if inventoff.v then 
 		
 		else
@@ -18097,7 +18046,6 @@ while true do
 		end
 	  wait(500)
       active1 = true
-	  samprulstop = true
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18110,17 +18058,7 @@ while true do
 	 if checked_test6.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18128,7 +18066,6 @@ while true do
 		end
 	  wait(500)
       active1 = true
-	  samprulstop = true
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18141,17 +18078,7 @@ while true do
 	if checked_test6.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	 
 	 if inventoff.v then 
 		
 		else
@@ -18159,7 +18086,6 @@ while true do
 		end
 	  wait(500)
       active1 = true
-	  samprulstop = true
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18178,17 +18104,7 @@ while true do
 	if checked_test7.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18196,7 +18112,6 @@ while true do
 		end
 	  wait(500)
       active2 = true
-	  samprulstop = true
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18209,17 +18124,7 @@ while true do
 	if checked_test7.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18227,7 +18132,7 @@ while true do
 		end
 	  wait(500)
       active2 = true
-	  samprulstop = true
+	  
       if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 	  else
@@ -18240,17 +18145,7 @@ while true do
 	if checked_test7.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18258,7 +18153,7 @@ while true do
 		end
 	  wait(500)
       active2 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18277,17 +18172,7 @@ while true do
 	if checked_test100.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18295,7 +18180,7 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18308,17 +18193,7 @@ while true do
 	if checked_test100.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18326,7 +18201,7 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18339,17 +18214,7 @@ while true do
 	if checked_test100.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18357,7 +18222,7 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18376,17 +18241,7 @@ while true do
 	if checked_test10.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	 
       if inventoff.v then 
 		
 		else
@@ -18394,7 +18249,7 @@ while true do
 		end
 	  wait(500)
       active5 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18407,17 +18262,7 @@ while true do
 	if checked_test10.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18425,7 +18270,7 @@ while true do
 		end
 	  wait(500)
       active5 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18438,17 +18283,7 @@ while true do
 	if checked_test10.v and otkrytie3.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18456,7 +18291,7 @@ while true do
 		end
 	  wait(500)
       active5 = true
-	  samprulstop = true
+	  
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18475,17 +18310,7 @@ while true do
 	if checked_test200.v and otkrytie.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18493,7 +18318,7 @@ while true do
 		end
 	  wait(500)
       active299 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18506,17 +18331,7 @@ while true do
 	if checked_test200.v and otkrytie2.v and otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18524,7 +18339,7 @@ while true do
 		end
 	  wait(500)
       active299 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18543,17 +18358,7 @@ while true do
 	if checked_test5.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0) 
 	  wait(200)
-	if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	
 	  if inventoff.v then 
 		
 		else
@@ -18561,7 +18366,7 @@ while true do
 		end
 	  wait(500)
       active = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18573,17 +18378,7 @@ while true do
     if checked_test6.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	 
 	  if inventoff.v then 
 		
 		else
@@ -18591,7 +18386,7 @@ while true do
 		end
 	  wait(500)
       active1 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18603,17 +18398,7 @@ while true do
     if checked_test7.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18621,7 +18406,7 @@ while true do
 		end
 	  wait(500)
       active2 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18633,17 +18418,7 @@ while true do
 	if checked_test100.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18651,7 +18426,7 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18664,17 +18439,7 @@ while true do
 	if checked_test200.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18682,7 +18447,7 @@ while true do
 		end
 	  wait(500)
       active299 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18695,17 +18460,7 @@ while true do
 	if checked_test10.v and otkrytie.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
       if inventoff.v then 
 		
 		else
@@ -18713,7 +18468,7 @@ while true do
 		end
 	  wait(500)
       active5 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18730,17 +18485,7 @@ while true do
 	if checked_test5.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	 
 	  if inventoff.v then 
 		
 		else
@@ -18748,7 +18493,7 @@ while true do
 		end
 	  wait(500)
       active = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18760,17 +18505,7 @@ while true do
     if checked_test6.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18778,7 +18513,7 @@ while true do
 		end
 	  wait(500)
       active1 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18790,17 +18525,7 @@ while true do
     if checked_test7.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18808,7 +18533,7 @@ while true do
 		end
 	  wait(500)
       active2 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18820,17 +18545,7 @@ while true do
 	 if checked_test100.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18838,7 +18553,7 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18851,17 +18566,7 @@ while true do
 	if checked_test200.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18869,7 +18574,7 @@ while true do
 		end
 	  wait(500)
       active299 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18882,17 +18587,7 @@ while true do
 	if checked_test10.v and otkrytie2.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18900,7 +18595,7 @@ while true do
 		end
 	  wait(500)
       active5 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18917,17 +18612,7 @@ while true do
 	if checked_test5.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18935,7 +18620,7 @@ while true do
 		end
 	  wait(500)
       active = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18947,17 +18632,7 @@ while true do
     if checked_test6.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18965,7 +18640,7 @@ while true do
 		end
 	  wait(500)
       active1 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -18977,17 +18652,7 @@ while true do
 	if checked_test7.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -18995,7 +18660,7 @@ while true do
 		end
 	  wait(500)
       active2 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -19007,17 +18672,7 @@ while true do
 	if checked_test100.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -19025,7 +18680,7 @@ while true do
 		end
 	  wait(500)
       active25 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -19037,17 +18692,7 @@ while true do
 	if checked_test10.v and otkrytie3.v and not otkrytieymnoe.v then
 	  sampCloseCurrentDialogWithButton(0)
 	  wait(200)
-	  if checked_test.v or checked_test2.v or checked_test3.v or checked_test4.v or checked_test14.v or checked_test13.v or checked_test12.v or checked_test11.v then 
-	  samprulstop = false
-	  wait(30000)
-	  sampSendChat('/mm')
-	  wait(200)
-	  sampSendDialogResponse(722, 1, 13, _)
-	  wait(200)
-	  sampSendClickTextdraw(2167)
-	  wait(100)
-	  closeDialog()
-	  end
+	  
 	  if inventoff.v then 
 		
 		else
@@ -19055,7 +18700,7 @@ while true do
 		end
 	  wait(500)
       active5 = true
-	  samprulstop = true
+
 	  if inventoff.v then 
 	  sampSendClickTextdraw(2107)
 		else
@@ -27597,17 +27242,17 @@ function yashikisroulette()
 			imgui.PopItemWidth()
 			
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать бронзовые рулетки', checked_test) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме бронзовые рулетки, пока они у вас не закончатся. Если слот обновляется - функция выключается. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать серебряные  рулетки', checked_test2) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме серебряные рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки', checked_test3) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме золотые рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать платиновые рулетки', checked_test4) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме платиновые рулетки, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать бронзовые рулетки', checked_test) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме бронзовые рулетки, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если слот обновляется - функция выключается. Если рулетки заканчиваются - функция выключается. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать серебряные  рулетки', checked_test2) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме серебряные рулетки, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки', checked_test3) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме золотые рулетки, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать платиновые рулетки', checked_test4) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать в автоматическом режиме платиновые рулетки, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Text('')
 			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Активировать авто-кликер мыши', cliker) imgui.SameLine(); imgui.TextQuestion(u8"Функция создана для облегчения открытия ларцов. Включите функцию, наведите на нужный ларец и нажмите комбинацию клавиш 'Alt + A'. Когда вы захотите остановить кликер, нажмите 'Alt + S'. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			imgui.Text('')
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать бронзовые рулетки с обновлением слота', checked_test11) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать бронзовые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать серебряные рулетки с обновлением слота', checked_test12) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать серебряные рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки с обновлением слота', checked_test13) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать золотые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
-			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать платиновые рулетки с обновлением слота', checked_test14) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать платиновые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Функция может также одновременно работать с открытием сундуков. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать бронзовые рулетки с обновлением слота', checked_test11) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать бронзовые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать серебряные рулетки с обновлением слота', checked_test12) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать серебряные рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать золотые рулетки с обновлением слота', checked_test13) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать золотые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
+			imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Открывать платиновые рулетки с обновлением слота', checked_test14) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то скрипт будет открывать платиновые рулетки и после каждого открытия обновлять слот, пока они у вас не закончатся. Перед активацией функционала, откройте меню с открытием рулеток. Если рулетки заканчиваются - функция выключается. Если система предлагает обновить слот за AZ - скрипт не обновляет и крутит дальше тот же слот. Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего аккаунта. На каких то серверах функционал полностью запрещен - уточняйте у Главной Администрации своего сервера.")
 			if checked_test.v then
 			checked_test.v = true
 			checked_test2.v = false
@@ -27688,6 +27333,8 @@ function yashikisroulette()
 			checked_test12.v = false
 			checked_test11.v = false
 		end
+		
+		if checked_test14.v == false and checked_test13.v == false and checked_test12.v == false and checked_test11.v == false and checked_test4.v == false and checked_test3.v == false and checked_test2.v == false and checked_test.v == false then krytim = true end
 		
 		
 		imgui.Text('') imgui.SameLine() imgui.SliderInt(u8'Задержка (в мс) ##484yhgfh',zadervkaprokrut,10, 10000) imgui.SameLine(); imgui.TextQuestion(u8"Задержка для открытия рулеток. Если не открывает все рулетки и останавливается - увеличьте задержку. Если крутит рулетки медленно - уменьшите задержку. По умолчанию установлено на 500 мс.")
@@ -27935,12 +27582,12 @@ function notesmenu()
 function tochmenu()
 			local sw, sh = getScreenResolution() 
 			imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-			imgui.SetNextWindowSize(imgui.ImVec2(625, 325), imgui.Cond.FirstUseEver)
+			imgui.SetNextWindowSize(imgui.ImVec2(675, 325), imgui.Cond.FirstUseEver)
 			imgui.Begin(fa.ICON_DIAMOND..u8' Toch Menu | by vegas~ | доработал Bunya', win_state['tochilki'], imgui.WindowFlags.NoResize)
 				imgui.Text('')
 				imgui.Separator()
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'*Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'вашего аккаунта. Чтобы начать процесс, включите функционал и начните первую заточку вручную.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'*Запрещено использовать, когда юзера нет за ПК. В ином случае это может привести к блокировке вашего')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'аккаунта. Чтобы начать процесс, включите функционал и начните первую заточку вручную.')
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8(" Брать камни и амулеты только с первой страницы")); imgui.SameLine(); imgui.ToggleButton(u8'', versiontoch); imgui.SameLine(); imgui.Text(u8(" Брать камни и амулеты на всех страницах"))
 				
@@ -27980,8 +27627,10 @@ function tochmenu()
 				imgui.RadioButton('+11', checked_radio, 11)
 				imgui.SameLine()
 				imgui.RadioButton('+12', checked_radio, 12)
+				imgui.SameLine()
+				imgui.RadioButton('+13', checked_radio, 13)
 				imgui.Separator()
-				imgui.Text('') imgui.SameLine(230) imgui.Text(u8'Покраска аксессуаров.') imgui.SameLine(); imgui.TextQuestion(u8"Перед включением функционала, положите красители, точильные камни и аксессуар в первые 3 ячейки второй страницы. Включите 'Начать процесс покраски', выберите нужный цвет и нажмите 'Paint'. После первой покраски, скрипт сам продолжит процесс.")
+				imgui.Text('') imgui.SameLine(250) imgui.Text(u8'Покраска аксессуаров.') imgui.SameLine(); imgui.TextQuestion(u8"Перед включением функционала, положите красители, точильные камни и аксессуар в первые 3 ячейки второй страницы. Включите 'Начать процесс покраски', выберите нужный цвет и нажмите 'Paint'. После первой покраски, скрипт сам продолжит процесс.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Начать процесс покраски")); imgui.SameLine(); imgui.ToggleButton(u8'Начать процесс покраски', checked_box4) 
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'Выберите нужный цвет:')
 				imgui.Separator()
@@ -27992,8 +27641,8 @@ function tochmenu()
 				imgui.SameLine() imgui.Checkbox(u8'Желтый', colour5)
 				imgui.SameLine() imgui.Checkbox(u8'Зеленый', colour6)
 				imgui.SameLine() imgui.Checkbox(u8'Голубой', colour7)
-				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Синий', colour8)
-				imgui.SameLine(81) imgui.Checkbox(u8'Фиолетовый', colour9)
+				imgui.SameLine() imgui.Checkbox(u8'Синий', colour8)
+				imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Фиолетовый', colour9)
 				imgui.Separator()
 				imgui.End()
 			end
@@ -31525,6 +31174,16 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.01.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс продажи и покупки биткоинов в "Bank Menu".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Вписан новый топ донатер.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс открытия рулеток в "Roulette Tools". Теперь перед активацией функционала, необходимо зайти в меню открытия рулеток.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'Функция больше не оптимизирована для работы одновременно с открытием сундуков, включайте что-то одно, либо открывайте рулетки,')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'либо проверяйте сундуки.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Roulette Tools" (был баг, когда после открытия, например, "бронзовых рулеток", вы хотели далее открывать "серебряные')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'рулетки", но скрипт не открывал их, пока вы не перезагрузите скрипт).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Toch Menu" добавлена возможность выбрать заточку до +13.')
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[17.01.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс автологин.')
