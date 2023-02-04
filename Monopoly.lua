@@ -1,8 +1,11 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.21')
+script_version('3.5.22')
 
+lssmi = false 
+lvsmi = false
+sfsmi = false
 use = false
 close = false
 use1 = false
@@ -1332,6 +1335,7 @@ local cfg3 = inicfg.load({
 		obkachetv2 = false,
 		vipobkachetv2 = false,
 		smilsv2 = true,
+		autosmiv2 = false,
 		smilvv2 = false,
 		smisfv2 = false,
 		windowsstylev2 = true,
@@ -2051,6 +2055,7 @@ local SET = {
 		obkachet = false,
 		vipobkachet = false,
 		smils = true,
+		autosmi = false,
 		smilv = false,
 		smisf = false,
 		windowsstyle = true,
@@ -2566,7 +2571,6 @@ local SET = {
 		unbaghud = false,
 		keyT = false,
 		launcher = false,
-		modevice = false,
 		deagle = false,
 		awp = false,
 		m4 = false,
@@ -5476,18 +5480,10 @@ function main()
 	
 	sampRegisterChatCommand("phoneair", phoneair) -- очистка чата
 	
-	sampRegisterChatCommand("vicemode", function() 
-	if modevice.v == false then modevice.v = true sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы включили авто-определение сервера и ника для команд '/reconvc' и '/exitvice'.", -1)
-	saveSettings()
-	else
-	modevice.v = false sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Вы включили ручной выбор сервера и ника для команд '/reconvc' и '/exitvice'.", -1) 
-	saveSettings()
-		end
-	end)
-	
 	sampRegisterChatCommand("versamp", sampversion)
 	
 	sampRegisterChatCommand("exitvice", viceexit)
+	sampRegisterChatCommand("exitvice2", viceexit2)
 	sampRegisterChatCommand("vrv", viprek)
 	
 	if novr.v == true then sampRegisterChatCommand("vr", viprek2) end
@@ -5505,6 +5501,7 @@ function main()
 	sampRegisterChatCommand('recon', recongenius) -- регистрируем команду
 	
 	sampRegisterChatCommand('reconvc', recongeniusvc) -- регистрируем команду
+	sampRegisterChatCommand('reconvc2', recongeniusvc2) -- регистрируем команду
 	
 	sampRegisterChatCommand('tu', testupdate) -- регистрируем команду
 	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
@@ -6503,7 +6500,6 @@ function saveSettings(args, key)
 	ini.settings.assistant8 = assistant8.v
 	ini.settings.keyT = keyT.v
 	ini.settings.launcher = launcher.v
-	ini.settings.modevice = modevice.v
 	ini.settings.deagle = deagle.v
 	ini.settings.awp = awp.v
 	ini.settings.m4 = m4.v
@@ -6922,6 +6918,7 @@ function saveSettings(args, key)
 	ini.settings.obkachet = obkachet.v
 	ini.settings.vipobkachet = vipobkachet.v
 	ini.settings.smils = smils.v
+	ini.settings.autosmi = autosmi.v
 	ini.settings.smilv = smilv.v
 	ini.settings.smisf = smisf.v
 	ini.settings.windowsstyle = windowsstyle.v
@@ -14384,7 +14381,7 @@ end
 function ARGBtoRGB(color) return bit32 or require'bit'.band(color, 0xFFFFFF) end -- конверт цветов
 
 function rel() -- перезагрузка скрипта
-	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Скрипт перезагружается.", -1)
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Скрипт перезагружается...", -1)
 	saveSettings()
 	reloadScript = true
 	if autorelog.v then thisScript():unload() else thisScript():reload() end
@@ -14448,6 +14445,12 @@ function podklchat()
 	end
 
 function sampev.onServerMessage(color, text)
+
+	if addad.v or addad2.v or vipaddad.v then 
+	if color == 1941201407 and text:match('Отредактировал сотрудник СМИ') and text:match('LS') and autosmi.v == true then lssmi = true lvsmi = false sfsmi = false end
+	if color == 1941201407 and text:match('Отредактировал сотрудник СМИ') and text:match('LV') and autosmi.v == true then lvsmi = true lssmi = false sfsmi = false end
+	if color == 1941201407 and text:match('Отредактировал сотрудник СМИ') and text:match('SF') and autosmi.v == true then sfsmi = true lvsmi = false lssmi = false end
+	end
 	
 	if text:match('%[(%d+)%] (.*) | Уровень:') and monopolygetfam == true then 
 	monopolyfam = monopolyfam + 1
@@ -14914,6 +14917,21 @@ end
 		if smisf.v then 
 		sampSendDialogResponse(25476, 1, 2, -1)
 		end
+		
+		if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		
+		if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+		
 		wait(300)
 		sampSendDialogResponse(15346, 1, 0, -1)
 		wait(200)
@@ -14940,6 +14958,21 @@ end
 		if smisf.v then 
 		sampSendDialogResponse(25476, 1, 2, -1)
 		end
+		
+		if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		
+		if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+		
 		wait(300)
 		sampSendDialogResponse(15346, 1, 0, -1)
 		wait(200)
@@ -14966,6 +14999,21 @@ end
 		if smisf.v then 
 		sampSendDialogResponse(25476, 1, 2, -1)
 		end
+		
+		if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		
+		if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+		
 		wait(300)
 		sampSendDialogResponse(15346, 1, 1, -1)
 		wait(200)
@@ -15482,6 +15530,7 @@ function load_settings() -- загрузка настроек
 	obkachet = imgui.ImBool(ini.settings.obkachet)
 	vipobkachet = imgui.ImBool(ini.settings.vipobkachet)
 	smils = imgui.ImBool(ini.settings.smils)
+	autosmi = imgui.ImBool(ini.settings.autosmi)
 	smilv = imgui.ImBool(ini.settings.smilv)
 	smisf = imgui.ImBool(ini.settings.smisf)
 	windowsstyle = imgui.ImBool(ini.settings.windowsstyle)
@@ -16092,7 +16141,6 @@ function load_settings() -- загрузка настроек
 
 	keyT = imgui.ImBool(ini.settings.keyT)
 	launcher = imgui.ImBool(ini.settings.launcher)
-	modevice = imgui.ImBool(ini.settings.modevice)
 	deagle = imgui.ImBool(ini.settings.deagle)
 	awp = imgui.ImBool(ini.settings.awp)
 	m4 = imgui.ImBool(ini.settings.m4)
@@ -26218,6 +26266,21 @@ while true do
 	if smisf.v then 
 	sampSendDialogResponse(25476, 1, 2, -1)
 	end
+	
+	if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+	
+	if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+	
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
@@ -26243,6 +26306,21 @@ while true do
 	if smisf.v then 
 	sampSendDialogResponse(25476, 1, 2, -1)
 	end
+	
+	if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+	
+	if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+	
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
@@ -26274,6 +26352,21 @@ while true do
 	if smisf.v then 
 	sampSendDialogResponse(25476, 1, 2, -1)
 	end
+	
+	if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+	
+	if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+	
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
@@ -27627,8 +27720,6 @@ function tochmenu()
 				imgui.RadioButton('+11', checked_radio, 11)
 				imgui.SameLine()
 				imgui.RadioButton('+12', checked_radio, 12)
-				imgui.SameLine()
-				imgui.RadioButton('+13', checked_radio, 13)
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine(250) imgui.Text(u8'Покраска аксессуаров.') imgui.SameLine(); imgui.TextQuestion(u8"Перед включением функционала, положите красители, точильные камни и аксессуар в первые 3 ячейки второй страницы. Включите 'Начать процесс покраски', выберите нужный цвет и нажмите 'Paint'. После первой покраски, скрипт сам продолжит процесс.")
 				imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Начать процесс покраски")); imgui.SameLine(); imgui.ToggleButton(u8'Начать процесс покраски', checked_box4) 
@@ -28113,7 +28204,7 @@ function shemamenu()
 function helpmenu()
 	local sw, sh = getScreenResolution()
 	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.SetNextWindowSize(imgui.ImVec2(950, 410), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowSize(imgui.ImVec2(960, 410), imgui.Cond.FirstUseEver)
 		imgui.Begin(fa.ICON_QUESTION_CIRCLE_O..u8(' Помощь'), win_state['help'], imgui.WindowFlags.NoResize)
 		imgui.Text('')
 		imgui.BeginGroup()
@@ -28124,7 +28215,7 @@ function helpmenu()
 		imgui.Separator()
 		imgui.EndChild()
 		imgui.SameLine()
-		imgui.BeginChild('##ddddd', imgui.ImVec2(745, 350), true)
+		imgui.BeginChild('##ddddd', imgui.ImVec2(755, 350), true)
 		if selected2 == 0 then selected2 = 1
 		elseif selected2 == 3 then
 		imgui.Text('') imgui.SameLine() imgui.Text(u8"Коды клавиш")
@@ -28185,10 +28276,10 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/versamp - изменить версию SAMP (сборка, лаунчер, мобильный лаунчер).')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/getfam [Family] - узнать, сколько игроков в сети с указанной фамилией.')
 				imgui.Separator()
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc - перезайти на сервер "Vice City", находясь на данном сервере.')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$')
-				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vicemode - включить/выключить авто-определение сервера и ника для команд "/reconvc" и "exitvice" от VRush.')
-				
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc - перезайти на сервер "Vice City", находясь на данном сервере (ручная настройка).')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc2 - тоже самое, что /reconvc, но: есть авто-определение; работает только тогда, когда вы на сервере (от VRush).')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice - перезайти с сервера "Vice City" на выбранный вами сервер через 2 минуты за 300.000$ (ручная настройка).')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/exitvice2 - тоже самое, что /exitvice, но: есть авто-определение; работает только тогда, когда вы на сервере (от VRush).')
 				
 		end
 		imgui.EndChild()
@@ -31175,6 +31266,11 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.02.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "/exitvice" и "/reconvc" добавлен сервер "Holiday".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Убрана команда "/vicemode" и добавлены, вместо этого команды: "/exitvice2" и "/reconvc2".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Piar Menu" добавлена функция "Авто-определение СМИ" (отправляется тем радиоцентрам, которые редактируют объявления).')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[28.01.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс продажи и покупки биткоинов в "Bank Menu".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Вписан новый топ донатер.')
@@ -31183,7 +31279,6 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'либо проверяйте сундуки.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Roulette Tools" (был баг, когда после открытия, например, "бронзовых рулеток", вы хотели далее открывать "серебряные')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'рулетки", но скрипт не открывал их, пока вы не перезагрузите скрипт).')
-		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Toch Menu" добавлена возможность выбрать заточку до +13.')
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[17.01.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс автологин.')
@@ -31282,9 +31377,12 @@ function getArizonaName()
 	if imgui.CustomButton(fa.ICON_LONG_ARROW_RIGHT..u8' Отправить VIP объявление сейчас', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(237, 0)) then adtravel2() end
 	imgui.Text('') imgui.SameLine() imgui.Text(u8'Отправлять объявления в СМИ:') imgui.SameLine(); imgui.TextQuestion(u8"Выберите один из пунктов. Если хотите выбрать другой, то уберите галочку с предыдущего пункта.")
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'ЛС##53r43gt5rotyfn548yhnu86yugj5869gyj', smils) imgui.SameLine() imgui.Checkbox(u8'ЛВ##53r43gt5rotyfn548yhnu86yugj58629gyj', smilv) imgui.SameLine() imgui.Checkbox(u8'СФ##53r43g1t5rotyfn548yhnu86yugj5869gyj', smisf)
-	if smils.v then smilv.v = false smisf.v = false end
-	if smilv.v then smils.v = false smisf.v = false end
-	if smisf.v then smilv.v = false smils.v = false end
+	if smils.v then smilv.v = false smisf.v = false autosmi.v = false end
+	if smilv.v then smils.v = false smisf.v = false autosmi.v = false end
+	if smisf.v then smilv.v = false smils.v = false autosmi.v = false end
+	if autosmi.v then smilv.v = false smils.v = false smisf.v = false end
+	imgui.SameLine() 
+	imgui.Checkbox(u8'Авто-определение СМИ', autosmi)
 	imgui.Separator()
 	imgui.Text('') imgui.SameLine() imgui.Checkbox(u8'Отправлять текст в /fam', famaddad) imgui.SameLine(254) imgui.InputText(u8'Задержка(сeк) ##199', famadsec)
 	imgui.SameLine() 
@@ -31375,6 +31473,7 @@ function getArizonaName()
 	obkachet.v = false
 	vipobkachet.v = false
 	smils.v = true
+	autosmi.v = false
 	smilv.v = false
 	smisf.v = false
 	adredak.v = u8'В 165 баре много девочек и пива.'
@@ -32446,6 +32545,21 @@ lua_thread.create(function()
 	if smisf.v then 
 	sampSendDialogResponse(25476, 1, 2, -1)
 	end
+	
+	if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+	
+	if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+	
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
@@ -32472,6 +32586,21 @@ lua_thread.create(function()
 	if smisf.v then 
 	sampSendDialogResponse(25476, 1, 2, -1)
 	end
+	
+	if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+	
+	if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+	
 	wait(300)
 	sampSendDialogResponse(15346, 1, 0, -1)
 	wait(200)
@@ -32498,6 +32627,21 @@ lua_thread.create(function()
 	if smisf.v then 
 	sampSendDialogResponse(25476, 1, 2, -1)
 	end
+	
+	if autosmi.v and lssmi == false and lvsmi == false and sfsmi == false then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+	
+	if lssmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 0, -1)
+		end
+		if lvsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 1, -1)
+		end
+		if sfsmi == true and autosmi.v then 
+		sampSendDialogResponse(25476, 1, 2, -1)
+		end
+	
 	wait(300)
 	sampSendDialogResponse(15346, 1, 1, -1)
 	wait(200)
@@ -36190,6 +36334,7 @@ function settingosnova()
 		cfg3.backup.obkachetv2 = obkachet.v
 		cfg3.backup.vipobkachetv2 = vipobkachet.v
 		cfg3.backup.smilsv2 = smils.v
+		cfg3.backup.autosmiv2 = autosmi.v
 		cfg3.backup.smilvv2 = smilv.v
 		cfg3.backup.smisfv2 = smisf.v
 		cfg3.backup.windowsstylev2 = windowsstyle.v
@@ -36893,6 +37038,7 @@ function settingosnova()
 		 obkachet.v =  cfg3.backup.obkachetv2 
 		 vipobkachet.v =  cfg3.backup.vipobkachetv2 
 		 smils.v =  cfg3.backup.smilsv2 
+		 autosmi.v =  cfg3.backup.autosmiv2 
 		 smilv.v =  cfg3.backup.smilvv2 
 		 smisf.v =  cfg3.backup.smisfv2 
 		 windowsstyle.v =  cfg3.backup.windowsstylev2 
@@ -37650,11 +37796,19 @@ function exitvicefuncvc()
 	exitvicevc = 1
 end
 
+function viceexit2()
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на ваш основной сервер, ожидайте...', -1)
+	reconnectvc(1) exitvice = 1
+end
+
+function recongeniusvc2()
+	sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City", ожидайте...', -1)
+	reconnectvc(1) exitvicevc = 1
+end
+
 function viceexit()
-	if modevice.v == true then reconnectvc(1) exitvice = 1
-	else
 	lua_thread.create(function()
-    sampShowDialog(7506, "{ff1000}Выход с Vice City (сменить способ '/vicemode')", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+    sampShowDialog(7506, "{ff1000}Выход с Vice City", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona\n23. Holiday", "Далее", "Закрыть", DIALOG_STYLE_LIST)
 	while sampIsDialogActive(7506) do wait(100) end -- ждёт пока вы ответите на диалог
     local _, button, list = sampHasDialogRespond(7506)
 	if button == 1 then
@@ -38010,20 +38164,33 @@ function viceexit()
 				exitvicefunc()
 				end
 			end
+			
+		if list == 22 then
+		viceip = '80.66.82.132'
+		sampShowDialog(7422, "{ff1000}Выход с Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, переход также будет осуществлён. Последний NickName: "..nickvice.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(7422) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(7422)
+			if button == 1 then 
+					nickvice.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Holiday" под ником '..nickvice.v..".", -1)
+					exitvicefunc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется переход с сервера "Vice City" на "Holiday" под ником '..nickvice.v..".", -1)
+				exitvicefunc()
+				end
+			end
 		
 			
 	else 
         
 			end
 		end)
-	end
 end
 
 function recongeniusvc()
-	if modevice.v == true then reconnectvc(1) exitvicevc = 1
-	else
 	lua_thread.create(function()
-    sampShowDialog(8506, "{ff1000}Перезаход на Vice City (сменить способ '/vicemode')", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona", "Далее", "Закрыть", DIALOG_STYLE_LIST)
+    sampShowDialog(8506, "{ff1000}Перезаход на Vice City", "1. Phoenix\n2. Tucson\n3. Scottdale\n4. Chandler\n5. Brainburg\n6. Saint Rose\n7. Mesa\n8. Red Rock\n9. Yuma\n10. Surprise\n11. Prescott\n12. Glendale\n13. Kingman\n14. Winslow\n15. Payson\n16. Gilbert\n17. Show-Low\n18. Casa Grande\n19. Page\n20. Sun City\n21. Queen Creek\n22. Sedona\n23. Holiday", "Далее", "Закрыть", DIALOG_STYLE_LIST)
 	while sampIsDialogActive(8506) do wait(100) end -- ждёт пока вы ответите на диалог
     local _, button, list = sampHasDialogRespond(8506)
 	if button == 1 then
@@ -38379,13 +38546,28 @@ function recongeniusvc()
 				exitvicefuncvc()
 				end
 			end
+			
+		if list == 22 then
+		viceipvc = '80.66.82.132'
+		sampShowDialog(8422, "{ff1000}Перезаход на Vice City", "Введите ваш NickName или выберите последний, на который вы перезаходили.\nЕсли закрыть диалог, перезаход также будет осуществлён. Последний NickName: "..nickvicevc.v, "Далее", 'Last Nick', DIALOG_STYLE_INPUT)
+		while sampIsDialogActive(8422) do wait(100) end -- ждёт пока вы ответите на диалог
+		local result, button, _, input = sampHasDialogRespond(8422)
+			if button == 1 then 
+					nickvicevc.v = input
+					saveSettings()
+					sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+					exitvicefuncvc()
+			else
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v..']{FFFFFF} Выполняется перезаход на сервер "Vice City" под ником '..nickvicevc.v..".", -1)
+				exitvicefuncvc()
+				end
+			end
 		
 			
 	else 
         
 			end
 		end)
-	end
 end
 
 function viprek(arg)
