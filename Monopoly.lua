@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.22')
+script_version('3.5.23')
 
 lssmi = false 
 lvsmi = false
@@ -1255,7 +1255,14 @@ local cfg = inicfg.load({
 		piarsh5 = 0,
 		vippiarsh5 = 0,
 		piarsh6 = 0,
-		vippiarsh6 = 0
+		vippiarsh6 = 0,
+		piarvip = 0,
+		piarvip1 = 0,
+		piarvip2 = 0,
+		piarvip3 = 0,
+		piarvip4 = 0,
+		piarvip5 = 0,
+		piarvip6 = 0
 	},
 	infofishkol = {
 		fishkol = 0,
@@ -15025,7 +15032,7 @@ end
 		end)
 	end
 	
-	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
+	if color == 1941201407 and text:match("Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
@@ -15077,7 +15084,7 @@ end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
-	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad2.v then
+	if color == 1941201407 and text:match("Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and addad2.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
@@ -15129,7 +15136,7 @@ end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
-	if text:find("^Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and obkachet.v then
+	if color == 1941201407 and text:match("Объявление: .+ Отправил: " .. userNick .. "%[%d+%] Тел%. %d+$") and obkachet.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.piarsh = cfg.adpred.piarsh + 1
@@ -15181,7 +15188,7 @@ end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
-	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") and vipaddad.v then
+	if color == 1941201407 and text:match("{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") and vipaddad.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
@@ -15233,7 +15240,7 @@ end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
-	if text:find("^{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") and obkachet.v then
+	if color == 1941201407 and text:match("{%x%x%x%x%x%x}%[VIP%] Объявление: .+ От" .. userNick .. "%[%d+%] Тел%. %d+$") and obkachet.v then
 		if os.date("%A") == 'Monday' then
 		yvedadd = text:match('.+')
 		cfg.adpred.vippiarsh = cfg.adpred.vippiarsh + 1
@@ -15285,6 +15292,35 @@ end
 		end
 		inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
+	
+	if vraddad.v or vraddad2.v or vraddad3.v then 
+	if color == -213517057 or color == 1687547391 then 
+	if text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..adredak4.v) or text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..adredak42.v) or text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..adredak43.v) then
+		if os.date("%A") == 'Monday' then
+		cfg.adpred.piarvip = cfg.adpred.piarvip + 1
+		end
+		if os.date("%A") == 'Tuesday' then
+		cfg.adpred.piarvip1 = cfg.adpred.piarvip1 + 1
+		end
+		if os.date("%A") == 'Wednesday' then
+		cfg.adpred.piarvip2 = cfg.adpred.piarvip2 + 1
+		end
+		if os.date("%A") == 'Thursday' then
+		cfg.adpred.piarvip3 = cfg.adpred.piarvip3 + 1
+		end
+		if os.date("%A") == 'Friday' then
+		cfg.adpred.piarvip4 = cfg.adpred.piarvip4 + 1
+		end
+		if os.date("%A") == 'Saturday' then
+		cfg.adpred.piarvip5 = cfg.adpred.piarvip5 + 1
+		end
+		if os.date("%A") == 'Sunday' then
+		cfg.adpred.piarvip6 = cfg.adpred.piarvip6 + 1
+		end
+		inicfg.save(cfg, 'Mono\\mini-games.ini')
+		end
+	end
+end
 	
 	if workcal and (text:match("%{FFFFFF%}Номера телефонов государственных служб:")or text:match('%{FFFFFF%}Проверить баланс телефона')or text:match('%{FFFFFF%}Служба точного времени')or text:match('%{FFFFFF%}Полицейский участок')or text:match('%{FFFFFF%}Скорая помощь')or text:match('%{FFFFFF%}Такси')or text:match('%{FFFFFF%}Механик')or text:match('%{FFFFFF%}Справочная центрального банка')or text:match('%{FFFFFF%}Служба по вопросам жилой недвижимости') )then 
 		return false
@@ -31266,6 +31302,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[08.02.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Piar Menu" (не засчитывались объявления в статистику).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Piar Menu" добавлен счётчик для подсчета рекламы в VIP чат.')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.02.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "/exitvice" и "/reconvc" добавлен сервер "Holiday".')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Убрана команда "/vicemode" и добавлены, вместо этого команды: "/exitvice2" и "/reconvc2".')
@@ -31337,14 +31377,14 @@ function getArizonaName()
 	
 	imgui.Text(u8('  '..gameServer)) imgui.SameLine() imgui.Text("|") imgui.SameLine() imgui.Text(u8(nickName))
 	imgui.Separator()
-	imgui.Text(u8('  Понедельник')) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh))
-	imgui.Text(u8('  Вторник')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh1)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh1))
-	imgui.Text(u8('  Среда')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh2)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh2))
-	imgui.Text(u8('  Четверг')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh3)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh3))
-	imgui.Text(u8('  Пятница')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh4)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh4))
-	imgui.Text(u8('  Суббота')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh5)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh5))
-	imgui.Text(u8('  Воскресенье')) imgui.SameLine(93) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений отправлено: ' ..cfg.adpred.piarsh6)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений отправлено: ' ..cfg.adpred.vippiarsh6))
-	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_UPLOAD..u8' Обнулить счётчик объявлений', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' В Понедельник отправлено:')) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip))
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' Во Вторник отправлено:')) imgui.SameLine(181) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh1)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh1)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip1))
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' В Среду отправлено:')) imgui.SameLine(181) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh2)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh2)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip2))
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' В Четверг отправлено:')) imgui.SameLine(181) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh3)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh3)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip3))
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' В Пятницу отправлено:')) imgui.SameLine(181) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh4)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh4)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip4))
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' В Субботу отправлено:')) imgui.SameLine(181) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh5)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh5)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip5))
+	imgui.Text(u8('')) imgui.SameLine(5) imgui.Text(u8(' В Воскресенье отправлено:')) imgui.SameLine(181) imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('Обычных объявлений: ' ..cfg.adpred.piarsh6)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('VIP объявлений: ' ..cfg.adpred.vippiarsh6)) imgui.SameLine() imgui.Text(u8('|')) imgui.SameLine() imgui.Text(u8('В VIP чат: ' ..cfg.adpred.piarvip6))
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(fa.ICON_UPLOAD..u8' Обнулить счётчик', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then 
 	cfg.adpred.piarsh = 0 
 	cfg.adpred.vippiarsh = 0 
 	cfg.adpred.piarsh1 = 0 
@@ -31359,6 +31399,13 @@ function getArizonaName()
 	cfg.adpred.vippiarsh5 = 0  
 	cfg.adpred.piarsh6 = 0 
 	cfg.adpred.vippiarsh6 = 0  
+	cfg.adpred.piarvip = 0
+	cfg.adpred.piarvip1 = 0
+	cfg.adpred.piarvip2 = 0
+	cfg.adpred.piarvip3 = 0
+	cfg.adpred.piarvip4 = 0
+	cfg.adpred.piarvip5 = 0
+	cfg.adpred.piarvip6 = 0
 	inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
 	imgui.PushItemWidth(50)
@@ -31454,6 +31501,13 @@ function getArizonaName()
 	cfg.adpred.vippiarsh5 = 0  
 	cfg.adpred.piarsh6 = 0 
 	cfg.adpred.vippiarsh6 = 0 
+	cfg.adpred.piarvip = 0
+	cfg.adpred.piarvip1 = 0
+	cfg.adpred.piarvip2 = 0
+	cfg.adpred.piarvip3 = 0
+	cfg.adpred.piarvip4 = 0
+	cfg.adpred.piarvip5 = 0
+	cfg.adpred.piarvip6 = 0
 	addad.v = false
 	addad2.v = false
 	vipaddad.v = false
