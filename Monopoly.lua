@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.23')
+script_version('3.5.24')
 
 lssmi = false 
 lvsmi = false
