@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.24')
+script_version('3.5.25')
 
 lssmi = false 
 lvsmi = false
@@ -14855,7 +14855,7 @@ end
 	sampSendClickTextdraw(2087)
 	end 
 	wait(700)
-	sampSendClickTextdraw(2077)
+	sampSendClickTextdraw(2078)
 		end)
 	end
 end
@@ -31302,6 +31302,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[27.02.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Toch Menu" (смена ид текстдрава).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Разбагать худ на клавишу" (смена ид диалога)')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[08.02.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Piar Menu" (не засчитывались объявления в статистику).')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Piar Menu" добавлен счётчик для подсчета рекламы в VIP чат.')
@@ -32430,11 +32434,11 @@ function inventory()
 		wait(500)
 		sampSendClickTextdraw(2095)
 		wait(500)
-		sampSendClickTextdraw(2077)
+		sampSendClickTextdraw(2078)
 		else
 		sampSendClickTextdraw(2092)
 		wait(1500)
-		sampSendClickTextdraw(2077)
+		sampSendClickTextdraw(2078)
 		end
 end)
 end
@@ -37822,9 +37826,9 @@ function hudbag()
 	lua_thread.create(function()
 	sampSendChat('/settings')
 	wait(300)
-	sampSendDialogResponse(154, 1, 14, -1)
+	sampSendDialogResponse(26031, 1, 13, -1)
 	wait(300)
-	sampSendDialogResponse(153, 1, 1, -1)
+	sampSendDialogResponse(26032, 1, 1, -1)
 	wait(300)
 	sampSendDialogResponse(1610, 1, 0, -1)
 	wait(300)
