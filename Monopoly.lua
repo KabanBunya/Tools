@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.25')
+script_version('3.5.26')
 
 lssmi = false 
 lvsmi = false
@@ -70,7 +70,7 @@ statuspuskv2 = ''
 statuspusk2v2 = ''
 statuspusk3v2 = ''
 statuspusk4v2 = ''
-scancr = 2
+scancr = 43
 pinkod = '1234'
 arztest3 = 1
 arztest4 = 1
@@ -5665,9 +5665,9 @@ end
 		end
 		
 		if sampGetCurrentServerAddress() == "80.66.82.147" and pricecr.v then 
-		scancr = 3
-		else
 		scancr = 2
+		else
+		scancr = 43
 		end
 		
 		
@@ -7277,7 +7277,14 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	dialogs_data[dialogId] = {listboxId, input}
 	end
 	if pricecr.v then 
-	if dialogId == 15072 and listboxId == scancr and button == 1 then
+	if dialogId == 15073 and listboxId == scancr and button == 1 then
+		analysis = 1
+		last_text = nil
+		data_cost = { sell = {}, buy = {} }
+		sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Запущен анализ цен. Не открывайте до завершения другие диалоги.', -1)
+		return { dialogId, button, 2, input }
+			end
+	if dialogId == 15072 and listboxId == scancr and button == 1 and sampGetCurrentServerAddress() == "80.66.82.147" then
 		analysis = 1
 		last_text = nil
 		data_cost = { sell = {}, buy = {} }
@@ -7843,10 +7850,17 @@ end
     return false
   end
   
-	if pricecr.v then 
+	if pricecr.v and sampGetCurrentServerAddress() == "80.66.82.147" then 
+	
+	for line in text:gmatch("[^\n]+") do
+	if line:find('Маска дракона') and dialogId == 15073 then
+            analysis = 3
+        end
+	end
+	
 	if dialogId == 15072 and title:find('Выберите список') then
 		if analysis == 2 then
-			lua_thread.create(sendResponse, dialogId, 1, 1, nil)
+			lua_thread.create(sendResponse, dialogId, 1, 0, nil)
 			return false
 		end
 
@@ -7886,7 +7900,122 @@ end
 			parser(text, 2)
 		end
 		printStyledString("~w~Finded ~r~" .. (#data_cost.buy + #data_cost.sell) .. "~w~ prices", 2000, 6)
-		lua_thread.create(sendResponse, dialogId, 1, 1, nil)
+		lua_thread.create(sendResponse, dialogId, 1, 2, nil)
+		return false
+	elseif analysis ~= nil then
+		analysis = nil
+		data_cost = { sell = {}, buy = {} }
+		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Критическая ошибка! Анализ был сбит другим диалогом.", -1)
+		lua_thread.create(sendResponse, dialogId, 0, nil, nil)
+		return false
+	end
+
+	if dialogId == 3082 then
+		if data_cost.last_update == nil then
+			text = text:gsub('Стоимость:[^\n]+', '%1\n{FF4040}Список средних цен не найден!\nЗагрузить его можно на пикапе средних цен')
+			return { dialogId, style, title, button1, button2, text }
+		end
+
+		for linev31 in text:gmatch('[^\n]+') do
+			local item = linev31:match('.*{%x+}(.+){%x+}.*$')
+			local tempv2 = {}
+
+			if item == nil then
+				text = text:gsub('Стоимость:[^\n]+', '%1\n{FF4040}Не удалось определить товар\n{FF6060}Средняя цена не может быть найдена!')
+				return { dialogId, style, title, button1, button2, text }
+			end
+
+			for _, info in ipairs(title:find('Продажа предмета') and data_cost.buy or data_cost.sell) do
+				if item:find(info['i'], 1, true) then
+					tempv2[#tempv2 + 1] = { info['i'], sumFormat(tostring(info['p'])) }
+				end
+			end
+
+			if os.time() - data_cost.last_update <= 86400 then -- 1 day
+				if #tempv2 > 1 then
+					local resultv31 = ""
+					for i = 1, #tempv2 do
+						resultv31 = resultv31 .. string.format("{67BE55}%s - {FFD900}%s", tempv2[i][1], tempv2[i][2])
+						if i ~= #tempv2 then
+							resultv31 = resultv31 .. "\n"
+						end
+					end
+					text = text:gsub('Стоимость:[^\n]+', '%1\n\n{67BE55}Средняя стоимость товаров с похожим названием:\n' .. resultv31)
+				elseif #tempv2 == 1 then
+					text = text:gsub('Стоимость:[^\n]+', '%1 {FFD900}(В среднем ' .. tempv2[1][2] .. ')')
+				else
+					text = text:gsub('Стоимость:[^\n]+', '%1\n{67BE55}Средняя цена не найдена!\n{FFD900}Обновите списки на площади ЦР\n')
+				end
+			else
+				text = text:gsub('Стоимость:[^\n]+', '%1\n{FF4040}Средние цены устарели!\n{FF6060}Обновите списки на площади ЦР\n')
+			end
+			break
+		end
+		
+		if text:match('Стоимость: VC$(.*) за') then
+		findcr = text:match('Стоимость: VC$(.*) за')
+		if findcr:match("%.") then
+            findcr=(findcr:gsub("%.", "")) 
+            text=(text:gsub("за 1 шт.", "за 1 шт. | $"..comma_value(findcr*crfind.v))) 
+        else
+            text=(text:gsub("за 1 шт.", "за 1 шт. | $"..comma_value(findcr*crfind.v)))
+        end
+	end
+	
+		return { dialogId, style, title, button1, button2, text }
+		end
+	
+	else
+	
+	for line in text:gmatch("[^\n]+") do
+	if line:find('Маска дракона') and dialogId == 15073 then
+            analysis = 3
+        end
+	end
+	
+	if dialogId == 15073 then
+		if analysis == 2 then
+			lua_thread.create(sendResponse, dialogId, 1, 2, nil)
+			return false
+		end
+
+		text = text .. '\n' .. '{00FF00}Проанализировать'
+		--return {dialogId, style, title, button1, button2, text}
+	end
+
+	if dialogId == 15073 and find_item ~= nil then
+		if find_item.last_text ~= nil and find_item.last_text == text then
+			sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Товаров с таким названием нет.", -1)
+			find_item = nil
+			return
+		end
+	end
+
+	if analysis ~= nil and dialogId == 15073 then
+		if last_text ~= nil and last_text == text then
+			if analysis == 1 then
+				analysis = 2
+			else
+				analysis = nil
+				data_cost.last_update = os.time()
+				sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Анализ завершён! Средние цены на товары обновлены.", -1)
+				local filev20 = io.open(pathv20, "w")
+				filev20:write(encodeJson(data_cost))
+				filev20:close()
+				fixpricecopia()
+			end
+			lua_thread.create(sendResponse, dialogId, 0, nil, nil)
+			return false
+		end
+
+		last_text = text
+		if title:find('Средняя цена товаров при продаже') then
+			parser(text, 1)
+		elseif title:find('Средняя цена товаров при скупке') then
+			parser(text, 2)
+		end
+		printStyledString("~w~Finded ~r~" .. (#data_cost.buy + #data_cost.sell) .. "~w~ prices", 2000, 6)
+		lua_thread.create(sendResponse, dialogId, 1, 2, nil)
 		return false
 	elseif analysis ~= nil then
 		analysis = nil
@@ -7962,7 +8091,7 @@ end
 			end
 
 			if car_last_text == text then
-				writeMessage("Средние цены на транспорт обновлены. В базе {FF6060}%s{FFFFFF} т/с", #car_prices)
+				writeMessage("Средние цены на транспорт обновлены. В базе {FF6060}%s{FFFFFF} т/с.", #car_prices)
 				sampSendDialogResponse(dialogId, 0, nil, nil)
 				car_analysis = false
 
@@ -7991,7 +8120,7 @@ end
 
 			lua_thread.create(function()
 				wait(car_cooldown)
-				sampSendDialogResponse(dialogId, 1, 1, nil)
+				sampSendDialogResponse(dialogId, 1, 2, nil)
 			end);
 
 			::finish::
@@ -8011,7 +8140,7 @@ end
 		writeMessage("Х Встаньте на пикап и откройте заново данное окно")
 	end
 
-	if dialogId == 9837 and string.find(title, "Технический паспорт транспорта") then
+	if dialogId == 25219 or dialogId == 25982 and string.find(title, "Технический паспорт транспорта") then
 		text = string.gsub(text, "%$(%d+)", function(arg) return "$" .. tostring(sum_format(arg)) end)
 		text = string.gsub(text, "(%d+)%$", function(arg) return tostring(sum_format(arg)) .. "$" end)
 		if #car_prices > 0 then
@@ -11389,7 +11518,7 @@ function imgui.OnDrawFrame()
 	end
 	imgui.BeginChild('##asdasasddf12462343434212434545645', imgui.ImVec2(655, 70), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
-	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Грим Лок.')
+	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Грим Лок и Паша Пирог.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Добавлена подписка "VK Donut" в группе "Mono Tools". За подписку вы получаете: эксклюзивные новости')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'с разработки, ваши предложения будут в приоритете и доступ к ранним версиям скрипта. Оформить')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'подписку можно в группе VK или перейдя по ссылке: ')
@@ -11874,7 +12003,7 @@ function imgui.OnDrawFrame()
 	end
 	imgui.BeginChild('##asdasasddf12462343434212', imgui.ImVec2(633, 54), false)
 	imgui.Text('') imgui.SameLine(120) imgui.Text(u8'Вступай в беседу скрипта в Telegram - ') imgui.SameLine(351) imgui.TextColoredRGB(""..colorlink.."https://t.me/monotools3") imgui.SameLine(351) imgui.Link('https://t.me/monotools3','https://t.me/monotools3')
-	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Грим Лок.')
+	imgui.Text('') imgui.SameLine(5) imgui.TextColoredRGB('• Подписку "VK Donut" оформили: '..colorlink..'Грим Лок и Паша Пирог.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Добавлена подписка "VK Donut" в группе "Mono Tools". За подписку вы получаете: эксклюзивные')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'новости с разработки, ваши предложения будут в приоритете и доступ к ранним версиям скрипта.')
 	imgui.Text('') imgui.SameLine(5) imgui.Text(u8'Оформить подписку можно в группе VK или перейдя по ссылке: ')
@@ -31302,6 +31431,13 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[14.03.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Разбагать худ на клавишу".')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Автобазар" (система снова сканирует, исправлено отображение уведомлений от скрипта и показываются средние цены машин')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'в паспорте, которые стоят на аукционе)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Центральный рынок" (не работало сканирование товаров)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Вписан новый Дон (Паша Пирог, спасибо за поддержку)')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[27.02.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Toch Menu" (смена ид текстдрава).')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- В "Разбагать худ на клавишу" (смена ид диалога)')
@@ -35114,7 +35250,7 @@ end
 
 function writeMessage(format, ...)
 	local message = string.format(format, ...)
-	return sampAddChatMessage(string.format("[%s]{FFFFFF} %s", nazvanie.v, message), -1)
+	return sampAddChatMessage(string.format(""..colorcm.."[%s]{FFFFFF} %s", nazvanie.v, message), -1)
 end
 
 function sum_format(sum)
@@ -37826,9 +37962,9 @@ function hudbag()
 	lua_thread.create(function()
 	sampSendChat('/settings')
 	wait(300)
-	sampSendDialogResponse(26031, 1, 13, -1)
+	sampSendDialogResponse(26032, 1, 13, -1)
 	wait(300)
-	sampSendDialogResponse(26032, 1, 1, -1)
+	sampSendDialogResponse(26033, 1, 1, -1)
 	wait(300)
 	sampSendDialogResponse(1610, 1, 0, -1)
 	wait(300)
