@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.26')
+script_version('3.5.27')
 
 lssmi = false 
 lvsmi = false
@@ -1226,6 +1226,9 @@ local cfg = inicfg.load({
     datasnake = {
         record = 0
     },
+	dlogi = { 
+		dlogs = ''
+	},
 	shahta = {
 		kamentime = 0,
 		lentime = 0,
@@ -2002,6 +2005,7 @@ local cfg3 = inicfg.load({
 local SET = {
  	settings = {
 		autologin = false,
+		autodlogs = false,
 		updatetext = false,
 		weatheroff = false,
 		yvedscript = true,
@@ -2928,6 +2932,7 @@ win_state['pravila2048'] = imgui.ImBool(false)
 win_state['pravilapong'] = imgui.ImBool(false)
 win_state['pravilasnake'] = imgui.ImBool(false)
 win_state['tup'] = imgui.ImBool(false)
+win_state['dlogs'] = imgui.ImBool(false)
 win_state['timeyved'] = imgui.ImBool(false)
 win_state['carsas'] = imgui.ImBool(false)
 win_state['about'] = imgui.ImBool(false)
@@ -4932,6 +4937,8 @@ function mainmenu()
 			win_state['shema'].v = not win_state['shema'].v
 		elseif win_state['tup'].v then
 			win_state['tup'].v = not win_state['tup'].v
+		elseif win_state['dlogs'].v then
+			win_state['dlogs'].v = not win_state['dlogs'].v
 		elseif win_state['timeyved'].v then
 			win_state['timeyved'].v = not win_state['timeyved'].v
 		elseif win_state['carsas'].v then
@@ -5511,6 +5518,7 @@ function main()
 	sampRegisterChatCommand('reconvc2', recongeniusvc2) -- регистрируем команду
 	
 	sampRegisterChatCommand('tu', testupdate) -- регистрируем команду
+	sampRegisterChatCommand('dlogs', logsd) -- регистрируем команду
 	sampRegisterChatCommand('mc', monochat) -- регистрируем команду
 	sampRegisterChatCommand('pmc', pmchat) -- регистрируем команду
 	sampRegisterChatCommand(activcall.v, Numbercall)
@@ -6030,7 +6038,7 @@ end
 			end
 		else imgui.Process = menu_spur.v end
 		
-		imgui.Process = win_state['regst'].v or win_state['statsinformerfish'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['calc'].v or win_state['fishmenu'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['housenumberv2'].v or win_state['housenumberredakv2'].v or win_state['shemafunksv2'].v or win_state['itogibtc'].v or win_state['btcsettingsv2'].v or win_state['timeyved'].v or ok or help
+		imgui.Process = win_state['regst'].v or win_state['statsinformerfish'].v or win_state['main'].v or win_state['update'].v or win_state['player'].v or win_state['base'].v or win_state['dial'].v or win_state['calc'].v or win_state['fishmenu'].v or win_state['rulstat'].v or win_state['informer'].v or win_state['informervrem'].v or win_state['pismoinformer'].v or win_state['shahtainformer'].v or win_state['renew'].v or win_state['find'].v or win_state['ass'].v or win_state['leave'].v or win_state['games'].v or win_state['redak'].v or win_state['shahtamenu'].v or win_state['shematext'].v or win_state['shemainst'].v or win_state['kartinst'].v or win_state['pravila2048'].v or win_state['pravilapong'].v or win_state['pravilasnake'].v or win_state['tup'].v or win_state['dlogs'].v or win_state['housenumberv2'].v or win_state['housenumberredakv2'].v or win_state['shemafunksv2'].v or win_state['itogibtc'].v or win_state['btcsettingsv2'].v or win_state['timeyved'].v or ok or help
 		
 		if menu_spur.v or win_state['settings'].v or win_state['leaders'].v or win_state['player'].v or win_state['base'].v or win_state['regst'].v or win_state['renew'].v or win_state['leave'].v then
 			if not isCharInAnyCar(PLAYER_PED) then
@@ -6864,6 +6872,7 @@ function saveSettings(args, key)
 	ini.settings.nazvanie = u8:decode(nazvanie.v)
 	ini.settings.nazvanietext = u8:decode(nazvanietext.v)
 	ini.settings.autologin = autologin.v
+	ini.settings.autodlogs = autodlogs.v
 	ini.settings.updatetext = updatetext.v
 	ini.settings.weatheroff = weatheroff.v
 	ini.settings.yvedscript = yvedscript.v
@@ -7850,10 +7859,11 @@ end
     return false
   end
   
-	if pricecr.v and sampGetCurrentServerAddress() == "80.66.82.147" then 
+	if pricecr.v then 
+		if sampGetCurrentServerAddress() == "80.66.82.147" then
 	
 	for line in text:gmatch("[^\n]+") do
-	if line:find('Маска дракона') and dialogId == 15073 then
+	if line:find('Маска из Бумажного дома') and dialogId == 15073 and analysis == 1 then
             analysis = 3
         end
 	end
@@ -7968,7 +7978,8 @@ end
 	else
 	
 	for line in text:gmatch("[^\n]+") do
-	if line:find('Маска дракона') and dialogId == 15073 then
+	if line:find('Маска из Бумажного дома') and dialogId == 15073 and analysis == 1 then
+			sampCloseCurrentDialogWithButton(0)
             analysis = 3
         end
 	end
@@ -7976,7 +7987,7 @@ end
 	if dialogId == 15073 then
 		if analysis == 2 then
 			lua_thread.create(sendResponse, dialogId, 1, 2, nil)
-			return false
+			--return false
 		end
 
 		text = text .. '\n' .. '{00FF00}Проанализировать'
@@ -8005,7 +8016,7 @@ end
 				fixpricecopia()
 			end
 			lua_thread.create(sendResponse, dialogId, 0, nil, nil)
-			return false
+			--return false
 		end
 
 		last_text = text
@@ -8016,13 +8027,13 @@ end
 		end
 		printStyledString("~w~Finded ~r~" .. (#data_cost.buy + #data_cost.sell) .. "~w~ prices", 2000, 6)
 		lua_thread.create(sendResponse, dialogId, 1, 2, nil)
-		return false
+		--return false
 	elseif analysis ~= nil then
 		analysis = nil
 		data_cost = { sell = {}, buy = {} }
 		sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Критическая ошибка! Анализ был сбит другим диалогом.", -1)
 		lua_thread.create(sendResponse, dialogId, 0, nil, nil)
-		return false
+		--return false
 	end
 
 	if dialogId == 3082 then
@@ -8080,6 +8091,8 @@ end
 		return { dialogId, style, title, button1, button2, text }
 		end
 	end
+end
+	
 		if priceab.v then
 		if car_analysis then
 		if string.find(title, "Средняя цена автомобилей при продаже") then
@@ -10956,6 +10969,10 @@ function testupdate()
 win_state['tup'].v = not win_state['tup'].v
 end
 
+function logsd()
+win_state['dlogs'].v = not win_state['dlogs'].v
+end
+
 function monochat(params)
     if not connected then chatmsg("Вы не подключены к серверу.") return end
     local tempField = string.match(params, "(.*)")
@@ -11283,6 +11300,11 @@ function imgui.OnDrawFrame()
        end
 	   
 	if not win_state['main'].v and win_state['tup'].v then
+		 imgui.Process = true
+		 imgui.ShowCursor = true
+       end
+	   
+	if not win_state['main'].v and win_state['dlogs'].v then
 		 imgui.Process = true
 		 imgui.ShowCursor = true
        end
@@ -12567,6 +12589,10 @@ end
 		tupupdate()
 	end
 	
+	if win_state['dlogs'].v then
+		logid()
+	end
+	
 	if win_state['carsas'].v then
 		carsax()
 	end
@@ -13670,6 +13696,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -13797,10 +13824,78 @@ function onWindowMessage(m, p)
 		win_state['dial'].v = false
 		win_state['rulstat'].v = false
     end
+	if not sampIsChatInputActive() and p == 0x1B and win_state['dlogs'].v then
+        consumeWindowMessage()
+		win_state['windowspusk'].v = false
+		win_state['tup'].v = false
+		win_state['dlogs'].v = false
+		win_state['timeyved'].v = false
+		win_state['settings'].v = false
+		win_state['yashiki'].v = false
+		win_state['obmentrade'].v = false
+		win_state['roulset'].v = false
+		win_state['roulset2'].v = false
+		win_state['videoset2'].v = false
+		win_state['gamer'].v = false
+		win_state['games'].v = false
+		win_state['redak'].v = false
+		win_state['shema'].v = false
+		win_state['shematext'].v = false
+		win_state['shahtamenu'].v = false
+		win_state['shemafunks'].v = false
+		win_state['btcsettings'].v = false
+		win_state['housenumber'].v = false
+		win_state['housenumberredak'].v = false
+		win_state['housenumberredakv2'].v = false
+		
+		
+		win_state['btcsettingsv2'].v = false
+		win_state['housenumberv2'].v = false
+		win_state['shemainst'].v = false
+		win_state['kartinst'].v = false
+		win_state['piarshema'].v = false
+		win_state['vkshema'].v = false
+		win_state['yvedfindvk'].v = false
+		win_state['yvedfindtg'].v = false
+		win_state['pravila2048'].v = false
+		pong = false
+		snaketaken = false
+		win_state['bank'].v = false
+		win_state['noteswin'].v = false
+		win_state['bitkoinwinokno'].v = false
+		win_state['koinwinokno'].v = false
+		win_state['kirkawin'].v = false
+		win_state['tochilki'].v = false
+		win_state['pcoff'].v = false
+		win_state['winprofile'].v = false
+		win_state['piar'].v = false
+		win_state['skupv2'].v = false
+		win_state['skupv3'].v = false
+		win_state['skupv4'].v = false
+		win_state['skupv5'].v = false
+		win_state['skupv6'].v = false
+		win_state['skup'].v = false
+		win_state['skup2'].v = false
+		win_state['oscripte'].v = false
+		win_state['zadach'].v = false
+		win_state['zadachv2'].v = false
+		win_state['zadachv3'].v = false
+		win_state['zadachv4'].v = false
+		win_state['zadachv5'].v = false
+		win_state['vkmessage'].v = false
+		win_state['help'].v = false
+		win_state['nastroikawin'].v = false
+		win_state['googlewin'].v = false
+		win_state['support'].v = false
+		win_state['messanger'].v = false
+		win_state['dial'].v = false
+		win_state['rulstat'].v = false
+    end
 	if not sampIsChatInputActive() and p == 0x1B and win_state['timeyved'].v then
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -13867,6 +13962,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -13932,6 +14028,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -13997,6 +14094,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14062,6 +14160,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14128,6 +14227,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14194,6 +14294,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14260,6 +14361,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14325,6 +14427,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14391,6 +14494,7 @@ function onWindowMessage(m, p)
         consumeWindowMessage()
 		win_state['windowspusk'].v = false
 		win_state['tup'].v = false
+		win_state['dlogs'].v = false
 		win_state['timeyved'].v = false
 		win_state['settings'].v = false
 		win_state['yashiki'].v = false
@@ -14581,6 +14685,14 @@ function podklchat()
 	end
 
 function sampev.onServerMessage(color, text)
+
+	if autodlogs.v == true and color == 833881343 and text:match('при открытии') and text:match('и выиграл') then 
+	logii = text:match('(.*)') 
+	dlogs = {cfg.dlogi.dlogs}
+	table.insert(dlogs, '['..os.date("%d.%m.%y %H:%M:%S")..'] '..logii)
+	cfg.dlogi.dlogs = table.concat(dlogs,', ')
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
 
 	if addad.v or addad2.v or vipaddad.v then 
 	if color == 1941201407 and text:match('Отредактировал сотрудник СМИ') and text:match('LS') and autosmi.v == true then lssmi = true lvsmi = false sfsmi = false end
@@ -15635,6 +15747,7 @@ function load_settings() -- загрузка настроек
 	assistant2 = imgui.ImBool(ini.settings.assistant2)
 	assistant8 = imgui.ImBool(ini.settings.assistant8)
 	autologin = imgui.ImBool(ini.settings.autologin)
+	autodlogs = imgui.ImBool(ini.settings.autodlogs)
 	updatetext = imgui.ImBool(ini.settings.updatetext)
 	weatheroff = imgui.ImBool(ini.settings.weatheroff)
 	yvedscript = imgui.ImBool(ini.settings.yvedscript)
@@ -28440,6 +28553,7 @@ function helpmenu()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/vrv - отправить VIP сообщение как рекламу.')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/versamp - изменить версию SAMP (сборка, лаунчер, мобильный лаунчер).')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/getfam [Family] - узнать, сколько игроков в сети с указанной фамилией.')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'/dlogs - логирование выпадение дропа из ларцов со всего сервера.')
 				imgui.Separator()
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc - перезайти на сервер "Vice City", находясь на данном сервере (ручная настройка).')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'/reconvc2 - тоже самое, что /reconvc, но: есть авто-определение; работает только тогда, когда вы на сервере (от VRush).')
@@ -31375,6 +31489,28 @@ function pravilasnakemenu()
 		imgui.End()
 	end
 	
+function logid()
+	local sw, sh = getScreenResolution()
+	local btn_size12 = imgui.ImVec2(370, 30)
+	imgui.SetNextWindowPos(imgui.ImVec2(sw/2, sh/2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+	imgui.SetNextWindowSize(imgui.ImVec2(1000, 400), imgui.Cond.FirstUseEver)
+	imgui.Begin(u8'Логирование дропа с ларцов', win_state['dlogs'], imgui.WindowFlags.NoResize)
+	if cfg.dlogi.dlogs == '' then imgui.Text('') imgui.SameLine() imgui.Text(u8'*В данный момент отсутствует информация о дропах с ларцов.')
+	else
+	imgui.Text('') imgui.SameLine() imgui.Text(''..u8(cfg.dlogi.dlogs):gsub(', ','\n'))
+	end
+	imgui.Separator()
+	imgui.Text('') imgui.SameLine() imgui.AlignTextToFramePadding(); imgui.Text(u8("Деактивировать логирование")); imgui.SameLine(); imgui.ToggleButton(u8("##deaktivationlogs4345634534"), autodlogs) imgui.SameLine() imgui.Text(u8("Активировать логирование")) imgui.SameLine(); imgui.TextQuestion(u8"Если включено, то тут будут записываться дропы с ларцов, которые пишутся на весь сервер.")	
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8'Обнулить логи', buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then
+	cfg.dlogi.dlogs = ''
+	dlogs = {}
+	inicfg.save(cfg, 'Mono\\mini-games.ini')
+	end
+	if imgui.CustomButton(u8"Сохранить настройки", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then saveSettings() sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) end
+	imgui.End()
+end
+	
+	
 function tupupdate()
 	local sw, sh = getScreenResolution()
 	local btn_size12 = imgui.ImVec2(370, 30)
@@ -31430,6 +31566,10 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[20.03.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Центральный рынок" (сканировались не все товары)')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Добавлена команда "/dlogs" (логирование выпадение дропа с ларцов со всего сервера)')
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[14.03.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Разбагать худ на клавишу".')
