@@ -1,6 +1,6 @@
 script_name('Mono Tools')
 script_properties("work-in-pause")
-script_version('1.2.2')
+script_version('1.2.3')
 
 local use = false
 local close = false
@@ -5090,8 +5090,6 @@ end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
 
-	print(dialogId, text)
-
 	if diaenable.v and vkconnect.v then
 		if style == 1 or style == 3 then
 			vk_requestv2('' .. title .. '\n' .. text .. '\n\n[______________]\n\n[' .. button1 .. '] | [' .. button2 .. ']' )
@@ -5132,15 +5130,15 @@ end
 	isNext = false
 	end
 
-	if dialogId == 10 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10, 1, 70) onecheck = false end
-	if dialogId == 10 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10, 1, 70) end) end
+	if dialogId == 10 and isEn == 2 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") and onecheck == true then sampSendDialogResponse(10, 1, 71) onecheck = false end
+	if dialogId == 10 and isEn == 1 and title:match("{BE433D}Скупка товара: {FFFFFF}1 /") then lua_thread.create(function() wait(1000) sampSendDialogResponse(10, 1, 71) end) end
 
-	if dialogId == 11 and isEnd ~= 0 and isBuyProcess then return false end
-	if dialogId == 9 and isEnd ~= 0 and isBuyProcess then return false end
+	--if dialogId == 11 and isEnd ~= 0 and isBuyProcess then return false end
+	--if dialogId == 9 and isEnd ~= 0 and isBuyProcess then return false end
 	if dialogId == 10 and isEn == 1 then
 		lua_thread.create(checkPage, text)
 		sampShowDialog(1234, "Выставление", "Предметы выставляются, подождите...", "Ждём...")
-		return false
+		--return false
 	end
 	if dialogId == 10 and isEn == 2 then
 		lua_thread.create(pageWrite, text)
@@ -17309,6 +17307,9 @@ function tupupdate()
 		imgui.Text('')
 		imgui.Text('') imgui.SameLine(170) imgui.Text(u8'Посмотреть полный список обновления вы сможете в "Параметры" - "Обновления".')
 		imgui.Separator()
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'[26.03.2023]')
+				imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Skup Menu v2".')
+				
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'[22.01.2023]')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Майнинг" (смена диалогов)')
 				imgui.Text('') imgui.SameLine() imgui.Text(u8'- Изменения списка донатеров.')
