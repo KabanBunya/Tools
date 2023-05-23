@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.27')
+script_version('3.5.28')
 
 lssmi = false 
 lvsmi = false
@@ -3212,34 +3212,6 @@ else
 		[5] = { cmd = "-", v = {}, text = "Any text", bindnaz = '-', delay = 3 }
 	}
 end
-
-writeMemory(0x555854, 4, -1869574000, true)
-writeMemory(0x555858, 1, 144, true)
-
-function patch()
-	if memory.getuint8(0x748C2B) == 0xE8 then
-		memory.fill(0x748C2B, 0x90, 5, true)
-	elseif memory.getuint8(0x748C7B) == 0xE8 then
-		memory.fill(0x748C7B, 0x90, 5, true)
-	end
-	if memory.getuint8(0x5909AA) == 0xBE then
-		memory.write(0x5909AB, 1, 1, true)
-	end
-	if memory.getuint8(0x590A1D) == 0xBE then
-		memory.write(0x590A1D, 0xE9, 1, true)
-		memory.write(0x590A1E, 0x8D, 4, true)
-	end
-	if memory.getuint8(0x748C6B) == 0xC6 then
-		memory.fill(0x748C6B, 0x90, 7, true)
-	elseif memory.getuint8(0x748CBB) == 0xC6 then
-		memory.fill(0x748CBB, 0x90, 7, true)
-	end
-	if memory.getuint8(0x590AF0) == 0xA1 then
-		memory.write(0x590AF0, 0xE9, 1, true)
-		memory.write(0x590AF1, 0x140, 4, true)
-	end
-end
-patch()
 
 local function send_player_stream(id, i)
 	if i then
@@ -31566,6 +31538,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.05.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс краша при заходе с Лаунчера.')
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[20.03.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Центральный рынок" (сканировались не все товары)')
