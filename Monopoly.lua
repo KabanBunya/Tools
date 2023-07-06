@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.28')
+script_version('3.5.29')
 
 lssmi = false 
 lvsmi = false
@@ -21,6 +21,8 @@ close5 = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
+rulstak = false
+rulstak2 = false
 checknick = '1'
 nodial = false
 checknick2 = '0'
@@ -7253,6 +7255,18 @@ function separator(text)
 	return text
 end
 
+function sampev.onSetObjectMaterialText(objectId, data)
+	if toch.v then
+		local object = sampGetObjectHandleBySampId(objectId)
+		if object and doesObjectExist(object) then
+			if getObjectModel(object) == 18663 then
+				data.text = separator(data.text)
+			end
+		end
+		return {objectId, data}
+	end
+end
+
 function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	if ndr.v then
 	dialogs_data[dialogId] = {listboxId, input}
@@ -7835,7 +7849,7 @@ end
 		if sampGetCurrentServerAddress() == "80.66.82.147" then
 	
 	for line in text:gmatch("[^\n]+") do
-	if line:find('Маска из Бумажного дома') and dialogId == 15073 and analysis == 1 then
+	if line:find('Трисс Меригольд') and dialogId == 15073 and analysis == 1 then
             analysis = 3
         end
 	end
@@ -7950,8 +7964,7 @@ end
 	else
 	
 	for line in text:gmatch("[^\n]+") do
-	if line:find('Маска из Бумажного дома') and dialogId == 15073 and analysis == 1 then
-			sampCloseCurrentDialogWithButton(0)
+	if line:find('Трисс Меригольд') and dialogId == 15073 and analysis == 1 then
             analysis = 3
         end
 	end
@@ -8495,7 +8508,7 @@ end
 	then slotruletka2 = false checked_test12.v = true end
 	end
 	
-	if data.modelId == 1274 and checked_test12.v and ostanovka3.v then 
+	if data.modelId == 1274 and rulstak2 == false and checked_test12.v and ostanovka3.v then 
 	countaz = countaz + 1
 	if countaz > slotazrul.v then 
 	slotazfind = true
@@ -8505,7 +8518,7 @@ end
 		end
 	end
 	
-	if data.modelId == 1274 and checked_test13.v and ostanovka3.v then 
+	if data.modelId == 1274 and rulstak2 == false and checked_test13.v and ostanovka3.v then 
 	countaz = countaz + 1
 	if countaz > slotazrul.v then 
 	slotazfind = true
@@ -8515,7 +8528,7 @@ end
 		end
 	end
 	
-	if data.modelId == 1274 and checked_test14.v and ostanovka3.v then 
+	if data.modelId == 1274 and rulstak2 == false and checked_test14.v and ostanovka3.v then 
 	countaz = countaz + 1
 	if countaz > slotazrul.v then 
 	slotazfind = true
@@ -8525,7 +8538,7 @@ end
 		end
 	end
 	
-	if data.modelId == 19057 and checked_test11.v and ostanovka4.v then 
+	if data.modelId == 19057 and rulstak == false and checked_test11.v and ostanovka4.v then 
 	countpodarok = countpodarok + 1
 	if countpodarok > slotpodarokrul.v then 
 	slotpodarokfind = true
@@ -9917,6 +9930,18 @@ end
 			end
 		end
 	end)
+	
+	if toch.v then
+		if id == 2070 or id == 2077  then -- разделение цен в трейде
+			if tonumber(data.text) then
+				data.text = comma_value(data.text)
+			end
+		else
+			data.text = separator(data.text)
+		end
+		return {id,data}
+	end
+	
 end
 
 function ruletka()
@@ -14658,6 +14683,24 @@ function podklchat()
 
 function sampev.onServerMessage(color, text)
 
+	print(color, text)
+
+	if color == 1941201407 and text:match('{FFFFFF}Вы запустили бронзовую рулетку') and checked_test11.v and ostanovka4.v then rulstak = true end
+	if color == -65281 and text:match('Вам был добавлен предмет') and checked_test11.v and ostanovka4.v then rulstak = false end
+	if text:match('{FFFFFF}Вы получили') and checked_test11.v and ostanovka4.v then rulstak = false end
+	
+	if color == 1941201407 and text:match('{FFFFFF}Вы запустили серебряную рулетку') and checked_test12.v and ostanovka3.v then rulstak2 = true end
+	if color == -65281 and text:match('Вам был добавлен предмет') and checked_test12.v and ostanovka3.v then rulstak2 = false end
+	if text:match('{FFFFFF}Вы получили') and checked_test12.v and ostanovka3.v then rulstak2 = false end
+	
+	if color == 1941201407 and text:match('{FFFFFF}Вы запустили золотую рулетку') and checked_test13.v and ostanovka3.v then rulstak2 = true end
+	if color == -65281 and text:match('Вам был добавлен предмет') and checked_test13.v and ostanovka3.v then rulstak2 = false end
+	if text:match('{FFFFFF}Вы получили') and checked_test13.v and ostanovka3.v then rulstak2 = false end
+	
+	if color == 1941201407 and text:match('{FFFFFF}Вы запустили платиновую рулетку') and checked_test14.v and ostanovka3.v then rulstak2 = true end
+	if color == -65281 and text:match('Вам был добавлен предмет') and checked_test14.v and ostanovka3.v then rulstak2 = false end
+	if text:match('{FFFFFF}Вы получили') and checked_test14.v and ostanovka3.v then rulstak2 = false end
+
 	if autodlogs.v == true and color == 833881343 and text:match('при открытии') and text:match('и выиграл') then 
 	logii = text:match('(.*)') 
 	dlogs = {cfg.dlogi.dlogs}
@@ -14840,7 +14883,7 @@ end
 			return false
 		end
 		local id123 = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
-		if text:match("%[%u+%] {%x+}[A-z0-9_]+%[" .. id123 .. "%]:") and vipresend.v then
+		if text:match("{%x+}[A-z0-9_]+%[" .. id123 .. "%]:") and vipresend.v then
 			finished = true
 		end
 	end
@@ -15507,8 +15550,8 @@ end
 	end
 	
 	if vraddad.v or vraddad2.v or vraddad3.v then 
-	if color == -213517057 or color == 1687547391 then 
-	if text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..adredak4.v) or text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..adredak42.v) or text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..adredak43.v) then
+	if color == -213517057 or color == 1687547391 or color == -45846529 then 
+	if text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..u8:decode(adredak4.v)) or text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..u8:decode(adredak42.v)) or text:match("{FFFFFF}" .. userNick .. "%[%d+%]: "..u8:decode(adredak43.v)) then
 		if os.date("%A") == 'Monday' then
 		cfg.adpred.piarvip = cfg.adpred.piarvip + 1
 		end
@@ -31478,7 +31521,7 @@ function logid()
 	dlogs = {}
 	inicfg.save(cfg, 'Mono\\mini-games.ini')
 	end
-	if imgui.CustomButton(u8"Сохранить настройки", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then saveSettings() sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) end
+	imgui.Text('') imgui.SameLine() if imgui.CustomButton(u8"Сохранить настройки", buttonclick, buttonvydel, buttonpol, imgui.ImVec2(-8, 0)) then saveSettings() sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Настройки скрипта успешно сохранены.", -1) end
 	imgui.End()
 end
 	
@@ -31538,6 +31581,18 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'25. Фикс "Piar Menu" (не отправлялись сообщения в /ad и /vr из-за смены ID диалогов)')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
+		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.07.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс в "Rolette Tools" поиска слотов с подарками и AZ.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Vip Resend" (не исчезало сообщение под чатом, что VIP объявление отправлено).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "/phoneair" (перевод телефона в режим "В самолёте" и обратно).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "/dlogs" (не отображался ползунок для перелистывания вниз, если сообщения о дропах заполнили всё окно).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Точки в числах" (теперь точки работают и в лавках). Важно! Если крашит - переустановите библиотеки, раньше это не было из-за')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'конфликта библиотеки, либы обновлены.')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Центральный Рынок" (не должно кикать и крашить при анализе цен).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Разбагать худ" (смена ид диалогов).')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Piar Menu" (не считались объявления в VIP чат).')
+		
 		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[23.05.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс краша при заходе с Лаунчера.')
@@ -32831,6 +32886,10 @@ function sampev.onDisplayGameText(style, tm, text)
 	elseif text:find('+50000') and podarki.v then 
 		moneypodarki = moneypodarki + 50000
 		itogopodarkov = itogopodarkov + 20
+	end
+	if toch.v then
+    	text = separator(text)
+    	return {style,time,text}
 	end
 end
 
@@ -35305,7 +35364,7 @@ function sumFormat(sum)
 end
 
 function sendResponse(dialogId, button, list, input)
-	wait(100)
+	wait(400)
 	sampSendDialogResponse(dialogId, button, list, input)
 end
 
@@ -38013,17 +38072,15 @@ end
 function phoneair()
 	lua_thread.create(function()
 	airphone = true
-	sampSendChat('/phone')
-	wait(200)
-	sampSendDialogResponse(1000, 1, 0, -1)
-	wait(200)
-	sampSendClickTextdraw(2112)
+	sampSendChat('/settings')
 	wait(500)
-	sampSendDialogResponse(966, 1, 10, -1)
-	wait(1000)
+	sampSendDialogResponse(26039, 1, 15, -1)
+	wait(500)
+	sampSendDialogResponse(966, 1, 8, -1)
+	wait(500)
 	sampCloseCurrentDialogWithButton(0)
-	wait(200)
-	sampSendChat('/phone')
+	wait(500)
+	sampCloseCurrentDialogWithButton(0)
 	airphone = false
 	sampAddChatMessage(''..colorcm..'['..nazvanie.v..']{FFFFFF} Вы успешно перевели телефон в режим '..colorcm2..'"'..phonetext..'"{FFFFFF}.', -1) 
 	end)
@@ -38077,9 +38134,9 @@ function hudbag()
 	lua_thread.create(function()
 	sampSendChat('/settings')
 	wait(300)
-	sampSendDialogResponse(26032, 1, 13, -1)
+	sampSendDialogResponse(26039, 1, 14, -1)
 	wait(300)
-	sampSendDialogResponse(26033, 1, 1, -1)
+	sampSendDialogResponse(26040, 1, 1, -1)
 	wait(300)
 	sampSendDialogResponse(1610, 1, 0, -1)
 	wait(300)
@@ -39079,6 +39136,13 @@ function onSendRpc(ID, BS)
 			raknetDeleteBitStream(BITSTREAM)
 			end)
 		end
+	end
+end
+
+function sampev.onTextDrawSetString(id, text)
+	if toch.v then
+		text = separator(text)
+		return {id, text}
 	end
 end
 
