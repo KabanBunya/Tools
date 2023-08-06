@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.29')
+script_version('3.5.30')
 
 lssmi = false 
 lvsmi = false
@@ -18,6 +18,9 @@ close2 = false
 close3 = false
 close4 = false
 close5 = false
+nocr = false
+nocrv2 = false
+nocrsell = false
 local boolshar = false
 local houserespawn = false
 local samprulstop = true
@@ -5532,12 +5535,12 @@ function main()
 	sampRegisterChatCommand("statarul", show_rulstat)
 	sampRegisterChatCommand("scanfish", function() if FishEn == 0 then lua_thread.create(function() FishEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Начинаю сканирование наживки, секунду.", -1) wait(300) sampSendChat('/fishrod') wait(300) sampSendDialogResponse(25285, 1 , 6, -1) end) end end)
 	
-	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
-	sampRegisterChatCommand("cst2", function() if isEnv2 == 0 then isEnv2 = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEnv2 = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
+	sampRegisterChatCommand("cst", function() if isEn == 0 then isEn = 2 nocr = false sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
+	sampRegisterChatCommand("cst2", function() if isEnv2 == 0 then isEnv2 = 2 nocrv2 = false sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Добавить товар на покупку'{FFFFFF}.", -1) else isEnv2 = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
 	sampRegisterChatCommand("cstreset", function() itemsskup = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu' - 'Пресет №1' успешно обнулён.", -1) end)
 	sampRegisterChatCommand("cstreset2", function() itemsskupv2 = ({}) sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Список товаров в 'Skup Menu' - 'Пресет №2' успешно обнулён.", -1) end)
 	
-	sampRegisterChatCommand("cstsell", function() if isEnsell == 0 then isEnsell = 2 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Выставить товар на продажу'{FFFFFF}.", -1) itemssell = ({}) else isEnsell = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
+	sampRegisterChatCommand("cstsell", function() if isEnsell == 0 then isEnsell = 2 nocrsell = false sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера запущен! Нажмите "..colorcm2.."'Выставить товар на продажу'{FFFFFF}.", -1) itemssell = ({}) else isEnsell = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Режим чекера выключен.", -1) end end)
 	if pricecr.v then sampRegisterChatCommand('price', get_price) end
 	if priceab.v then sampRegisterChatCommand('carprice', function(searchv21)
 		searchv21 = to_lower(searchv21)
@@ -7290,6 +7293,32 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
+
+	print(dialogId, text)
+	
+	if dialogId == 3050 and isEn == 2 then
+		arg1 = title:match('Страница (%d+)/(%d+)')
+		arg2 = title:match('/(%d+)')
+		if tonumber(arg1) == tonumber(arg2) then 
+			nocr = true
+		end
+	end
+	
+	if dialogId == 3050 and isEnv2 == 2 then
+		arg1 = title:match('Страница (%d+)/(%d+)')
+		arg2 = title:match('/(%d+)')
+		if tonumber(arg1) == tonumber(arg2) then 
+			nocrv2 = true
+		end
+	end
+	
+	if dialogId == 3050 and isEnsell == 2 then
+		arg1 = title:match('Страница (%d+)/(%d+)')
+		arg2 = title:match('/(%d+)')
+		if tonumber(arg1) == tonumber(arg2) then 
+			nocrsell = true
+		end
+	end
 
 	if title:match('{BFBBBA}') then 
 	for line in text:gmatch("[^\n]+") do
@@ -31582,6 +31611,9 @@ function tupupdate()
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[04.12.2022]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'26. Добавлена команда "/reconvc" - перезайти на сервер "Vice City", находясь на данном сервере.')]]
 		
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.08.2023]')
+		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс сканирования предметов на скуп и продажу (до фикса было бесконечное сканирование).')
+		
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'[06.07.2023]')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс в "Rolette Tools" поиска слотов с подарками и AZ.')
 		imgui.Text('') imgui.SameLine() imgui.Text(u8'- Фикс "Vip Resend" (не исчезало сообщение под чатом, что VIP объявление отправлено).')
@@ -35501,7 +35533,7 @@ function pageWrite(menu)
 			end
 			if not isFounded then table.insert(itemsskup, {itemskup, 0, 0, false, false}) end
 		end
-		if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNext = true end
+		if t[i]:find(">>>") and nocr == false then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNext = true end
 	end
 	if not isNext then isEn = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemsskup, _nameini) sampSendDialogResponse(3050, 0) isBuyProcess = false end
 end
@@ -35555,7 +35587,7 @@ function pageWritev2(menu)
 			end
 			if not isFoundedv2 then table.insert(itemsskupv2, {itemskupv2, 0, 0, false, false}) end
 		end
-		if t[i]:find(">>>") then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNextv2 = true end
+		if t[i]:find(">>>") and nocrv2 == false then wait(delayintv2.v) sampSendDialogResponse(3050, 1, i - 2) isNextv2 = true end
 	end
 	if not isNextv2 then isEnv2 = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemsskupv2, _nameiniv2) sampSendDialogResponse(3050, 0) isBuyProcessv2 = false end
 end
@@ -35609,7 +35641,7 @@ function pageWritesell(menusell)
 			end
 			if not isFoundedsell then table.insert(itemssell, {itemsell, 0, 0, false, false}) end
 		end
-		if t[i]:find(">>>") then wait(delayintsellv2.v) sampSendDialogResponse(3050, 1, i - 2) isNextsell = true end
+		if t[i]:find(">>>") and nocrsell == false then wait(delayintsellv2.v) sampSendDialogResponse(3050, 1, i - 2) isNextsell = true end
 	end
 	if not isNextsell then isEnsell = 0 sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} Проверка прошла успешно!", -1) inicfg.save(itemssell, _nameinisell) sampSendDialogResponse(3050, 0) isBuyProcesssell = false end
 end
