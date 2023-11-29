@@ -1,7 +1,7 @@
 script_author('Bunya')
 script_name('Tools')
 script_properties("work-in-pause")
-script_version('3.5.30')
+script_version('3.5.31')
 
 lssmi = false 
 lvsmi = false
@@ -7293,8 +7293,6 @@ function sampev.onSendDialogResponse(dialogId , button , listboxId , input)
 	end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
-
-	print(dialogId, text)
 	
 	if dialogId == 3050 and isEn == 2 then
 		arg1 = title:match('Страница (%d+)/(%d+)')
@@ -7470,14 +7468,20 @@ end
 	elseif text:find('Неверный пароль!') then
 	sampAddChatMessage(""..colorcm.."["..nazvanie.v.."]{FFFFFF} В настройках скрипта указан неверный пароль! Измените его в настройках или вводите вручную.", -1)
 	end
-	if dialogId == 991 and autopin.v then 
+	if autopin.v then 
+	for line in text:gmatch("[^\n]+") do
+	if line:find('Вы должны подтвердить свой PIN') then 
+	
 	if sampGetCurrentServerAddress() == "80.66.82.147" then 
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(pinkod))
 		else
 		sampSendDialogResponse(dialogId, 1, 0, u8:decode(autopasspin.v))
 	end
 		return false
+		end
 	end
+end
+	
 	for line in text:gmatch("[^\n]+") do
 	if line:find('PIN-код принят!') and autopin.v then
 		closeDialog()
@@ -14712,8 +14716,6 @@ function podklchat()
 
 function sampev.onServerMessage(color, text)
 
-	print(color, text)
-
 	if color == 1941201407 and text:match('{FFFFFF}Вы запустили бронзовую рулетку') and checked_test11.v and ostanovka4.v then rulstak = true end
 	if color == -65281 and text:match('Вам был добавлен предмет') and checked_test11.v and ostanovka4.v then rulstak = false end
 	if text:match('{FFFFFF}Вы получили') and checked_test11.v and ostanovka4.v then rulstak = false end
@@ -19091,13 +19093,18 @@ end
 function raznoe()
 while true do 
 	if podarki.v then 
-	setVirtualKeyDown(key.VK_MENU, true)
-    wait(200)
-    setVirtualKeyDown(key.VK_MENU, false)
-	wait(200)
-	sampSendDialogResponse(1449, 1 , 3, -1)
+	sampSendChat('/bizinfo')
 	wait(100)
-	closeDialog()
+	sampSendDialogResponse(9761, 1 , 7, -1)
+	wait(100)
+	sampSendDialogResponse(156, 1 , 0, -1)
+	wait(100)
+	sampSendDialogResponse(157, 1 , 0, -1)
+	wait(100)
+	sampSendDialogResponse(1665, 1 , 10, -1)
+	wait(100)
+	sampSendDialogResponse(1466, 1 , 0, -1)
+	
 	end
 	if customlarec.v then 
 	setVirtualKeyDown(key.VK_MENU, true)
